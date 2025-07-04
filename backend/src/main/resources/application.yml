@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: pegasus
+    
+#  profiles:
+#    active: local
+    
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        #dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    show-sql: false
+    open-in-view: false
+
+  devtools:
+    add-properties: true
+    # Remove spring logging info
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    #context-path: /pegasus-backend
+
+jwt:
+  secret: ${JWT_SECRET}
+  expirationMs: 864000000
+  # Cookie session duration in millis (1 day default now 86400000)
+
+logging:
+  level:
+    root: WARN
+    org.springframework: WARN
+    org.alsception.pegasus.*: TRACE

@@ -1,0 +1,25 @@
+<script>
+  import PrimaryMenu from "./PrimaryMenu.svelte";
+</script>
+
+<div class="navbar /*bg-base-100*/ shadow-sm /*bhead*/ fixed bg-slate-950">
+  <div class="navbar-start">
+    <div class="dropdown">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+        <i class="fas fa-bars text-xl"></i>
+      </div>
+
+      <PrimaryMenu/>
+
+    </div>
+  </div>
+  <div class="navbar-center">
+    <a href="/#/home">
+      <h1 class="pp text-lg sm:text-xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-sky-400 via-blue-500 to-violet-600 text-transparent bg-clip-text font-mono uppercase tracking-widest drop-shadow-md yellowtail-regular "
+      >Pegasus</h1>
+    </a>
+  </div>
+  <div class="navbar-end">
+    <!-- OVDE CE DA IDE: THEME, SETTINGS?, I LOGOUT -->
+  </div>
+</div>

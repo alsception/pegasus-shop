@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--so this shit works (apparently), but cannot change anything
+ovo sranje radi ali sta god promenis nece da uzme
+TODO:
+1. fix
+2. add trace and debug, blue and purple
+3. remove unnecc. spaces
+4. add echo() function with custom colors and line separators and wrappers
+5. add custom logger with background colored red for errors
+est time: 4h
+see this err msg:
+There is no conversion class registered for composite conversion word [clr]
+ERROR in ch.qos.logback.core.pattern.parser.Compiler@73e50201 - Failed to create converter for [%clr] keyword
+-->
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd'T'HH:mm:ss.SSS} %clr(%-5level){INFO=green;WARN=yellow;ERROR=red} %clr([%15.15thread]){magenta} %clr([%40.40logger{39}]){cyan}: %clr(%msg){INFO=green;WARN=yellow;ERROR=red}%n
+            </pattern>
+        </encoder>
+    </appender>
+    
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

@@ -1,0 +1,33 @@
+{
+  "name": "pegasus-front",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@tailwindcss/postcss": "^4.1.5",
+    "@tsconfig/svelte": "^5.0.4",
+    "@zerodevx/svelte-toast": "^0.9.6",
+    "autoprefixer": "^10.4.21",
+    "daisyui": "^5.0.38",
+    "postcss": "^8.5.3",
+    "svelte": "^5.20.2",
+    "svelte-check": "^4.1.4",
+    "svelte-dnd-action": "^0.9.61",
+    "typescript": "~5.7.2",
+    "vite": "^6.2.0"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.6",
+    "axios": "^1.9.0",
+    "gsap": "^3.13.0",
+    "svelte-spa-router": "^4.0.1",
+    "tailwindcss": "^4.1.6"
+  }
+}

@@ -1,0 +1,189 @@
+<script lang="ts">
+  import { onMount } from "svelte";
+
+
+import { gsap } from "gsap";
+import ScrambleTextPlugin from "gsap/ScrambleTextPlugin";
+import { SplitText } from "gsap/all";
+
+  type Item = {
+    title: string;
+    description: string;
+    icon: string;
+    href: string;
+  };
+
+const items: Item[] = [
+  {
+    title: "Users",
+    description: "Manage and view users",
+    icon: "users",
+    href: "/users",
+  },
+  {
+    title: "Shop",
+    description: "Browse products",
+    icon: "box",
+    href: "/products?listView=false",
+  },
+  {
+    title: "Products administration",
+    description: "Manage store items",
+    icon: "box",
+    href: "/products?listView=true",
+  },
+  {
+    title: "My Cart",
+    description: "View, update or delete items in your cart",
+    icon: "shopping-basket",
+    href: "/cart",
+  },
+  {
+    title: "Orders",
+    description: "View and manage orders",
+    icon: "truck",
+    href: "/orders",
+  },
+  {
+    title: "Gallery",
+    description:
+      "View and manage picture gallery. Billions of free pictures, by Unsplash API",
+    icon: "image",
+    href: "/pix",
+  },
+];
+
+async function addItemsWithDelay(
+  sourceItems: Item[],
+  addFn: (item: Item) => void,
+  delay = 60
+) {
+  for (const item of sourceItems) {
+    addFn(item);
+    await new Promise(resolve => setTimeout(resolve, delay));
+  }
+}
+let displayedItems: Item[] = [];
+
+onMount(() => {
+  addItemsWithDelay(items, item => displayedItems = [...displayedItems, item]);
+
+  //gsap
+  /*************************
+  INTERESANTAN EFEKAT JER MORA NESTO DA IMAMO, PP JE KLASA
+
+
+  KAKO OVO RADI NEPITAJ
+  ***************************/  
+/* 
+
+  //gsap
+  document.addEventListener("DOMContentLoaded", () => {
+    // 📦 Registruj potrebne GSAP plugine
+    gsap.registerPlugin(SplitText, ScrambleTextPlugin);
+
+    // 🧩 Registruj custom efekt scrambleSplit
+    gsap.registerEffect({
+      name: "scrambleSplit",
+      plugins: "scrambleText",
+      defaults: { scrambleText: "{original}" },
+      extendTimeline: true,
+      effect(splits, vars) {
+        let tl = gsap.timeline(); // kreiraj timeline
+        splits.forEach(split => {
+          // ✨ Kreiraj nevidljivi proxy div sa originalnim tekstom
+          let proxy = document.createElement("div"),
+              chars = split.chars,
+              l = chars.length;
+
+          // Spoji karaktere nazad u ceo string
+          proxy.innerText = chars.map(e => e.innerText).join("");
+
+          // 🎞️ Pokreni scrambleText animaciju nad proxy-jem
+          tl.add(
+            gsap.to(proxy, vars).eventCallback("onUpdate", () => {
+              // 📤 Ažuriraj svako slovo u stvarnom DOM-u sa znakom iz proxy-ja
+              let i = l;
+              while (i--) {
+                chars[i].innerText = proxy.innerText.charAt(i);
+              }
+            }),
+            0 // sve animacije počinju u isto vreme
+          );
+        });
+        return tl; // vrati timeline da GSAP može da koristi
+      }
+    });
+
+    // 🧪 Nađi sve elemente sa klasom .pp
+    const elements = document.querySelectorAll(".pp");
+
+    // 🎯 Za svaki element:
+    elements.forEach((el) => {
+      // 1. Razbij tekst u karaktere
+      const split = new SplitText(el, { type: "chars" });
+
+      // 2. Pokreni scrambleSplit efekt (svi bez delay-a → paralelno)
+      gsap.effects.scrambleSplit([split], {
+        duration: 2,
+        delay: 0.4, // svi istovremeno
+      });
+
+      // 3. Ubaci ulaznu animaciju sa random pozicijom
+      gsap.from(split.chars, {
+        duration: 0.5,
+        y: "random(-100, 100)",
+        x: "random(-50, 50)",
+        stagger: 0.05,
+        delay: 0.4, // isti delay za sve
+      });
+    });
+  });
+ */
+});
+
+</script>
+<!-- hover:bg-gradient-to-r hover:from-[#fde68a]  hover:to-[#f59e0b] -->
+
+<div
+  class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 scale-up-center-normal"
+>
+
+  {#each displayedItems as item}
+    <a    
+      href="#{item.href}"
+      class="block p-6 rounded-2xl bg-base-100 dark:bg-slate-900 dark:hover:bg-slate-800 
+        hover:bg-slate-200
+            shadow text-center scale-up-center-normal 
+            transition-all duration-200 hover:-translate-y-1 
+            hover:[&_*]:bg-gradient-to-r hover:[&_*]:from-sky-400 hover:[&_*]:via-blue-500 hover:[&_*]:to-violet-600 hover:[&_*]:bg-clip-text hover:[&_*]:text-transparent
+           "
+    >
+      <div class="text-2xl font-semibold scale-up-center-normal">
+      <i class="fas fa-{item.icon} w-5 mr-2"></i>
+      </div>
+      <h2 class=" text-2xl font-semibold">{item.title}</h2>
+      <p
+      class=" mt-2 text-sm text-slate-500 dark:text-slate-400"
+      >
+      {item.description}
+      </p>
+    </a>
+  {/each}
+</div>
+
+
+                                <style>
+
+
+/*********************************/
+/* ----------------------------------------------
+* Generated by Gradienty on 2025-06-02 16:00
+* animation scale-up-center-normal
+* ----------------------------------------
+*/
+  @keyframes scale-up-center-normal {0% { transform: scale(0.5); } 100% { transform: scale(1);} }
+
+.scale-up-center-normal { 
+  animation: scale-up-center-normal 0.25s ease-out 0s 1 normal both;}
+                                </style>

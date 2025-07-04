@@ -1,0 +1,202 @@
+/* https://tailwindcss.com/docs/installation/using-vite */
+
+@import "tailwindcss";
+
+@plugin "daisyui" ;
+
+@plugin "daisyui/theme" {
+  name: "main";
+  default: true;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: oklch(98% 0.001 106.423);
+  --color-base-200: oklch(100% 0 0);
+  --color-base-300: oklch(98% 0.001 106.423);
+  --color-base-content: oklch(44% 0.043 257.281);
+  --color-primary: oklch(27% 0.041 260.031);
+  --color-primary-content: oklch(97% 0.013 17.38);
+  --color-secondary: oklch(60% 0.25 292.717);
+  --color-secondary-content: oklch(97% 0.014 343.198);
+  --color-accent: oklch(54% 0.245 262.881);
+  --color-accent-content: oklch(98% 0.016 73.684);
+  --color-neutral: oklch(27% 0.041 260.031);
+  --color-neutral-content: oklch(96% 0.007 247.896);
+  --color-info: oklch(51% 0.262 276.966);
+  --color-info-content: oklch(97% 0.013 236.62);
+  --color-success: oklch(62% 0.194 149.214);
+  --color-success-content: oklch(100% 0 0);
+  --color-warning: oklch(90% 0.182 98.111);
+  --color-warning-content: oklch(27% 0.041 260.031);
+  --color-error: oklch(63% 0.237 25.331);
+  --color-error-content: oklch(97% 0.014 343.198);
+  --radius-selector: 1rem;
+  --radius-field: 2rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 0px;
+  --depth: 1;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "black";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: oklch(0% 0 0);
+  --color-base-200: oklch(19% 0 0);
+  --color-base-300: oklch(22% 0 0);
+  --color-base-content: oklch(87.609% 0 0);
+  --color-primary: oklch(35% 0 0);
+  --color-primary-content: oklch(100% 0 0);
+  --color-secondary: oklch(35% 0 0);
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: rgb(96, 237, 244);
+  --color-accent-content: oklch(0% 0 0);
+  --color-neutral: oklch(35% 0 0);
+  --color-neutral-content: oklch(100% 0 0);
+  --color-info: oklch(45.201% 0.313 264.052);
+  --color-info-content: oklch(89.04% 0.062 264.052);
+  --color-success: oklch(51.975% 0.176 142.495);
+  --color-success-content: oklch(90.395% 0.035 142.495);
+  --color-warning: oklch(96.798% 0.211 109.769);
+  --color-warning-content: oklch(19.359% 0.042 109.769);
+  --color-error: oklch(62.795% 0.257 29.233);
+  --color-error-content: oklch(12.559% 0.051 29.233);
+  --radius-selector: 1rem;
+  --radius-field: 2rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 0px;
+  --depth: 1;
+  --noise: 0;
+}
+
+/** END THEME CONFIG, START STYLING RULES
+    Maybe split in 2 files ? */
+
+/** We dont use default selection */
+::selection {
+  color: black;
+  background-color: yellow;
+}
+/* Light mode selection */
+::selection {
+  color: black;
+  background-color: yellow;
+}
+
+/* Dark mode selection */
+@media (prefers-color-scheme: dark) {
+  ::selection {
+    background: #00fff7; /* neon cyan */
+    color: #2d0036; /* deep purple */
+    /* text-shadow: 0 0 8px #ff00ea, 0 0 16px #00fff7;  *//* magenta & cyan glow */
+  }
+}
+
+.cyberpunk-text{
+  color: #00fff7; /* neon cyan */
+  background-color: #2d0036; /* deep purple */
+  text-shadow: 0 0 8px #ff00ea, 0 0 16px #00fff7; /* magenta & cyan glow */
+}
+
+/* This is used for logo*/
+.yellowtail-regular {
+  font-family: "Yellowtail", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.input-form{
+  border-radius: 0.5rem;
+  width: 100%;
+}
+
+/** Whenever we have table view for some data, we will apply these rules (tailwind classes) */
+/**
+Attention, truncate class apparently f*cks with tooltips, because of overflow: hidden;
+*/
+
+/** This one is use for table header */
+.pgs-th {
+  @apply px-4 py-2 text-center text-xs font-medium text-gray-100 uppercase tracking-wider font-mono;
+}
+
+/** Table cell normal, alling to left*/
+.pgs-td{
+  @apply px-4 py-2 text-sm text-gray-500 dark:text-gray-400 max-w-md text-left;
+  /**Apparently, truncate interferes with tooltips*/
+}
+
+/** Numerical cell, with font mono and align to right, as it should be */
+.pgs-td-num{
+  @apply px-4 py-2 text-sm text-gray-500 dark:text-gray-400 max-w-md font-mono text-right;
+}
+
+/** Font mono center, for small centered cells */
+.pgs-td-fmc{
+  @apply px-4 py-2 text-sm text-gray-500 dark:text-gray-400 max-w-md truncate font-mono text-center;
+}
+
+.pgs-tr-hov{
+  @apply hover:bg-blue-100 dark:hover:bg-slate-700;
+}
+
+.pgs-gradient-bg {
+  @apply bg-gradient-to-r from-sky-400 via-blue-500 to-violet-600;
+}
+
+.pgs-gradient-text {
+  @apply text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-500 to-violet-600;
+}
+
+/** Some nice effect for links */
+.pgs-hyperlink {
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  font-weight: 700;
+  vertical-align: top;
+}
+
+.pgs-hyperlink:hover {
+  color: blue;
+}
+
+.pgs-hyperlink::before,
+.pgs-hyperlink::after {
+ content: '';
+  position: absolute;
+  width: 100%;
+  left: 0;
+}
+.pgs-hyperlink::before {
+  background-color: var(--color-accent);
+  height: 2px;
+  bottom: 0;
+  transform-origin: 100% 50%;
+  transform: scaleX(0);
+  transition: transform .3s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.pgs-hyperlink::after {
+  content: attr(data-replace);
+  height: 100%;
+  top: 0;
+  transform-origin: 100% 50%;
+  transform: translate3d(200%, 0, 0);
+  transition: transform .3s cubic-bezier(0.76, 0, 0.24, 1);
+  color: var(--color-accent);
+}
+
+.pgs-hyperlink:hover::before {
+  transform-origin: 0% 50%;
+  transform: scaleX(1);
+}
+
+.pgs-hyperlink:hover::after {
+  transform: translate3d(0, 0, 0);
+}
