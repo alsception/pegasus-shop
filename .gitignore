@@ -1,0 +1,48 @@
+# === Global files ===
+.DS_Store
+*.log
+*.class
+*.jar
+*.war
+*.ear
+.env
+
+# === VS Code ===
+.vscode/
+
+# === IntelliJ IDEA ===
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# === STS (Spring Tool Suite) ===
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# === NetBeans ===
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# === Maven & Gradle ===
+**/target/
+**/build/
+!.mvn/wrapper/maven-wrapper.jar
+
+# === Java backend specific ===
+backend/src/main/resources/application-local.properties
+backend/src/main/resources/application-dev.properties
+
+# === Frontend svelte ===
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.*  # catches .env.local, .env.production, etc.
