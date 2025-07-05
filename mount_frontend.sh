@@ -40,4 +40,4 @@ end_time=$(date +%s)
 duration=$((end_time - start_time))
 
 # Done
-echo "✅ Deploy completed successfully in ${duration} seconds!"
+echo "Deploy completed successfully in ${duration} seconds!"
