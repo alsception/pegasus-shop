@@ -2,7 +2,7 @@
   import PrimaryMenu from "./PrimaryMenu.svelte";
 </script>
 
-<div class="navbar /*bg-base-100*/ shadow-sm /*bhead*/ fixed bg-slate-950">
+<div class="navbar shadow-sm fixed bg-slate-950 z-50">
   <div class="navbar-start">
     <div class="dropdown">
       <div tabindex="0" role="button" class="btn btn-ghost btn-circle">

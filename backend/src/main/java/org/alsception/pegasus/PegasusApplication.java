@@ -14,12 +14,15 @@ public class PegasusApplication implements ApplicationListener<ApplicationReadyE
     @Value("${server.servlet.context-path:/}")
     private String contextPath;
     
+    @Value("${server.port:/}")
+    private String port;
+    
     private static final Logger logger = LoggerFactory.getLogger(PegasusApplication.class);
 
     public static void main(String[] args) 
     {
         // Manually set default profile if none is set
-        System.setProperty("spring.profiles.active", "local");
+        System.setProperty("spring.profiles.active", "local");//Do we need this now?
 
         SpringApplication.run(PegasusApplication.class, args);
     }
@@ -27,7 +30,7 @@ public class PegasusApplication implements ApplicationListener<ApplicationReadyE
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) 
     {
-       logger.info("Application context path is: " + contextPath);
+       logger.info("Application context path is: " + contextPath + ", on port: "+port);
        logger.info("<================================================================================================>\n");
     }
 

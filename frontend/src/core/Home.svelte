@@ -146,7 +146,8 @@ onMount(() => {
 <!-- hover:bg-gradient-to-r hover:from-[#fde68a]  hover:to-[#f59e0b] -->
 
 <div
-  class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 scale-up-center-normal"
+  class="max-w-7xl mx-auto px-6 py-10 
+  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 scale-up-center-normal"
 >
 
   {#each displayedItems as item}
