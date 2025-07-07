@@ -57,13 +57,9 @@
        */
 
       if (!isAuthenticated) {
-        console.log("not auth");
         error = "Session expired. Please login again.";
-        console.log(error);
-        // goto('/login?return=' + encodeURIComponent(currentPath));
         return;
       } else {
-        console.log("auth ok");
         handleSearch();
       }
     } catch (err) {
@@ -73,33 +69,27 @@
     }
   });
 
-
-  function handleFormSubmit(event: { preventDefault: () => void }) {
+  function handleFormSubmit(event: { preventDefault: () => void }) 
+  {
     event.preventDefault(); // prevent page reload
     handleSearch();
   }
 
- async function handleSearch() {
-    console.log("Searching for:", searchTerm);
-    
-    // JWT token
+ async function handleSearch() 
+ {    
     const token = $auth.token;
     loading = true;
     
-    try {
+    try {        
 
-        // Wait 10 seconds before proceeding
-      //await new Promise(resolve => setTimeout(resolve, 10000));
-
-        const res = await fetch(API_BASE_URL + `/orders?search=${searchTerm}`, {
+        const res = await fetch(API_BASE_URL + `/orders?search=${searchTerm}`, 
+        {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
-        });
-
-        
+        });        
         
         // Check response status and handle specific cases
         if (!res.ok) {
@@ -119,12 +109,12 @@
         
         // Parse JSON directly - no need for JSON.parse since res.json() already does this
         const data = await res.json();
-        console.log('Response data:', data);
         
         // Update orders with the received data
         orders = data;
         
-    } catch (error: any) {
+    } catch (error: any) 
+    {
         console.error('Error during search:', error);
         
         // Handle 401 Unauthorized specifically
@@ -266,9 +256,14 @@
 
   {#if loading}
 
-    <div class="flex justify-center items-center h-64">
-      <span class="loading loading-bars loading-xl"></span>
-    </div>
+     <div
+        class="absolute inset-0 flex flex-col justify-center items-center z-10 rounded-2xl"
+      >
+        <span
+          class="loading loading-infinity mb-2 text-blue-500"
+          style="width: 4rem; height: 4rem;"
+        ></span>
+      </div>
 
   {:else if error}
 
@@ -278,77 +273,84 @@
     
   {:else}
 
-  <div class="max-w-[2048px] w-full overflow-x-auto shadow-md rounded-lg align-middle text-center mx-auto">
-    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 /*table*/">
-      <thead class="bg-gray-800 dark:bg-slate-800">
-        <tr class="h-12">
-          <th class="pgs-th">id</th>
-          <th class="pgs-th">code</th>
-          <th class="pgs-th">user</th>
-          <th class="pgs-th">buyer</th>
-          <th class="pgs-th">Email</th>
-          <th class="pgs-th">Address</th>            
-          <th class="pgs-th">Payment Method</th>
-          <th class="pgs-th">Amount</th>
-          <th class="pgs-th">Items</th>
-          <th class="pgs-th">Comment</th>          
-          <th class="pgs-th">Other</th>       
-          <th class="pgs-th">created</th>       
-          <th class="pgs-th">Status</th>
-          <th class="pgs-th">Actions</th>          
-        </tr>
-      </thead>
-      <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-        {#each orders as order, i}
-          <tr class="{i % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900'} hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors pgs-tr-hov">
-            <td class="pgs-td">
-              <a use:link href="/orders/{order.id}" class="pgs-hyperlink">{order.id}</a>
-            </td>
-            <td class="pgs-td font-mono">{formatCode(order.code)}</td>
-            <td class="pgs-td">{order.user?.username}</td>
-            <td class="pgs-td">{order.name}</td> 
-            <td class="pgs-td">{order.email}</td>
-            <td class="pgs-td">{order.address}</td>            
-            <td class="pgs-td">
-              <div class="badge badge-neutral">{order.paymentMethod}</div>
-          </td>
-            <td class="pgs-td-num font-mono">{order.price}</td>
-            <td class="pgs-td-num font-mono">{order.items.length}</td>
-            <td class="text-center">{@html formatCommentInfo(order.comment)}</td>            
-            <td class="pgs-td">{order.other}</td>
-            <td class="pgs-td font-mono">
-              {@html formatDate(order.created,'New - created less than 15 minutes ago',15)}
-            </td>
-            <td class="text-center"><div class="badge badge-primary">{order.status}</div></td>        
+    {#if (orders.length === 0)}
+        
+      <div class="flex justify-center items-center h-64">
+        <h3 class="text-gray-500 dark:text-gray-400">No orders found.</h3>
+      </div>
+
+    {:else}
+
+      <div class="max-w-[2048px] w-full overflow-x-auto shadow-md rounded-lg align-middle text-center mx-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 /*table*/">
+          <thead class="bg-gray-800 dark:bg-slate-800">
+            <tr class="h-12">
+              <th class="pgs-th">id</th>
+              <th class="pgs-th">code</th>
+              <th class="pgs-th">user</th>
+              <th class="pgs-th">buyer</th>
+              <th class="pgs-th">Email</th>
+              <th class="pgs-th">Address</th>            
+              <th class="pgs-th">Payment Method</th>
+              <th class="pgs-th">Amount</th>
+              <th class="pgs-th">Items</th>
+              <th class="pgs-th">Comment</th>          
+              <th class="pgs-th">Other</th>       
+              <th class="pgs-th">created</th>       
+              <th class="pgs-th">Status</th>
+              <th class="pgs-th">Actions</th>          
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            {#each orders as order, i}
+              <tr class="{i % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900'} hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors pgs-tr-hov">
+                <td class="pgs-td">
+                  <a use:link href="/orders/{order.id}" class="pgs-hyperlink">{order.id}</a>
+                </td>
+                <td class="pgs-td font-mono">{formatCode(order.code)}</td>
+                <td class="pgs-td">{order.user?.username}</td>
+                <td class="pgs-td">{order.name}</td> 
+                <td class="pgs-td">{order.email}</td>
+                <td class="pgs-td">{order.address}</td>            
+                <td class="pgs-td">
+                  <div class="badge badge-neutral">{order.paymentMethod}</div>
+              </td>
+                <td class="pgs-td-num font-mono">{order.price}</td>
+                <td class="pgs-td-num font-mono">{order.items.length}</td>
+                <td class="text-center">{@html formatCommentInfo(order.comment)}</td>            
+                <td class="pgs-td">{order.other}</td>
+                <td class="pgs-td font-mono">
+                  {@html formatDate(order.created,'New - created less than 15 minutes ago',15)}
+                </td>
+                <td class="text-center"><div class="badge badge-primary">{order.status}</div></td>        
 
 
-            <td class=" justify-center">
-              <div class="tooltip" data-tip="Edit"><a class="px-4" aria-label="Edit" use:link href="/orders/mngmt/{order.id}"><i class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"></i></a></div>
-              <button class="px-4" aria-label="Delete" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
-                <div class="tooltip" data-tip="Delete">
-                <i class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"></i>
-              </div></button>
-            </td>      
-          </tr>
-        {/each}
-        <tr class="bg-white dark:bg-slate-900"> 
-          <td colspan="18" class="pgs-td text-left font-mono font-bold">Total orders found: {orders.length}</td>  
-        </tr>
-      </tbody>
-    </table>
-  </div>
-    
-    {/if}
-    <!-- ovde cemo staviti order details (items) -->
-    {#if modalOrder}
-      <Modal
-        showModal={true}
-        title="Reviews"
-        data={modalOrder.reviews}
-        on:close={closeModal}
-      />
+                <td class=" justify-center">
+                  <div class="tooltip" data-tip="Edit"><a class="px-4" aria-label="Edit" use:link href="/orders/mngmt/{order.id}"><i class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"></i></a></div>
+                  <button class="px-4" aria-label="Delete" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
+                    <div class="tooltip" data-tip="Delete">
+                    <i class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"></i>
+                  </div></button>
+                </td>      
+              </tr>
+            {/each}
+            <tr class="bg-white dark:bg-slate-900"> 
+              <td colspan="18" class="pgs-td text-left font-mono font-bold">Total orders found: {orders.length}</td>  
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
     {/if}
   {/if}
-<style>
 
-</style>
+  <!-- ovde cemo staviti order details (items) -->
+  {#if modalOrder}
+    <Modal
+      showModal={true}
+      title="Reviews"
+      data={modalOrder.reviews}
+      on:close={closeModal}
+    />
+  {/if}
+{/if}

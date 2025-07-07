@@ -56,25 +56,47 @@ async function client<T>(
   }
   else
   {
-    throw new Error('No auth token provided');
+    throw new Error('You are not logged in or your session has expired. Please log in to continue.');
   }
 
   const response = await fetch(`${API_BASE_URL}${path}`, {...options, headers});
 
   if (!response.ok) 
   {
-    const message = await response.text();//do we need await here? yes
-    
-    throw new Error(`${message}`);  //<--- ln 78
+    let message = await response.text();
+    if (!message) {
+      // Provide default messages for common statuses
+      message = response.status + ' - ';
+      switch (response.status) {
+      case 400:
+        message += 'Bad request';
+        break;
+      case 401:
+        message += 'Unauthorized';
+        break;
+      case 403:
+        message += 'Forbidden';
+        break;
+      case 404:
+        message += `NOT FOUND: ${path}`;
+        break;
+      case 500:
+        message += 'Internal server error';
+        break;
+      default:
+        message += `Request failed with status ${response.status}`;
+      }
+    }
+    throw new Error(`${message}`);
   }
   
   // Check if response has content before parsing JSON
   const contentLength = response.headers.get('content-length');
   const contentType = response.headers.get('content-type');
   
-  if (contentLength === '0' || response.status === 204 || !contentType?.includes('application/json')) {
-      console.log(12)
-      return null as T; // or return {} as T
+  if (contentLength === '0' || response.status === 204 || !contentType?.includes('application/json')) 
+  {
+    return null as T; // or return {} as T
   }
   
   let x = await response.json(); // Add await here too!

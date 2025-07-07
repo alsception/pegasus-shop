@@ -1,7 +1,7 @@
 import type { Product } from "../products/Product";
 import type { User } from "../users/User";
 
-export interface PGSCart 
+export interface Cart 
 {
     id: number;
     totalPrice: number;

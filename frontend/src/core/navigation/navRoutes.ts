@@ -25,7 +25,7 @@ export const navRoutes: NavRoutesMap =
     "/products/mngmt/:id": {
       label: "Products administration",
       icon: "box",
-      href: "",
+      href: "#/products?listView=true",
       component: null,
       componentDetails: "/products/mngmt/:id",
     },

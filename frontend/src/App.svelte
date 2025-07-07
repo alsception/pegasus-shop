@@ -63,7 +63,6 @@
       isAuthenticated = authStatus;
 
       /*processDayTime()*/
-
     } catch (err) {
        console.log(err);
     } 
@@ -114,13 +113,13 @@
 
 </script>
 
+  <Header/>
+
 {#if !$auth.isAuthenticated}
 
   <Login />
 
 {:else}
-
-  <Header/>
 
   <main class="flex-1 overflow-auto main-content p-6 w-full mt-24">
     <!-- Router to render dynamic pages -->

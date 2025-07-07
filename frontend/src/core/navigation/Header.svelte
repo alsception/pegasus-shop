@@ -4,8 +4,8 @@
 
 <div class="navbar shadow-sm fixed bg-slate-950 z-50">
   <div class="navbar-start">
-    <div class="dropdown">
-      <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+    <div class="dropdown bg-neutral-800">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-circle bg-neutral-800 hover:bg-neutral-700">
         <i class="fas fa-bars text-xl"></i>
       </div>
 

@@ -2,15 +2,14 @@
   import { onMount } from "svelte";
   import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/store"; // or relative import
-  import Login from "../../core/auth/login.svelte";
   import { get } from "svelte/store";
-  import type { User } from "./User.ts";
-  import { logout } from "../../core/services/client";
-  import NewUserModal from "./NewUserModal.svelte";
-  import api from "../../core/services/client";
   import { formatDate } from "../../lib/utils";
   import { formatActive } from "../../lib/utils";
-  import { scale, slide } from "svelte/transition";
+  import { logout } from "../../core/services/client";
+  import type { User } from "./User.ts";
+  import NewUserModal from "./NewUserModal.svelte";
+  import Login from "../../core/auth/login.svelte";
+  import api from "../../core/services/client";
 
   let isAuthenticated = false;  
   let loading: boolean = false;
@@ -62,7 +61,7 @@
     try {
       const { isAuthenticated: authStatus } = get(auth);
       isAuthenticated = authStatus;
-      //TODO: if is not authenticated, then dont do search
+      //TODO: if is not authenticated, then dont do search      
       handleSearch();
     } catch (err) {
       error = err instanceof Error ? err.message : "Unknown error";
@@ -77,17 +76,17 @@
     handleSearch();
   }
 
-  function handleSearch() 
+  async function handleSearch() 
   {
     //TODO: Currently we search for new users when modal is closed
     // We should not search if new user has not been created
     
-    console.log("Searching for:", searchTerm);
-
-    // JWT token
+    loading = true;
+    error = null; // Reset error message
+    
     const token = $auth.token;
 
-    fetch(API_BASE_URL+`/users?search=${searchTerm}`, {
+    await fetch(API_BASE_URL+`/users?search=${searchTerm}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -115,8 +114,11 @@
           // Optional: Redirect to login or clear token
           // window.location.href = '/login';
         } else {
-          console.error("Error:", err);
+          error = err instanceof Error ? err.message : "Unknown error";
         }
+      })
+      .finally(() => {
+        loading = false;
       });
   }
   
@@ -158,15 +160,15 @@
     switch (userRole.toUpperCase()) 
     {
       case "ADMIN":
-        return "error";
+        return "admin";
       case "CUSTOMER":
         return "success";
       case "EMPLOYEE":
-        return "accent";
+        return "info";
       //Most should be covered by these 3
       case "TESTER":
       case "VENDOR":
-        return "info";
+        return "accent";
       case "OTHER":
         return "";
       default:
@@ -208,8 +210,6 @@
   function handleCheckboxChange(event: Event, i: any) 
   {
 
-    console.log('checked: '+i)
-    console.log('event: ',event)
 		const target = event.target as HTMLInputElement;
 		let isChecked = target.checked;
 
@@ -268,25 +268,37 @@
   <div id="results" style="margin: 48px;"></div>
 
   {#if loading}
-
-    <div class="flex justify-center items-center h-64">
-      <span class="loading loading-bars loading-xl"></span>
-    </div>
+      <!-- Overlay loading animation -->
+      <div
+        class="absolute inset-0 flex flex-col justify-center items-center z-10 rounded-2xl"
+      >
+        <span
+          class="loading loading-infinity mb-2 text-blue-500"
+          style="width: 4rem; height: 4rem;"
+        ></span>
+      </div>
 
   {:else if error}
 
-    <div class="flex justify-center items-center h-64">
+    <div class="flex justify-center items-center h-64 text-red-500 text-2xl mt-4 text-center dark:text-red-400">
       <h3>Error: {error}</h3>
     </div>
     
   {:else}
+
+  {#if (users.length === 0)}
+        
+      <div class="flex justify-center items-center h-64">
+        <h3 class="text-gray-500 dark:text-gray-400">No users found.</h3>
+      </div>
+
+    {:else}
 
   <div class="max-w-[1568px] overflow-x-auto shadow-md rounded-lg align-middle mx-auto">
       <table class="table table-zebra table-xs min-w-full divide-y divide-gray-200 dark:divide-gray-700" >
       <thead class="bg-gray-800 dark:bg-slate-800">
         <tr class="h-12">
           <th>
-           <!--  <input type="checkbox" class="checkbox checkbox-accent checkbox-xs bg-slate-200"  /> -->
           </th>
           <th class="pgs-th cursor-pointer"  
             title="Click to sort by"
@@ -352,7 +364,9 @@
                   <a use:link href="/users/{user.id}" class="text-gray-500 dark:text-gray-400 hover:text-sky-500 dark:hover:text-sky-500 font-bold ">{user.username}</a>
               </td> 
               <td>
-                <span style="font-size: small;" class="font-mono font-semibold text-{getUserColor(user.role)}">{user.role}</span>
+                <span class="badge badge-outline badge-{getUserColor(user.role)} font-mono font-semibold" style="text-transform: uppercase;">
+                  {user.role}
+                </span>
               </td>     
               <td class="pgs-td">{user.firstName}</td>
               <td class="pgs-td">{user.lastName}</td> 
@@ -384,6 +398,7 @@
       </tbody>
     </table>
   </div>
+  {/if}
 
   <div style="display: none;">
     <!-- tailwind hack, otherwise these colors are not included in bundle -->
@@ -411,4 +426,13 @@
 .selected:hover {
   background-color: #cfe2ffd5; /* slightly different light blue */
 } 
+
+/* Softer custom badge backgrounds, do NOT use .badge to avoid DaisyUI interference */
+.badge-admin    { background: #d8cafe !important; color: #3e1cb9 !important; }
+.badge-error    { background: #fecaca !important; color: #b91c1c !important; }
+.badge-success  { background: #bbf7d0 !important; color: #166534 !important; }
+.badge-accent   { background: #fef9c3 !important; color: #a16207 !important; }
+.badge-info     { background: #dbeafe !important; color: #1e40af !important; }
+.badge          { background: #e3e4e6; color: #5e5f61; border-radius: 0.5rem !important; font-size: inherit;}
+/* No .badge base class here! */
 </style>

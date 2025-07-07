@@ -3,7 +3,7 @@
   import { auth } from "../../core/services/store";
   import Login from "../../core/auth/login.svelte";
   import axios from "axios";
-  import type { PGSCart } from "./PGSCart";
+  import type { PGSCart } from "./Cart";
 
   document.title = 'Cart | Pegasus'
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -43,14 +43,11 @@
   async function loadCart() 
   {
     loading = true;
-    try {
+    try{
       const response = await axiosInstance.get<PGSCart>('cart');
-      console.log(response);
       cart = response.data;
-      console.log(cart);
-    } catch (error) {
-      console.error('Failed to load cart:', error);
-      alert('Error loading cart.');
+    } catch (err) {
+      error = (err instanceof Error ? err.message : "Unknown error");
     } finally {
       loading = false;
     }
@@ -89,13 +86,19 @@
 
   {#if loading}
 
-    <div class="flex justify-center items-center h-64">
-      <span class="loading loading-bars loading-xl"></span>
+    <!-- Overlay loading animation -->
+    <div
+      class="absolute inset-0 flex flex-col justify-center items-center z-10 rounded-2xl"
+    >
+      <span
+        class="loading loading-infinity mb-2 text-blue-500"
+        style="width: 4rem; height: 4rem;"
+      ></span>
     </div>
 
   {:else if error}
 
-    <div class="flex justify-center items-center h-64">
+    <div class="flex justify-center items-center h-64 text-red-500 text-2xl mt-4 text-center dark:text-red-400">
       <h3>Error: {error}</h3>
     </div>
     
