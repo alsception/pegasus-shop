@@ -1,259 +1,162 @@
 <script lang="ts">
   import axios from "axios";
+  import { showSuccessToast } from "../../core/toaster";
+  import { auth } from "../../core/services/store";
+  import Login from "../../core/auth/login.svelte";
+  import LoadingOverlay from "../../core/LoadingOverlay.svelte";
+  import ErrorDiv from "../users/ErrorDiv.svelte";
 
- const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+  document.title = "Checkout | Pegasus";
+
+  let isAuthenticated = false;
+  let loading: boolean = false;
+  let error: string | null = null;
   let name = "";
   let email = "";
+  let phone = "";
   let address = "";
-  let paymentMethod = "";
+  let paymentMethod = "bank_transfer";
 
+  //Authenticacion
+  $: isAuthenticated = $auth.isAuthenticated;
 
   async function submitForm() {
-    const url = API_BASE_URL + '/cart/checkout';
+    const url = API_BASE_URL + "/cart/checkout";
     const payload = {
       email,
       name,
       address,
-      paymentMethod
+      phone,
+      paymentMethod,
     };
 
     try {
+      loading = true;
       const response = await axios.post(url, payload, {
         headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token'),
-          'Content-Type': 'application/json'
-        }
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Content-Type": "application/json",
+        },
       });
-      console.log('Success:', response.data);
-    } catch (error) {
-      console.error('Error submitting form:', error);
+
+      //todo: show success message -> go to order details page. we dont have order details page yet.
+      showSuccessToast("Order placed successfully!");
+    } catch (err) {
+      error = (err as Error).message;
+    } finally {
+      loading = false;
     }
+  }
+
+  function cancel(event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) 
+  {
+    window.location.href = "#/cart";
   }
 </script>
 
-<div class="w-full max-w-xl bg-white rounded-lg shadow-md p-8">
-  <h1 class="text-2xl font-bold mb-6">Checkout</h1>
+<div class="w-full max-w-4xl mx-auto p-4">
 
-<form class="space-y-5" on:submit|preventDefault={submitForm}>    
-    <!-- Ime i prezime -->
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1" for="fullName"
-        >Name</label
+  {#if !$auth.isAuthenticated}
+
+    <Login />
+
+  {:else}
+  
+
+    {#if loading}
+
+      <LoadingOverlay/>
+     
+    {/if}
+
+     {#if error}
+  
+      <ErrorDiv {error} />
+
+    {:else}
+
+    <div
+      class=" mx-auto p-4 sm:p-6 bg-white dark:bg-slate-900 rounded-2xl shadow-md mt-6 sm:mt-10"
+    >
+      <h2
+        class="text-xl font-semibold col-span-full text-gray-700 dark:text-gray-100 mb-7"
       >
-      <input
-        id="fullName"
-        type="text"
-        class="input w-full"
-        placeholder="Name"
-        bind:value={name} required
-      />
-    </div>
+        Checkout
+      </h2>
 
-    <!-- Email adresa -->
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1" for="email"
-        >Email adresa <span class="text-red-500">*</span></label
-      >
-      <input
-        id="email"
-        type="email"
-        class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring focus:border-blue-400"
-        placeholder="petar@example.com"
-        bind:value={email} required
-      />
-    </div>
+      <form class="space-y-5" on:submit|preventDefault={submitForm}>
 
-    <!-- Adresa za dostavu -->
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1" for="address"
-        >Adresa za dostavu</label
-      >
-      <textarea
-        id="address"
-        class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring focus:border-blue-400"
-        rows="3"
-        placeholder="Ulica i broj, grad, poštanski broj"
-        bind:value={address}
-      ></textarea>
-    </div>
-
-    <!-- Način plaćanja -->
-     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">
-    Payment Method:
-        <select bind:value={paymentMethod} required>
-          <option value="" disabled selected>Select</option>
-          <option value="credit_card" disabled>Credit Card</option>
-          <option value="paypal" disabled>PayPal</option>
-          <option value="bank_transfer">Bank Transfer / pouzećem</option>
-        </select>
-      </label>
-
-    <div class="hidden">
-      <label class="block text-sm font-medium text-gray-700 mb-2"
-        >Način plaćanja</label
-      >
-      <div class="space-y-2">
-        <label class="flex items-center space-x-2">
+        <div class="w-full">
+          <label for="Name" class="label text-sm pb-3">Name</label>
           <input
-            type="radio"
-            name="payment"
-            value="card"
-            class="text-blue-600 focus:ring-blue-500"
+            id="name"
+            class="input input-form font-bold"
+            placeholder="Name"
+            bind:value={name}
           />
-          <span>Kreditna/debitna kartica</span>
-        </label>
-        <label class="flex items-center space-x-2">
-          <input
-            type="radio"
-            name="payment"
-            value="cash"
-            class="text-blue-600 focus:ring-blue-500"
-          />
-          <span>Gotovina pouzećem</span>
-        </label>
-        <label class="flex items-center space-x-2">
-          <input
-            type="radio"
-            name="payment"
-            value="paypal"
-            class="text-blue-600 focus:ring-blue-500"
-          />
-          <span>PayPal</span>
-        </label>
-      </div>
-    </div>
+        </div>
 
-    <br><br>
-    <!-- Submit dugme -->
-    <div>
-      <!-- hologram maybe add hologram later-->
-      <button
-        type="submit"
-        class="btn " 
-      >
-        Confirm
-      </button>
+        <div class="w-full">
+          <label for="email" class="label text-sm pb-3">e-mail</label>
+          <input
+            id="email"
+            class="input input-form font-bold"
+            placeholder="e-mail"
+            bind:value={email}
+          />
+        </div>
+
+        <div class="w-full">
+          <label for="phone" class="label text-sm pb-3">phone</label>
+          <input
+            id="phone"
+            class="input input-form font-bold"
+            placeholder="phone"
+            bind:value={phone}
+          />
+        </div>
+
+        <div class="w-full">
+          <label for="address" class="label text-sm pb-3">Address</label>
+          <textarea
+            id="address"
+            class="input input-form font-bold"
+            rows="3"
+            placeholder="Street and number, city, postal code, country"
+            bind:value={address}
+          ></textarea>
+        </div>
+
+        <div class="w-full">
+          <fieldset class="fieldset">
+            <legend class="label text-sm pb-3">Payment Method:</legend>
+            <select
+              id="payment"
+              bind:value={paymentMethod}
+              required
+              class="select input input-form font-bold"
+            >
+              <option value="bank_transfer" selected
+                >Bank Transfer / invoice</option
+              >
+              <option value="credit_card" disabled>Credit Card</option>
+              <option value="paypal" disabled>PayPal</option>
+              <option value="crypto" disabled>Crypto / Bitcoin</option>
+            </select>
+          </fieldset>
+        </div>
+
+        <div class="col-span-full flex justify-end">
+          <button type="button" on:click={cancel} class="btn m-3">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary m-3"> Confirm </button>
+        </div>
+
+      </form>
     </div>
-  </form>
+  {/if}
+  {/if}
 </div>
-<style>
-  /*********************************/
-  /* ----------------------------------------------
-* Generated by Gradienty on 2025-06-02 16:00
-* animation scale-up-center-normal
-* ----------------------------------------
-*/
-  @keyframes scale-up-center-normal {
-    0% {
-      transform: scale(0.5);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
-
-  .scale-up-center-normal {
-    animation: scale-up-center-normal 0.25s ease-out 0s 1 normal both;
-  }
-
-  /********glitch*/
-
-  .hologram:hover {
-    border: 2px solid rgba(0, 255, 255, 0.5);
-    background: rgba(0, 255, 255, 0.1);
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
-    backdrop-filter: blur(5px);
-  }
-
-  .hologram:hover span {
-    position: relative;
-    display: inline-block;
-    text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
-  }
-
-  .hologram:hover span::before,
-  .hologram:hover span::after {
-    content: attr(data-text);
-    position: absolute;
-    left: 0;
-    opacity: 0;
-    filter: blur(1px);
-    transition: all 0.3s ease;
-  }
-
-  .hologram:hover span::before {
-    top: -2px;
-    color: #ff00ff;
-    transform: translateX(0);
-    animation: glitch 2s infinite;
-  }
-
-  .hologram:hover span::after {
-    bottom: -2px;
-    color: #00ffff;
-    transform: translateX(0);
-    animation: glitch 2s infinite reverse;
-  }
-
-  .scan-line:hover {
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(
-      to right,
-      transparent,
-      rgba(0, 255, 255, 0.8),
-      transparent
-    );
-    top: 0;
-    animation: scan 2s linear infinite;
-    filter: blur(1px);
-  }
-
-  @keyframes glitch {
-    0%,
-    100% {
-      transform: translateX(0);
-      opacity: 0.3;
-    }
-    20% {
-      transform: translateX(-5px);
-      opacity: 0.5;
-    }
-    40% {
-      transform: translateX(5px);
-      opacity: 0.7;
-    }
-    60% {
-      transform: translateX(-3px);
-      opacity: 0.5;
-    }
-    80% {
-      transform: translateX(3px);
-      opacity: 0.3;
-    }
-  }
-
-  @keyframes scan {
-    0% {
-      top: -10%;
-    }
-    100% {
-      top: 110%;
-    }
-  }
-
-  .no-spinner::-webkit-outer-spin-button,
-  .no-spinner::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-    text-align: right;
-  }
-
-  .no-spinner {
-    -moz-appearance: textfield;
-    text-align: right;
-  }
-</style>

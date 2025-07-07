@@ -3,6 +3,8 @@
   import { params } from "svelte-spa-router";
   import { auth } from "../../core/services/store"; 
   import type { Product } from "./Product";
+  import LoadingOverlay from "../../core/LoadingOverlay.svelte";
+  import ErrorDiv from "../users/ErrorDiv.svelte";
 
   document.title = 'Products | Pegasus'
   
@@ -52,15 +54,11 @@
 
   {#if loading}
 
-    <div class="flex justify-center items-center h-64">
-      <span class="loading loading-bars loading-xl"></span>
-    </div>
+  <LoadingOverlay/>
 
   {:else if error}
   
-    <div class="flex justify-center items-center h-64">
-      <h3>Error: {error}</h3>
-    </div>
+  <ErrorDiv {error} />
 
   {:else if !product}
   

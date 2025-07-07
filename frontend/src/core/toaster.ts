@@ -8,7 +8,7 @@ export function showSuccessToast(message: string): void {
   toast.push('✅ ' + message, {
     theme: {
       '--toastColor': 'mintcream',
-      '--toastBackground': 'rgba(72,187,120,0.9)',
+      '--toastBackground': 'rgb(72, 187, 120)',
       '--toastBarBackground': '#2F855A',
       '--toastBarHeight': 0
     }

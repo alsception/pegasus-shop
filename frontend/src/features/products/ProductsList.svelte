@@ -11,6 +11,8 @@
   import { formatActive } from "../../lib/utils";
   import { formatCommentInfo } from "../../lib/utils";
   import { showSuccessToast, showErrorToast } from "../../core/toaster";
+  import LoadingOverlay from "../../core/LoadingOverlay.svelte";
+  import ErrorDiv from "../users/ErrorDiv.svelte";
 
   document.title = "Products | Pegasus";
 
@@ -234,7 +236,7 @@
   <Login />
 {:else}
   <div
-    class="w-full max-w-4xl mx-auto p-4 bg-white dark:bg-slate-900 rounded-lg shadow-md dark:shadow-gray-900/30"
+    class="w-full max-w-4xl p-4 bg-white dark:bg-slate-900 rounded-lg shadow-md dark:shadow-gray-900/30 mx-4 sm:mx-0"
   >
     <form
       on:submit|preventDefault={handleFormSubmit}
@@ -270,21 +272,11 @@
 
   {#if loading}
     
-    <!-- Overlay loading animation -->
-    <div
-      class="absolute inset-0 flex flex-col justify-center items-center z-10 rounded-2xl"
-    >
-      <span
-        class="loading loading-infinity mb-2 text-blue-500"
-        style="width: 4rem; height: 4rem;"
-      ></span>
-    </div>
+  <LoadingOverlay/>
 
   {:else if error}
 
-    <div class="flex justify-center items-center h-64 text-red-500 text-2xl mt-4 text-center dark:text-red-400">
-      <h3>Error: {error}</h3>
-    </div>
+  <ErrorDiv {error} />
 
   {:else}
 

@@ -8,6 +8,8 @@
   import { showSuccessToast, showErrorToast } from '../../core/toaster';
   import axios from 'axios';
   import Login from "../../core/auth/login.svelte";
+  import LoadingOverlay from "../../core/LoadingOverlay.svelte";
+  import ErrorDiv from "../users/ErrorDiv.svelte";
 
   document.title = 'Orders | Pegasus'
 
@@ -256,20 +258,11 @@
 
   {#if loading}
 
-     <div
-        class="absolute inset-0 flex flex-col justify-center items-center z-10 rounded-2xl"
-      >
-        <span
-          class="loading loading-infinity mb-2 text-blue-500"
-          style="width: 4rem; height: 4rem;"
-        ></span>
-      </div>
+  <LoadingOverlay/>
 
   {:else if error}
-
-    <div class="flex justify-center items-center h-64">
-      <h3>Error: {error}</h3>
-    </div>
+    
+  <ErrorDiv {error} />
     
   {:else}
 

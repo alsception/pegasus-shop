@@ -47,7 +47,6 @@
 
           // Ispis svih zaglavlja
           for (let [key, value] of response.headers.entries()) {
-            console.log(`${key}: ${value}`);
             if (key === "x-ratelimit-remaining") {
               ratelimitremaining = value;
             }
@@ -57,8 +56,6 @@
           return response.json(); // ili response.text(), response.blob() itd.
         })
         .then((data) => {
-          console.log("sucess@!!!");
-          console.log(data);
           photos = data.results;
           totalPages = data.total_pages;
           numResults = data.results.length;

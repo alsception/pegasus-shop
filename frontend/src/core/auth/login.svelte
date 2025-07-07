@@ -1,4 +1,6 @@
 <script lang="ts">
+  import LoadingOverlay from '../LoadingOverlay.svelte';
+
   import { login } from "../services/client";
 
   let username = "";
@@ -34,15 +36,7 @@
 
     {#if loading}
 
-      <!-- Overlay loading animation -->
-      <div
-        class="absolute inset-0 bg-white/66 dark:bg-black/66 flex flex-col justify-center items-center z-10 rounded-2xl"
-      >
-        <span
-          class="loading loading-infinity mb-2 text-blue-500"
-          style="width: 4rem; height: 4rem;"
-        ></span>
-      </div>
+      <LoadingOverlay/>
 
     {/if}
 

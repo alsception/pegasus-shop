@@ -4,6 +4,8 @@
   import Login from "../../core/auth/login.svelte";
   import axios from "axios";
   import type { PGSCart } from "./Cart";
+  import LoadingOverlay from "../../core/LoadingOverlay.svelte";
+  import ErrorDiv from "../users/ErrorDiv.svelte";
 
   document.title = 'Cart | Pegasus'
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -74,6 +76,11 @@
       cart.items[index] = item;
     } */
   }
+  
+  function cancel(event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) 
+  {
+    window.location.href = "#/products";
+  }
 </script>
 
 <div class="w-full max-w-4xl mx-auto p-4">
@@ -86,21 +93,11 @@
 
   {#if loading}
 
-    <!-- Overlay loading animation -->
-    <div
-      class="absolute inset-0 flex flex-col justify-center items-center z-10 rounded-2xl"
-    >
-      <span
-        class="loading loading-infinity mb-2 text-blue-500"
-        style="width: 4rem; height: 4rem;"
-      ></span>
-    </div>
+    <LoadingOverlay/>
 
   {:else if error}
 
-    <div class="flex justify-center items-center h-64 text-red-500 text-2xl mt-4 text-center dark:text-red-400">
-      <h3>Error: {error}</h3>
-    </div>
+    <ErrorDiv {error} />
     
   {:else}  
 
@@ -119,7 +116,7 @@
 
               <div class="py-4 grid grid-cols-3 gap-2 items-center">
                 <div class="col-span-2">
-                  <p class="text-base sm:text-lg font-medium truncate">{item.product.name}</p>
+                  <p class="text-base sm:text-md font-medium truncate">{item.product.name}</p>
                   <p class="text-xs sm:text-sm text-gray-500">Quantity:   
                     <input
                     type="number"
@@ -170,35 +167,39 @@
               </div>
             {/each}
           </div>
-        {:else}
-          <p class="text-center text-gray-500 py-4">Your cart is empty</p>
-        {/if}
-        
-        <div class="space-y-4 mt-6 divide-y divide-gray-200 dark:divide-slate-700">
+          <div class="space-y-4 mt-6 divide-y divide-gray-200 dark:divide-slate-700">
           <div class="pt-4 flex justify-between items-center">
-            <p class="text-base sm:text-lg font-semibold">Subtotal:</p>
-            <p class="text-lg sm:text-xl font-bold">{formatPrice(cart.subtotal || 0)}</p>
+            <p class="text-base sm:text-md font-semibold">Subtotal:</p>
+            <p class="text-md sm:text-xl font-bold">{formatPrice(cart.subtotal || 0)}</p>
           </div>
           
           <div class="pt-4 flex justify-between items-center">
-            <p class="text-base sm:text-lg font-semibold">Tax:</p>
-            <p class="text-lg sm:text-xl font-bold">{formatPrice(cart.tax || 0)}</p>
+            <p class="text-base sm:text-md font-semibold">Tax:</p>
+            <p class="text-md sm:text-xl font-bold">{formatPrice(cart.tax || 0)}</p>
           </div>
           
           <div class="pt-4 flex justify-between items-center">
-            <p class="text-base sm:text-lg font-semibold">Shipping:</p>
-            <p class="text-lg sm:text-xl font-bold">{formatPrice(cart.shipping || 0)}</p>
+            <p class="text-base sm:text-md font-semibold">Shipping:</p>
+            <p class="text-md sm:text-xl font-bold">{formatPrice(cart.shipping || 0)}</p>
           </div>
           
           <div class="pt-4 flex justify-between items-center">
-            <p class="text-base sm:text-lg font-semibold">Total:</p>
-            <p class="text-lg sm:text-xl font-bold">{formatPrice(cart.totalPrice || 0)}</p>
+            <p class="text-base sm:text-md font-semibold">Total:</p>
+            <p class="text-md sm:text-xl font-bold">{formatPrice(cart.totalPrice || 0)}</p>
           </div>
         </div>
         <br>
-        <div class="w-full text-center">
-          <a href="#/checkout" class="btn btn-primary"> Proceed to Checkout</a>
+        <div class="col-span-full flex justify-end">
+          <button type="button" on:click={cancel} class="btn m-3">
+            Cancel
+          </button>
+          <a href="#/checkout" class="btn btn-primary m-3"> Confirm</a>
         </div>
+
+        {:else}
+          <p class="text-center text-gray-500 py-4">Your cart is empty</p>
+        {/if}       
+        
       </div>
     </div>    
 

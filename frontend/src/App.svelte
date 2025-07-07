@@ -121,8 +121,7 @@
 
 {:else}
 
-  <main class="flex-1 overflow-auto main-content p-6 w-full mt-24">
-    <!-- Router to render dynamic pages -->
+  <main class="flex-1 overflow-auto main-content w-full mt-24 p-0 sm:p-6">
     <Router {routes} />
   </main>
 

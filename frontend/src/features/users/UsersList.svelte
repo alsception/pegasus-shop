@@ -1,4 +1,6 @@
 <script lang="ts">
+  import ErrorDiv from './ErrorDiv.svelte';
+
   import { onMount } from "svelte";
   import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/store"; // or relative import
@@ -10,6 +12,7 @@
   import NewUserModal from "./NewUserModal.svelte";
   import Login from "../../core/auth/login.svelte";
   import api from "../../core/services/client";
+  import LoadingOverlay from "../../core/LoadingOverlay.svelte";
 
   let isAuthenticated = false;  
   let loading: boolean = false;
@@ -212,22 +215,21 @@
 
 		const target = event.target as HTMLInputElement;
 		let isChecked = target.checked;
-
-		if (isChecked) {
-			// ✅ Do something when checked
-			console.log("Checked! Doing something...");
-      //add to this element tr-i
+    //TODO: BUG - when ordering, selected rows are not updated
+		if (isChecked) 
+    {			
       const trElement = document.getElementById(`tr-${i}`); 
       //add class bg-blue-100 dark:bg-slate-700
-      if (trElement) {
-        console.log('adding class...');
+      if (trElement) 
+      {
         trElement.classList.add("selected");
       }
-		} else {
-			// ❌ Do something when unchecked (optional)
-			console.log("Unchecked.");
+		} 
+    else 
+    {
       const trElement = document.getElementById(`tr-${i}`);
-      if (trElement) {
+      if (trElement) 
+      {
         trElement.classList.remove("selected");
       }
 		}
@@ -268,22 +270,13 @@
   <div id="results" style="margin: 48px;"></div>
 
   {#if loading}
-      <!-- Overlay loading animation -->
-      <div
-        class="absolute inset-0 flex flex-col justify-center items-center z-10 rounded-2xl"
-      >
-        <span
-          class="loading loading-infinity mb-2 text-blue-500"
-          style="width: 4rem; height: 4rem;"
-        ></span>
-      </div>
+      
+  <LoadingOverlay/>
 
   {:else if error}
 
-    <div class="flex justify-center items-center h-64 text-red-500 text-2xl mt-4 text-center dark:text-red-400">
-      <h3>Error: {error}</h3>
-    </div>
-    
+  <ErrorDiv {error} />
+
   {:else}
 
   {#if (users.length === 0)}
@@ -364,7 +357,7 @@
                   <a use:link href="/users/{user.id}" class="text-gray-500 dark:text-gray-400 hover:text-sky-500 dark:hover:text-sky-500 font-bold ">{user.username}</a>
               </td> 
               <td>
-                <span class="badge badge-outline badge-{getUserColor(user.role)} font-mono font-semibold" style="text-transform: uppercase;">
+                <span class="badge badge-outline badge-{getUserColor(user.role)} dark:badge-{getUserColor(user.role)}-dark font-mono font-semibold" style="text-transform: uppercase;">
                   {user.role}
                 </span>
               </td>     
@@ -428,11 +421,18 @@
 } 
 
 /* Softer custom badge backgrounds, do NOT use .badge to avoid DaisyUI interference */
-.badge-admin    { background: #d8cafe !important; color: #3e1cb9 !important; }
-.badge-error    { background: #fecaca !important; color: #b91c1c !important; }
+/* .badge-admin    { background: #d8cafe !important; color: #3e1cb9 !important; }
+ */.badge-error    { background: #fecaca !important; color: #b91c1c !important; }
 .badge-success  { background: #bbf7d0 !important; color: #166534 !important; }
 .badge-accent   { background: #fef9c3 !important; color: #a16207 !important; }
 .badge-info     { background: #dbeafe !important; color: #1e40af !important; }
+.badge          { background: #e3e4e6; color: #5e5f61; border-radius: 0.5rem !important; font-size: inherit;}
+.badge-admin-dark    { background: #371399 !important; color: #614daa !important; }
+.badge-error-dark    { background: #fecaca !important; color: #b91c1c !important; }
+/* TODO: This dont work */
+.badge-success-dark  { background: #00531d !important;  color: #00ff61 !important;}
+.badge-accent-dark   { background: #fef9c3 !important; color: #a16207 !important; }
+.badge-info-dark     { background: #dbeafe !important; color: #1e40af !important; }
 .badge          { background: #e3e4e6; color: #5e5f61; border-radius: 0.5rem !important; font-size: inherit;}
 /* No .badge base class here! */
 </style>
