@@ -13,6 +13,8 @@
   import { showSuccessToast, showErrorToast } from "../../core/toaster";
   import LoadingOverlay from "../../core/LoadingOverlay.svelte";
   import ErrorDiv from "../users/ErrorDiv.svelte";
+  import AddToCartButton from "./AddToCartButton.svelte";
+  import { addToCart } from "./ProductService";
 
   document.title = "Products | Pegasus";
 
@@ -169,7 +171,7 @@
     isListView = !isListView;
   }
 
-  const axiosInstance = axios.create({
+  /* const axiosInstance = axios.create({
     baseURL: API_BASE_URL,
     headers: {
       "Content-Type": "application/json",
@@ -183,8 +185,8 @@
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
-  });
-
+  }); */
+/* 
   async function addToCart(productId: number): Promise<void> {
     addToCartLoading = productId;
     try {
@@ -229,7 +231,7 @@
     }
 
     showErrorToast(errorMessage);
-  }
+  } */
 </script>
 
 {#if !$auth.isAuthenticated}
@@ -396,13 +398,11 @@
       <div
         class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 gap-8 p-4"
       >
-        <!-- transition:fade={{ delay: i * 100 }}   -->
         {#each products as product, i}
           <div
-            class="scale-up-center-normal product-card glow bg-white dark:bg-slate-900 shadow-lg rounded-xl overflow-hidden p-5 transition-all duration-300 hover:shadow-2xl min-w-[196px] max-w-[384px] scale-up-center-normal
-                  transition-all duration-200 hover:-translate-y-1"
+            class="scale-up-center-normal product-card glow bg-white dark:bg-slate-900 shadow-lg rounded-xl overflow-hidden p-5 hover:shadow-2xl min-w-[196px] max-w-[384px] scale-up-center-normal
+                  transition-all duration-200"
           >
-            <!-- Product Image -->
             <div
               class="w-full h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden rounded-md mb-4"
             >
@@ -457,30 +457,9 @@
                 </div>
                 <div class="w-1/2 flex justify-center">
                   
-                        {#if addToCartLoading === product.id}
-
-                          <button
-                            class="btn bg-amber-300 hover:bg-amber-400 p-2 rounded-full button-fx w-full flex items-center justify-center"
-                            style="width: 96px;"
-                            disabled
-                            aria-label="Adding to cart"
-                          >                            
-                            <span class="">Adding</span>
-                            <span class="loading loading-dots loading-xs"></span>
-                          </button>
-
-                        {:else}
-
-                          <button
-                            class="cursor-pointer text-black bg-amber-300 hover:bg-amber-400 p-2 rounded-full button-fx btn w-full flex items-center justify-center"
-                            style="width: 96px;"
-                            on:click={() => addToCart(product.id)}
-                          >
-                            <span data-text="Add to cart">Add to cart</span>
-                            <div class="scan-line"></div>
-                          </button>
-
-                        {/if}
+                  <AddToCartButton
+                    product={ product } 
+                  />
                       
                 </div>
               </div>

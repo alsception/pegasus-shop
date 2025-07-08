@@ -5,6 +5,7 @@
   import type { Product } from "./Product";
   import LoadingOverlay from "../../core/LoadingOverlay.svelte";
   import ErrorDiv from "../users/ErrorDiv.svelte";
+  import AddToCartButton from "./AddToCartButton.svelte";
 
   document.title = 'Products | Pegasus'
   
@@ -69,6 +70,21 @@
   {:else}
 
     <div class="product-card">
+      <div
+              class="w-full h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden rounded-md mb-4"
+            >
+              {#if product.imageUrl}
+                <img
+                  src={product.imageUrl}
+                  alt={product.name}
+                  class="object-cover w-full h-full"
+                />
+              {:else}
+                <span class="text-gray-400 dark:text-gray-500"
+                  >No image available</span
+                >
+              {/if}
+            </div>
       <h1>{product.name}</h1>
       <p class="product-detail"><strong>Code:</strong> {product.code}</p>
       <p class="product-detail">
@@ -80,6 +96,12 @@
       <p class="product-detail"><strong>Category:</strong> {product.category}</p>
       <p class="product-detail"><strong>Tax:</strong> {product.tax}</p>
       <p class="product-detail"><strong>Tax Group:</strong> {product.taxGroup}</p>
+      <div class="w-full flex mr-0">
+      <AddToCartButton
+        product={ product } 
+      />
+      </div>
+                      
   </div>
 
   {/if}
