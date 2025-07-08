@@ -18,7 +18,6 @@
 
   //This object is used for displaying menu
   const navItems = getNavigationItems();
-  console.log(navItems);
 </script>
 
 <ul

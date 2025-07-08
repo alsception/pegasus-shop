@@ -34,16 +34,10 @@ export function formatDate(dateStr: string | number | Date | null | undefined, t
         output = `<div>
                     <span class="indicator-item badge badge-accent">new</span>
                     <br>
-                    <div class="bg-amber-100 dark:bg-blue-700 tooltip cursor-pointer" data-tip="`+tooltip+`">
-                        <span class="text-accent font-bold"> ${formattedDateTime} </span>
+                    <div class="bg-amber-100 dark:bg-blue-950 tooltip cursor-pointer" data-tip="`+tooltip+`">
+                        <span class="text-accent dark:text-yellow-300 font-bold"> ${formattedDateTime} </span>
                     </div>
                   </div>`;
-
-/* 
-        formattedOutput = `
-        <span class="indicator-item badge badge-primary">New</span>
-        <div> ${formatted}</div>
-       ` */
     }
     else
     {

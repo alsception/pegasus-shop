@@ -171,67 +171,6 @@
     isListView = !isListView;
   }
 
-  /* const axiosInstance = axios.create({
-    baseURL: API_BASE_URL,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  // Add Bearer token if available
-  axiosInstance.interceptors.request.use((config) => {
-    const token = localStorage.getItem("token"); // or getToken() if you have a helper
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  }); */
-/* 
-  async function addToCart(productId: number): Promise<void> {
-    addToCartLoading = productId;
-    try {
-      const response = await axiosInstance.post<{ message: string }>(
-        "/cart/add",
-        null,
-        {
-          params: {
-            productId,
-          },
-        }
-      );
-      //We assume success if no error happened
-      processSuccess(response);
-    } catch (error: any) {
-      processError(error);
-    } finally {
-      addToCartLoading = null;
-    }
-  }
-
-  function processSuccess(response: any) {
-    // Display success message
-    if (response.data && response.data.message) {
-      showSuccessToast(response.data.message);
-    }
-  }
-
-  function processError(error: any) {
-    // Extract message from error response
-    let errorMessage = "Error adding product to cart: ";
-
-    if (error.response && error.response.data) {
-      // error.response.data.message should contain message
-      if (error.response.data.message) {
-        errorMessage += error.response.data.message;
-      } else if (typeof error.response.data === "string") {
-        errorMessage += error.response.data;
-      }
-    } else if (error.message) {
-      errorMessage = error.message;
-    }
-
-    showErrorToast(errorMessage);
-  } */
 </script>
 
 {#if !$auth.isAuthenticated}
@@ -419,7 +358,6 @@
               {/if}
             </div>
 
-            <!-- Product Header -->
             <div class="product-card-header mb-4">
               <h1 class="text-xl font-semibold text-gray-800 dark:text-white">
                 <a use:link href="/products/{product.id}" class="pgs-hyperlink"
@@ -428,7 +366,6 @@
               </h1>
             </div>
 
-            <!-- Product Body -->
             <div
               class="product-card-body space-y-2 text-gray-700 dark:text-gray-300"
             >
@@ -442,23 +379,34 @@
                 <div class="w-1/2 flex justify-center">
                   <h2>
                     <span
-                      class="product-detail text-xl price font-bold text-green-600 dark:text-green-400"
-                      >€</span
-                    >
+                      class="product-detail text-xl price font-bold"
+                      class:text-green-600={product.active !== false && product.stockQuantity !== null}
+                      class:dark:text-green-400={product.active !== false && product.stockQuantity !== null}
+                      class:text-gray-400={product.active === false || product.stockQuantity === null}
+                      class:dark:text-400-600={product.active === false || product.stockQuantity === null}
+                    >€</span>
+
                     <span
-                      class="product-detail text-3xl price font-bold text-green-600 dark:text-green-400"
-                      >{product.priceEur}</span
-                    >
+                      class="product-detail text-3xl price font-bold"
+                      class:text-green-600={product.active !== false && product.stockQuantity !== null}
+                      class:dark:text-green-400={product.active !== false && product.stockQuantity !== null}
+                      class:text-gray-400={product.active === false || product.stockQuantity === null}
+                      class:dark:text-gray-400={product.active === false || product.stockQuantity === null}
+                    >{product.priceEur}</span>
+
                     <span
-                      class="product-detail text-xl price font-bold text-green-600 dark:text-green-400"
-                      >, 00</span
-                    >
-                  </h2>
+                      class="product-detail text-xl price font-bold"
+                      class:text-green-600={product.active !== false && product.stockQuantity !== null}
+                      class:dark:text-green-400={product.active !== false && product.stockQuantity !== null}
+                      class:text-gray-400={product.active === false || product.stockQuantity === null}
+                      class:dark:text-gray-400={product.active === false || product.stockQuantity === null}
+                    >, 00</span>
                 </div>
                 <div class="w-1/2 flex justify-center">
                   
                   <AddToCartButton
                     product={ product } 
+                    width="96px"
                   />
                       
                 </div>
