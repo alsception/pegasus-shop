@@ -1,6 +1,5 @@
 package org.alsception.pegasus.core.security;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
@@ -8,11 +7,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,8 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.alsception.pegasus.features.security.CustomUserDetailsService;
-import org.alsception.pegasus.core.security.JwtUtils;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -45,11 +37,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) 
         {
-            logger.debug("Found authHeader: {}***", authHeader.substring(0, 10));
+            logger.trace("Found authHeader: {}***", authHeader.substring(0, 10));
             
             String token = authHeader.substring(7);
             
-            logger.debug("Found token: {}***", token.substring(0, 10));
+            logger.trace("Found token: {}***", token.substring(0, 10));
             
             try 
             {
@@ -57,7 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 {
                     String username = jwtUtils.getUsernameFromJwtToken(token);
                     
-                    logger.debug("Got username: "+username);
+                    logger.trace("Got username from token: "+username);
 
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
@@ -67,12 +59,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                } else {
-                    // Token invalid -> immediately reject the request (optional)
+                } 
+                else 
+                {
+                    // Token invalid -> reject the request 
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
                 }
-            } catch (Exception e) {
+            } 
+            catch (Exception e) 
+            {
                 // Any unexpected error during token validation -> reject request
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
@@ -88,7 +84,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     
     public void printRequestDetails(HttpServletRequest request) throws IOException 
     {
-        logger.warn("<======================== UNATHORIZED HTTP REQUEST DETAILS ======================================>");
+        logger.warn("+======================== UNATHORIZED HTTP REQUEST DETAILS ======================================+");
         logger.warn("[1/2] No auth header | "+request.getMethod()+" "+request.getRequestURI());
         
         final String serverInfo = "Server Info [" + request.getServerName() + ":" + request.getServerPort()+"]";
@@ -96,7 +92,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String query = "Query String [" + request.getQueryString()+"]";            
 
         logger.warn("[2/2] " + serverInfo+", "+remoteInfo+", "+query);
-        logger.warn("<================================================================================================>");
+        logger.warn("+================================================================================================+");
     }
 
 }

@@ -1,19 +1,15 @@
-package org.alsception.pegasus.features.security;
+package org.alsception.pegasus.core.security;
 
 import java.util.HashMap;
 import java.util.Map;
 import org.alsception.pegasus.core.users.PGSUser;
-import org.alsception.pegasus.core.users.PGSUserRole;
 import org.alsception.pegasus.core.users.UserService;
-import org.alsception.pegasus.core.security.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,9 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController 
 {   
-//    @Autowired    
-//    private CustomUserDetailsService userService;
-//    
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final CustomUserDetailsService userDetailsService;
@@ -39,8 +32,8 @@ public class AuthController
 
     public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils,
                           CustomUserDetailsService userDetailsService, BCryptPasswordEncoder passwordEncoder,
-                          UserService userService
-    ) {
+                          UserService userService) 
+    {
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
         this.userDetailsService = userDetailsService;
@@ -51,10 +44,14 @@ public class AuthController
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(@RequestBody AuthRequest userDTO) 
     {
-        try {
+        try 
+        {   
+            logger.info("Registering new user: " + userDTO.getUsername());
+            
             // Check if user already exists
             if (userDetailsService.userExists(userDTO.getUsername())) 
             {
+                logger.error("Duplicate username: " + userDTO.getUsername());
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Username already exists"));
             }
@@ -67,6 +64,8 @@ public class AuthController
             
             // Save to repository
             userService.saveUser(user);
+            
+            logger.info("User created: " + user.getUsername());
 
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(Map.of("message", "User registered successfully!"));
@@ -98,7 +97,7 @@ public class AuthController
                     .body("Authentication failed: " + e.getMessage());
         }
 
-        logger.debug("Loading user: " + userDTO.getUsername());
+        logger.trace("Loading user: " + userDTO.getUsername());
         
         UserDetails userDetails = userDetailsService.loadUserByUsername(userDTO.getUsername());
         

@@ -29,10 +29,9 @@ import org.alsception.pegasus.features.order.PGSOrder;
 public class PGSUser 
 {
     
-    /*
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    We will assign id 
-    */
+    
+    
+    // We will assign id in java instead of db    
     @Id
     private Long id;
     
@@ -45,7 +44,7 @@ public class PGSUser
     @Column(nullable = false, unique = true)
     private String username;
     
-    @JsonIgnore //Za svaki slucaj, nikad se nezna :)
+    @JsonIgnore //You never knows...
     @Column(nullable = false)
     private String password;
     
@@ -64,6 +63,9 @@ public class PGSUser
     
     @Column
     private String phone;
+    
+    @Column
+    private String organization;
     
     @Getter(AccessLevel.NONE)
     @Column(name = "active")
@@ -91,7 +93,7 @@ public class PGSUser
     }
 
     //TODO: Ovo netreba da bude ovde, user netreba da zna sta je userdto
-    public PGSUser(org.alsception.pegasus.features.security.AuthRequest userDTO) 
+    public PGSUser(org.alsception.pegasus.core.security.AuthRequest userDTO) 
     {
         this.username = userDTO.getUsername();
         this.password = userDTO.getPassword();

@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.alsception.pegasus.features.products.PopularProductsWrapper;
 import org.alsception.pegasus.features.products.PGSProduct;
-import org.alsception.pegasus.features.security.AuthController;
+import org.alsception.pegasus.core.security.AuthController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -38,25 +38,30 @@ public class JwtUtils {
             .signWith(getSigningKey(), SignatureAlgorithm.HS512)
             .compact();
         
-        logger.debug("created token: "+token);
+        logger.trace("created token: "+token);
         
         return token;
     }
 
-    public boolean validateJwtToken(String token) {
-        try {
+    public boolean validateJwtToken(String token) 
+    {
+        try 
+        {
             Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())  // Use the signing key derived from jwtSecret
                 .build()
                 .parseClaimsJws(token);  // This will throw an exception if the token is invalid
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
+        } 
+        catch (JwtException | IllegalArgumentException e) 
+        {
             logger.error("Invalid JWT: " + e.getMessage());
         }
         return false;
     }
 
-    public String getUsernameFromJwtToken(String token) {
+    public String getUsernameFromJwtToken(String token) 
+    {
         return Jwts.parserBuilder()
             .setSigningKey(getSigningKey())
             .build()

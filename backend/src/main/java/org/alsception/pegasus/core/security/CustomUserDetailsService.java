@@ -1,4 +1,4 @@
-package org.alsception.pegasus.features.security;
+package org.alsception.pegasus.core.security;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository repository;
-    
     private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
     public CustomUserDetailsService(UserRepository repository) {
@@ -23,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException 
     {        
-        logger.debug("Trying to find user: " + username);
+        logger.trace("Trying to find user: " + username);
 
         Optional<PGSUser> user = repository.findByUsername(username);
 
@@ -33,32 +32,31 @@ public class CustomUserDetailsService implements UserDetailsService {
         } 
         else 
         {
-            logger.debug("Found user in DB: " + user.get().getUsername());            
-            logger.debug(user.toString());
+            logger.trace("Found user in DB: " + user.get().getUsername());            
         }
         
         // Map your User entity to Spring's UserDetails
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.get().getUsername())
                 .password(user.get().getPassword()) // should already be bcrypt encoded!
-                .roles(user.get().getRole().toString()) // or authorities
+                .roles(user.get().getRole().toString())
                 .build();
     }
     
     public boolean userExists(String username)
     {
-        logger.debug("Looking if username exists: " + username);
+        logger.trace("Looking if username exists: " + username);
 
         Optional<PGSUser> user = repository.findByUsername(username);
 
         if (user.isEmpty()) 
         {
-            logger.debug("Username is free for registration. | " + username);
+            logger.trace("Username is free for registration. | " + username);
             return false;
         } 
         else 
         {
-            logger.warn("Username already present in DB: " + user.get().getUsername());            
+            logger.trace("Username already present in DB: " + user.get().getUsername());            
             return true;
         }
         

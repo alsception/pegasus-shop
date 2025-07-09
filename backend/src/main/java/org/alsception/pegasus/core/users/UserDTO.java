@@ -18,6 +18,7 @@ public class UserDTO
     private String lastName;    
     private String email;    
     private String phone;    
+    private String organization;    
     private Boolean active;    
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -40,5 +41,6 @@ public class UserDTO
         this.active = user.isActive();
         this.phone = user.getPhone();
         this.email = user.getEmail();
+        this.organization = user.getOrganization();
     }
 }
