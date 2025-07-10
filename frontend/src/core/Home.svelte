@@ -68,78 +68,6 @@ let displayedItems: Item[] = [];
 onMount(() => {
   addItemsWithDelay(items, item => displayedItems = [...displayedItems, item]);
 
-  //gsap
-  /*************************
-  INTERESANTAN EFEKAT JER MORA NESTO DA IMAMO, PP JE KLASA
-
-
-  KAKO OVO RADI NEPITAJ
-  ***************************/  
-/* 
-
-  //gsap
-  document.addEventListener("DOMContentLoaded", () => {
-    // 📦 Registruj potrebne GSAP plugine
-    gsap.registerPlugin(SplitText, ScrambleTextPlugin);
-
-    // 🧩 Registruj custom efekt scrambleSplit
-    gsap.registerEffect({
-      name: "scrambleSplit",
-      plugins: "scrambleText",
-      defaults: { scrambleText: "{original}" },
-      extendTimeline: true,
-      effect(splits, vars) {
-        let tl = gsap.timeline(); // kreiraj timeline
-        splits.forEach(split => {
-          // ✨ Kreiraj nevidljivi proxy div sa originalnim tekstom
-          let proxy = document.createElement("div"),
-              chars = split.chars,
-              l = chars.length;
-
-          // Spoji karaktere nazad u ceo string
-          proxy.innerText = chars.map(e => e.innerText).join("");
-
-          // 🎞️ Pokreni scrambleText animaciju nad proxy-jem
-          tl.add(
-            gsap.to(proxy, vars).eventCallback("onUpdate", () => {
-              // 📤 Ažuriraj svako slovo u stvarnom DOM-u sa znakom iz proxy-ja
-              let i = l;
-              while (i--) {
-                chars[i].innerText = proxy.innerText.charAt(i);
-              }
-            }),
-            0 // sve animacije počinju u isto vreme
-          );
-        });
-        return tl; // vrati timeline da GSAP može da koristi
-      }
-    });
-
-    // 🧪 Nađi sve elemente sa klasom .pp
-    const elements = document.querySelectorAll(".pp");
-
-    // 🎯 Za svaki element:
-    elements.forEach((el) => {
-      // 1. Razbij tekst u karaktere
-      const split = new SplitText(el, { type: "chars" });
-
-      // 2. Pokreni scrambleSplit efekt (svi bez delay-a → paralelno)
-      gsap.effects.scrambleSplit([split], {
-        duration: 2,
-        delay: 0.4, // svi istovremeno
-      });
-
-      // 3. Ubaci ulaznu animaciju sa random pozicijom
-      gsap.from(split.chars, {
-        duration: 0.5,
-        y: "random(-100, 100)",
-        x: "random(-50, 50)",
-        stagger: 0.05,
-        delay: 0.4, // isti delay za sve
-      });
-    });
-  });
- */
 });
 
 </script>
@@ -155,7 +83,7 @@ onMount(() => {
       href="#{item.href}"
       class="block p-6 rounded-2xl bg-base-100 
         
-            shadow text-center scale-up-center-normal 
+            text-center scale-up-center-normal 
             transition-all duration-200 hover:-translate-y-1 
                 hover:text-accent
            "
@@ -184,6 +112,10 @@ Color palete:
   <li><span class="badge badge-xs bg-base-200"></span> bg-base-200</li>
   <li><span class="badge badge-xs bg-base-300"></span> bg-base-300</li>
 </ul>
+
+<div class="px-3 py-2 hidden sm:block absolute top-24 right-4 sm:right-10 bg-blue-500/20 rounded-[6px] w-max font-medium text-blue-300 border border-blue-500/20 animate-gentle-up-down ">Clean Code</div>
+----------------------------------------
+<div class="overflow-x-auto"><div class="whitespace-nowrap"><table><thead><tr><th></th><th><!---->Color name<!----></th><th><!---->CSS variable<!----></th><th><!---->Where to use<!----></th></tr></thead><tbody><tr><td><span class="badge bg-primary"></span></td><td><!---->primary<!----></td><td><code>--color-primary</code></td><td><!---->Primary brand color, The main color of your brand<!----></td></tr><tr><td><span class="badge bg-primary-content"></span></td><td><!---->primary-content<!----></td><td><code>--color-primary-content</code></td><td><!---->Foreground content color to use on<!----><code>primary</code><!---->color<!----><br><br></td></tr><tr><td><span class="badge bg-secondary"></span></td><td><!---->secondary<!----></td><td><code>--color-secondary</code></td><td><!---->Secondary brand color, The optional, secondary color of your brand<!----></td></tr><tr><td><span class="badge bg-secondary-content"></span></td><td><!---->secondary-content<!----></td><td><code>--color-secondary-content</code></td><td><!---->Foreground content color to use on<!----><code>secondary</code><!---->color<!----><br><br></td></tr><tr><td><span class="badge bg-accent"></span></td><td><!---->accent<!----></td><td><code>--color-accent</code></td><td><!---->Accent brand color, The optional, accent color of your brand<!----></td></tr><tr><td><span class="badge bg-accent-content"></span></td><td><!---->accent-content<!----></td><td><code>--color-accent-content</code></td><td><!---->Foreground content color to use on<!----><code>accent</code><!---->color<!----><br><br></td></tr><tr><td><span class="badge bg-neutral"></span></td><td><!---->neutral<!----></td><td><code>--color-neutral</code></td><td><!---->Neutral dark color, For not-saturated parts of UI<!----></td></tr><tr><td><span class="badge bg-neutral-content"></span></td><td><!---->neutral-content<!----></td><td><code>--color-neutral-content</code></td><td><!---->Foreground content color to use on neutral color<!----><br><br></td></tr><tr><td><span class="badge bg-base-100"></span></td><td><!---->base-100<!----></td><td><code>--color-base-100</code></td><td><!---->Base surface color of page, used for blank backgrounds<!----></td></tr><tr><td><span class="badge bg-base-200"></span></td><td><!---->base-200<!----></td><td><code>--color-base-200</code></td><td><!---->Base color, darker shade, to create elevations<!----></td></tr><tr><td><span class="badge bg-base-300"></span></td><td><!---->base-300<!----></td><td><code>--color-base-300</code></td><td><!---->Base color, even more darker shade, to create elevations<!----></td></tr><tr><td><span class="badge bg-base-content"></span></td><td><!---->base-content<!----></td><td><code>--color-base-content</code></td><td><!---->Foreground content color to use on<!----><code>base</code><!---->color<!----><br><br></td></tr><tr><td><span class="badge bg-info"></span></td><td><!---->info<!----></td><td><code>--color-info</code></td><td><!---->Info color, For informative/helpful messages<!----></td></tr><tr><td><span class="badge bg-info-content"></span></td><td><!---->info-content<!----></td><td><code>--color-info-content</code></td><td><!---->Foreground content color to use on<!----><code>info</code><!---->color<!----></td></tr><tr><td><span class="badge bg-success"></span></td><td><!---->success<!----></td><td><code>--color-success</code></td><td><!---->Success color, For success/safe messages<!----></td></tr><tr><td><span class="badge bg-success-content"></span></td><td><!---->success-content<!----></td><td><code>--color-success-content</code></td><td><!---->Foreground content color to use on<!----><code>success</code><!---->color<!----></td></tr><tr><td><span class="badge bg-warning"></span></td><td><!---->warning<!----></td><td><code>--color-warning</code></td><td><!---->Warning color, For warning/caution messages<!----></td></tr><tr><td><span class="badge bg-warning-content"></span></td><td><!---->warning-content<!----></td><td><code>--color-warning-content</code></td><td><!---->Foreground content color to use on<!----><code>warning</code><!---->color<!----></td></tr><tr><td><span class="badge bg-error"></span></td><td><!---->error<!----></td><td><code>--color-error</code></td><td><!---->Error color, For error/danger/destructive messages<!----></td></tr><tr><td><span class="badge bg-error-content"></span></td><td><!---->error-content<!----></td><td><code>--color-error-content</code></td><td><!---->Foreground content color to use on<!----><code>error</code><!---->color<!----></td></tr></tbody></table></div></div>
 
 
 

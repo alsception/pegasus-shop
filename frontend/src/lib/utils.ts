@@ -10,6 +10,11 @@
  * @param tooltip Non-obligatory tooltip
  * @param minDiff Minimum difference in minutes to change background and tooltip
  * @returns HTML. If date passed is <diffInMinutes> older then <now>, it will be with different background and tooltip.
+ * 
+ * 
+ * TODO: This should be split in 2 functions, one for formatting date and another for tooltip.
+ * 
+ * 
  */
 export function formatDate(dateStr: string | number | Date | null | undefined, tooltip: string, minDiff: number): string 
 {

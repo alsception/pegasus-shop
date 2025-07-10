@@ -94,7 +94,7 @@
   {:else}
     <form
       on:submit|preventDefault={handleSubmit}
-      class="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded shadow p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      class="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
     >
       <h2
         class="text-2xl font-semibold col-span-full text-gray-700 dark:text-gray-100 py-5"

@@ -220,7 +220,7 @@
 
 
 <div
-    class="w-full max-w-4xl mx-auto p-4 bg-white dark:bg-slate-900 rounded-lg shadow-md dark:shadow-gray-900/30"
+    class="w-full max-w-4xl mx-auto p-4 bg-white dark:bg-slate-900 rounded-lg"
   >
 
     <form
@@ -274,7 +274,7 @@
 
     {:else}
 
-      <div class="max-w-[2048px] w-full overflow-x-auto shadow-md rounded-lg align-middle text-center mx-auto">
+      <div class="max-w-[2048px] w-full overflow-x-auto rounded-lg align-middle text-center mx-auto">
         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 /*table*/">
           <thead class="bg-gray-800 dark:bg-slate-800">
             <tr class="h-12">
@@ -293,7 +293,7 @@
           </thead>
           <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {#each orders as order, i}
-              <tr class="{i % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900'} hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors pgs-tr-hov">
+              <tr class="{i % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900'} hover:bg-gray-100 dark:hover:bg-gray-600 pgs-tr-hov">
                 <td class="pgs-td">
                   <a use:link href="/orders/{order.id}" class="pgs-hyperlink">{order.id}</a>
                 </td>

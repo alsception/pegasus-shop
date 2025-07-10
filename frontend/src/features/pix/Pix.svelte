@@ -103,7 +103,7 @@
 </script>
 
 <div
-  class="w-full max-w-4xl mx-auto p-4 bg-white dark:bg-slate-900 rounded-lg shadow-md dark:shadow-gray-900/30 min-w-[1024px]"
+  class="w-full max-w-4xl mx-auto p-4 bg-white dark:bg-slate-900 rounded-lg min-w-[1024px]"
 >
   <form
     on:submit|preventDefault={() => searchBackgrounds(query)}
@@ -169,7 +169,7 @@
   >
     {#each photos as photo}
       <div
-        class="bg-white dark:bg-slate-900 rounded-xl shadow hover:shadow-lg transition duration-200 overflow-hidden flex flex-col max-w-[384px]"
+        class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden flex flex-col max-w-[384px]"
       >
         <img
           class="w-full object-cover"
@@ -241,7 +241,7 @@
       <div class="flex-1 space-y-4">
         {#each column as photo}
           <div
-            class="bg-white dark:bg-slate-900 rounded-xl shadow hover:shadow-lg transition overflow-hidden /*max-w-[396px]*/"
+            class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden"
           >
             <img
               class="w-full object-cover"

@@ -177,7 +177,7 @@
   <Login />
 {:else}
   <div
-    class="w-full max-w-4xl p-4 bg-white dark:bg-slate-900 rounded-lg shadow-md dark:shadow-gray-900/30 mx-4 sm:mx-0"
+    class="w-full max-w-4xl p-4 bg-white dark:bg-slate-900 rounded-lg mx-4 sm:mx-0"
   >
     <form
       on:submit|preventDefault={handleFormSubmit}
@@ -223,7 +223,7 @@
 
     {#if isListView && isAdminView}
       <div
-        class="max-w-[2048px] w-full overflow-x-auto shadow-md rounded-lg align-middle text-center mx-auto"
+        class="max-w-[2048px] w-full overflow-x-auto rounded-lg align-middle text-center mx-auto"
       >
         <table
           class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 /*table*/"
@@ -261,7 +261,7 @@
               <tr
                 class="{i % 2 === 0
                   ? 'bg-white dark:bg-gray-800'
-                  : 'bg-gray-50 dark:bg-gray-900'} hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors pgs-tr-hov"
+                  : 'bg-gray-50 dark:bg-gray-900'} hover:bg-gray-100 dark:hover:bg-gray-600 pgs-tr-hov"
               >
                 <td class="pgs-td">
                   <a
@@ -339,7 +339,7 @@
       >
         {#each products as product, i}
           <div
-            class="scale-up-center-normal product-card glow bg-white dark:bg-slate-900 shadow-lg rounded-xl overflow-hidden p-5 hover:shadow-2xl min-w-[196px] max-w-[384px] scale-up-center-normal
+            class="scale-up-center-normal product-card glow bg-white dark:bg-slate-900 rounded-xl overflow-hidden p-5 min-w-[196px] max-w-[384px] scale-up-center-normal hover:shadow-2xl
                   transition-all duration-200"
           >
             <div
@@ -368,10 +368,7 @@
 
             <div
               class="product-card-body space-y-2 text-gray-700 dark:text-gray-300"
-            >
-              <p class="product-detail font-thin text-zinc-500">
-                {product.code}
-              </p>
+            >              
               <p class="product-detail font-thin text-gray-500">
                 {product.description}
               </p>

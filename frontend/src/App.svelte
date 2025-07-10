@@ -121,7 +121,7 @@
 
 {:else}
 
-  <main class="flex-1 overflow-auto main-content w-full mt-24 p-0 sm:p-6">
+  <main class="flex-1 overflow-auto main-content w-full mt-24 p-0 sm:p-6]" style="padding-bottom: 64px !important;">
     <Router {routes} />
   </main>
 

@@ -9,19 +9,20 @@
   default: true;
   prefersdark: false;
   color-scheme: "light";
-  --color-base-100: oklch(96.2% 0.004 38.25);
+  --color-base-100: rgb(249, 249, 249);
   --color-base-200: oklch(100% 0 0);
   --color-base-300: rgb(231 229 228); /* This is the color of the body background in light/default theme. bg-stone-200 */
+  --color-base-400: rgb(217, 217, 217); /*doesnt work*/
   --color-base-content: oklch(44% 0.043 257.281);
   --color-primary: oklch(27% 0.041 260.031);
   --color-primary-content: oklch(97% 0.013 17.38);
-  --color-secondary: oklch(60% 0.25 292.717);
+  --color-secondary: #dbedfd;  /*header*/
   --color-secondary-content: oklch(97% 0.014 343.198);
   --color-accent: oklch(54% 0.245 262.881);
   --color-accent-content: oklch(98% 0.016 73.684);
   --color-neutral: oklch(27% 0.041 260.031);
   --color-neutral-content: oklch(96% 0.007 247.896);
-  --color-info: oklch(51% 0.262 276.966);
+  --color-info: aliceblue;
   --color-info-content: oklch(97% 0.013 236.62);
   --color-success: oklch(62% 0.194 149.214);
   --color-success-content: oklch(100% 0 0);
@@ -51,13 +52,13 @@
   --color-base-content: oklch(97% 0.001 106.424);
   --color-primary: oklch(68% 0.169 237.323);
   --color-primary-content: oklch(97% 0.013 236.62);
-  --color-secondary: oklch(63% 0.237 25.331);
-  --color-secondary-content: oklch(97% 0.013 17.38);
+  --color-secondary: hsl(241.7, 41.4%, 34.1%); /*header*/
+  --color-secondary-content: #ffffff;
   --color-accent: oklch(0% 0 0);
   --color-accent-content: oklch(100% 0 0);
-  --color-neutral: oklch(26% 0.007 34.298);
+  --color-neutral: navy;
   --color-neutral-content: oklch(98% 0.001 106.423);
-  --color-info: oklch(78% 0.154 211.53);
+  --color-info: rgb(17, 19, 19);
   --color-info-content: oklch(30% 0.056 229.695);
   --color-success: oklch(76% 0.177 163.223);
   --color-success-content: oklch(26% 0.051 172.552);
@@ -129,7 +130,9 @@ Attention, truncate class apparently f*cks with tooltips, because of overflow: h
 
 /** This one is use for table header */
 .pgs-th {
-  @apply px-4 py-2 text-center text-xs font-medium text-gray-100 uppercase tracking-wider font-mono;
+  @apply px-4 py-2 text-center text-xs font-bold uppercase tracking-wider font-mono;
+  color: var(--color-base-content);/**or neutral*/
+  background-color: var(--color-base);
 }
 
 /** Table cell normal, alling to left*/

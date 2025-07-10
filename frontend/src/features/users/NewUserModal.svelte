@@ -81,7 +81,7 @@
     transition:fade={{ duration: 200 }}
   >
     <div
-      class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full z-50"
+      class="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full z-50"
       transition:fade={{ duration: 200 }}
     >
       <div

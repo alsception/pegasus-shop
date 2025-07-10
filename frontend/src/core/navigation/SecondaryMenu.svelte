@@ -13,7 +13,7 @@ import { logout } from "../services/client"
     </button>
     <div
       id="dropdownMenu"
-      class="hidden absolute right-0 mt-2 w-40 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-40"
+      class="hidden absolute right-0 mt-2 w-40 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-md z-40"
     >
       <a
         href="#"

@@ -23,6 +23,8 @@
   let sortAsc = true;
   let searchTerm = '';
 
+  document.title = 'Users | Pegasus'
+
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   $: auth.subscribe((value) => {
@@ -244,7 +246,7 @@
 {#if !$auth.isAuthenticated}
   <Login />
 {:else}
-<div class="max-w-[684px] mx-auto p-4 bg-white dark:bg-slate-900 rounded-lg shadow-md dark:shadow-gray-900/30">
+<div class="max-w-[684px] mx-auto p-4 bg-base-200 rounded-lg">
   <form on:submit|preventDefault={handleFormSubmit} class="flex flex-wrap items-center gap-3">
       <input
         type="text"
@@ -287,14 +289,14 @@
 
     {:else}
 
-  <div class="max-w-[1568px] overflow-x-auto shadow-md rounded-lg align-middle mx-auto">
+  <div class="max-w-[1568px] overflow-x-auto rounded-lg align-middle mx-auto">
       <table class="table table-zebra table-xs min-w-full divide-y divide-gray-200 dark:divide-gray-700" >
-      <thead class="bg-gray-800 dark:bg-slate-800">
+      <thead class="bg-base-200">
         <tr class="h-12">
-          <th>
+          <th class="pgs-th">
           </th>
           <th class="pgs-th cursor-pointer"  
-            title="Click to sort by"
+            title="Click to sort by"            
             class:pgs-gradient-text={isActiveHeader('username')}
             class:dark\:bg-slate-700={isActiveHeader('username')} 
             on:click={() => sortBy('username')}>
@@ -348,7 +350,7 @@
       <tbody class="bg-white dark:bg-slate-950 divide-y divide-gray-200 dark:divide-gray-700">
 
         {#each users as user, i}     
-            <tr id="tr-{i}" class="{ getClass(user.modified) + ' bg-gray-50 dark:bg-gray-900'} hover:bg-blue-100 dark:hover:bg-slate-700 border">            
+            <tr id="tr-{i}" class="{ getClass(user.modified) + ' bg-base-100 '} hover:bg-secondary">            
             
               <td class="justify-center pgs-td-center px-4">
                 <input type="checkbox" class="checkbox checkbox-accent checkbox-xs" 	on:change={(event) => handleCheckboxChange(event, i)} />

@@ -17,10 +17,12 @@
 
   //This object is used for displaying menu
   const navItems = getNavigationItems();
+
+  //CSS: here we need shadow
 </script>
 
 <ul
-  class="menu menu-sm dropdown-content /*bg-base-100 dark:bg-slate-800*/ rounded-box mt-3 w-52 p-2 shadow scale-in-ver-top" style="background-color: var(--color-base-100);"
+  class="menu menu-sm dropdown-content shadow rounded-box mt-3 w-52 p-2 scale-in-ver-top bg-base-100"
 >
   {#each navItems as item}
     <li>
@@ -28,7 +30,7 @@
         <a
           use:link
           href={item.disabled ? "#" : item.href}
-          class="flex items-center px-3 py-2 rounded-md transition-colors cursor-pointer
+          class="flex items-center px-3 py-2 rounded-md cursor-pointer
                   hover:bg-[#0f172a] hover:text-blue-400 
                  text-base"
         >
@@ -37,7 +39,7 @@
         </a>
       {:else}
         <div
-          class="flex items-center px-3 py-2 rounded-md transition-colors pointer-events-none 
+          class="flex items-center px-3 py-2 rounded-md pointer-events-none 
               hover:text-gray-400 dark:hover:text-gray-500 
               text-base"
         >
