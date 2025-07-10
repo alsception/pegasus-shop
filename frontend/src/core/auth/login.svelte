@@ -66,6 +66,14 @@
       Login
     </button>
 
+    <button
+      type="submit"
+      class="btn btn- w-full mt-2"
+      disabled={loading}
+    >
+      Register
+    </button>
+
     {#if error}
 
       <p class="text-red-500 text-sm mt-4 text-center dark:text-red-400">

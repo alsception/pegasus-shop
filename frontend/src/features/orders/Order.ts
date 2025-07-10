@@ -1,6 +1,6 @@
 import type { User } from "../users/User";
 
-export interface PGSOrder {
+export interface Order {
   other: any;
   comment: string | number | Date | null | undefined;
   id: number;
@@ -11,13 +11,13 @@ export interface PGSOrder {
   address: string;
   paymentMethod: string;
   price?: number; // BigDecimal maps to number in TS, nullable so optional
-  items: PGSOrderItem[];
+  items: OrderItem[];
   created?: string; // LocalDateTime as ISO string
   modified?: string; // LocalDateTime as ISO string, nullable so optional
   status?: string;
 }
 
-export interface PGSOrderItem {
+export interface OrderItem {
   id: number;
   // order?: PGSOrder; // Not included due to @JsonBackReference
   // Add other PGSOrderItem properties here

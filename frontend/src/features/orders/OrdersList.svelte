@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PGSOrder } from "./PGSOrder";
+  import type { PGSOrder } from "./Order";
   import { onMount } from "svelte";
   import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/store";  
@@ -281,14 +281,11 @@
               <th class="pgs-th">id</th>
               <th class="pgs-th">code</th>
               <th class="pgs-th">user</th>
-              <th class="pgs-th">buyer</th>
               <th class="pgs-th">Email</th>
-              <th class="pgs-th">Address</th>            
               <th class="pgs-th">Payment Method</th>
               <th class="pgs-th">Amount</th>
               <th class="pgs-th">Items</th>
               <th class="pgs-th">Comment</th>          
-              <th class="pgs-th">Other</th>       
               <th class="pgs-th">created</th>       
               <th class="pgs-th">Status</th>
               <th class="pgs-th">Actions</th>          
@@ -302,16 +299,13 @@
                 </td>
                 <td class="pgs-td font-mono">{formatCode(order.code)}</td>
                 <td class="pgs-td">{order.user?.username}</td>
-                <td class="pgs-td">{order.name}</td> 
                 <td class="pgs-td">{order.email}</td>
-                <td class="pgs-td">{order.address}</td>            
                 <td class="pgs-td">
                   <div class="badge badge-neutral">{order.paymentMethod}</div>
               </td>
                 <td class="pgs-td-num font-mono">{order.price}</td>
                 <td class="pgs-td-num font-mono">{order.items.length}</td>
                 <td class="text-center">{@html formatCommentInfo(order.comment)}</td>            
-                <td class="pgs-td">{order.other}</td>
                 <td class="pgs-td font-mono">
                   {@html formatDate(order.created,'New - created less than 15 minutes ago',15)}
                 </td>

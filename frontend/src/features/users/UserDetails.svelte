@@ -9,7 +9,7 @@
   import ErrorDiv from "./ErrorDiv.svelte";
 
   let isAuthenticated = false;
-  let loading: boolean = true;
+  let loading: boolean = false;
   let error: string | null = null;
   let user: User | null = null;
   let ID: number | string;
@@ -48,10 +48,14 @@
     created: new Date().toISOString(),
   };
 
-  async function fetch(id: string | number) {
-    loading = true;
-    try {
-      let data = await api<User>("/users/" + id, {
+  async function fetch(id: string | number) 
+  {
+    startLoadingAnimation();
+
+    try 
+    {
+      let data = await api<User>("/users/" + id, 
+      {
         method: "GET",
       });
       //samo jedan treba da ostane
@@ -61,7 +65,7 @@
     } catch (err) {
       processError(err);
     } finally {
-      loading = false;
+      removeLoadingAnimation();
     }
   }
 
@@ -84,6 +88,9 @@
 
   async function handleSubmit() {
     try {
+
+      loading = true;
+          
       await api<User>(`/users/${ID}`, {
         method: "PUT",
         body: JSON.stringify(formData),
@@ -99,24 +106,55 @@
     }
   }
 
-  function cancelEditing(event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) 
-  {
+  function cancelEditing(
+    event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }
+  ) {
     window.location.href = "#/users"; // Back to users
+  }
+
+  //Instead of loading spinner, we will show skeletons
+  function startLoadingAnimation(): void 
+  {
+    // Remove display:none from #loadingMessage element
+    const loadingMessage = document.getElementById('loadingMessage');
+    if (loadingMessage) {
+      loadingMessage.style.display = '';
+    }
+
+    const inputs = document.querySelectorAll<HTMLInputElement>(
+      "#userForm input, #userForm select"
+    );
+    inputs.forEach((input) => {
+      console.log("adding skeleton to input", input);
+      input.classList.add("skeleton");
+      input.disabled = true;
+    });
+  }
+
+  function removeLoadingAnimation(): void 
+  {
+    // Add display:none to #loadingMessage element
+    const loadingMessage = document.getElementById('loadingMessage');
+    if (loadingMessage) {
+      loadingMessage.style.display = 'none';
+    }
+    
+    const inputs = document.querySelectorAll<HTMLInputElement>(
+      "#userForm input, #userForm select"
+    );
+    inputs.forEach((input) => {
+      input.classList.remove("skeleton");
+      input.disabled = false;
+    });
   }
 </script>
 
 <div class="relative w-full scale-up-center-normal">
-
   {#if !$auth.isAuthenticated}
-   
-  <Login />
-
+    <Login />
   {:else if error}
-
-  <ErrorDiv {error} />
-
+    <ErrorDiv {error} />
   {:else}
-  
     {#if loading}
       <!-- Overlay loading animation -->
       <div
@@ -131,102 +169,117 @@
 
     <form
       on:submit|preventDefault={handleSubmit}
-      class="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded shadow p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      id="userForm"
+      class="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded shadow p-6 w-full"
     >
-      <h2
-        class="text-2xl font-semibold col-span-full text-gray-700 dark:text-gray-100"
-      >
-        User details
-      </h2>
-      <div class="w-full">
-        <label for="username" class="label text-sm pb-3">Username</label>
-        <input
-          id="username"
-          class="input input-form font-bold"
-          bind:value={formData.username}
-        />
+      <!-- Full-width header -->
+      <div class="w-full mb-6 pb-4 border-b border-gray-200 dark:border-gray-600">
+        <div class="flex items-center gap-2">
+          <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-100">
+            User details
+          </h2>
+          <div 
+            id="loadingMessage"
+            style="display: none;"
+            class="text-2xl font-semibold text-gray-700 dark:text-gray-100 flex items-center gap-2">
+            <span class="loading loading-dots loading-xs"></span>
+        </div>
+        </div>
       </div>
-      <div class="w-full">
-        <label for="password" class="label text-sm pb-3">Password</label>
-        <input
-          id="password"
-          type="password"
-          autoComplete="new-password"
-          readOnly
-          on:focus={(e) => e.currentTarget.removeAttribute("readonly")}
-          placeholder="Enter new password"
-          class="input input-form"
-          bind:value={formData.password}
-        />
-      </div>
-      <div class="w-full">
-        <label for="active" class="label text-sm pb-3">Active</label>
-        <select
-          id="active"
-          class="select font-mono font-bold input-form"
-          bind:value={formData.active}
-        >
-          <option
-            value=""
-            disabled
-            selected={formData.active === undefined || formData.active === null}
-            >-- Select --</option
+
+      <!-- Form content grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+        <div class="w-full">
+          <label for="username" class="label text-sm pb-3">Username</label>
+
+          <input
+            id="username"
+            class="input input-form font-bold"
+            bind:value={formData.username}
+          />
+        </div>
+        <div class="w-full">
+          <label for="password" class="label text-sm pb-3">Password</label>
+          <input
+            id="password"
+            type="password"
+            autoComplete="new-password"
+            readOnly
+            on:focus={(e) => e.currentTarget.removeAttribute("readonly")}
+            placeholder="Enter new password"
+            class="input input-form"
+            bind:value={formData.password}
+          />
+        </div>
+        <div class="w-full">
+          <label for="active" class="label text-sm pb-3">Active</label>
+          <select
+            id="active"
+            class="select font-mono font-bold input-form"
+            bind:value={formData.active}
           >
-          <option value={true}>✅ YES</option>
-          <option value={false}>⛔ NO</option>
-        </select>
-      </div>
-      <div class="w-full">
-        <label for="firstName" class="label text-sm pb-3">First Name</label>
-        <input
-          id="firstName"
-          class="input input-form font-bold"
-          bind:value={formData.firstName}
-        />
-      </div>
-      <div class="w-full">
-        <label for="lastName" class="label text-sm pb-3">Last Name</label>
-        <input
-          id="lastName"
-          class="input input-form font-bold"
-          bind:value={formData.lastName}
-        />
-      </div>
-      <div class="w-full">
-        <label for="email" class="label text-sm pb-3">Email</label>
-        <input
-          id="email"
-          type="email"
-          class="input input-form font-bold"
-          bind:value={formData.email}
-        />
-      </div>
-      <div class="w-full">
-        <label for="phone" class="label text-sm pb-3">Phone</label>
-        <input
-          id="phone"
-          type="tel"
-          class="input input-form font-bold"
-          bind:value={formData.phone}
-        />
-      </div>
-      <div class="w-full">
-        <label for="role" class="label text-sm pb-3"> Role </label>
-        <select
-          id="type"
-          bind:value={formData.role}
-          class="select font-mono font-bold input-form"
-        >
-          {#each userTypes as type}
-            <option value={type}>{type}</option>
-          {/each}
-        </select>
-      </div>
-      <div class="col-span-full flex justify-end">
-        <button type="button" on:click={cancelEditing} class="btn m-3">
-          Cancel
-        </button>
-        <button type="submit" class="btn btn-primary m-3"> Save </button>
+            <option
+              value=""
+              disabled
+              selected={formData.active === undefined ||
+                formData.active === null}>-- Select --</option
+            >
+            <option value={true}>✅ YES</option>
+            <option value={false}>⛔ NO</option>
+          </select>
+        </div>
+        <div class="w-full">
+          <label for="firstName" class="label text-sm pb-3">First Name</label>
+          <input
+            id="firstName"
+            class="input input-form font-bold"
+            bind:value={formData.firstName}
+          />
+        </div>
+        <div class="w-full">
+          <label for="lastName" class="label text-sm pb-3">Last Name</label>
+          <input
+            id="lastName"
+            class="input input-form font-bold"
+            bind:value={formData.lastName}
+          />
+        </div>
+        <div class="w-full">
+          <label for="email" class="label text-sm pb-3">Email</label>
+          <input
+            id="email"
+            type="email"
+            class="input input-form font-bold"
+            bind:value={formData.email}
+          />
+        </div>
+        <div class="w-full">
+          <label for="phone" class="label text-sm pb-3">Phone</label>
+          <input
+            id="phone"
+            type="tel"
+            class="input input-form font-bold"
+            bind:value={formData.phone}
+          />
+        </div>
+        <div class="w-full">
+          <label for="role" class="label text-sm pb-3"> Role </label>
+          <select
+            id="type"
+            bind:value={formData.role}
+            class="select font-mono font-bold input-form"
+          >
+            {#each userTypes as type}
+              <option value={type}>{type}</option>
+            {/each}
+          </select>
+        </div>
+        <div class="col-span-full flex justify-end">
+          <button type="button" on:click={cancelEditing} class="btn m-3">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary m-3"> Save </button>
+        </div>
       </div>
     </form>
   {/if}

@@ -78,7 +78,7 @@
     {:else}
 
     <div
-      class=" mx-auto p-4 sm:p-6 bg-white dark:bg-slate-900 rounded-2xl shadow-md mt-6 sm:mt-10"
+      class=" mx-auto p-4 sm:p-6 rounded-2xl shadow-md mt-6 sm:mt-10" style="border: 1px solid gray; background-color: var(--color-base-300);" 
     >
       <h2
         class="text-xl font-semibold col-span-full text-gray-700 dark:text-gray-100 mb-7"

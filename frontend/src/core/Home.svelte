@@ -153,11 +153,11 @@ onMount(() => {
   {#each displayedItems as item}
     <a    
       href="#{item.href}"
-      class="block p-6 rounded-2xl bg-base-100 dark:bg-slate-900 dark:hover:bg-slate-800 
-        hover:bg-slate-200
+      class="block p-6 rounded-2xl bg-base-100 
+        
             shadow text-center scale-up-center-normal 
             transition-all duration-200 hover:-translate-y-1 
-            hover:[&_*]:bg-gradient-to-r hover:[&_*]:from-sky-400 hover:[&_*]:via-blue-500 hover:[&_*]:to-violet-600 hover:[&_*]:bg-clip-text hover:[&_*]:text-transparent
+                hover:text-accent
            "
     >
       <div class="text-2xl font-semibold scale-up-center-normal">
@@ -165,13 +165,26 @@ onMount(() => {
       </div>
       <h2 class=" text-2xl font-semibold">{item.title}</h2>
       <p
-      class=" mt-2 text-sm text-slate-500 dark:text-slate-400"
+      class=" mt-2 text-base text-primary"
       >
       {item.description}
       </p>
     </a>
   {/each}
 </div>
+
+
+Color palete:
+<ul>
+  <li><span class="badge badge-xs bg-primary"></span> bg-primary</li> 
+  <li><span class="badge badge-xs bg-secondary"></span> bg-secondary</li> 
+  <li><span class="badge badge-xs bg-accent"></span> bg-accent</li>
+  <li><span class="badge badge-xs bg-base"></span> bg-base</li>
+  <li><span class="badge badge-xs bg-base-100"></span> bg-base-100</li>
+  <li><span class="badge badge-xs bg-base-200"></span> bg-base-200</li>
+  <li><span class="badge badge-xs bg-base-300"></span> bg-base-300</li>
+</ul>
+
 
 
                                 <style>

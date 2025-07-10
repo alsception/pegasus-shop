@@ -4,11 +4,11 @@
 
 <div class="navbar shadow-sm fixed bg-slate-950 z-50">
   <div class="navbar-start">
-    <div class="dropdown bg-neutral-800">
+    <div class="dropdown /*bg-neutral-950*/" title="Open Menu">
       <div
         tabindex="0"
         role="button"
-        class="btn btn-ghost btn-circle bg-neutral-800 hover:bg-neutral-700"
+        class="btn btn-ghost btn-circle /*bg-neutral-800*/ hover:bg-neutral-700"
       >
         <i class="fas fa-bars text-xl"></i>
       </div>
