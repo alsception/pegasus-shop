@@ -30,10 +30,12 @@
     </a>
   </div>
   <div class="navbar-end"> 
-    <label class="swap swap-rotate mr-4 tooltip tooltip-left" data-tip="Toggle Dark Mode">
-      <input type="checkbox" class="theme-controller" value="dark" />
-      <span class="swap-off text-xl">☀️</span>
-      <span class="swap-on text-xl">🌚</span>
-    </label>
+      <div class="navbar-end" style="display: none;"> 
+        <label class="swap swap-rotate mr-4 tooltip tooltip-left" data-tip="Toggle Dark Mode">
+          <input type="checkbox" class="theme-controller" value="dark" />
+          <span class="swap-off text-xl">☀️</span>
+          <span class="swap-on text-xl">🌚</span>
+        </label>
+    </div>
   </div>
 </div>

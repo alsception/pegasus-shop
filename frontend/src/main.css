@@ -48,7 +48,6 @@
   --color-base-100: oklch(14% 0.004 49.25);
   --color-base-200: oklch(21% 0.006 56.043);
   --color-base-300: rgb(0, 0, 0); /* This is the color of the body background in dark theme */
-  --color-base-content: oklch(44% 0.043 257.281);
   --color-base-content: oklch(97% 0.001 106.424);
   --color-primary: oklch(68% 0.169 237.323);
   --color-primary-content: oklch(97% 0.013 236.62);
@@ -74,6 +73,19 @@
   --border: 0px;
   --depth: 1;
   --noise: 0;
+}
+
+:root {
+  --custom-purple: #8b5cf6;
+  --brand-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+[data-theme="light"] {
+  --custom-purple: #cf9bff;
+}
+
+[data-theme="dark"] {
+  --custom-purple: #3d1681;
 }
 
 /** END THEME CONFIG, START STYLING RULES

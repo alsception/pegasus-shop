@@ -40,4 +40,4 @@ logging:
   level:
     root: WARN
     org.springframework: WARN
-    org.alsception.pegasus.*: DEBUG
+    org.alsception.pegasus.*: INFO
