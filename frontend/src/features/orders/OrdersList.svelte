@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PGSOrder } from "./Order";
+  import type { Order } from "./Order";
   import { onMount } from "svelte";
   import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/store";  
@@ -17,8 +17,8 @@
 
   //DEFINITIONS
   let isAuthenticated = false;
-  let modalOrder: PGSOrder | null = null;
-  let orders: PGSOrder[] = [];
+  let modalOrder: Order | null = null;
+  let orders: Order[] = [];
   let loading: boolean = true;
   let error: string | null = null;
   let isDark = false;
@@ -136,7 +136,7 @@
     }
 }
 
-  function openModal(order: PGSOrder): void {
+  function openModal(order: Order): void {
     modalOrder = order;
   }
 
@@ -211,6 +211,22 @@
     showErrorToast(errorMessage);
   }
 
+
+
+  function formatPrice(price: number | undefined): string {
+
+    if (price === undefined || price === null) 
+    {
+      return "€ 0,00";
+    }
+    
+    return new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(price);
+  }
 </script>
 
 {#if !$auth.isAuthenticated}
@@ -303,7 +319,7 @@
                 <td class="pgs-td">
                   <div class="badge badge-neutral">{order.paymentMethod}</div>
               </td>
-                <td class="pgs-td-num font-mono">{order.price}</td>
+                <td class="pgs-td-num font-mono">{formatPrice(order.price)}</td>
                 <td class="pgs-td-num font-mono">{order.items.length}</td>
                 <td class="text-center">{@html formatCommentInfo(order.comment)}</td>            
                 <td class="pgs-td font-mono">
