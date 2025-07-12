@@ -4,7 +4,7 @@ This project is intended as an excercise
 
 It should have this basic functionalities:
 
-I Customer flow:
+I) Customer flow:
 --------------------
 1. Register
 2. Login
