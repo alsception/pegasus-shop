@@ -88,11 +88,13 @@ Configures BCrypt password encoder as a Spring bean for dependency injection.
    → Authenticate credentials
    → Generate JWT token
    → Return token to client
+   → Client must store the token (in local storage) and include it in every request
    ```
 
 3. **Protected Request**:
    ```
    GET /api/protected-endpoint
+   Token is included in http header: 
    Authorization: Bearer <jwt-token>
    → JwtAuthenticationFilter extracts token
    → Validates token
