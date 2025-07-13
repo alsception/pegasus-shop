@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { auth } from "../../core/services/store";
-  import Login from "../../core/auth/login.svelte";
+  import Login from "../../core/auth/Login.svelte";
   import axios from "axios";
   import type { PGSCart } from "./Cart";
   import LoadingOverlay from "../../core/LoadingOverlay.svelte";

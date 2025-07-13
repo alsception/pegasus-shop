@@ -94,5 +94,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         logger.warn("[2/2] " + serverInfo+", "+remoteInfo+", "+query);
         logger.warn("+================================================================================================+");
     }
-
 }

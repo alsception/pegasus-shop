@@ -1,18 +1,20 @@
-import type { ComponentRegistry} from "./MenuTypes";
-import { navRoutes } from "./navRoutes";//Routes are here
-import Home from "../Home.svelte";
-import Users from "../../features/users/UsersList.svelte";
-import UserDetails from "../../features/users/UserDetails.svelte";
-import Products from "../../features/products/ProductsList.svelte";
-import Orders from "../../features/orders/OrdersList.svelte";
-import ProductDetail from "../../features/products/ProductDetail.svelte";
-import ProductAdministration from "../../features/products/ProductAdministration.svelte";
-import CartDetails from "../../features/cart/CartDetails.svelte";
-import Checkout from "../../features/cart/Checkout.svelte";
-import Pix from "../../features/pix/Pix.svelte";
-import Logout from "../auth/Logout.svelte";
+import type { ComponentRegistry} from "../menu/MenuTypes";
+import { navRoutes } from "../menu/navRoutes";//Routes are here
+import Home from "../../Home.svelte";
+import Users from "../../../features/users/UsersList.svelte";
+import UserDetails from "../../../features/users/UserDetails.svelte";
+import Products from "../../../features/products/ProductsList.svelte";
+import Orders from "../../../features/orders/OrdersList.svelte";
+import ProductDetail from "../../../features/products/ProductDetail.svelte";
+import ProductAdministration from "../../../features/products/ProductAdministration.svelte";
+import CartDetails from "../../../features/cart/CartDetails.svelte";
+import Checkout from "../../../features/cart/Checkout.svelte";
+import Pix from "../../../features/pix/Pix.svelte";
+import Logout from "../../auth/Logout.svelte";
+import Register from "../../auth/Register.svelte";
 
 // Component Registry - central place for all components
+// Whenever new component is added it should be imported here and added its /url
 export const components: ComponentRegistry = 
 {
     "/home": Home,
@@ -31,8 +33,8 @@ export const components: ComponentRegistry =
     "/Todo": null,
     "/Hours": null,
     "/pix": Pix,
-    "/logout": Logout
-
+    "/logout": Logout,
+    "/register": Register
 };
 
 // Helper function to generate flat routes for router configuration

@@ -33,3 +33,42 @@ export function clearToken() {
 export function getToken() {
   return localStorage.getItem('token');
 }
+
+export function getCurrentUsername() 
+{
+  return getUsernameFromToken(getToken());
+}
+
+function getUsernameFromToken(token: string | null) 
+{
+  // Split the token into parts
+  if (token !== null) {
+    const parts = token.split(".");
+
+    if (parts.length !== 3) {
+      throw new Error("Invalid JWT token format");
+    }
+
+    // Get the payload (middle part)
+    const payload = parts[1];
+
+    // Base64 decode the payload
+    // Note: Need to add padding and handle URL-safe base64
+    const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+
+    // Parse the JSON
+    const data = JSON.parse(jsonPayload);
+
+    // Look for common username fields
+    return data.username || data.sub || data.email || null;
+  }
+  return "";
+}

@@ -1,11 +1,11 @@
 /*
-    This file handles:
-
-    Sending a login request (POST /login)
-    Storing the token using setToken() from the store
-    Sending authenticated requests (through the api() function)
-    Optional logout logic
-*/
+ *   This file handles:
+ *
+ *   Sending a login request (POST /login)
+ *   Storing the token using setToken() from the store
+ *   Sending authenticated requests (through the api() function)
+ *   Optional logout logic
+**/
 
 
 import { setToken, clearToken, getToken } from './store';
@@ -28,6 +28,7 @@ export async function login(username: string, password: string)
   }
 
   const data = await response.json();
+
   setToken(data.token);
 }
 
@@ -35,6 +36,35 @@ export function logout() {
   clearToken();
   // Optionally: call backend logout endpoint if you have one, i dont
 }
+
+export async function register(username: string, password: string) 
+{
+  const response = await fetch(`${API_BASE_URL}/auth/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ username, password }),
+    credentials: 'include' // if backend uses cookies
+  });
+
+  console.log(response)
+  
+  if (!response.ok) 
+  {
+    let message = await processErrMsg(response, '');
+    throw new Error(`${message}`);
+  }
+
+  const data = await response.text();  
+  
+  console.log('Register response:', data);
+
+  alert(data);
+  
+  /*setToken(data.token);*///in future we should send token
+}
+
 
 /**
  * This function executes call to the backend
@@ -63,30 +93,7 @@ async function client<T>(
 
   if (!response.ok) 
   {
-    let message = await response.text();
-    if (!message) {
-      // Provide default messages for common statuses
-      message = response.status + ' - ';
-      switch (response.status) {
-      case 400:
-        message += 'Bad request';
-        break;
-      case 401:
-        message += 'Unauthorized';
-        break;
-      case 403:
-        message += 'Forbidden';
-        break;
-      case 404:
-        message += `NOT FOUND: ${path}`;
-        break;
-      case 500:
-        message += 'Internal server error';
-        break;
-      default:
-        message += `Request failed with status ${response.status}`;
-      }
-    }
+    let message = await processErrMsg(response, '');
     throw new Error(`${message}`);
   }
   
@@ -102,6 +109,36 @@ async function client<T>(
   let x = await response.json(); // Add await here too!
 
   return x;
+}
+
+async function processErrMsg(response: any, path: any)
+{
+  let message = await response.text();
+  if (!message) {
+    // Provide default messages for common statuses
+    message = response.status + ' - ';
+    switch (response.status) {
+    case 400:
+      message += 'Bad request';
+      break;
+    case 401:
+      message += 'Unauthorized';
+      break;
+    case 403:
+      message += 'Forbidden';
+      break;
+    case 404:
+      message += `NOT FOUND: ${path}`;
+      break;
+    case 500:
+      message += 'Internal server error';
+      break;
+    default:
+      message += `Request failed with status ${response.status}`;
+    }
+  }
+  console.log(message)
+  return message;
 }
 
 export default client;

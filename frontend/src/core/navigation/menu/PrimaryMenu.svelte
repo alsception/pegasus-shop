@@ -1,6 +1,7 @@
 <script lang="ts">
   import { link } from "svelte-spa-router";
   import { navRoutes } from "./navRoutes";
+  import { getCurrentUsername } from '../../services/store';
 
   // Function to get navigation items (for menu display)
   function getNavigationItems() {
@@ -24,6 +25,12 @@
 <ul
   class="menu menu-sm dropdown-content shadow rounded-box mt-3 w-52 p-2 scale-in-ver-top bg-base-100"
 >
+<li class="flex items-center px-3 py-2 rounded-md pointer-events-none 
+              hover:text-gray-400 dark:hover:text-gray-500 
+              text-base"><div>Hello <strong>{getCurrentUsername()}</strong></div>
+            </li>
+<li class=""></li>
+
   {#each navItems as item}
     <li>
       {#if !item.disabled}

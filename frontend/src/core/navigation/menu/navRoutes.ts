@@ -1,5 +1,9 @@
 import type { NavRoutesMap } from "./MenuTypes";
 
+/***
+ * This object is used for generating main menu
+ */
+
 export const navRoutes: NavRoutesMap = 
 {
     "/home": {

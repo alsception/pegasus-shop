@@ -1,7 +1,8 @@
 <script lang="ts">
   import LoadingOverlay from '../LoadingOverlay.svelte';
-
   import { login } from "../services/client";
+
+  document.title = 'Log in | Pegasus'
 
   let username = "";
   let password = "";
@@ -31,7 +32,7 @@
     <h2
       class="text-2xl font-semibold mb-8 text-center text-primary dark:text-gray-400"
     >
-      Login to Pegasus
+      Wellcome to Pegasus
     </h2>
 
     {#if loading}
@@ -66,21 +67,23 @@
       Login
     </button>
 
-    <button
-      type="submit"
-      class="btn btn- w-full mt-2"
-      disabled={loading}
-    >
-      Register
-    </button>
-
     {#if error}
 
-      <p class="text-red-500 text-sm mt-4 text-center dark:text-red-400">
+      <p class="text-red-500 text-sm mt-4 text-center dark:text-red-400 bg-error-content p-2">
         ERROR: {error}
       </p>
 
     {/if}
+
+    <div class="mt-4">
+    <label for="register" class="label">Don't have accont?</label>
+    <a
+      href="#/register"
+      class="pgs-hyperlink hover:bg-secondary"
+    >
+      Click here to register
+    </a>
+    </div>   
 
   </form>
 </div>

@@ -1,9 +1,11 @@
 package org.alsception.pegasus.core.security;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import org.alsception.pegasus.core.users.PGSUser;
 import org.alsception.pegasus.core.users.UserService;
+import org.alsception.pegasus.core.utils.UniqueIdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,10 +27,8 @@ public class AuthController
     private final JwtUtils jwtUtils;
     private final CustomUserDetailsService userDetailsService;
     private final UserService userService;
-    private final BCryptPasswordEncoder passwordEncoder;
-    
+    private final BCryptPasswordEncoder passwordEncoder;    
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
-
 
     public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils,
                           CustomUserDetailsService userDetailsService, BCryptPasswordEncoder passwordEncoder,
@@ -42,39 +42,62 @@ public class AuthController
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, String>> register(@RequestBody AuthRequest userDTO) 
+    public ResponseEntity<?> register(@RequestBody AuthRequest userDTO) 
     {
         try 
         {   
-            logger.info("Registering new user: " + userDTO.getUsername());
-            
+            logger.info("Registering new user: " + userDTO.getUsername());    
+
+            // Check if empty request
+            if (null == userDTO.getUsername() || null == userDTO.getPassword() || userDTO.getUsername().isBlank() || userDTO.getPassword().isBlank()) 
+            {
+                logger.error("Empty register request: " + userDTO.toString());
+                
+                return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body( "Username or password cannot be blank");
+            }
+
             // Check if user already exists
             if (userDetailsService.userExists(userDTO.getUsername())) 
             {
                 logger.error("Duplicate username: " + userDTO.getUsername());
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Username already exists"));
+                
+                return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body( "Username already exists");
             }
+
+            //TODO: Why dont we use service here instead of doing all in ctrl??
 
             // Create and save user
             String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
             userDTO.setPassword(encryptedPassword);
             PGSUser user = new PGSUser(userDTO);    
             user.setActive(Boolean.TRUE);
+            user.setId(UniqueIdGenerator.generateNanoId());//Important
             
             // Save to repository
             userService.saveUser(user);
             
             logger.info("User created: " + user.getUsername());
 
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(Map.of("message", "User registered successfully!"));
+            //TODO: Why dont we sign in automaticaly after registration? Or send json instead of plain text?
 
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("User registered successfully!");
         } 
         catch (Exception e) 
-        {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Error: " + e.getMessage()));
+        {                   
+            try {
+                printErrDetails("Error registering user", userDTO, e.getMessage());
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Error: " + e.getMessage());
         }
     }
 
@@ -107,6 +130,15 @@ public class AuthController
         response.put("token", token);
         
         return ResponseEntity.ok(response);
+    }    
+
+     public void printErrDetails(String title, AuthRequest userDTO, String msg) throws IOException 
+    {
+        if(title == null || title.isEmpty()) title = "ERROR";
+        logger.error("+======================================================== "+title.toUpperCase()+" ================================================+");
+        logger.error("[1/2] Request: "+userDTO.toString());
+        logger.error("[2/2] " + msg);
+        logger.error("+================================================================================================================================+");
+       
     }
-    
 }

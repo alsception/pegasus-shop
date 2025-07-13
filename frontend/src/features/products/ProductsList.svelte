@@ -3,7 +3,7 @@
   import { link } from "svelte-spa-router";
   import Modal from "./ProductModal.svelte";
   import { auth } from "../../core/services/store";
-  import Login from "../../core/auth/login.svelte";
+  import Login from "../../core/auth/Login.svelte";
   import { get } from "svelte/store";
   import type { Product } from "./Product";
   import axios from "axios";

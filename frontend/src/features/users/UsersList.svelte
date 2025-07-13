@@ -10,7 +10,7 @@
   import { logout } from "../../core/services/client";
   import type { User } from "./User.ts";
   import NewUserModal from "./NewUserModal.svelte";
-  import Login from "../../core/auth/login.svelte";
+  import Login from "../../core/auth/Login.svelte";
   import api from "../../core/services/client";
   import LoadingOverlay from "../../core/LoadingOverlay.svelte";
 

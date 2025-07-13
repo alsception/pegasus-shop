@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
   import { params } from "svelte-spa-router";
   import { auth } from "../../core/services/store";
-  import Login from "../../core/auth/login.svelte";
+  import Login from "../../core/auth/Login.svelte";
   import api from "../../core/services/client";
   import { toast } from "@zerodevx/svelte-toast";
   import ErrorDiv from "./ErrorDiv.svelte";

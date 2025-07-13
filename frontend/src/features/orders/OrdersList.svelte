@@ -7,7 +7,7 @@
   import { formatCode, formatDate, formatCommentInfo } from "../../lib/utils";
   import { showSuccessToast, showErrorToast } from '../../core/toaster';
   import axios from 'axios';
-  import Login from "../../core/auth/login.svelte";
+  import Login from "../../core/auth/Login.svelte";
   import LoadingOverlay from "../../core/LoadingOverlay.svelte";
   import ErrorDiv from "../users/ErrorDiv.svelte";
 

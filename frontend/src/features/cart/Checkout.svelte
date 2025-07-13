@@ -2,7 +2,7 @@
   import axios from "axios";
   import { showSuccessToast } from "../../core/toaster";
   import { auth } from "../../core/services/store";
-  import Login from "../../core/auth/login.svelte";
+  import Login from "../../core/auth/Login.svelte";
   import LoadingOverlay from "../../core/LoadingOverlay.svelte";
   import ErrorDiv from "../users/ErrorDiv.svelte";
 
