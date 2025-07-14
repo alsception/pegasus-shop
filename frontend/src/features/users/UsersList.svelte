@@ -3,7 +3,7 @@
 
   import { onMount } from "svelte";
   import { link } from "svelte-spa-router";
-  import { auth } from "../../core/services/store"; // or relative import
+  import { auth } from "../../core/services/SessionStore";
   import { get } from "svelte/store";
   import { formatDate } from "../../lib/utils";
   import { formatActive } from "../../lib/utils";

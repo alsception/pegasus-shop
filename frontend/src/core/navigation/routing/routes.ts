@@ -5,7 +5,7 @@ import Users from "../../../features/users/UsersList.svelte";
 import UserDetails from "../../../features/users/UserDetails.svelte";
 import Products from "../../../features/products/ProductsList.svelte";
 import Orders from "../../../features/orders/OrdersList.svelte";
-import ProductDetail from "../../../features/products/ProductDetail.svelte";
+import ProductDetail from "../../../features/products/ProductPage.svelte";
 import ProductAdministration from "../../../features/products/ProductAdministration.svelte";
 import CartDetails from "../../../features/cart/CartDetails.svelte";
 import Checkout from "../../../features/cart/Checkout.svelte";

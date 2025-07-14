@@ -1,7 +1,7 @@
 <script lang="ts">
   import axios from "axios";
   import { showSuccessToast } from "../../core/toaster";
-  import { auth } from "../../core/services/store";
+  import { auth } from "../../core/services/SessionStore";
   import Login from "../../core/auth/Login.svelte";
   import LoadingOverlay from "../../core/LoadingOverlay.svelte";
   import ErrorDiv from "../users/ErrorDiv.svelte";

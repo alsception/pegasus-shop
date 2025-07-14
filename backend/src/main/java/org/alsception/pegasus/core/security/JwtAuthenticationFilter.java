@@ -84,14 +84,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     
     public void printRequestDetails(HttpServletRequest request) throws IOException 
     {
-        logger.warn("+======================== UNATHORIZED HTTP REQUEST DETAILS ======================================+");
-        logger.warn("[1/2] No auth header | "+request.getMethod()+" "+request.getRequestURI());
+        //Login and register requests are unathorized 
         
-        final String serverInfo = "Server Info [" + request.getServerName() + ":" + request.getServerPort()+"]";
-        final String remoteInfo = "Remote Info [" + request.getRemoteAddr() + ":" + request.getRemotePort()+"]";            
-        final String query = "Query String [" + request.getQueryString()+"]";            
+        if( !(request.getMethod() == "POST" && (
+                request.getRequestURI().endsWith("/api/auth/login") || request.getRequestURI().endsWith("/api/auth/register"))
+        )){
+            logger.warn("+======================== UNATHORIZED HTTP REQUEST DETAILS ======================================+");
+            logger.warn("[1/2] No auth header | "+request.getMethod()+" "+request.getRequestURI());
 
-        logger.warn("[2/2] " + serverInfo+", "+remoteInfo+", "+query);
-        logger.warn("+================================================================================================+");
+            final String serverInfo = "Server Info [" + request.getServerName() + ":" + request.getServerPort()+"]";
+            final String remoteInfo = "Remote Info [" + request.getRemoteAddr() + ":" + request.getRemotePort()+"]";            
+            final String query = "Query String [" + request.getQueryString()+"]";            
+
+            logger.warn("[2/2] " + serverInfo+", "+remoteInfo+", "+query);
+            logger.warn("+================================================================================================+");
+        }
     }
 }

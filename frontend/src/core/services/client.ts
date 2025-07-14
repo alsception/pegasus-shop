@@ -8,7 +8,8 @@
 **/
 
 
-import { setToken, clearToken, getToken } from './store';
+import { showSuccessToast } from '../toaster';
+import { setToken, clearToken, getToken } from './SessionStore';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -22,9 +23,11 @@ export async function login(username: string, password: string)
     body: JSON.stringify({ username, password }),
     credentials: 'include' // if backend uses cookies
   });
-
-  if (!response.ok) {
-    throw new Error('Invalid credentials');
+ 
+  if (!response.ok) 
+  {
+    let message = await processErrMsg(response, '');
+    throw new Error(`${message}`);
   }
 
   const data = await response.json();
@@ -58,9 +61,7 @@ export async function register(username: string, password: string)
 
   const data = await response.text();  
   
-  console.log('Register response:', data);
-
-  alert(data);
+  showSuccessToast(data);
   
   /*setToken(data.token);*///in future we should send token
 }
@@ -137,7 +138,6 @@ async function processErrMsg(response: any, path: any)
       message += `Request failed with status ${response.status}`;
     }
   }
-  console.log(message)
   return message;
 }
 

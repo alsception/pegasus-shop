@@ -7,6 +7,7 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Date;
+import org.alsception.pegasus.core.utils.UniqueIdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,15 +32,20 @@ public class JwtUtils {
         // Use the expiration time from the config
         Date expirationDate = new Date(System.currentTimeMillis() + jwtExpirationMs);
 
+        String role = userDetails.getAuthorities().toString();
+
         String token = Jwts.builder()
+            .setId(UniqueIdGenerator.generateCompactNanoId())
             .setSubject(userDetails.getUsername())
             .setIssuedAt(new Date())
             .setExpiration(expirationDate)
+            .setIssuer("pegasus")
+            .claim( "role", role)
             .signWith(getSigningKey(), SignatureAlgorithm.HS512)
             .compact();
         
-        logger.trace("created token: "+token);
-        
+        logger.trace("Created token: ***{}", token.substring(token.length()-10));
+
         return token;
     }
 

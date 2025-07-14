@@ -9,13 +9,15 @@
   let error = "";
   let loading = false;
 
-  async function handleLogin() 
+  //TODO: ADD firstname,lastname, phone, email,etc...
+
+  async function handleSubmit() 
   {
     try 
     {
       loading = true;
       await register(username, password);
-      //window.location.href = "/#/home";
+      window.location.href = "/#/login";
     } catch (err: any) {
       error = err.message;
     } finally {
@@ -26,13 +28,13 @@
 
 <div class="flex items-center justify-center min-h-screen">
   <form
-    on:submit|preventDefault={handleLogin}
+    on:submit|preventDefault={handleSubmit}
     class="w-full max-w-sm relative p-6 rounded-2xl bg-white dark:bg-slate-900"
   >
     <h2
       class="text-2xl font-semibold mb-8 text-center text-primary dark:text-gray-400"
     >
-      Registration
+      Pegasus: Registration
     </h2>
 
     {#if loading}

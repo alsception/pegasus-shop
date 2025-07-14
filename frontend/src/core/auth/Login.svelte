@@ -22,6 +22,10 @@
       loading = false;
     }
   }
+
+  //TODO: ADD SOME LATERAL SPACING HERE ON MOBILE
+
+
 </script>
 
 <div class="flex items-center justify-center min-h-screen">

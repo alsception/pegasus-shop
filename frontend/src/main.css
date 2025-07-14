@@ -49,12 +49,12 @@
   --color-base-200: oklch(21% 0.006 56.043);
   --color-base-300: rgb(0, 0, 0); /* This is the color of the body background in dark theme */
   --color-base-content: oklch(97% 0.001 106.424);
-  --color-primary: oklch(68% 0.169 237.323);
+  --color-primary: gray;
   --color-primary-content: oklch(97% 0.013 236.62);
   --color-secondary: hsl(241.7, 41.4%, 34.1%); /*header*/
   --color-secondary-content: #ffffff;
-  --color-accent: oklch(0% 0 0);
-  --color-accent-content: oklch(100% 0 0);
+  --color-accent: oklch(68% 0.169 237.323);
+  --color-accent-content: oklch(97% 0.013 236.62);
   --color-neutral: navy;
   --color-neutral-content: oklch(98% 0.001 106.423);
   --color-info: rgb(17, 19, 19);

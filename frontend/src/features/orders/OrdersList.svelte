@@ -2,7 +2,7 @@
   import type { Order } from "./Order";
   import { onMount } from "svelte";
   import { link } from "svelte-spa-router";
-  import { auth } from "../../core/services/store";  
+  import { auth } from "../../core/services/SessionStore";  
   import { get } from "svelte/store";
   import { formatCode, formatDate, formatCommentInfo } from "../../lib/utils";
   import { showSuccessToast, showErrorToast } from '../../core/toaster';
@@ -30,7 +30,7 @@
     isAuthenticated = value.isAuthenticated;
   });
 
-
+/* 
   function checkDarkmode()
   {
 
@@ -45,12 +45,12 @@
 
     return () => observer.disconnect();
   }
-
+ */
 
   // Fetch the orders from the backend
   onMount(async () => {
-    checkDarkmode();
-
+/*     checkDarkmode();
+ */
     try {
       const { isAuthenticated } = get(auth);
 

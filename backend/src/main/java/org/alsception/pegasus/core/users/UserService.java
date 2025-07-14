@@ -56,10 +56,13 @@ public class UserService
         return new UserDTO(savedUser);  // Convert the saved entity to DTO
     }
     
-    public PGSUser saveUser(PGSUser user) 
+    public PGSUser saveUser(PGSUser user, boolean encodePassword) 
     {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(PGSUserRole.USER);//TODO: take from frontend as param
+        user.setId(UniqueIdGenerator.generateNanoId());//Important
+        if(encodePassword){
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        user.setRole(PGSUserRole.CUSTOMER);//TODO: take from frontend as param
         user.setActive(Boolean.TRUE);
         
         PGSUser savedUser = repository.save(user);

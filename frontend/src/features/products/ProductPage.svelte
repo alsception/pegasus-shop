@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { params } from "svelte-spa-router";
-  import { auth } from "../../core/services/store";
+  import { auth } from "../../core/services/SessionStore";
   import type { Product } from "./Product";
   import LoadingOverlay from "../../core/LoadingOverlay.svelte";
   import ErrorDiv from "../users/ErrorDiv.svelte";

@@ -97,7 +97,6 @@ public class PGSUser
     {
         this.username = userDTO.getUsername();
         this.password = userDTO.getPassword();
-        this.role = PGSUserRole.USER;
     }
     
     public boolean isActive() {

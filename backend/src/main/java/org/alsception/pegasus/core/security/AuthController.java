@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 import org.alsception.pegasus.core.users.PGSUser;
 import org.alsception.pegasus.core.users.UserService;
-import org.alsception.pegasus.core.utils.UniqueIdGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,12 +23,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController 
 {   
+    /**
+     * Jednog lepog dana, register i login logika treba da ide u poseban service
+     * Nazalost, pitaj boga kako su beanovi postavljeni, dobiju se raznorazne greske,
+     * sta god da se pokusa. Ko uspe da resi, svaka cast
+     * Zbog toga su i loginEnabled, registrationEnabled ovde.
+     * Neuspeo pokusaj refaktoringa :( 14/7/25
+     */
+
+
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final CustomUserDetailsService userDetailsService;
     private final UserService userService;
     private final BCryptPasswordEncoder passwordEncoder;    
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
+    private boolean registrationEnabled = true;
+    private boolean loginEnabled = true;
 
     public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils,
                           CustomUserDetailsService userDetailsService, BCryptPasswordEncoder passwordEncoder,
@@ -41,12 +53,26 @@ public class AuthController
         this.userService = userService;
     }
 
+    /**
+     * @param userDTO
+     * @return ResponseEntity
+     */
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody AuthRequest userDTO) 
     {
         try 
         {   
             logger.info("Registering new user: " + userDTO.getUsername());    
+
+            if(!registrationEnabled)
+            {
+                logger.error("Registration disabled");
+                
+                return ResponseEntity
+                    .status(HttpStatus.METHOD_NOT_ALLOWED)
+                    .body( "Registration is currently disabled");
+            }   
 
             // Check if empty request
             if (null == userDTO.getUsername() || null == userDTO.getPassword() || userDTO.getUsername().isBlank() || userDTO.getPassword().isBlank()) 
@@ -68,25 +94,16 @@ public class AuthController
                     .body( "Username already exists");
             }
 
-            //TODO: Why dont we use service here instead of doing all in ctrl??
 
             // Create and save user
-            String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
-            userDTO.setPassword(encryptedPassword);
             PGSUser user = new PGSUser(userDTO);    
-            user.setActive(Boolean.TRUE);
-            user.setId(UniqueIdGenerator.generateNanoId());//Important
-            
-            // Save to repository
-            userService.saveUser(user);
-            
-            logger.info("User created: " + user.getUsername());
+            userService.saveUser(user,true);            
 
             //TODO: Why dont we sign in automaticaly after registration? Or send json instead of plain text?
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body("User registered successfully!");
+                    .body("Registration successfull!");
         } 
         catch (Exception e) 
         {                   
@@ -106,18 +123,35 @@ public class AuthController
     {
         logger.debug("Authenticating user: " + userDTO.getUsername());
 
+        if(!loginEnabled)
+        {
+            logger.error("Login is currently disabled");
+            
+            return ResponseEntity
+                .status(HttpStatus.METHOD_NOT_ALLOWED)
+                .body( "Login is currently disabled");
+        }    
+
         try {
             authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword())
             );
         } 
-        catch (Exception e) 
+        catch (AuthenticationException e) 
         {
-            logger.error("Authentication failed: " + e.getMessage());
+            logger.warn("Bad credentials");
             
             return ResponseEntity
                     .status(401)
-                    .body("Authentication failed: " + e.getMessage());
+                    .body("Bad credentials");
+        }
+        catch (Exception e) 
+        {
+            logger.error(e.getMessage());
+            
+            return ResponseEntity
+                    .status(500)
+                    .body(e.getMessage());
         }
 
         logger.trace("Loading user: " + userDTO.getUsername());
@@ -138,7 +172,6 @@ public class AuthController
         logger.error("+======================================================== "+title.toUpperCase()+" ================================================+");
         logger.error("[1/2] Request: "+userDTO.toString());
         logger.error("[2/2] " + msg);
-        logger.error("+================================================================================================================================+");
-       
+        logger.error("+================================================================================================================================+");       
     }
 }

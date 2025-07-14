@@ -5,7 +5,7 @@
   import Router from "svelte-spa-router";
 
   //Our imports - core
-  import { auth } from "./core/services/store";
+  import { auth } from "./core/services/SessionStore";
   import Login from "./core/auth/Login.svelte";
   import Register from "./core/auth/Register.svelte";
   import Header from "./core/navigation/Header.svelte";
