@@ -86,9 +86,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     {
         //Login and register requests are unathorized 
         
-        if( !(request.getMethod() == "POST" && (
-                request.getRequestURI().endsWith("/api/auth/login") || request.getRequestURI().endsWith("/api/auth/register"))
-        )){
+        if( 
+            !(request.getMethod().equals("POST") 
+            && (request.getRequestURI().equals("/api/auth/login") || request.getRequestURI().equals("/api/auth/register")))
+        ){
             logger.warn("+======================== UNATHORIZED HTTP REQUEST DETAILS ======================================+");
             logger.warn("[1/2] No auth header | "+request.getMethod()+" "+request.getRequestURI());
 

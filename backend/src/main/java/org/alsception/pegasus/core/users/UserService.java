@@ -59,10 +59,11 @@ public class UserService
     public PGSUser saveUser(PGSUser user, boolean encodePassword) 
     {
         user.setId(UniqueIdGenerator.generateNanoId());//Important
-        if(encodePassword){
+        if(encodePassword)
+        {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        user.setRole(PGSUserRole.CUSTOMER);//TODO: take from frontend as param
+        user.setRole(PGSUserRole.CUSTOMER);//Later we will need to create also other user types
         user.setActive(Boolean.TRUE);
         
         PGSUser savedUser = repository.save(user);

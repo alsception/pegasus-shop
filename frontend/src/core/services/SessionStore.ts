@@ -20,7 +20,7 @@ export const auth = writable<AuthState>({
   isAuthenticated: !!storedToken,
 });
 
-export function setToken(token: string) {
+export function authenticate(token: string) {
   localStorage.setItem('token', token);
   auth.set({ token, isAuthenticated: true });
 }
@@ -66,14 +66,26 @@ export function isCustomer(): boolean
 
 function getUsernameFromToken(token: string | null) 
 {
-  const data = getTokenPart(token,1);  
-  return data.sub || '';
+  try
+  {
+    const data = getTokenPart(token,1);  
+    return data.sub || '';
+  }catch(error){
+    console.error(error);
+    return '_____'
+  }  
 }
 
 function getRolesFromToken(token: string | null) 
 {
-  const data = getTokenPart(token,1);  
-  return data.role || '';
+  try
+  {
+    const data = getTokenPart(token,1);  
+    return data.role || '';
+  }catch(error){
+    console.error(error);
+    return '-'
+  }    
 }
 
 function getTokenPart(token: string | null, part: number) 
@@ -107,11 +119,9 @@ function getTokenPart(token: string | null, part: number)
       // Parse the JSON
       const data = JSON.parse(jsonPayload);
 
-      console.log(data)
-
       return data;
     }
-    return "";
+    return null;
   } 
   catch (error) 
   {

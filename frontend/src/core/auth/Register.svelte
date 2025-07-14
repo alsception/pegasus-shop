@@ -72,7 +72,7 @@
     {#if error}
 
       <p class="text-red-500 text-sm mt-4 text-center dark:text-red-400 bg-error-content p-2">
-        ERROR: {error}
+        {error}
       </p>
 
     {/if}

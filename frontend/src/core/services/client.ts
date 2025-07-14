@@ -9,7 +9,7 @@
 
 
 import { showSuccessToast } from '../toaster';
-import { setToken, clearToken, getToken } from './SessionStore';
+import { authenticate, clearToken, getToken } from './SessionStore';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -32,7 +32,7 @@ export async function login(username: string, password: string)
 
   const data = await response.json();
 
-  setToken(data.token);
+  authenticate(data.token);
 }
 
 export function logout() {
