@@ -3,10 +3,30 @@
   import { navRoutes } from "./navRoutes";
   import { getCurrentUsername } from "../../services/SessionStore";
   import { getCurrentRole } from "../../services/SessionStore";
+  import type { NavRoutesMap } from "./MenuTypes";
+
+  const role = getCurrentRole();  
+
+  //Filter nav items by role
+  const getRoutesByRole = (role: 'ADMIN' | 'CUSTOMER') => {
+    return Object.entries(navRoutes)
+      .filter(([_, route]) => {
+        if(route.default) return true;
+        if (role === 'ADMIN') return route.admin === true;
+        if (role === 'CUSTOMER') return route.customer === true;
+        return false;
+      })
+      .reduce((acc, [path, route]) => {
+        acc[path] = route;
+        return acc;
+      }, {} as NavRoutesMap);
+  };
+
+  const filteredRoutes = getRoutesByRole(role);
 
   // Function to get navigation items (for menu display)
   function getNavigationItems() {
-    return Object.values(navRoutes).map((route) => ({
+    return Object.values(filteredRoutes).map((route) => ({
       label: route.label,
       icon: route.icon,
       href: route.href,

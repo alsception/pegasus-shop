@@ -11,6 +11,9 @@ export const navRoutes: NavRoutesMap =
       icon: "home",
       href: "#/home",
       component: "/home",
+      admin: true,
+      customer: false,
+      default: true,
     },
     "/users": {
       label: "Users",
@@ -18,6 +21,8 @@ export const navRoutes: NavRoutesMap =
       href: "#/users",
       component: "/users",
       componentDetails: "/users/:id",
+      admin: true,
+      customer: false,
     },
     "/products": {
       label: "Products",
@@ -25,6 +30,8 @@ export const navRoutes: NavRoutesMap =
       href: "#/products",
       component: "/products",
       componentDetails: "/products/:id",
+      admin: true,
+      customer: true,
     },
     "/products/mngmt/:id": {
       label: "Products administration",
@@ -32,6 +39,8 @@ export const navRoutes: NavRoutesMap =
       href: "#/products?listView=true",
       component: null,
       componentDetails: "/products/mngmt/:id",
+      admin: true,
+      customer: false,
     },
     "/orders": {
       label: "Orders",
@@ -39,6 +48,8 @@ export const navRoutes: NavRoutesMap =
       href: "#/orders",
       component: null,
       disabled: false,
+      admin: true,
+      customer: true,
     },
     "/cart": {
       label: "My cart",
@@ -46,6 +57,8 @@ export const navRoutes: NavRoutesMap =
       href: "#/cart",
       component: null,
       disabled: false,
+      admin: true,
+      customer: true,
     },
     "/checkout": {
       label: "Checkout",
@@ -54,6 +67,8 @@ export const navRoutes: NavRoutesMap =
       component: null,
       disabled: false,
       hidden: true,
+      admin: true,
+      customer: true,
     },   
     "/statistics": {
       label: "Statistics",
@@ -61,14 +76,9 @@ export const navRoutes: NavRoutesMap =
       href: "#/statistics",
       component: null,
       disabled: true,
-    },
-    "/catalogs": {
-      label: "Catalogs",
-      icon: "file",
-      href: "",
-      component: null,
-      disabled: true,
-    },    
+      admin: false,
+      customer: false,
+    }, 
     "/pix": {
       label: "Pictures",
       icon: "image",
@@ -76,6 +86,8 @@ export const navRoutes: NavRoutesMap =
       component: null,
       disabled: false,
       hidden: false,
+      admin: true,
+      customer: false,
     },  
     "/logout": {
       label: "Logout",
@@ -84,5 +96,8 @@ export const navRoutes: NavRoutesMap =
       component: "Logout",
       disabled: false,
       hidden: false,
+      admin: true,
+      customer: false,
+      default: true,
     },
   };

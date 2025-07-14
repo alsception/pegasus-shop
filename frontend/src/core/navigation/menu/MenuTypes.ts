@@ -42,6 +42,9 @@ export type NavRoute = {
   routes?: Record<string, SubRoute> // For sub-routes like /products/:id
   disabled?: boolean
   hidden?: boolean //TODO: dis doesnt actually work. Currently we hide for disabled
+  admin?: boolean
+  customer?: boolean
+  default?: boolean
 }
 
 export type ComponentRegistry = Record<string, Component>

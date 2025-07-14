@@ -24,4 +24,11 @@
  |_|   |_____\____/_/   \_\____/ \___/|____/ 
                                              
 
- v 1.0.1
+ v 1.0.3
+
+
+ TODO:
+ 1. MAKE LOCAL DATABASE BACKUO
+ 2. LIMIT USERNAME ON REGISTRATION
+      2.1 Maybe also limit fields in displaying users.
+ 3. If user is admir can see / edit other users and so on...
