@@ -8,5 +8,4 @@ echo "Building frontend..."
 cd backend
 
 echo "Building backend..."                                                      
-./mvnw clean package -DskipTests      
-
+./mvnw clean package -DskipTests     
