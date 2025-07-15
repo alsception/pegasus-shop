@@ -49,10 +49,10 @@
   --color-base-200: oklch(21% 0.006 56.043);
   --color-base-300: rgb(0, 0, 0); /* This is the color of the body background in dark theme */
   --color-base-content: oklch(97% 0.001 106.424);
-  --color-primary: gray;
+  --color-primary: rgb(59 130 246);/*blue 500*/
   --color-primary-content: oklch(97% 0.013 236.62);
-  --color-secondary: hsl(241.7, 41.4%, 34.1%); /*header*/
-  --color-secondary-content: #ffffff;
+  --color-secondary: #2088b0bf; /*header*/
+  --color-secondary-content: orange;
   --color-accent: oklch(68% 0.169 237.323);
   --color-accent-content: oklch(97% 0.013 236.62);
   --color-neutral: navy;
@@ -65,7 +65,7 @@
   --color-warning-content: oklch(28% 0.066 53.813);
   --color-error: oklch(71% 0.202 349.761);
   --color-error-content: oklch(28% 0.109 3.907);
-  --radius-selector: 0.25rem;
+  --radius-selector: 1rem;
   --radius-field: 2rem;
   --radius-box: 0rem;
   --size-selector: 0.25rem;
@@ -96,11 +96,6 @@
   color: black;
   background-color: yellow;
 }
-/* Light mode selection */
-::selection {
-  color: black;
-  background-color: yellow;
-}
 
 /* Dark mode selection */
 @media (prefers-color-scheme: dark) {
@@ -108,6 +103,17 @@
     background: #00fff7; /* neon cyan */
     color: #2d0036; /* deep purple */
     /* text-shadow: 0 0 8px #ff00ea, 0 0 16px #00fff7;  *//* magenta & cyan glow */
+  }
+}
+
+/* [data-theme='dark'] ::selection {
+  background: #00fff7;
+  color: #2d0036;
+} */
+[data-theme=dark] {
+    ::selection {
+      background-color: #00fff7 !important;
+      color: #2d0036 !important;
   }
 }
 

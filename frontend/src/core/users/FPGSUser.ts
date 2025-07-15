@@ -1,4 +1,4 @@
-export interface User 
+export interface FPGSUser 
 {
     id: number;
     role: string;
@@ -9,7 +9,10 @@ export interface User
     created: string | Date | number | null;
     //svi posle ovoga mogu biti null ili da ne postoje
     modified?: string | Date | number | null;
+    dob?: string | Date | number | null;
     password?: string | null;
     email?: string | null;
     phone?: string | null;
+    organization?: string | null;
+    comment?: string | null;
 }

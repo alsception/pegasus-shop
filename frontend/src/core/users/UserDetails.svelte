@@ -1,20 +1,25 @@
 <script lang="ts">
-  import { type User } from "./User";
+  import { type FPGSUser } from "./FPGSUser";
   import { onMount } from "svelte";
   import { params } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";
   import Login from "../../core/auth/Login.svelte";
   import api from "../../core/services/client";
-  import { toast } from "@zerodevx/svelte-toast";
-  import ErrorDiv from "./ErrorDiv.svelte";
+  import ErrorDiv from "../utils/ErrorDiv.svelte";
+  import { showSuccessToast } from "../utils/toaster";
 
   let isAuthenticated = false;
   let loading: boolean = false;
   let error: string | null = null;
-  let user: User | null = null;
   let ID: number | string;
 
-  document.title = "User details: | Pegasus";
+  document.title = "User details | Pegasus";
+
+  /**
+  *   TODO: Pitanje kakve date formate koristimo ovde, moguce da su pogresni
+ * 
+  * 
+    */
 
   //Authenticacion
   $: isAuthenticated = $auth.isAuthenticated;
@@ -28,43 +33,52 @@
         fetch(ID); // reactively fetch when id changes
       } else {
         error = "Invalid user ID.";
-        user = null;
         formData = {};
       }
     }
   }
 
   // Available user types
-  const userTypes = ["ADMIN", "CUSTOMER", "EMPLOYEE", "TESTER", "OTHER"];
+  const userTypes = ["ADMIN", "CUSTOMER", "VENDOR", "EMPLOYEE", "TESTER", "USER", "OTHER"];
 
-  //IZGLEDA DA OVDE IMAMO I USER I FORM DATA, A TREBALO BI SAMO JEDAN.
-
-  let formData: Partial<User> = {
+  let formData: Partial<FPGSUser> = {
     role: "",
     username: "",
     firstName: "",
     lastName: "",
     active: null,
     created: new Date().toISOString(),
+    modified: null,
+    dob: null,
+    organization: '',
+    comment: ''
   };
 
-  async function fetch(id: string | number) {
+  async function fetch(id: string | number) 
+  {
     startLoadingAnimation();
 
     try {
-      let data = await api<User>("/users/" + id, {
+      let data = await api<FPGSUser>("/users/" + id, {
         method: "GET",
       });
-      //samo jedan treba da ostane
+      
       formData = data;
-      user = data;
+      document.title = formData.username+" - User details "+" | Pegasus";
       error = null;
       formData.created = data.created;
-
       // Convert created date to datetime-local format
       if (data.created) {
         const date = new Date(data.created);
         formData.created = date.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm
+      }
+      if (data.modified) {
+        const date = new Date(data.modified);
+        formData.modified = date.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm
+      }
+      if (data.dob) {
+        const date = new Date(data.dob);
+        formData.dob = date.toISOString().slice(0, 10); // YYYY-MM-DDTHH:mm
       }
 
     } catch (err) {
@@ -74,15 +88,16 @@
     }
   }
 
-  function processError(err: any) {
-    user = null;
+  function processError(err: any) 
+  {
     formData = {};
     error =
       (err as Error)?.message ||
       "User not found or an unknown error occurred. ERR_80";
   }
 
-  onMount(async () => {
+  onMount(async () => 
+  {
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
@@ -91,19 +106,25 @@
     }
   });
 
-  async function handleSubmit() {
-    try {
-      loading = true;
+  async function handleSubmit() 
+  {
+    try 
+    {
+      loading = true;         
 
-      await api<User>(`/users/${ID}`, {
+      if(formData.dob)formData.dob += 'T00:00';//hack :)
+
+      await api<FPGSUser>(`/users/${ID}`, 
+      {
         method: "PUT",
         body: JSON.stringify(formData),
       });
 
-      toast.push("✅ User saved");
+      showSuccessToast("User saved");
 
-      window.location.href = "/#/users";
-    } catch (err) {
+      fetch(ID);
+      
+    } catch (err){
       alert((err as Error).message);
     } finally {
       loading = false;
@@ -111,10 +132,12 @@
   }
 
   function cancelEditing(
-    event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }
-  ) {
+    event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) 
+  {
     window.location.href = "#/users"; // Back to users
   }
+
+  const inputSkeletons = '#userForm input, #userForm select, #userForm textarea';
 
   //Instead of loading spinner, we will show skeletons
   function startLoadingAnimation(): void {
@@ -124,9 +147,7 @@
       loadingMessage.style.display = "";
     }
 
-    const inputs = document.querySelectorAll<HTMLInputElement>(
-      "#userForm input, #userForm select"
-    );
+    const inputs = document.querySelectorAll<HTMLInputElement>(inputSkeletons);
     inputs.forEach((input) => {
       input.classList.add("skeleton");
       input.disabled = true;
@@ -140,9 +161,7 @@
       loadingMessage.style.display = "none";
     }
 
-    const inputs = document.querySelectorAll<HTMLInputElement>(
-      "#userForm input, #userForm select"
-    );
+    const inputs = document.querySelectorAll<HTMLInputElement>(inputSkeletons);
     inputs.forEach((input) => {
       input.classList.remove("skeleton");
       input.disabled = false;
@@ -175,7 +194,7 @@
     >
       <!-- Full-width header  -->
       <div
-        class="w-full mb-6 pt-4 pb-4 px-6 bg-secondary"
+        class="w-full mb-6 pt-4 pb-4 px-6 bg-base-100" 
       >
         <div class="flex items-center gap-2">
           <h2 class="text-4xl font-semibold text-primary yellowtail-regular">
@@ -194,7 +213,7 @@
       <!-- Form content grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 px-8 gap-6 pb-8 w-full ">
         <div class="w-full">
-          <label for="username" class="label label-secondary text-sm pb-3">Username</label>
+          <label for="username" class="label label-primary text-sm pb-3">Username</label>
 
           <label class="label label-secondary input input-form">
             <svg
@@ -221,7 +240,7 @@
           </label>
         </div>
         <div class="w-full">
-          <label for="password" class="label label-secondary text-sm pb-3">Password</label>
+          <label for="password" class="label label-secondary text-sm pb-3 text-gray-500">Password</label>
           <input
             id="password"
             type="password"
@@ -234,7 +253,7 @@
           />
         </div>
         <div class="w-full">
-          <label for="active" class="label label-secondary text-sm pb-3">Active</label>
+          <label for="active" class="label label-secondary text-sm pb-3 text-gray-500">Active</label>
           <select
             id="active"
             class="select font-mono font-bold input-form text-primary"
@@ -251,41 +270,7 @@
           </select>
         </div>
         <div class="w-full">
-          <label for="firstName" class="label label-secondary text-sm pb-3">First Name</label>
-          <input
-            id="firstName"
-            class="input input-form font-bold text-primary"
-            bind:value={formData.firstName}
-          />
-        </div>
-        <div class="w-full">
-          <label for="lastName" class="label label-secondary text-sm pb-3">Last Name</label>
-          <input
-            id="lastName"
-            class="input input-form font-bold text-primary"
-            bind:value={formData.lastName}
-          />
-        </div>
-        <div class="w-full">
-          <label for="email" class="label label-secondary text-sm pb-3">Email</label>
-          <input
-            id="email"
-            type="email"
-            class="input input-form font-bold text-primary"
-            bind:value={formData.email}
-          />
-        </div>
-        <div class="w-full">
-          <label for="phone" class="label label-secondary text-sm pb-3">Phone</label>
-          <input
-            id="phone"
-            type="tel"
-            class="input input-form font-bold text-primary"
-            bind:value={formData.phone}
-          />
-        </div>
-        <div class="w-full">
-          <label for="role" class="label label-secondary text-sm pb-3"> Role </label>
+          <label for="role" class="label label-secondary text-sm pb-3 text-gray-500"> Role </label>
           <select
             id="type"
             bind:value={formData.role}
@@ -297,7 +282,63 @@
           </select>
         </div>
         <div class="w-full">
-          <label for="created" class="label label-secondary text-sm pb-3"> Created </label>
+          <label for="firstName" class="label label-secondary text-sm pb-3 text-gray-500">First Name</label>
+          <input
+            id="firstName"
+            class="input input-form font-bold text-primary"
+            bind:value={formData.firstName}
+          />
+        </div>
+        <div class="w-full">
+          <label for="lastName" class="label label-secondary text-sm pb-3 text-gray-500">Last Name</label>
+          <input
+            id="lastName"
+            class="input input-form font-bold text-primary"
+            bind:value={formData.lastName}
+          />
+        </div>
+        <div class="w-full">
+          <label for="email" class="label label-secondary text-sm pb-3 text-gray-500">Email</label>
+          <input
+            id="email"
+            type="email"
+            class="input input-form font-bold text-primary"
+            bind:value={formData.email}
+          />
+        </div>
+        <div class="w-full">
+          <label for="phone" class="label label-secondary text-sm pb-3 text-gray-500">Phone</label>
+          <input
+            id="phone"
+            type="tel"
+            class="input input-form font-bold text-primary"
+            bind:value={formData.phone}
+          />
+        </div>
+        <div class="w-full">
+          <label for="organization" class="label label-secondary text-sm pb-3 text-gray-500">Organization</label>
+          <input
+            id="organization"
+            type="text"
+            class="input input-form font-bold text-primary"
+            bind:value={formData.organization}
+          />
+        </div>       
+
+        <div class="w-full">
+          <label for="dob" class="label label-secondary text-sm pb-3 text-gray-500">
+            Day of birth
+          </label>
+          <input
+            id="dob"
+            type="date"
+            class="input input-form font-bold text-primary"
+            bind:value={formData.dob}
+          />
+        </div>        
+
+        <div class="w-full">
+          <label for="created" class="label label-secondary text-sm pb-3 text-gray-500"> Created </label>
           <input
             id="created"
             type="datetime-local"
@@ -306,6 +347,27 @@
             disabled
             readonly
           />
+        </div>
+        <div class="w-full">
+          <label for="modified" class="label label-secondary text-sm pb-3 text-gray-500"> Modified </label>
+          <input
+            id="modified"
+            type="datetime-local"
+            class="input input-form font-bold text-primary"
+            bind:value={formData.modified}
+            disabled
+            readonly
+          />
+        </div>
+
+        <div class="w-full col-span-full">
+          <label for="comment" class="label text-gray-500 text-sm pb-3">Comment</label>
+          <textarea
+            id="comment"
+            class="input input-form font-bold text-primary"
+            bind:value={formData.comment}
+            style="height: 100px;"
+          ></textarea>
         </div>
       </div>
 
@@ -322,3 +384,10 @@
     </form>
   {/if}
 </div>
+
+<style>
+  input:hover,select:hover,textarea:hover{
+    border: 1px solid var(--color-accent);
+    transition: 200ms ease;
+  }
+</style>

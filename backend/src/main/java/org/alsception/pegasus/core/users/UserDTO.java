@@ -14,11 +14,13 @@ public class UserDTO
     private String role;    
     private LocalDateTime created;    
     private LocalDateTime modified;    
+    private LocalDateTime dob;
     private String firstName;    
     private String lastName;    
     private String email;    
     private String phone;    
     private String organization;    
+    private String comment;  
     private Boolean active;    
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -36,11 +38,33 @@ public class UserDTO
         this.role = user.getRole().toString();
         this.created = user.getCreated();
         this.modified = user.getModified();
+        this.dob = user.getDob();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.active = user.isActive();
         this.phone = user.getPhone();
         this.email = user.getEmail();
         this.organization = user.getOrganization();
+        this.comment = user.getComment();
+    }
+
+    public PGSUser convert(UserDTO user) 
+    {
+        PGSUser p = new PGSUser();
+        p.setId(user.getId());
+        p.setUsername(user.getUsername());
+        p.setPassword(user.getPassword());
+        p.setRole(PGSUserRole.valueOf(user.getRole().toString()));
+        p.setCreated(user.getCreated());
+        p.setModified(user.getModified());
+        p.setDob(user.getDob());
+        p.setFirstName(user.getFirstName());
+        p.setLastName(user.getLastName());
+        p.setActive(user.getActive());
+        p.setPhone(user.getPhone());
+        p.setEmail(user.getEmail());
+        p.setOrganization(user.getOrganization());
+        p.setComment(user.getComment());
+        return p;
     }
 }

@@ -1,34 +1,26 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { link } from "svelte-spa-router";
-  import Modal from "./ProductModal.svelte";
-  import { auth } from "../../core/services/SessionStore";
-  import Login from "../../core/auth/Login.svelte";
   import { get } from "svelte/store";
-  import type { Product } from "./Product";
-  import axios from "axios";
+  import { auth } from "../../core/services/SessionStore";
   import { formatDate } from "../../lib/utils";
   import { formatActive } from "../../lib/utils";
   import { formatCommentInfo } from "../../lib/utils";
-  import { showSuccessToast, showErrorToast } from "../../core/toaster";
-  import LoadingOverlay from "../../core/LoadingOverlay.svelte";
-  import ErrorDiv from "../users/ErrorDiv.svelte";
+  import type { Product } from "./Product";
+  import Modal from "./ProductModal.svelte";
+  import Login from "../../core/auth/Login.svelte";
+  import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
+  import ErrorDiv from "../../core/utils/ErrorDiv.svelte";
   import AddToCartButton from "./AddToCartButton.svelte";
-  import { addToCart } from "./ProductService";
 
   document.title = "Products | Pegasus";
-
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-  const fallbackImage =
-    "https://images.unsplash.com/photo-1503602642458-232111445657?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDQzNzd8MHwxfHNlYXJjaHw0fHxwcm9kdWN0fGVufDB8fHx8MTc0ODAwODQyN3ww&ixlib=rb-4.1.0&q=80&w=200";
 
   //DEFINITIONS
   let isAuthenticated = false;
   let modalProduct: Product | null = null;
   let products: Product[] = [];
   let loading: boolean = false;
-  let addToCartLoading: number | null = null; // store productId being added
   let error: string | null = null;
   let isListView = false;
   let isAdminView = true;
@@ -233,23 +225,18 @@
               <th class="pgs-th">Name</th>
               <th class="pgs-th">Code</th>
               <th class="pgs-th">Description</th>
-
               <th class="pgs-th">Category</th>
-
               <th class="pgs-th">Brand</th>
               <th class="pgs-th">Price</th>
               <th class="pgs-th">Currency</th>
-
               <th class="pgs-th">Shipping</th>
               <th class="pgs-th">Tax</th>
               <th class="pgs-th">Discount</th>
-
               <th class="pgs-th">Stock</th>
               <th class="pgs-th">Comment</th>
               <th class="pgs-th">Other</th>
               <th class="pgs-th">created</th>
               <th class="pgs-th">modified</th>
-
               <th class="pgs-th">Active</th>
               <th class="pgs-th">Actions</th>
             </tr>

@@ -1,8 +1,8 @@
 import type { ComponentRegistry} from "../menu/MenuTypes";
 import { navRoutes } from "../menu/navRoutes";//Routes are here
 import Home from "../../Home.svelte";
-import Users from "../../../features/users/UsersList.svelte";
-import UserDetails from "../../../features/users/UserDetails.svelte";
+import Users from "../../../core/users/UsersList.svelte";
+import UserDetails from "../../../core/users/UserDetails.svelte";
 import Products from "../../../features/products/ProductsList.svelte";
 import Orders from "../../../features/orders/OrdersList.svelte";
 import ProductDetail from "../../../features/products/ProductPage.svelte";

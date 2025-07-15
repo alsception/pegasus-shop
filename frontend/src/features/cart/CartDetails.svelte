@@ -3,16 +3,16 @@
   import { auth } from "../../core/services/SessionStore";
   import Login from "../../core/auth/Login.svelte";
   import axios from "axios";
-  import type { PGSCart } from "./Cart";
-  import LoadingOverlay from "../../core/LoadingOverlay.svelte";
-  import ErrorDiv from "../users/ErrorDiv.svelte";
+  import type { Cart } from "./Cart";
+  import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
+  import ErrorDiv from "../../core/utils/ErrorDiv.svelte";
 
   document.title = 'Cart | Pegasus'
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   let isAuthenticated = false;
   let loading: boolean = false;
-  let cart: PGSCart | null = null;
+  let cart: Cart | null = null;
   let error: any = null;
 
   // AUTHENTICATION

@@ -53,7 +53,7 @@ export function getCurrentRole()
 
 export function isAdmin(): boolean
 {
-  //Raw role is this, with brackets included: "[ROLE_CUSTOMER]" or "[ROLE_ADMIN]"
+  //Raw role is this, with brackets included and prefix: "[ROLE_CUSTOMER]" or "[ROLE_ADMIN]"
   const role = getRolesFromToken(getToken());
   return role === "[ROLE_ADMIN]";  
 }

@@ -1,15 +1,13 @@
 package org.alsception.pegasus.core.users;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.alsception.pegasus.core.utils.UniqueIdGenerator;
 import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -73,11 +71,19 @@ public class UserService
     }
     
     
-    public UserDTO update(UserDTO receivedUser) 
+    public UserDTO update(UserDTO receivedUser, String requestorUsername) 
     {
-        //map
-        //password
-        //save
+        //first, see if requestor has rights to execute update
+        // It needs to be ADMIN, or owner
+        PGSUser requestor = findByUsername(requestorUsername);
+        if( !(requestor.getRole().equals(PGSUserRole.ADMIN) || receivedUser.getUsername().equals(requestorUsername)))
+        {
+            throw new AccessDeniedException("User does not have permissions to perform this action");
+        }
+
+        //1.map
+        //2.password
+        //3.save
         
         PGSUser dbUser = repository.findById(receivedUser.getId()).get();
         
@@ -90,7 +96,10 @@ public class UserService
         dbUser.setActive(receivedUser.getActive());     
         dbUser.setEmail(receivedUser.getEmail());
         dbUser.setPhone(receivedUser.getPhone());
+        dbUser.setOrganization(receivedUser.getOrganization());
+        dbUser.setComment(receivedUser.getComment());        
         dbUser.setRole(PGSUserRole.valueOf(receivedUser.getRole()));
+        dbUser.setDob(receivedUser.getDob());
         
         if(receivedUser.getPassword()!=null && !"".equals(receivedUser.getPassword()))
         {
@@ -100,7 +109,7 @@ public class UserService
         
         dbUser = repository.save(dbUser);
         
-        logger.debug("User updated: "+dbUser.getId());
+        logger.info("User updated: "+dbUser.getId());
         
         return new UserDTO(dbUser); 
     }
@@ -144,9 +153,16 @@ public class UserService
         return repository.existsById(id);
     } 
     
-    public void deleteById(Long id) 
+    public void deleteById(Long id, String requestorUsername) 
     {
+        //See if requestor has rights to execute action
+        //It needs to be ADMIN, or owner
+        PGSUser requestor = findByUsername(requestorUsername);
+        
+        if( !(requestor.getRole().equals(PGSUserRole.ADMIN) || requestor.getId().equals(id)))
+        {
+            throw new AccessDeniedException("User does not have permissions to perform this action");
+        }
         repository.deleteById(id);
-    } 
-    
+    }     
 }

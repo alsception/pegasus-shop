@@ -1,12 +1,16 @@
 package org.alsception.pegasus.core.users;
 
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.MethodNotAllowedException;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/users")
@@ -47,8 +53,7 @@ public class UserController
         {
             return ResponseEntity.notFound().build();
         }
-    }
-    
+    }    
     
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO user) throws BadRequestException
@@ -74,34 +79,40 @@ public class UserController
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO user) throws BadRequestException 
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO user, Principal principal) throws BadRequestException //Spring autoinjects principal
     {
         if (!id.equals(user.getId())) 
         {
             throw new BadRequestException("Path ID and body ID do not match.");
-        }
+        }       
         else if (!userService.existsById(id)) 
         { 
             return ResponseEntity.notFound().build();
         }
-                
-        user = userService.update(user);    
-        
-        return ResponseEntity.ok(user);            
+               
+        try 
+        {
+            user = userService.update(user,principal.getName());    
+            return ResponseEntity.ok(user);                
+        } 
+        catch (AccessDeniedException e) 
+        {
+            throw new BadRequestException(e.getMessage());
+            /*throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have permission");*/
+        }        
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) 
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id, Principal principal) 
     {
         if (userService.existsById(id)) 
         {        
-            userService.deleteById(id);
+            userService.deleteById(id, principal.getName());
             return ResponseEntity.noContent().build();
         }
         else
         {
             return ResponseEntity.notFound().build();
-        }
-        
+        }        
     }
 }

@@ -3,18 +3,17 @@
   import { params } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";
   import type { Product } from "./Product";
-  import LoadingOverlay from "../../core/LoadingOverlay.svelte";
-  import ErrorDiv from "../users/ErrorDiv.svelte";
+  import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
+  import ErrorDiv from "../../core/utils/ErrorDiv.svelte";
   import AddToCartButton from "./AddToCartButton.svelte";
 
   document.title = "Product details | Pegasus";
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   let productId: number;
   let product: Product | null = null;
   let loading = true;
   let error: string | null = null;
-
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   $: {
     if ($params?.id) {
@@ -128,12 +127,12 @@
 
   }
 
-  .product-detail strong {
+/*  .product-detail strong {
     color: #666;
   }
 
   .price {
     margin-top: 1rem;
     font-weight: bold;
-  }
+  }*/
 </style>

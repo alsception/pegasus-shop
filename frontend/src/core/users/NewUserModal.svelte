@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import type { User } from "./User";
+  import type { FPGSUser } from "./FPGSUser";
   import { toast } from "@zerodevx/svelte-toast";
   import api from "../../core/services/client";
 
@@ -9,7 +9,7 @@
 
   const dispatch = createEventDispatcher();
 
-  let newUser: User;
+  let newUser: FPGSUser;
 
   function resetUser() {
     newUser = {
@@ -18,7 +18,7 @@
       username: "",
       firstName: "",
       lastName: "",
-      active: false,
+      active: true,
       created: null,
       modified: null,
       password: null,
@@ -28,15 +28,15 @@
   }
 
   // Available user types
-  const userTypes = ["ADMIN", "CUSTOMER", "EMPLOYEE", "TESTER", "OTHER"];
+  const userTypes = ["ADMIN", "CUSTOMER", "VENDOR", "EMPLOYEE", "TESTER", "USER", "OTHER"];
 
   function closeModal() {
     isOpen = false;
     dispatch("close");
   }
 
-  async function createUser(user: User) {
-    return api<User>("/users", {
+  async function createUser(user: FPGSUser) {
+    return api<FPGSUser>("/users", {
       method: "POST",
       body: JSON.stringify(user),
     });
@@ -49,7 +49,7 @@
     resetUser();
   }
 
-  async function submit(newUser: User) 
+  async function submit(newUser: FPGSUser) 
   {
     try 
     {

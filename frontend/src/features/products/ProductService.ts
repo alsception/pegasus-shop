@@ -1,5 +1,5 @@
 import axios from "axios";
-import { showErrorToast, showSuccessToast } from "../../core/toaster";
+import { showErrorToast, showSuccessToast } from "../../core/utils/toaster";
 import { writable } from "svelte/store";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;

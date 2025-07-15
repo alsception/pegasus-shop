@@ -1,23 +1,24 @@
 <script lang="ts">
-  import ErrorDiv from './ErrorDiv.svelte';
-
   import { onMount } from "svelte";
   import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";
   import { get } from "svelte/store";
-  import { formatDate } from "../../lib/utils";
+  import { formatCommentInfo, formatDate } from "../../lib/utils";
   import { formatActive } from "../../lib/utils";
   import { logout } from "../../core/services/client";
-  import type { User } from "./User.ts";
-  import NewUserModal from "./NewUserModal.svelte";
+  import type { FPGSUser } from "./FPGSUser";
   import Login from "../../core/auth/Login.svelte";
   import api from "../../core/services/client";
-  import LoadingOverlay from "../../core/LoadingOverlay.svelte";
+  import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
+  import ErrorDiv from '../utils/ErrorDiv.svelte';
+  import NewUserModal from "./NewUserModal.svelte";
+  import { showErrorToastLongDuration, showErrorToastNoExp } from "../utils/toaster";
+
 
   let isAuthenticated = false;  
   let loading: boolean = false;
   let error: string | null = null;
-  let users: User[] = [];  
+  let users: FPGSUser[] = [];  
   let showCreateModal = false;
   let sortKey = '';
   let sortAsc = true;
@@ -67,7 +68,7 @@
       const { isAuthenticated: authStatus } = get(auth);
       isAuthenticated = authStatus;
       //TODO: if is not authenticated, then dont do search      
-      handleSearch();
+      handleSearch(true);
     } catch (err) {
       error = err instanceof Error ? err.message : "Unknown error";
     } finally {
@@ -78,15 +79,15 @@
   function handleFormSubmit(event: { preventDefault: () => void }) 
   {
     event.preventDefault(); // prevent page reload
-    handleSearch();
+    handleSearch(false);
   }
 
-  async function handleSearch() 
+  async function handleSearch(showLoading: boolean) 
   {
     //TODO: Currently we search for new users when modal is closed
     // We should not search if new user has not been created
     
-    loading = true;
+    if(showLoading) loading = true;
     error = null; // Reset error message
     
     const token = $auth.token;
@@ -143,7 +144,7 @@
     return '';
   }
 
-  function sortBy(key: keyof User) 
+  function sortBy(key: keyof FPGSUser) 
   {
     users = [...users].sort((a, b) => {
       const valA = String(a[key]);
@@ -160,8 +161,8 @@
     showCreateModal = true;
   }
 
- function getUserColor(userRole: string): string 
- {
+  function getUserColor(userRole: string): string 
+  {
     switch (userRole.toUpperCase()) 
     {
       case "ADMIN":
@@ -185,11 +186,8 @@
   {
     if (confirm("Are you sure? This action cannot be undone.") == true) 
     {
-      deleteUser(id);
-      
-    } else {
-      console.log('no')
-    }
+      deleteUser(id);      
+    } 
   }
 
   async function executeDelete(id: number) 
@@ -205,9 +203,10 @@
     {
       await executeDelete(id);
       //We just assume its created if no error happens...
-      handleSearch();      
+      handleSearch(false);      
     } catch (error) {
-      console.error("Error deleting user:", error);
+      //TODO: process this err msg to show network error failed to fetch, and json msg error from server
+      showErrorToastLongDuration("Error deleting user: " + error);
     }
   }
 
@@ -237,7 +236,7 @@
 		}
 	}
 
-  function isActiveHeader(name: keyof User) 
+  function isActiveHeader(name: keyof FPGSUser) 
   {
     return sortKey === name;
   }
@@ -290,7 +289,7 @@
     {:else}
 
   <div class="max-w-[1568px] overflow-x-auto rounded-lg align-middle mx-auto">
-      <table class="table table-zebra table-xs min-w-full divide-y divide-gray-200 dark:divide-gray-700" >
+      <table class="table table-zebra min-w-full divide-y divide-gray-200 dark:divide-gray-700" >
       <thead class="bg-base-200">
         <tr class="h-12">
           <th class="pgs-th">
@@ -324,6 +323,9 @@
             class:dark\:bg-slate-700={isActiveHeader('lastName')} 
             on:click={() => sortBy('lastName')}>{@html lastNameHeader}            
           </th>
+                    <th class="pgs-th">
+                      
+                    </th>
 
           <th class="pgs-th cursor-pointer"  
             title="Click to sort by"
@@ -356,16 +358,18 @@
                 <input type="checkbox" class="checkbox checkbox-accent checkbox-xs" 	on:change={(event) => handleCheckboxChange(event, i)} />
               </td>
               <td class="pgs-td">
-                  <a use:link href="/users/{user.id}" class="text-gray-500 dark:text-gray-400 hover:text-sky-500 dark:hover:text-sky-500 font-bold ">{user.username}</a>
+                  <a use:link href="#/users/{user.id}" class="text-gray-500 dark:text-gray-400 pgs-hyperlink font-bold block max-w-[200px] truncate">{user.username}</a>
               </td> 
               <td>
                 <span class="badge badge-outline badge-{getUserColor(user.role)} dark:badge-{getUserColor(user.role)}-dark font-mono font-semibold" style="text-transform: uppercase;">
                   {user.role}
                 </span>
               </td>     
-              <td class="pgs-td">{user.firstName}</td>
-              <td class="pgs-td">{user.lastName}</td> 
-              
+              <td class="pgs-td"><span class="block max-w-[200px] truncate" title="{user.firstName}">{user.firstName}</span></td>
+              <td class="pgs-td"><span class="block max-w-[200px] truncate" title="{user.lastName}">{user.lastName}</span></td>
+              <td class="text-center"
+                  >{@html formatCommentInfo(user.comment)}</td
+                >
               <td class="pgs-td font-mono justify-right">
                 {@html formatDate(user.created,'new',15)}
               </td>
@@ -373,22 +377,24 @@
                 {@html formatDate(user.modified,'Changed less then 15 minutes ago',15)}
               </td>
               <td class="pgs-td font-mono"> {formatActive(user.active)}</td>      
-              <td class="justify-center">
-                <div class="tooltip" data-tip="Edit">
-                  <a class="px-4" aria-label="Edit" use:link href="/users/{user.id}">
-                    <i class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"></i>
-                  </a>
-                </div>
-                <button class="px-4" aria-label="Delete" on:click={()=>deleteDialog(user.id)}>
-                  <div class="tooltip" data-tip="Delete">
-                    <i class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"></i>
+              <td class="px-2">
+                <div class="flex justify-center items-center gap-2" style="font-size: 14px;">
+                  <div class="tooltip" data-tip="Edit">
+                    <a class="px-2" aria-label="Edit" use:link href="#/users/{user.id}">
+                      <i class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"></i>
+                    </a>
                   </div>
-                </button>
+                  <div class="tooltip" data-tip="Delete">
+                    <button class="px-2" aria-label="Delete" on:click={() => deleteDialog(user.id)}>
+                      <i class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"></i>
+                    </button>
+                  </div>
+                </div>
               </td>
             </tr>          
         {/each}
-        <tr class="bg-white dark:bg-slate-900"> 
-          <td colspan="9" class="pgs-td font-mono">Total users found: {users.length}</td>  
+        <tr class="bg-base-200"> 
+          <td colspan="10" class="pgs-td font-mono">Total users found: {users.length}</td>  
         </tr>  
       </tbody>
     </table>
@@ -405,10 +411,9 @@
     <span class="text-info">sdfgsd</span>
   </div>
 
-
   <NewUserModal
     isOpen={showCreateModal}
-    on:close={() => {showCreateModal = false; handleSearch()}
+    on:close={() => {showCreateModal = false; handleSearch(false)}
     }
   />
   {/if}

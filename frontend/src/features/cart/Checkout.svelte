@@ -1,10 +1,10 @@
 <script lang="ts">
   import axios from "axios";
-  import { showSuccessToast } from "../../core/toaster";
+  import { showSuccessToast } from "../../core/utils/toaster";
   import { auth } from "../../core/services/SessionStore";
   import Login from "../../core/auth/Login.svelte";
-  import LoadingOverlay from "../../core/LoadingOverlay.svelte";
-  import ErrorDiv from "../users/ErrorDiv.svelte";
+  import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
+  import ErrorDiv from "../../core/utils/ErrorDiv.svelte";
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -71,11 +71,11 @@
      
     {/if}
 
-     {#if error}
+      {#if error}
   
       <ErrorDiv {error} />
 
-    {:else}
+      {:else}
 
     <div
       class=" mx-auto p-4 sm:p-6 rounded-2xl mt-6 sm:mt-10" style="border: 1px solid gray; background-color: var(--color-base-200);" 

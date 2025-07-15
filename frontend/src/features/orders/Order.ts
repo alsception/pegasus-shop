@@ -1,11 +1,11 @@
-import type { User } from "../users/User";
+import type { FPGSUser } from "../../core/users/FPGSUser";
 
 export interface Order {
   other: any;
   comment: string | number | Date | null | undefined;
   id: number;
   code: string;
-  user?: User; // Optional since it has @JsonBackReference
+  user?: FPGSUser; // Optional since it has @JsonBackReference
   email: string;
   name: string;
   address: string;

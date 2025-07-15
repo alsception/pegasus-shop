@@ -19,14 +19,11 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
 
     private final CartService cartService;
-    private final UserService userService;
-    private final PGSUser user = null;
 
     private static final Logger logger = LoggerFactory.getLogger(CartController.class);
 
-    public CartController(CartService cartService, UserService userService) {
+    public CartController(CartService cartService) {
         this.cartService = cartService;
-        this.userService = userService;
     }
 
     @PostMapping("/add")

@@ -16,7 +16,3 @@ public interface UserRepository extends JpaRepository<PGSUser, Long>
     //this one causes exception
     /*List<PGSUser> findByUsernameContainingOrFirstNameContainingOrLastNameContainingOrRoleContaining(String search);*/
 }
-
-
-
-//https://pegasus-uvnn.onrender.com/api

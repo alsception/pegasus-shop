@@ -27,10 +27,7 @@ import org.alsception.pegasus.features.order.PGSOrder;
 @Entity
 @Table(name = "pgs_users")
 public class PGSUser 
-{
-    
-    
-    
+{   
     // We will assign id in java instead of db    
     @Id
     private Long id;
@@ -66,10 +63,16 @@ public class PGSUser
     
     @Column
     private String organization;
+
+    @Column
+    private String comment;
     
     @Getter(AccessLevel.NONE)
     @Column(name = "active")
     private Boolean active;    
+
+    @Column(nullable = true)
+    private LocalDateTime dob;  //Date of birth
     
     /**
      * Lomboks toString was actually calling getOrders and generating problems...

@@ -24,11 +24,23 @@
  |_|   |_____\____/_/   \_\____/ \___/|____/ 
                                              
 
- v 1.0.3
-
+ v 1.0.4
+-------------------------------------------------------------------------------------------------------------------------------------------
 
  TODO:
- 1. MAKE LOCAL DATABASE BACKUO
+ 1. --> MAKE LOCAL DATABASE BACKUP or Neon
  2. LIMIT USERNAME ON REGISTRATION
       2.1 Maybe also limit fields in displaying users.
- 3. If user is admir can see / edit other users and so on...
+ 3. If user is admir can see / edit other users and so on...[in progress]
+ 4. when deleting user that has cart: SQL Error: 0, SQLState: 23503
+     2025-07-15T16:36:54.459 ERROR [nio-8080-exec-6] [  o.h.engine.jdbc.spi.SqlExceptionHelper]: 
+     ERROR: update or delete on table "pgs_users" violates foreign key constraint "fk_carts_user" on table "pgs_carts"
+     Detail: Key (id)=(19794075269870) is still referenced from table "pgs_carts".
+
+ 5. -----------------------
+ why user search is not case sensitive?????
+     why dont we have ctrl + click?
+     why dont we show comment on list?
+     A sta ako user sam sebe promeni u admira???????????
+6. fix if user disabled cannot login
+

@@ -6,8 +6,8 @@
   import Login from "../../core/auth/Login.svelte";
   import api from "../../core/services/client";
   import { toast } from "@zerodevx/svelte-toast";
-  import LoadingOverlay from "../../core/LoadingOverlay.svelte";
-  import ErrorDiv from "../users/ErrorDiv.svelte";
+  import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
+  import ErrorDiv from "../../core/utils/ErrorDiv.svelte";
 
   let isAuthenticated = false;
   let loading: boolean = false;
@@ -29,7 +29,7 @@
   }
 
   // Available product types
-  const productTypes = ["ADMIN", "CUSTOMER", "EMPLOYEE", "TESTER", "OTHER"];
+  const userTypes = ["ADMIN", "CUSTOMER", "VENDOR", "EMPLOYEE", "TESTER", "USER", "OTHER"];
 
   //IZGLEDA DA OVDE IMAMO I PRODUCT I FORM DATA, A TREBALO BI SAMO JEDAN.
 

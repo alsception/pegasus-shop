@@ -5,11 +5,11 @@
   import { auth } from "../../core/services/SessionStore";  
   import { get } from "svelte/store";
   import { formatCode, formatDate, formatCommentInfo } from "../../lib/utils";
-  import { showSuccessToast, showErrorToast } from '../../core/toaster';
+  import { showSuccessToast, showErrorToast } from '../../core/utils/toaster';
   import axios from 'axios';
   import Login from "../../core/auth/Login.svelte";
-  import LoadingOverlay from "../../core/LoadingOverlay.svelte";
-  import ErrorDiv from "../users/ErrorDiv.svelte";
+  import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
+  import ErrorDiv from "../../core/utils/ErrorDiv.svelte";
 
   document.title = 'Orders | Pegasus'
 

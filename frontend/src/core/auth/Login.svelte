@@ -1,5 +1,5 @@
 <script lang="ts">
-  import LoadingOverlay from '../LoadingOverlay.svelte';
+  import LoadingOverlay from '../utils/LoadingOverlay.svelte';
   import { login } from "../services/client";
 
   document.title = 'Log in | Pegasus'
