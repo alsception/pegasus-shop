@@ -226,24 +226,8 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 px-8 gap-6 pb-8 w-full ">
         <div class="w-full">
           <label for="username" class="label label-secondary text-sm text-gray-500 pb-3">Username</label>
-
           <label class="label label-secondary input input-form">
-            <svg
-              class="h-[1em] opacity-50"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <g
-                stroke-linejoin="round"
-                stroke-linecap="round"
-                stroke-width="2.5"
-                fill="none"
-                stroke="currentColor"
-              >
-                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </g>
-            </svg>
+            <i class="fas fa-user text-xs text-gray-400"></i>
             <input
               id="username"
               class=" font-bold text-primary"
@@ -324,7 +308,8 @@
             bind:value={formData.lastName}
           />
         </div>
-        <div class="w-full">
+        <div class="w-full"> 
+          <i class="fas fa-envelope text-xs text-gray-400"></i>         
           <label for="email" class="label label-secondary text-sm pb-3 text-gray-500">Email</label>
           <input
             id="email"
@@ -334,6 +319,7 @@
           />
         </div>
         <div class="w-full">
+          <i class="fas fa-phone text-xs text-gray-400"></i>
           <label for="phone" class="label label-secondary text-sm pb-3 text-gray-500">Phone</label>
           <input
             id="phone"
@@ -343,6 +329,7 @@
           />
         </div>
         <div class="w-full lg:col-span-2">
+          <i class="fas fa-building text-xs text-gray-400"></i>
           <label for="organization" class="label label-secondary text-sm pb-3 text-gray-500">Organization</label>
           <input
             id="organization"
