@@ -121,7 +121,7 @@
         body: JSON.stringify(formData),
       });
 
-      showSuccessToast("User saved");
+      showSuccessToast("Saved");
 
       fetch(ID);
       
@@ -223,9 +223,9 @@
       </div>
 
       <!-- Form content grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 px-8 gap-6 pb-8 w-full ">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 px-8 gap-6 pb-8 w-full ">
         <div class="w-full">
-          <label for="username" class="label label-primary text-sm pb-3">Username</label>
+          <label for="username" class="label label-secondary text-sm text-gray-500 pb-3">Username</label>
 
           <label class="label label-secondary input input-form">
             <svg
@@ -283,6 +283,8 @@
           </div>
         </div>
 
+        <div class="col-span-full"><!-- HACK --></div>
+
         <div class="w-full">
           <label for="role" class="label label-secondary text-sm pb-3 text-gray-500"> Role </label>
           <select
@@ -295,6 +297,17 @@
             {/each}
           </select>
         </div>
+        <div class="w-full">
+          <label for="dob" class="label label-secondary text-sm pb-3 text-gray-500">
+            Day of birth
+          </label>
+          <input
+            id="dob"
+            type="date"
+            class="input input-form font-bold text-primary"
+            bind:value={formData.dob}
+          />
+        </div>   
         <div class="w-full">
           <label for="firstName" class="label label-secondary text-sm pb-3 text-gray-500">First Name</label>
           <input
@@ -329,7 +342,7 @@
             bind:value={formData.phone}
           />
         </div>
-        <div class="w-full">
+        <div class="w-full lg:col-span-2">
           <label for="organization" class="label label-secondary text-sm pb-3 text-gray-500">Organization</label>
           <input
             id="organization"
@@ -339,17 +352,6 @@
           />
         </div>       
 
-        <div class="w-full">
-          <label for="dob" class="label label-secondary text-sm pb-3 text-gray-500">
-            Day of birth
-          </label>
-          <input
-            id="dob"
-            type="date"
-            class="input input-form font-bold text-primary"
-            bind:value={formData.dob}
-          />
-        </div>   
 
         <div class="w-full col-span-full">
           <label for="comment" class="label text-gray-500 text-sm pb-3">Comment</label>
