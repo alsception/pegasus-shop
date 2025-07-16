@@ -7,6 +7,7 @@
   import api from "../../core/services/client";
   import ErrorDiv from "../utils/ErrorDiv.svelte";
   import { showSuccessToast } from "../utils/toaster";
+  import { formatDateTime } from "../../utils/utils";
 
   let isAuthenticated = false;
   let loading: boolean = false;
@@ -167,6 +168,17 @@
       input.disabled = false;
     });
   }
+
+  /**Instead of declaring function like a normal people do, why dont we just declare a constant variable (const) that holds an arrow function expression.*/
+  /* const formatDateTime = (value: string | number | Date | null | undefined): string => {
+    if (!value) return "-";
+  
+    const date = new Date(value);
+    if (isNaN(date.getTime())) return "-";
+
+    return date.toLocaleString("en-GB");
+  }; */
+
 </script>
 
 <div class="relative w-full scale-up-center-normal">
@@ -252,23 +264,25 @@
             bind:value={formData.password}
           />
         </div>
+
         <div class="w-full">
-          <label for="active" class="label label-secondary text-sm pb-3 text-gray-500">Active</label>
-          <select
-            id="active"
-            class="select font-mono font-bold input-form text-primary"
-            bind:value={formData.active}
-          >
-            <option
-              value=""
-              disabled
-              selected={formData.active === undefined ||
-                formData.active === null}>-- Select --</option
-            >
-            <option value={true}>✅ YES</option>
-            <option value={false}>⛔ NO</option>
-          </select>
+          <label for="active" class="label label-secondary text-sm pb-3 text-gray-500">Status</label>
+          <div class="w-full flex items-center space-x-2"> 
+            <input
+              type="checkbox"
+              bind:checked="{formData.active}"
+              class="toggle border-base bg-base-100 text-red-600 border-slate-500 checked:text-green-600"
+            />            
+            <p class="font-mono font-bold text-primary ml-4">
+              {#if formData.active}
+                ACTIVE <i class="fa fa-check" aria-hidden="true"></i>
+              {:else}               
+                DISABLED <i class="fa fa-ban" aria-hidden="true"></i>
+              {/if}
+            </p>
+          </div>
         </div>
+
         <div class="w-full">
           <label for="role" class="label label-secondary text-sm pb-3 text-gray-500"> Role </label>
           <select
@@ -335,30 +349,7 @@
             class="input input-form font-bold text-primary"
             bind:value={formData.dob}
           />
-        </div>        
-
-        <div class="w-full">
-          <label for="created" class="label label-secondary text-sm pb-3 text-gray-500"> Created </label>
-          <input
-            id="created"
-            type="datetime-local"
-            class="input input-form font-bold text-primary"
-            bind:value={formData.created}
-            disabled
-            readonly
-          />
-        </div>
-        <div class="w-full">
-          <label for="modified" class="label label-secondary text-sm pb-3 text-gray-500"> Modified </label>
-          <input
-            id="modified"
-            type="datetime-local"
-            class="input input-form font-bold text-primary"
-            bind:value={formData.modified}
-            disabled
-            readonly
-          />
-        </div>
+        </div>   
 
         <div class="w-full col-span-full">
           <label for="comment" class="label text-gray-500 text-sm pb-3">Comment</label>
@@ -374,13 +365,24 @@
       <div
         class="w-full pt-4 pb-4 px-4 bg-base-100"
       >
-        <div class="flex items-center justify-end gap-2">
-          <button type="button" on:click={cancelEditing} class="btn m-3">
-            Cancel
-          </button>
-          <button type="submit" class="btn btn-primary m-3"> Save </button>
+     <div class="w-full p-4 rounded-lg border border-base-300 ">
+      <div class="flex items-center justify-between"> 
+        <div class="flex items-center justify-between text-xs text-gray-600 font-mono bg-base-100 p-2 rounded-md">
+          <div class="flex gap-6 items-center"> 
+            <span class="flex items-center gap-2"> 
+              <i class="fas fa-calendar-plus text-gray-400"></i> Created: {formatDateTime(formData.created)} 
+            </span> 
+            <span class="flex items-center gap-2"> 
+              <i class="fas fa-edit text-gray-400"></i> Modified: {formatDateTime(formData.modified)} 
+            </span> 
+          </div>
+        </div>
+        <div class="flex items-center justify-end gap-2"> 
+          <button type="button" on:click={cancelEditing} class="btn btn-outline m-3"> Close </button> 
+          <button type="submit" class="btn btn-primary m-3"> Save </button> 
         </div>
       </div>
+    </div>
     </form>
   {/if}
 </div>
@@ -388,6 +390,9 @@
 <style>
   input:hover,select:hover,textarea:hover{
     border: 1px solid var(--color-accent);
-    transition: 200ms ease;
+    transition: 50ms ease;
+  }
+  .toggle{
+    transition: 200ms ease !important;
   }
 </style>

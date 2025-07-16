@@ -4,7 +4,7 @@
   import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";  
   import { get } from "svelte/store";
-  import { formatCode, formatDate, formatCommentInfo } from "../../lib/utils";
+  import { formatCode, formatDate, formatCommentInfo } from "../../utils/utils";
   import { showSuccessToast, showErrorToast } from '../../core/utils/toaster';
   import axios from 'axios';
   import Login from "../../core/auth/Login.svelte";

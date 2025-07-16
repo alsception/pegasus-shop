@@ -77,4 +77,14 @@ export function formatCode(code: string | null | undefined): string
     
     return formatted;
 }
-    
+
+/**Instead of declaring function like a normal people do, why dont we just declare a constant variable (const) that holds an arrow function expression.*/
+export const formatDateTime = (value: string | number | Date | null | undefined): string => 
+{
+    if (!value) return "-";
+
+    const date = new Date(value);
+    if (isNaN(date.getTime())) return "-";
+
+    return date.toLocaleString("en-GB");
+};

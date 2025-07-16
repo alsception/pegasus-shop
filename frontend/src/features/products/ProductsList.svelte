@@ -3,9 +3,9 @@
   import { link } from "svelte-spa-router";
   import { get } from "svelte/store";
   import { auth } from "../../core/services/SessionStore";
-  import { formatDate } from "../../lib/utils";
-  import { formatActive } from "../../lib/utils";
-  import { formatCommentInfo } from "../../lib/utils";
+  import { formatDate } from "../../utils/utils";
+  import { formatActive } from "../../utils/utils";
+  import { formatCommentInfo } from "../../utils/utils";
   import type { Product } from "./Product";
   import Modal from "./ProductModal.svelte";
   import Login from "../../core/auth/Login.svelte";
