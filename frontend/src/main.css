@@ -118,9 +118,9 @@
 }
 
 .cyberpunk-text{
-  color: #00fff7; /* neon cyan */
-  background-color: #2d0036; /* deep purple */
-  text-shadow: 0 0 8px #ff00ea, 0 0 16px #00fff7; /* magenta & cyan glow */
+  color: #00fff7 !important;/* neon cyan */
+  background-color: #2d0036 !important; /* deep purple */
+  text-shadow: 0 0 8px #ff00ea, 0 0 16px #00fff7 !important; /* magenta & cyan glow */
 }
 
 /* This is used for logo*/

@@ -7,10 +7,8 @@ import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.MethodNotAllowedException;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/users")
@@ -98,6 +94,7 @@ public class UserController
         catch (AccessDeniedException e) 
         {
             throw new BadRequestException(e.getMessage());
+            //TODO: umesto bad request exc ovde bi bolje isla not allowd, not authorized, forbidden ili nesto slicno
             /*throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User does not have permission");*/
         }        
     }

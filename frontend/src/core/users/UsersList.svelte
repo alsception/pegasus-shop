@@ -3,8 +3,8 @@
   import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";
   import { get } from "svelte/store";
-  import { formatCommentInfo, formatDate } from "../../utils/utils";
-  import { formatActive } from "../../utils/utils";
+  import { formatCommentInfo, formatDate } from "../../utils/formatting";
+  import { formatActive } from "../../utils/formatting";
   import { logout } from "../../core/services/client";
   import type { FPGSUser } from "./FPGSUser";
   import Login from "../../core/auth/Login.svelte";

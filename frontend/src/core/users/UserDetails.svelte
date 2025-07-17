@@ -7,7 +7,7 @@
   import api from "../../core/services/client";
   import ErrorDiv from "../utils/ErrorDiv.svelte";
   import { showSuccessToast } from "../utils/toaster";
-  import { formatDateTime } from "../../utils/utils";
+  import { formatDateTime } from "../../utils/formatting";
 
   let isAuthenticated = false;
   let loading: boolean = false;
@@ -132,6 +132,13 @@
     }
   }
 
+  function handleKeydown(event: KeyboardEvent) {
+    if (event.ctrlKey && event.key === 'Enter') {
+      event.preventDefault();
+      handleSubmit();
+    }
+  }
+
   function cancelEditing(
     event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) 
   {
@@ -168,17 +175,6 @@
       input.disabled = false;
     });
   }
-
-  /**Instead of declaring function like a normal people do, why dont we just declare a constant variable (const) that holds an arrow function expression.*/
-  /* const formatDateTime = (value: string | number | Date | null | undefined): string => {
-    if (!value) return "-";
-  
-    const date = new Date(value);
-    if (isNaN(date.getTime())) return "-";
-
-    return date.toLocaleString("en-GB");
-  }; */
-
 </script>
 
 <div class="relative w-full scale-up-center-normal">
@@ -201,6 +197,7 @@
 
     <form
       on:submit|preventDefault={handleSubmit}
+      on:keydown={handleKeydown}
       id="userForm"
       class="max-w-5xl mx-auto bg-base-200 rounded p-6 pb-0 pt-0 px-0 w-full shadow-2xl "
     >
@@ -352,9 +349,9 @@
       </div>
 
       <div
-        class="w-full pt-4 pb-4 px-4 bg-base-100"
+        class="w-full px-2 py-2 bg-base-100"
       >
-     <div class="w-full p-4 rounded-lg border border-base-300 ">
+     <div class="w-full px-4 py-0 rounded-lg border border-base-300 ">
       <div class="flex items-center justify-between"> 
         <div class="flex items-center justify-between text-xs text-gray-600 font-mono bg-base-100 p-2 rounded-md">
           <div class="flex gap-6 items-center"> 
