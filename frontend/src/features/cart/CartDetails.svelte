@@ -103,7 +103,7 @@
 
     {#if cart}
 
-    <div class=" mx-auto p-4 sm:p-6 bg-white dark:bg-slate-900 rounded-2xl mt-6 sm:mt-10">
+    <div class=" mx-auto p-4 sm:p-6 bg-base-100 rounded-2xl mt-6 sm:mt-10">
       <h2 class="text-xl sm:text-2xl font-bold mb-4 text-center">Pegasus Shop - My Cart</h2>
       
       <div class="font-mono">

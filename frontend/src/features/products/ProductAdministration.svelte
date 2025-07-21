@@ -8,6 +8,7 @@
   import { toast } from "@zerodevx/svelte-toast";
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/utils/ErrorDiv.svelte";
+  import { formatDateTime } from "../../utils/formatting";
 
   let isAuthenticated = false;
   let loading: boolean = false;
@@ -94,7 +95,7 @@
   {:else}
     <form
       on:submit|preventDefault={handleSubmit}
-      class="max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      class="max-w-5xl mx-auto bg-base-200 dark:bg-gray-800 rounded p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
     >
       <h2
         class="text-2xl font-semibold col-span-full text-gray-700 dark:text-gray-100 py-5"
@@ -141,31 +142,9 @@
         />
       </div>
 
-      <div class="w-full">
-        <label for="created" class="label text-sm pb-3">Created</label>
-        <input
-          id="created"
-          type="datetime"
-          disabled
-          class="input input-form font-bold"
-          bind:value={formData.created}
-        />
-      </div>
 
-      <!-- ln 3 -->
-
-      <div class="w-full">
-        <label for="modified" class="label text-sm pb-3">Modified</label>
-        <input
-          id="modified"
-          type="datetime"
-          disabled
-          class="input input-form font-bold"
-          bind:value={formData.modified}
-        />
-      </div>
-
-      <div class="w-full">
+      <div class="w-full lg:col-span-3">
+         <i class="fas fa-image text-gray-400"></i>
         <label for="imglink" class="label text-sm pb-3">Image link</label>
         <input
           id="imglink"
@@ -307,11 +286,32 @@
       </div>
 
       <div class="col-span-full flex justify-end">
-        <button type="button" on:click={cancelEditing} class="btn m-3">
-          Cancel
-        </button>
-        <button type="submit" class="btn btn-primary m-3"> Save </button>
+        
+
+
+      <div
+        class="w-full px-2 py-2 bg-base-200"
+      >
+     <div class="w-full px-4 py-0 rounded-lg border border-base-300 ">
+      <div class="flex items-center justify-between"> 
+        <div class="flex items-center justify-between text-xs text-gray-600 font-mono  p-2 rounded-md">
+          <div class="flex gap-6 items-center"> 
+            <span class="flex items-center gap-2"> 
+              <i class="fas fa-calendar-plus text-gray-400"></i> Created: {formatDateTime(formData.created)} 
+            </span> 
+            <span class="flex items-center gap-2"> 
+              <i class="fas fa-edit text-gray-400"></i> Modified: {formatDateTime(formData.modified)} 
+            </span> 
+          </div>
+        </div>
+        <div class="flex items-center justify-end gap-2"> 
+          <button type="button" on:click={cancelEditing} class="btn btn-outline m-3"> Close </button> 
+          <button type="submit" class="btn btn-primary m-3"> Save </button> 
+        </div>
       </div>
+    </div>
+          </div>
+
     </form>
   {/if}
 </div>

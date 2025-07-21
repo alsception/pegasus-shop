@@ -5,7 +5,7 @@
 @plugin "daisyui" ;
 
 @plugin "daisyui/theme" {
-  name: "main";
+  name: "light";
   default: true;
   prefersdark: false;
   color-scheme: "light";
@@ -14,9 +14,9 @@
   --color-base-300: rgb(231 229 228); /* This is the color of the body background in light/default theme. bg-stone-200 */
   --color-base-400: rgb(217, 217, 217); /*doesnt work*/
   --color-base-content: oklch(44% 0.043 257.281);
-  --color-primary: oklch(27% 0.041 260.031);
+  --color-primary: oklch(44% 0.043 257.281);
   --color-primary-content: oklch(97% 0.013 17.38);
-  --color-secondary: #dbedfd;  /*header*/
+  --color-secondary: #dbedfd;  /*used as hover on tables*/
   --color-secondary-content: oklch(97% 0.014 343.198);
   --color-accent: oklch(54% 0.245 262.881);
   --color-accent-content: oklch(98% 0.016 73.684);
@@ -45,21 +45,25 @@
   default: false;
   prefersdark: true;
   color-scheme: "dark";
-  --color-base-100: oklch(14% 0.004 49.25);
-  --color-base-200: oklch(21% 0.006 56.043);
-  --color-base-300: rgb(0, 0, 0); /* This is the color of the body background in dark theme */
-  --color-base-content: oklch(97% 0.001 106.424);
-  --color-primary: rgb(59 130 246);/*blue 500*/
-  --color-primary-content: oklch(97% 0.013 236.62);
-  --color-secondary: #2088b0bf; /*header*/
+  --color-base-100: rgb(38, 38, 38);/*#1d232a00 rgb(0, 0, 0);*/
+    --color-base-200: rgb(19, 19, 19);
+    --color-base-300: rgb(0, 0, 0);
+    --color-base-content: rgb(183, 183, 183);
+ /*  --color-base-100: oklch(14% 0.004 49.25);
+  --color-base-200: rgb(25, 30, 36);/*oklch(21% 0.006 56.043);/*rgb(25, 30, 36);*
+  --color-base-300: rgb(0, 0, 0); /* This is the color of the body background in dark theme *
+  --color-base-content: oklch(97% 0.001 106.424); */
+  --color-primary: rgb(229 231 233);/*blue 500*/
+  --color-primary-content: blue;
+  --color-secondary: rgb(130, 136, 138); /*used as hover on tables*/
   --color-secondary-content: orange;
   --color-accent: oklch(68% 0.169 237.323);
   --color-accent-content: oklch(97% 0.013 236.62);
-  --color-neutral: navy;
+  --color-neutral: #0c0c20;
   --color-neutral-content: oklch(98% 0.001 106.423);
-  --color-info: rgb(17, 19, 19);
+  --color-info: rgb(105, 83, 255);/*rgb(0, 255, 88);green*/
   --color-info-content: oklch(30% 0.056 229.695);
-  --color-success: oklch(76% 0.177 163.223);
+  --color-success: /*oklch(76% 0.177 163.223);*/rgb(0, 255, 88);
   --color-success-content: oklch(26% 0.051 172.552);
   --color-warning: oklch(85% 0.199 91.936);
   --color-warning-content: oklch(28% 0.066 53.813);
@@ -67,12 +71,17 @@
   --color-error-content: oklch(28% 0.109 3.907);
   --radius-selector: 1rem;
   --radius-field: 2rem;
-  --radius-box: 0rem;
+  --radius-box: 0.25rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 0px;
   --depth: 1;
-  --noise: 0;
+  --noise: 0; 
+}
+input:focus, textarea:focus, select:focus, button:focus {
+  outline: none; /* Remove default focus outline */
+  box-shadow: 0 0 0 3px rgb(0, 98, 255); /* Simulates Tailwind's ring-blue-500 */
+  border-color: rgb(59, 130, 246); /* Optional: match border to ring color */
 }
 
 :root {
@@ -86,6 +95,17 @@
 
 [data-theme="dark"] {
   --custom-purple: #3d1681;
+}
+
+:root {
+  --my-color: #fff;
+  /* or any other variables/style */
+}
+[data-theme='dark'] {
+  --my-color: #000;
+}
+[data-theme='pink'] {
+  --my-color: #ffabc8;
 }
 
 /** END THEME CONFIG, START STYLING RULES
@@ -151,6 +171,7 @@ Attention, truncate class apparently f*cks with tooltips, because of overflow: h
   @apply px-4 py-2 text-center text-xs font-bold uppercase tracking-wider font-mono;
   color: var(--color-base-content);/**or neutral*/
   background-color: var(--color-base);
+  height: 64px;
 }
 
 /** Table cell normal, alling to left*/
@@ -181,6 +202,10 @@ Attention, truncate class apparently f*cks with tooltips, because of overflow: h
   @apply text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-500 to-violet-600;
 }
 
+.pgs-info-text{
+  color: rgb(0, 255, 88);
+}
+
 /** Some nice effect for links */
 .pgs-hyperlink {
   overflow: hidden;
@@ -203,7 +228,7 @@ Attention, truncate class apparently f*cks with tooltips, because of overflow: h
   left: 0;
 }
 .pgs-hyperlink::before {
-  background-color: var(--color-accent);
+  background-color: var(--color-primary);
   height: 2px;
   bottom: 0;
   transform-origin: 100% 50%;
@@ -217,7 +242,7 @@ Attention, truncate class apparently f*cks with tooltips, because of overflow: h
   transform-origin: 100% 50%;
   transform: translate3d(200%, 0, 0);
   transition: transform .3s cubic-bezier(0.76, 0, 0.24, 1);
-  color: var(--color-accent);
+  color: var(--color-primary);
 }
 
 .pgs-hyperlink:hover::before {
@@ -227,4 +252,37 @@ Attention, truncate class apparently f*cks with tooltips, because of overflow: h
 
 .pgs-hyperlink:hover::after {
   transform: translate3d(0, 0, 0);
+}
+
+/* Dark mode, we need both settings */
+@media (prefers-color-scheme: dark) {
+  .pgs-hyperlink:hover {
+    color: var(--color-error);
+  }
+}
+
+/* Dark mode (when .dark is on <html> or <body>) */
+.dark .pgs-hyperlink:hover {
+  color: var(--color-error);
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    @apply bg-linear-to-b from-gray-900 to-gray-950 text-gray-200;
+  }
+}
+.dark body {
+  @apply bg-linear-to-b from-gray-900 to-gray-950 text-gray-200;
+}
+
+.search-bar {
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 48px;
+  background-color: var(--color-base-200);
+}
+
+.btn-dash:hover{
+  background-color: var(--color-base-100);
 }

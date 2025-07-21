@@ -233,26 +233,22 @@
   <Login />
 {:else}
 
-
-
-<div
-    class="w-full max-w-4xl mx-auto p-4 bg-white dark:bg-slate-900 rounded-lg"
-  >
-
+<div class="w-full flex justify-center px-4">
+  <div class="w-full max-w-4xl p-4 bg-transparent rounded-lg">
     <form
       on:submit|preventDefault={handleFormSubmit}
-      class="flex flex-wrap items-center gap-3"
+      class="flex flex-col sm:flex-row items-center gap-3"
     >
       <input
         type="text"
         bind:value={searchTerm}
         placeholder="Search orders..."
-        class="input input-primary"
+        class="input input-primary border-2"
       />
       <!-- Search Button -->
       <button
         type="submit"
-        class="btn"
+        class="btn btn-dash"
       >
         <i class="fas fa-search"></i>
         Search
@@ -262,12 +258,13 @@
       <!-- Create order Button -->
       <button
         on:click={() => alert('not implemented yet')}
-        class="btn"
+        class="btn btn-dash"
       >       
           <i class="fas fa-plus"></i>
           Create new order
       </button>
     </form>
+</div>
 </div>
 
 <div id="results" class="w-full max-w-4xl mx-auto mt-6"></div>
@@ -291,8 +288,8 @@
     {:else}
 
       <div class="max-w-[2048px] w-full overflow-x-auto rounded-lg align-middle text-center mx-auto">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 /*table*/">
-          <thead class="bg-gray-800 dark:bg-slate-800">
+          <table class="table table-zebra min-w-full divide-y divide-accent" >
+          <thead class="bg-base-200">
             <tr class="h-12">
               <th class="pgs-th">id</th>
               <th class="pgs-th">code</th>
@@ -307,9 +304,9 @@
               <th class="pgs-th">Actions</th>          
             </tr>
           </thead>
-          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody>
             {#each orders as order, i}
-              <tr class="{i % 2 === 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-900'} hover:bg-gray-100 dark:hover:bg-gray-600 pgs-tr-hov">
+              <tr class="bg-base-100  outline-1 outline-transparent hover:outline-blue-500 hover:bg-blue-600/15">
                 <td class="pgs-td">
                   <a use:link href="/orders/{order.id}" class="pgs-hyperlink">{order.id}</a>
                 </td>

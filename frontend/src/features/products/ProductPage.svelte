@@ -62,7 +62,7 @@
 {:else}
   <div class="product-card dark:product-card-dark">
     <div
-      class="w-full h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden rounded-md mb-4"
+      class="w-full h-48 bg-base-100 flex items-center justify-center overflow-hidden rounded-md mb-4"
     >
       {#if product.imageUrl}
         <img
@@ -100,7 +100,7 @@
 <style>
   p{
     min-height: 24px;
-    color: #333;
+    color: var(--color-base-content);
   }
   .product-card {
     max-width: 500px;
@@ -108,7 +108,7 @@
     padding: 2rem;
     border-radius: 12px;
 /*     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
- */    background-color: #fff;
+ */    background-color: var(--color-base-200);
   }
 
   .product-card h1 {
@@ -121,7 +121,7 @@
     margin: 0.5rem 0;
     font-size: 1rem;
     font-weight: bold;
-    color: #000;
+    color: var(--color-base-content);
     margin-top: 16px;
     margin-bottom: 0px;
 

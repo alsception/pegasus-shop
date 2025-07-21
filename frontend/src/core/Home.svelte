@@ -30,7 +30,7 @@
     icon: "box",
     href: "/products?listView=false",
     color: "green",
-    default: false,
+    default: true,
     admin: true,
     customer: true
   },
@@ -71,7 +71,7 @@
     icon: "image",
     href: "/pix",
     color: "violet",
-    default: false,
+    default: true,
     admin: true,
     customer: true
   },
@@ -79,16 +79,18 @@
 
   const role = getCurrentRole();  
 
-const getItemsByRole = (role: 'ADMIN' | 'CUSTOMER'): Item[] => {
+const getItemsByRole = (role: 'ADMIN' | 'CUSTOMER' | 'EMPLOYEE'): Item[] => {
   return allItems.filter((route) => {
     if (route.default) return true;
-    if (role === 'ADMIN' || 'EMPLOYEE') return route.admin === true;
-    //TODO: employee treba da bude za sebe..
+
+    if (role === 'ADMIN' || role === 'EMPLOYEE') return route.admin === true;
     if (role === 'CUSTOMER') return route.customer === true;
+
     return false;
   });
 };
 
+console.log('role: ', role);
 let items = getItemsByRole(role);
 
 async function addItemsWithDelay(
@@ -104,6 +106,7 @@ async function addItemsWithDelay(
 let displayedItems: Item[] = [];
 
 onMount(() => {
+  console.log('items:', items);
   addItemsWithDelay(items, item => displayedItems = [...displayedItems, item]);
 
 });
@@ -119,19 +122,23 @@ function getHoverBorderClass(color: string): string {
 
 <div
   class="max-w-7xl mx-auto px-6 py-10 
-  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 scale-up-center-normal bg-base-300"
+  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 scale-up-center-normal "
 >
-
+<!-- ${getHoverBorderClass(item.color)} -->
   {#each displayedItems as item}
    <a
     href="#{item.href}"
-    class={`block p-6 rounded-2xl bg-base-100 text-center 
+    class={`block p-6  bg-base-100 text-center 
             scale-up-center-normal transition-all duration-200 
-            hover:-translate-y-1 hover:bg-accent/5 border-3 border-base-100 ${getHoverBorderClass(item.color)}`}>
-      <div class="text-2xl font-semibold scale-up-center-normal">
+             hover:bg-accent/5 border-3 border-base-100  
+           text-primary home-link
+             
+            hover:text-white
+          hover:bg-linear-to-br    hover:from-blue-600 hover:to-violet-600 ` }>
+      <div class="text-2xl font-semibold scale-up-center-normal text-primary/66 menu-block">
         <i class="fas fa-{item.icon} w-5 mr-2"></i>
       </div>
-      <h2 class=" text-2xl font-semibold">{item.title}</h2>
+      <h2 class=" text-2xl font-semibold group-hover:text-white">{item.title}</h2>
       <p
       class=" mt-2 text-base text-primary/66"
       >
@@ -170,4 +177,14 @@ Color palete:
 
 .scale-up-center-normal { 
   animation: scale-up-center-normal 0.25s ease-out 0s 1 normal both;}
+.menu-block{
+  display: inline-block; /* needed for transform to work properly */
+  transition: transform 0.2s ease;
+}
+  .menu-block:hover{
+transform: scale(2.1); /* 10% bigger */
+  }
+  .home-link:hover h2{
+  @apply text-blue-500;
+}
                                 </style>

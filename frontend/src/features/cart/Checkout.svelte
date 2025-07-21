@@ -92,7 +92,7 @@
           <label for="Name" class="label text-sm pb-3">Name</label>
           <input
             id="name"
-            class="input input-form font-bold"
+            class="input input-form font-bold font-mono"
             placeholder="Name"
             bind:value={name}
           />
@@ -102,7 +102,7 @@
           <label for="email" class="label text-sm pb-3">e-mail</label>
           <input
             id="email"
-            class="input input-form font-bold"
+            class="input input-form font-bold font-mono"
             placeholder="e-mail"
             bind:value={email}
           />
@@ -112,7 +112,7 @@
           <label for="phone" class="label text-sm pb-3">phone</label>
           <input
             id="phone"
-            class="input input-form font-bold"
+            class="input input-form font-bold font-mono"
             placeholder="phone"
             bind:value={phone}
           />
@@ -122,7 +122,7 @@
           <label for="address" class="label text-sm pb-3">Address</label>
           <textarea
             id="address"
-            class="input input-form font-bold"
+            class="input input-form font-bold font-mono"
             rows="3"
             placeholder="Street and number, city, postal code, country"
             bind:value={address}
@@ -136,7 +136,7 @@
               id="payment"
               bind:value={paymentMethod}
               required
-              class="select input input-form font-bold"
+              class="select input input-form font-bold font-mono"
             >
               <option value="bank_transfer" selected
                 >Bank Transfer / invoice</option

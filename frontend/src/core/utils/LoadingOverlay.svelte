@@ -1,5 +1,5 @@
 <div
-  class="absolute inset-0 bg-white/33 dark:bg-black/33 flex flex-col justify-center items-center z-10"
+  class="absolute inset-0 bg-transparent flex flex-col justify-center items-center z-10"
 >
   <span
     class="loading loading-infinity mb-2 text-blue-500"

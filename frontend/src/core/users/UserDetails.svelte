@@ -355,10 +355,10 @@
       <div class="flex items-center justify-between"> 
         <div class="flex items-center justify-between text-xs text-gray-600 font-mono bg-base-100 p-2 rounded-md">
           <div class="flex gap-6 items-center"> 
-            <span class="flex items-center gap-2"> 
+            <span class="flex items-center gap-2 info-block"> 
               <i class="fas fa-calendar-plus text-gray-400"></i> Created: {formatDateTime(formData.created)} 
             </span> 
-            <span class="flex items-center gap-2"> 
+            <span class="flex items-center gap-2 info-block"> 
               <i class="fas fa-edit text-gray-400"></i> Modified: {formatDateTime(formData.modified)} 
             </span> 
           </div>
@@ -374,6 +374,9 @@
 </div>
 
 <style>
+  .info-block:hover{
+    color: rgb(0, 255, 88) !important;
+  }
   input:hover,select:hover,textarea:hover{
     border: 1px solid var(--color-accent);
     transition: 50ms ease;

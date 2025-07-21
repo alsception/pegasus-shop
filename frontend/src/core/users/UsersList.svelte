@@ -166,19 +166,20 @@
     switch (userRole.toUpperCase()) 
     {
       case "ADMIN":
-        return "admin";
+        return " bg-info/70 text-success ml-4 ";
       case "CUSTOMER":
-        return "success";
+        return "success text-success/60 ";
       case "EMPLOYEE":
-        return "info";
+        return "accent ";
       //Most should be covered by these 3
       case "TESTER":
+        return "error ";
       case "VENDOR":
-        return "accent";
+        return "warning ";
       case "OTHER":
-        return "";
+        return "secondary ";
       default:
-        return ""; // ili neka podrazumevana boja
+        return "secondary "; // ili neka podrazumevana boja
     }
   }
 
@@ -245,27 +246,32 @@
 {#if !$auth.isAuthenticated}
   <Login />
 {:else}
-<div class="max-w-[684px] mx-auto p-4 bg-base-200 rounded-lg">
-  <form on:submit|preventDefault={handleFormSubmit} class="flex flex-wrap items-center gap-3">
+<div class="w-full flex justify-center px-4">
+  <div class="w-full max-w-4xl p-4 bg-transparent rounded-lg">
+    <form
+      on:submit|preventDefault={handleFormSubmit}
+      class="flex flex-col sm:flex-row items-center gap-3"
+    >
       <input
         type="text"
         bind:value={searchTerm}
         placeholder="Search users..."
-        class="input input-primary"
+        class="input input-primary border-2"
         />
-      <button type="submit" class="btn">
+      <button type="submit" class="btn btn-dash">
         <i class="fas fa-search"></i>
           Search
       </button>
      
       <button
         on:click={openCreateModal}
-        class="btn"
+        class="btn btn-dash"
       >       
           <i class="fas fa-plus"></i><i class="fas fa-user"></i>
           Create new user
       </button>
     </form>
+  </div>
   </div>
 
   <div id="results" style="margin: 48px;"></div>
@@ -289,7 +295,7 @@
     {:else}
 
   <div class="max-w-[1568px] overflow-x-auto rounded-lg align-middle mx-auto">
-      <table class="table table-zebra min-w-full divide-y divide-gray-200 dark:divide-gray-700" >
+          <table class="table table-zebra min-w-full divide-y divide-accent" >
       <thead class="bg-base-200">
         <tr class="h-12">
           <th class="pgs-th">
@@ -349,19 +355,19 @@
           <th class="pgs-th">ACTIONS</th>
         </tr>
       </thead>
-      <tbody class="bg-white dark:bg-slate-950 divide-y divide-gray-200 dark:divide-gray-700">
+      <tbody class="">
 
         {#each users as user, i}     
-            <tr id="tr-{i}" class="{ getClass(user.modified) + ' bg-base-100 '} hover:bg-secondary">            
+            <tr id="tr-{i}" class="{ getClass(user.modified) + ' bg-base-100  outline-1 outline-transparent hover:outline-blue-500 hover:bg-blue-600/15'} ">            
             
-              <td class="justify-center pgs-td-center px-4">
+              <td class="justify-center pgs-td-center px-4 ">
                 <input type="checkbox" class="checkbox checkbox-accent checkbox-xs" 	on:change={(event) => handleCheckboxChange(event, i)} />
               </td>
               <td class="pgs-td">
-                  <a use:link href="#/users/{user.id}" class="text-gray-500 dark:text-gray-400 pgs-hyperlink font-bold block max-w-[200px] truncate">{user.username}</a>
+                  <a use:link href="#/users/{user.id}" class="text-gray-500  pgs-hyperlink dark:text-gray-100 text-primary font-bold block max-w-[200px] truncate">{user.username}</a>
               </td> 
               <td>
-                <span class="badge badge-outline badge-{getUserColor(user.role)} dark:badge-{getUserColor(user.role)}-dark font-mono font-semibold" style="text-transform: uppercase;">
+                <span class="badge badge-outline badge-{getUserColor(user.role)} badge-{getUserColor(user.role)} font-mono font-semibold" style="text-transform: uppercase;">
                   {user.role}
                 </span>
               </td>     
@@ -373,7 +379,7 @@
               <td class="pgs-td font-mono justify-right">
                 {@html formatDate(user.created,'new',15)}
               </td>
-              <td class="pgs-td font-mono pgs-td-num">
+              <td class="pgs-td font-mono pgs-td-num ">
                 {@html formatDate(user.modified,'Changed less then 15 minutes ago',15)}
               </td>
               <td class="pgs-td font-mono"> {formatActive(user.active)}</td>      
@@ -400,9 +406,8 @@
     </table>
   </div>
   {/if}
-
-  <div style="display: none;">
-    <!-- tailwind hack, otherwise these colors are not included in bundle -->
+<!-- 
+  <div style="">
     <span class="text-primary">sdfgsd</span>
     <span class="text-error">sdfgsd</span>
     <span class="text-success">sdfgsd</span>
@@ -410,6 +415,20 @@
     <span class="text-secondary">sdfgsd</span>
     <span class="text-info">sdfgsd</span>
   </div>
+  <div class="badge badge-soft badge-primary">Primary</div>
+<div class="badge badge-soft badge-secondary">Secondary</div>
+<div class="badge badge-soft badge-accent">Accent</div>
+<div class="badge badge-soft badge-info">Info</div>
+<div class="badge badge-soft badge-success">Success</div>
+<div class="badge badge-soft badge-warning">Warning</div>
+<div class="badge badge-soft badge-error">Error</div>
+<div class="badge badge-outline badge-primary">Primary</div>
+<div class="badge badge-outline badge-secondary">Secondary</div>
+<div class="badge badge-outline badge-accent">Accent</div>
+<div class="badge badge-outline badge-info">Info</div>
+<div class="badge badge-outline badge-success">Success</div>
+<div class="badge badge-outline badge-warning">Warning</div>
+<div class="badge badge-outline badge-error">Error</div> -->
 
   <NewUserModal
     isOpen={showCreateModal}
@@ -427,19 +446,21 @@
   background-color: #cfe2ffd5; /* slightly different light blue */
 } 
 
-/* Softer custom badge backgrounds, do NOT use .badge to avoid DaisyUI interference */
-/* .badge-admin    { background: #d8cafe !important; color: #3e1cb9 !important; }
- */.badge-error    { background: #fecaca !important; color: #b91c1c !important; }
-.badge-success  { background: #bbf7d0 !important; color: #166534 !important; }
-.badge-accent   { background: #fef9c3 !important; color: #a16207 !important; }
-.badge-info     { background: #dbeafe !important; color: #1e40af !important; }
-.badge          { background: #e3e4e6; color: #5e5f61; border-radius: 0.5rem !important; font-size: inherit;}
-.badge-admin-dark    { background: #371399 !important; color: #614daa !important; }
-.badge-error-dark    { background: #fecaca !important; color: #b91c1c !important; }
-/* TODO: This dont work */
-.badge-success-dark  { background: #00531d !important;  color: #00ff61 !important;}
-.badge-accent-dark   { background: #fef9c3 !important; color: #a16207 !important; }
-.badge-info-dark     { background: #dbeafe !important; color: #1e40af !important; }
-.badge          { background: #e3e4e6; color: #5e5f61; border-radius: 0.5rem !important; font-size: inherit;}
-/* No .badge base class here! */
+
+@media (prefers-color-scheme: dark) {
+  .pgs-table-tr {
+    @apply bg-linear-to-b from-gray-900 to-gray-950 text-gray-200;
+  }
+}
+.dark .pgs-table-tr {
+  @apply bg-linear-to-b from-gray-900 to-gray-950 text-gray-200;
+}
+
+
+.pgs-table-tr{
+
+}
+.pgs-table-tr:hover{
+  
+}
 </style>
