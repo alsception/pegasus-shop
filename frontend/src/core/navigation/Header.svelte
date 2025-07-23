@@ -31,7 +31,7 @@
       <div
         tabindex="0"
         role="button"
-        class="btn btn-neutral btn-circle hover:bg-neutral-700 tooltip tooltip-right"  
+        class="btn btn-ghost btn-circle hover:bg-neutral-700 tooltip tooltip-info tooltip-right"  
         data-tip="Open Menu"
         aria-label="Open Menu"        
       >
@@ -50,7 +50,7 @@
   </div>
   <div class="navbar-end"> 
       <div class="" style="/*display: none;*/"> 
-        <label class="swap swap-rotate mr-4 tooltip tooltip-left" data-tip="Toggle Dark Mode">
+        <label class="swap swap-rotate mr-4 tooltip tooltip-info tooltip-left" data-tip="Toggle Dark Mode">
           <input id="theme-controller" type="checkbox" class="theme-controller" value="dark" />
           <span class="swap-off text-xl">☀️</span>
           <span class="swap-on text-xl">🌚</span>

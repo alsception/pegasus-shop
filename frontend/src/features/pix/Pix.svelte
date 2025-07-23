@@ -264,7 +264,7 @@
               <p class="text-sm text-gray-500 mt-1">❤️ {photo.likes}</p>
               <p class="text-sm text-gray-500 mt-1">links:</p>
 
-              <div class="tooltip" data-tip={photo.urls.full}>
+              <div class="tooltip tooltip-info" data-tip={photo.urls.full}>
                 <a
                   href={photo.urls.full}
                   target="_blank"

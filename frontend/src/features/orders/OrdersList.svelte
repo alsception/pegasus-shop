@@ -326,9 +326,9 @@
 
 
                 <td class=" justify-center">
-                  <div class="tooltip" data-tip="Edit"><a class="px-4" aria-label="Edit" use:link href="/orders/mngmt/{order.id}"><i class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"></i></a></div>
+                  <div class="tooltip tooltip-info" data-tip="Edit"><a class="px-4" aria-label="Edit" use:link href="/orders/mngmt/{order.id}"><i class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"></i></a></div>
                   <button class="px-4" aria-label="Delete" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
-                    <div class="tooltip" data-tip="Delete">
+                    <div class="tooltip tooltip-info" data-tip="Delete">
                     <i class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"></i>
                   </div></button>
                 </td>      

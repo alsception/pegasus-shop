@@ -62,7 +62,7 @@ export function formatCommentInfo(comment: string | number | Date | null | undef
 {
     if (comment == null || comment === '') return '';
     
-    return `<div class="tooltip cursor-pointer" data-tip="`+comment+`">
+    return `<div class="tooltip tooltip-info cursor-pointer" data-tip="`+comment+`">
                 <i class="fas fa-circle-info text-blue-400 hover:text-blue-600 cursor-pointer"></i>        
             </div>`;
 

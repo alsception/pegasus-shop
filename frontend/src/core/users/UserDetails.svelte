@@ -14,7 +14,7 @@
   let error: string | null = null;
   let ID: number | string;
 
-  document.title = "User details | Pegasus";
+  document.title = "Account details | Pegasus";
 
   /**
   *   TODO: Pitanje kakve date formate koristimo ovde, moguce da su pogresni
@@ -65,7 +65,7 @@
       });
       
       formData = data;
-      document.title = formData.username+" - User details "+" | Pegasus";
+      document.title = formData.username+" | Account details "+" | Pegasus";
       error = null;
       formData.created = data.created;
       // Convert created date to datetime-local format
@@ -186,7 +186,7 @@
     {#if loading}
       <!-- Overlay loading animation -->
       <div
-        class="absolute inset-0 bg-white/33 dark:bg-black/33 flex flex-col justify-center items-center z-10 rounded-2xl max-w-5xl mx-auto"
+        class="absolute inset-0 dark:bg-black/33 flex flex-col justify-center items-center z-10 rounded-2xl max-w-5xl mx-auto"
       >
         <span
           class="loading loading-infinity mb-2 text-blue-500"
@@ -195,193 +195,359 @@
       </div>
     {/if}
 
-    <form
-      on:submit|preventDefault={handleSubmit}
-      on:keydown={handleKeydown}
-      id="userForm"
-      class="max-w-5xl mx-auto bg-base-200 rounded p-6 pb-0 pt-0 px-0 w-full shadow-2xl "
-    >
-      <!-- Full-width header  -->
-      <div
-        class="w-full mb-6 pt-4 pb-4 px-6 bg-base-100" 
-      >
-        <div class="flex items-center gap-2">
-          <h2 class="text-4xl font-semibold text-primary yellowtail-regular">
-            User details
-          </h2>
-          <div
-            id="loadingMessage"
-            style="display: none;"
-            class="text-2xl font-semibold text-gray-700 dark:text-gray-100 flex items-center gap-2"
-          >
-            <span class="loading loading-dots loading-xs"></span>
-          </div>
-        </div>
-      </div>
+<!-- TODO: 
+FIX THIS PROBLEM:
+Non-interactive element `<form>` should not be assigned mouse or keyboard event listeners
+https://svelte.dev/e/a11y_no_noninteractive_element_interactionssvelte(a11y_no_noninteractive_element_interactions)
+A space-separated list of the classes of the element. Classes allows CSS and JavaScript to select and access specific elements via the class selectors or functions like the method Document.getElementsByClassName().
 
-      <!-- Form content grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 px-8 gap-6 pb-8 w-full ">
-        <div class="w-full">
-          <label for="username" class="label label-secondary text-sm text-gray-500 pb-3">Username</label>
-          <label class="label label-secondary input input-form">
-            <i class="fas fa-user text-xs text-gray-400"></i>
+MDN Reference -->
+
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+<form
+  on:submit|preventDefault={handleSubmit}
+  on:keydown={handleKeydown}
+  id="userForm"
+  class="max-w-7xl mx-auto bg-base-100 rounded-lg p-8 w-full space-y-8"
+>
+  <!-- Header Section -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="lg:col-span-1">
+      <h2 class="text-4xl font-semibold text-accent yellowtail-regular">
+        Account details
+      </h2>
+
+      <div
+        id="loadingMessage"
+        style="display: none;"
+        class="text-2xl font-semibold text-gray-700 dark:text-gray-100 flex items-center gap-2 mt-4"
+      >
+        <span class="loading loading-dots loading-xs"></span>
+      </div>
+    </div>    
+  </div>
+
+  <!-- Full-width underline -->
+  <div class="h-px bg-neutral w-full"></div>
+
+  <!-- Basics Section -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+    <div class="lg:col-span-1">
+      <h3 class="text-2xl font-semibold text-accent yellowtail-regular">
+        Basics
+      </h3>
+      <p class="text-secondary text-sm mt-2">
+        Essential user credentials and permissions
+      </p>
+    </div>
+    <div class="lg:col-span-2">
+      <div class="">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div class="w-full">
+            <label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+              <i class="fas fa-user text-xs text-gray-400 mr-2"></i>Username
+            </label>
             <input
               id="username"
-              class=" font-bold text-primary"
+              class="pgs-input-form"
               bind:value={formData.username}
             />
-          </label>
-        </div>
-        <div class="w-full">
-          <label for="password" class="label label-secondary text-sm pb-3 text-gray-500">Password</label>
-          <input
-            id="password"
-            type="password"
-            autoComplete="new-password"
-            readOnly
-            on:focus={(e) => e.currentTarget.removeAttribute("readonly")}
-            placeholder="Enter new password"
-            class="input input-form text-primary"
-            bind:value={formData.password}
-          />
-        </div>
-
-        <div class="w-full">
-          <label for="active" class="label label-secondary text-sm pb-3 text-gray-500">Status</label>
-          <div class="w-full flex items-center space-x-2"> 
+          </div>
+          
+          <div class="w-full">
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
             <input
-              type="checkbox"
-              bind:checked="{formData.active}"
-              class="toggle border-base bg-base-100 text-red-600 border-slate-500 checked:text-green-600"
-            />            
-            <p class="font-mono font-bold text-primary ml-4">
-              {#if formData.active}
-                ACTIVE <i class="fa fa-check" aria-hidden="true"></i>
-              {:else}               
-                DISABLED <i class="fa fa-ban" aria-hidden="true"></i>
-              {/if}
-            </p>
+              id="password"
+              type="password"
+              autoComplete="new-password"
+              readOnly
+              on:focus={(e) => e.currentTarget.removeAttribute("readonly")}
+              placeholder="Enter new password"
+              class="pgs-input-form"
+              bind:value={formData.password}
+            />
           </div>
-        </div>
 
-        <div class="col-span-full"><!-- HACK --></div>
-
-        <div class="w-full">
-          <label for="role" class="label label-secondary text-sm pb-3 text-gray-500"> Role </label>
-          <select
-            id="type"
-            bind:value={formData.role}
-            class="select font-mono font-bold input-form text-primary"
-          >
-            {#each userTypes as type}
-              <option value={type}>{type}</option>
-            {/each}
-          </select>
-        </div>
-        <div class="w-full">
-          <label for="dob" class="label label-secondary text-sm pb-3 text-gray-500">
-            Day of birth
-          </label>
-          <input
-            id="dob"
-            type="date"
-            class="input input-form font-bold text-primary"
-            bind:value={formData.dob}
-          />
-        </div>   
-        <div class="w-full">
-          <label for="firstName" class="label label-secondary text-sm pb-3 text-gray-500">First Name</label>
-          <input
-            id="firstName"
-            class="input input-form font-bold text-primary"
-            bind:value={formData.firstName}
-          />
-        </div>
-        <div class="w-full">
-          <label for="lastName" class="label label-secondary text-sm pb-3 text-gray-500">Last Name</label>
-          <input
-            id="lastName"
-            class="input input-form font-bold text-primary"
-            bind:value={formData.lastName}
-          />
-        </div>
-        <div class="w-full"> 
-          <i class="fas fa-envelope text-xs text-gray-400"></i>         
-          <label for="email" class="label label-secondary text-sm pb-3 text-gray-500">Email</label>
-          <input
-            id="email"
-            type="email"
-            class="input input-form font-bold text-primary"
-            bind:value={formData.email}
-          />
-        </div>
-        <div class="w-full">
-          <i class="fas fa-phone text-xs text-gray-400"></i>
-          <label for="phone" class="label label-secondary text-sm pb-3 text-gray-500">Phone</label>
-          <input
-            id="phone"
-            type="tel"
-            class="input input-form font-bold text-primary"
-            bind:value={formData.phone}
-          />
-        </div>
-        <div class="w-full lg:col-span-2">
-          <i class="fas fa-building text-xs text-gray-400"></i>
-          <label for="organization" class="label label-secondary text-sm pb-3 text-gray-500">Organization</label>
-          <input
-            id="organization"
-            type="text"
-            class="input input-form font-bold text-primary"
-            bind:value={formData.organization}
-          />
-        </div>       
-
-
-        <div class="w-full col-span-full">
-          <label for="comment" class="label text-gray-500 text-sm pb-3">Comment</label>
-          <textarea
-            id="comment"
-            class="input input-form font-bold text-primary"
-            bind:value={formData.comment}
-            style="height: 100px;"
-          ></textarea>
-        </div>
-      </div>
-
-      <div
-        class="w-full px-2 py-2 bg-base-100"
-      >
-     <div class="w-full px-4 py-0 rounded-lg border border-base-300 ">
-      <div class="flex items-center justify-between"> 
-        <div class="flex items-center justify-between text-xs text-gray-600 font-mono bg-base-100 p-2 rounded-md">
-          <div class="flex gap-6 items-center"> 
-            <span class="flex items-center gap-2 info-block"> 
-              <i class="fas fa-calendar-plus text-gray-400"></i> Created: {formatDateTime(formData.created)} 
-            </span> 
-            <span class="flex items-center gap-2 info-block"> 
-              <i class="fas fa-edit text-gray-400"></i> Modified: {formatDateTime(formData.modified)} 
-            </span> 
+          <div class="w-full">
+            <label for="role" class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+            <select
+              id="role"
+              bind:value={formData.role}
+              class="pgs-input-form font-mono"
+            >
+              {#each userTypes as type}
+                <option value={type}>{type}</option>
+              {/each}
+            </select>
           </div>
-        </div>
-        <div class="flex items-center justify-end gap-2"> 
-          <button type="button" on:click={cancelEditing} class="btn btn-outline m-3"> Close </button> 
-          <button type="submit" class="btn btn-primary m-3"> Save </button> 
+
+          <div class="w-full">
+            <label for="active" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <div class="flex items-center space-x-3 pt-2">
+              <input
+                type="checkbox"
+                bind:checked={formData.active}
+                class="toggle ring-2 ring-primary bg-base-100 text-red-600 checked:text-green-600"
+              />
+              <p class="font-mono font-bold text-primary">
+                {#if formData.active}
+                  ACTIVE <i class="fa fa-check text-green-600" aria-hidden="true"></i>
+                {:else}
+                  DISABLED <i class="fa fa-ban text-red-600" aria-hidden="true"></i>
+                {/if}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    </form>
+  </div>
+
+  <!-- Full-width underline -->
+  <div class="h-px bg-neutral w-full"></div>
+
+  <!-- Profile Section -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+    <div class="lg:col-span-1">
+      <h3 class="text-2xl font-semibold text-accent yellowtail-regular">
+        Profile
+      </h3>
+      <p class="text-secondary text-sm mt-2">
+        Personal information and organization details
+      </p>
+    </div>
+    <div class="lg:col-span-2">
+      <div class="rounded-lg ">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div class="w-full">
+            <label for="firstName" class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+            <input
+              id="firstName"
+              class="pgs-input-form"
+              bind:value={formData.firstName}
+            />
+          </div>
+          
+          <div class="w-full">
+            <label for="lastName" class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+            <input
+              id="lastName"
+              class="pgs-input-form"
+              bind:value={formData.lastName}
+            />
+          </div>
+
+          <div class="w-full">
+            <label for="dob" class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+            <input
+              id="dob"
+              type="date"
+              class="pgs-input-form"
+              bind:value={formData.dob}
+            />
+          </div>
+
+          <div class="w-full">
+            <label for="organization" class="block text-sm font-medium text-gray-700 mb-2">
+              <i class="fas fa-building text-xs text-gray-400 mr-2"></i>Organization
+            </label>
+            <input
+              id="organization"
+              type="text"
+              class="pgs-input-form"
+              bind:value={formData.organization}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-width underline -->
+  <div class="h-px bg-neutral w-full"></div>
+
+  <!-- Contact Section -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+    <div class="lg:col-span-1">
+      <h3 class="text-2xl font-semibold text-accent yellowtail-regular">
+        Contact
+      </h3>
+      <p class="text-secondary text-sm mt-2">
+        Communication and contact information
+      </p>
+    </div>
+    <div class="lg:col-span-2">
+      <div class="rounded-lg">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div class="w-full">  
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+              <i class="fas fa-envelope text-xs text-gray-400 mr-2"></i>Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              class="pgs-input-form"
+              bind:value={formData.email}
+            />
+          </div>
+          
+          <div class="w-full">
+            <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+              <i class="fas fa-phone text-xs text-gray-400 mr-2"></i>Phone
+            </label>
+            <input
+              id="phone"
+              type="tel"
+              class="pgs-input-form"
+              bind:value={formData.phone}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-width underline -->
+  <div class="h-px bg-neutral w-full"></div>
+
+  <!-- Address Section
+   
+  TODO: we dont save this yet to database. Address should be only one big textarea
+  
+  -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16 ">
+    <div class="lg:col-span-1">
+      <h3 class="text-2xl font-semibold text-accent yellowtail-regular">
+        Address
+      </h3>
+      <p class="text-secondary text-sm mt-2">
+        Physical location and address details 
+      </p>
+    </div>
+    <div class="lg:col-span-2">
+      <div class="rounded-lg">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div class="w-full">
+            <label for="addressName" class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+            <input
+              id="addressName"
+              type="text"
+              class="pgs-input-form"
+              bind:value={formData.addressName}
+            />
+          </div>
+          
+          <div class="w-full">
+            <label for="street" class="block text-sm font-medium text-gray-700 mb-2">Street</label>
+            <input
+              id="street"
+              type="text"
+              class="pgs-input-form"
+              bind:value={formData.street}
+            />
+          </div>
+
+          <div class="w-full">
+            <label for="town" class="block text-sm font-medium text-gray-700 mb-2">Town</label>
+            <input
+              id="town"
+              type="text"
+              class="pgs-input-form"
+              bind:value={formData.town}
+            />
+          </div>
+
+          <div class="w-full">
+            <label for="state" class="block text-sm font-medium text-gray-700 mb-2">State</label>
+            <input
+              id="state"
+              type="text"
+              class="pgs-input-form"
+              bind:value={formData.state}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-width underline -->
+  <div class="h-px bg-neutral w-full"></div>
+
+  <!-- Other Section -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+    <div class="lg:col-span-1">
+      <h3 class="text-2xl font-semibold text-accent yellowtail-regular">
+        Other
+      </h3>
+      <p class="text-secondary text-sm mt-2">
+        Additional notes and comments
+      </p>
+    </div>
+    <div class="lg:col-span-2">
+      <div class=" rounded-lg">
+        <div class="w-full">
+          <label for="comment" class="block text-sm font-medium text-gray-700 mb-2">Comment</label>
+          <textarea
+            id="comment"
+            class="pgs-input-form resize-vertical"
+            bind:value={formData.comment}
+            rows="4"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-width underline -->
+  <div class="h-px bg-neutral w-full"></div>
+
+  <!-- Metadata -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+    <div class="lg:col-span-1">
+      <h3 class="text-2xl font-semibold text-accent yellowtail-regular">
+        Metadata
+      </h3>
+      <p class="text-secondary text-sm mt-2">
+        Account creation date and time of last change
+      </p>
+    </div>
+    <div class="lg:col-span-2">
+      <div class=" rounded-lg p-6 ">
+        <div class="flex flex-col ">
+          <!-- Metadata -->
+          <div class="flex flex-col sm:flex-row flex-wrap gap-x-10 gap-y-2 text-md text-secondary">
+            <span class="flex items-center gap-2 min-w-[200px] text-sm">
+              <i class="fas fa-calendar-plus text-gray-400"></i>
+              Created: <span class="font-mono">{formatDateTime(formData.created)}</span>
+            </span>
+            <span class="flex items-center gap-2 min-w-[200px] text-sm">
+              <i class="fas fa-edit text-gray-400"></i>
+              Modified: <span class="font-mono">{formatDateTime(formData.modified)}</span>
+            </span>
+          </div>          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-width underline -->
+  <div class="h-px bg-neutral w-full"></div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2">
+    <div class="lg:col-span-1">
+      <h3 class="text-2xl font-semibold text-accent yellowtail-regular">
+        Actions
+      </h3>
+      <p class="text-secondary text-sm mt-2">
+        Save the changes or close without saving
+      </p>
+    </div>
+    <div class="flex justify-end gap-3 pt-4 ">
+      <button type="button" on:click={cancelEditing} class="btn btn-outline btn- m-3"> Close </button> 
+      <button type="submit" class="btn btn-primary m-3"> Save </button> 
+    </div>
+  </div>
+</form>
   {/if}
 </div>
-
-<style>
-  .info-block:hover{
-    color: rgb(0, 255, 88) !important;
-  }
-  input:hover,select:hover,textarea:hover{
-    border: 1px solid var(--color-accent);
-    transition: 50ms ease;
-  }
-  .toggle{
-    transition: 200ms ease !important;
-  }
-</style>

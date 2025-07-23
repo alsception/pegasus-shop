@@ -385,12 +385,12 @@
               <td class="pgs-td font-mono"> {formatActive(user.active)}</td>      
               <td class="px-2">
                 <div class="flex justify-center items-center gap-2" style="font-size: 14px;">
-                  <div class="tooltip" data-tip="Edit">
+                  <div class="tooltip tooltip-info" data-tip="Edit">
                     <a class="px-2" aria-label="Edit" use:link href="#/users/{user.id}">
                       <i class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"></i>
                     </a>
                   </div>
-                  <div class="tooltip" data-tip="Delete">
+                  <div class="tooltip tooltip-info" data-tip="Delete">
                     <button class="px-2" aria-label="Delete" on:click={() => deleteDialog(user.id)}>
                       <i class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"></i>
                     </button>
@@ -406,29 +406,6 @@
     </table>
   </div>
   {/if}
-<!-- 
-  <div style="">
-    <span class="text-primary">sdfgsd</span>
-    <span class="text-error">sdfgsd</span>
-    <span class="text-success">sdfgsd</span>
-    <span class="text-accent">sdfgsd</span>
-    <span class="text-secondary">sdfgsd</span>
-    <span class="text-info">sdfgsd</span>
-  </div>
-  <div class="badge badge-soft badge-primary">Primary</div>
-<div class="badge badge-soft badge-secondary">Secondary</div>
-<div class="badge badge-soft badge-accent">Accent</div>
-<div class="badge badge-soft badge-info">Info</div>
-<div class="badge badge-soft badge-success">Success</div>
-<div class="badge badge-soft badge-warning">Warning</div>
-<div class="badge badge-soft badge-error">Error</div>
-<div class="badge badge-outline badge-primary">Primary</div>
-<div class="badge badge-outline badge-secondary">Secondary</div>
-<div class="badge badge-outline badge-accent">Accent</div>
-<div class="badge badge-outline badge-info">Info</div>
-<div class="badge badge-outline badge-success">Success</div>
-<div class="badge badge-outline badge-warning">Warning</div>
-<div class="badge badge-outline badge-error">Error</div> -->
 
   <NewUserModal
     isOpen={showCreateModal}
@@ -446,7 +423,7 @@
   background-color: #cfe2ffd5; /* slightly different light blue */
 } 
 
-
+/* 
 @media (prefers-color-scheme: dark) {
   .pgs-table-tr {
     @apply bg-linear-to-b from-gray-900 to-gray-950 text-gray-200;
@@ -455,7 +432,7 @@
 .dark .pgs-table-tr {
   @apply bg-linear-to-b from-gray-900 to-gray-950 text-gray-200;
 }
-
+ */
 
 .pgs-table-tr{
 

@@ -88,7 +88,6 @@
         // goto('/login?return=' + encodeURIComponent(currentPath));
         return;
       } else {
-        loading = true;
         handleSearch();
       }
     } catch (err) {
@@ -136,10 +135,10 @@
 
       // Update products with the received data
       products = data;
-    } catch (error: any) {
-
+    } catch (err: any) {
+      console.log(error)
       // Handle 401 Unauthorized specifically
-      if (error.message.includes("401")) {
+      if (err.message.includes("401")) {
         console.log("Authentication failed - token may be expired");
         // Clear invalid token
         $auth.token = null;
@@ -147,7 +146,9 @@
         // window.location.href = '/login';
         // OR: showLoginModal = true;
         // OR: goto('/login');
-      }
+      } else {
+          error = err instanceof Error ? err.message : "Unknown error";
+        }
 
       // Handle other errors appropriately (show user message, etc.)
     } finally {
@@ -287,7 +288,7 @@
                 <td class="pgs-td font-mono">{formatActive(product.active)}</td>
 
                 <td class=" justify-center">
-                  <div class="tooltip" data-tip="Edit">
+                  <div class="tooltip tooltip-info" data-tip="Edit">
                     <a
                       class="px-4"
                       aria-label="Edit"
@@ -303,7 +304,7 @@
                     aria-label="Delete"
                     on:click={() => deleteDialog(product.id)}
                   >
-                    <div class="tooltip" data-tip="Delete">
+                    <div class="tooltip tooltip-info" data-tip="Delete">
                       <i
                         class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"
                       ></i>
