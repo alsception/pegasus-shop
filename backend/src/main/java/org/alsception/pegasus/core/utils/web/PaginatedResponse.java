@@ -1,4 +1,4 @@
-package org.alsception.pegasus.core.utils2;
+package org.alsception.pegasus.core.utils.web;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

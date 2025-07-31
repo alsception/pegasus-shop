@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.alsception.pegasus.core.users.PGSUser;
+import org.alsception.pegasus.features.users.PGSUser;
 
 @Data //Lombook for getters and setters
 @NoArgsConstructor

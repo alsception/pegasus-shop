@@ -44,6 +44,11 @@ public class UniqueIdGenerator
         return toAlpha(System.nanoTime());
     }
 
+    /**
+     * Base36 will return Uppercase
+     * @param value
+     * @return
+     */
     public static String toAlpha(long value) 
     {        
         StringBuilder sb = new StringBuilder();
@@ -54,7 +59,6 @@ public class UniqueIdGenerator
         }        
         String id = sb.reverse().toString();
         log.trace("Generated alfa: "+id);
-        return id;
-    
+        return id;    
     }
 }

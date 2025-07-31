@@ -3,7 +3,7 @@ package org.alsception.pegasus.core.security;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.alsception.pegasus.core.users.PGSUser;
+import org.alsception.pegasus.features.users.PGSUser;
 
 @Data //Lombook for getters and setters
 @NoArgsConstructor

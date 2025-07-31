@@ -1,4 +1,4 @@
-package org.alsception.pegasus.core.utils2;
+package org.alsception.pegasus.core.utils.web;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

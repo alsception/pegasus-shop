@@ -1,4 +1,4 @@
-package org.alsception.pegasus.core.users;
+package org.alsception.pegasus.features.users;
 
 import java.net.URI;
 import java.security.Principal;
@@ -112,4 +112,21 @@ public class UserController
             return ResponseEntity.notFound().build();
         }        
     }
+
+    @GetMapping("/my-account")
+    public ResponseEntity<UserDTO> getMyAccount(Principal principal) 
+    {
+        if (principal == null || principal.getName() == null) {
+            return ResponseEntity.badRequest().build(); // or UNAUTHORIZED, depending on config
+        }
+
+        UserDTO user = userService.findByUsernameDto(principal.getName());
+
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

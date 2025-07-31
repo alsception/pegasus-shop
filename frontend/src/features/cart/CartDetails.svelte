@@ -5,7 +5,7 @@
   import axios from "axios";
   import type { Cart } from "./Cart";
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
-  import ErrorDiv from "../../core/utils/ErrorDiv.svelte";
+  import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
 
   document.title = 'Cart | Pegasus'
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -46,7 +46,7 @@
   {
     loading = true;
     try{
-      const response = await axiosInstance.get<PGSCart>('cart');
+      const response = await axiosInstance.get<Cart>('cart');
       cart = response.data;
     } catch (err) {
       error = (err instanceof Error ? err.message : "Unknown error");
@@ -103,7 +103,7 @@
 
     {#if cart}
 
-    <div class=" mx-auto p-4 sm:p-6 bg-base-100 rounded-2xl mt-6 sm:mt-10">
+    <div class="nb-card mx-auto p-4 sm:p-6 bg-base-100 /*rounded-2xl*/ mt-6 sm:mt-10 " style="min-width: 568px;">
       <h2 class="text-xl sm:text-2xl font-bold mb-4 text-center">Pegasus Shop - My Cart</h2>
       
       <div class="font-mono">
@@ -120,7 +120,8 @@
                   <p class="text-xs sm:text-sm text-gray-500">Quantity:   
                     <input
                     type="number"
-                    class="input input-ghost w-20 validator"
+                    class="input input-ghost w-20 validator text-base color-primary"
+                    style="color: black;"
                     required
                     placeholder="Type a number between 1 to 10"
                     min="0"
@@ -168,32 +169,32 @@
             {/each}
           </div>
           <div class="space-y-4 mt-6 divide-y divide-gray-200 dark:divide-slate-700">
-          <div class="pt-4 flex justify-between items-center">
-            <p class="text-base sm:text-md font-semibold">Subtotal:</p>
-            <p class="text-md sm:text-xl font-bold">{formatPrice(cart.subtotal || 0)}</p>
-          </div>
-          
-          <div class="pt-4 flex justify-between items-center">
-            <p class="text-base sm:text-md font-semibold">Tax:</p>
-            <p class="text-md sm:text-xl font-bold">{formatPrice(cart.tax || 0)}</p>
-          </div>
-          
-          <div class="pt-4 flex justify-between items-center">
-            <p class="text-base sm:text-md font-semibold">Shipping:</p>
-            <p class="text-md sm:text-xl font-bold">{formatPrice(cart.shipping || 0)}</p>
-          </div>
-          
-          <div class="pt-4 flex justify-between items-center">
-            <p class="text-base sm:text-md font-semibold">Total:</p>
-            <p class="text-md sm:text-xl font-bold">{formatPrice(cart.totalPrice || 0)}</p>
-          </div>
+           <!--  <div class="pt-4 flex justify-between items-center">
+              <p class="text-base sm:text-md font-semibold">Subtotal:</p>
+              <p class="text-md sm:text-xl font-bold">{formatPrice(cart.subtotal || 0)}</p>
+            </div>
+            
+            <div class="pt-4 flex justify-between items-center">
+              <p class="text-base sm:text-md font-semibold">Tax:</p>
+              <p class="text-md sm:text-xl font-bold">{formatPrice(cart.tax || 0)}</p>
+            </div>
+             -->
+            <div class="pt-4 flex justify-between items-center">
+              <p class="text-base sm:text-md font-semibold">Shipping:</p>
+              <p class="text-md sm:text-xl font-bold">{formatPrice(cart.shippingCost || 0)}</p>
+            </div>
+            
+            <div class="pt-4 flex justify-between items-center">
+              <p class="text-base sm:text-md font-semibold">Total:</p>
+              <p class="text-md sm:text-xl font-bold">{formatPrice(cart.totalPrice || 0)}</p>
+            </div>
         </div>
         <br>
         <div class="col-span-full flex justify-end">
-          <button type="button" on:click={cancel} class="btn m-3">
+          <button type="button" on:click={cancel} class=" m-3 nb-button default">
             Cancel
           </button>
-          <a href="#/checkout" class="btn btn-primary m-3"> Confirm</a>
+          <a href="#/checkout" class=" m-3 nb-button blue"> Confirm</a>
         </div>
 
         {:else}

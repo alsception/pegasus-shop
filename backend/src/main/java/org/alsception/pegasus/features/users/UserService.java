@@ -1,4 +1,4 @@
-package org.alsception.pegasus.core.users;
+package org.alsception.pegasus.features.users;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -129,16 +129,18 @@ public class UserService
                          .map(UserDTO::new)
                          .collect(Collectors.toList());
     }
-    
-    /*public Optional<UserDTO> findByUsername(String username)
+
+    public UserDTO findByUsernameDto(String username)
     {
         return repository.findByUsername(username)
-                .map(UserDTO::new);
-    }*/
+                .map(UserDTO::new)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+    }
 
-    public PGSUser findByUsername(String username)
+    private PGSUser findByUsername(String username)
     {
-        return repository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+        return repository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
     public UserDTO findById(Long id) 

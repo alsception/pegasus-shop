@@ -24,4 +24,5 @@ public class PGSCheckoutRequestDTO
     private String name;
     private String address;
     private String paymentMethod;
+    private String comment;
 }

@@ -19,20 +19,20 @@
       await register(username, password);
       window.location.href = "/#/login";
     } catch (err: any) {
-      error = err.message;
+      error = 'ERROR: ' + err.message;
     } finally {
       loading = false;
     }
   }
 </script>
 
-<div class="flex items-center justify-center min-h-screen">
+<div class="flex items-center justify-center min-h-screen" transition:scale={{ duration: 1000, start: 0.0 }}>
   <form
     on:submit|preventDefault={handleSubmit}
-    class="w-full max-w-sm relative p-6 rounded-2xl bg-white dark:bg-slate-900"
+    class="w-full max-w-md relative p-6 px-10 rounded-2xl bg-base-100"
   >
     <h2
-      class="text-2xl font-semibold mb-8 text-center text-primary dark:text-gray-400"
+      class="text-2xl font-semibold mb-8 text-center text-primary dark:text-gray-300"
     >
       Pegasus: Registration
     </h2>
@@ -43,21 +43,25 @@
 
     {/if}
 
+    <label for="username" class="block text-md font-medium text-secondary mb-2">
+      <i class="fas fa-user text-sm text-secondary mx-2"></i>Username
+    </label>
     <input
       type="text"
       bind:value={username}
       placeholder="Username"
-      class="w-full input px-4 py-2 mb-4
-             rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+      class="pgs-input mb-8"
       disabled={loading}
     />
-
+    
+    <label for="password" class="block text-md font-medium text-secondary mb-2">
+      <i class="fas fa-lock text-sm textsecondary mx-2"></i>Password
+    </label>
     <input
       type="password"
       bind:value={password}
       placeholder="Password"
-      class="w-full input mb-4
-             rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+      class="pgs-input mb-8"
       disabled={loading}
     />
  
@@ -71,17 +75,17 @@
 
     {#if error}
 
-      <p class="text-red-500 text-sm mt-4 text-center dark:text-red-400 bg-error-content p-2">
+      <p class="text-red-500 text-sm mt-8 text-center dark:text-red-400 bg-error-content p-2">
         {error}
       </p>
 
     {/if}
 
-    <div class="mt-4">
+    <div class="mt-8">
     <label for="register" class="label">Already have an account? </label>
     <a
       href="#/login"
-      class="pgs-hyperlink hover:bg-secondary"
+      class="pgs-hyperlink"
     >
       Click here to login
     </a>

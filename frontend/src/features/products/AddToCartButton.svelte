@@ -15,7 +15,7 @@
 
 {#if product.active === false || product.stock === 0}
   <button
-    class="btn bg-gray-300 p-2 rounded-full button-fx w-full flex items-center justify-center"
+    class="nb-button default bg-gray-300 button-fx w-full flex items-center justify-center"
     style="width: {width}"
     disabled
     aria-label="Product not available"
@@ -24,7 +24,7 @@
   </button>
 {:else if $addToCartLoading === product.id}
   <button
-    class="btn bg-amber-300 hover:bg-amber-400 p-2 rounded-full button-fx w-full flex items-center justify-center"
+    class="nb-button blue"
     style="width: {width}"
     disabled
     aria-label="Adding to cart"
@@ -34,11 +34,12 @@
   </button>
 {:else}
   <button
-    class="cursor-pointer text-black bg-amber-300 hover:bg-amber-400 p-2 rounded-full button-fx btn w-full flex items-center justify-center"
+    class="nb-button blue"
     style="width: {width}"
     on:click={() => addToCart(product.id)}
   >
-    <span data-text="Add to cart">Add to cart</span>
+    <span data-text="Add to cart">       
+       🧺 Add to cart</span>
     <div class="scan-line"></div>
   </button>
 {/if}

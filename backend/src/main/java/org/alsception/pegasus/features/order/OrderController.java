@@ -4,9 +4,9 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.alsception.pegasus.core.users.PGSUser;
+import org.alsception.pegasus.features.users.PGSUser;
 import org.alsception.pegasus.features.order.OrderService;
-import org.alsception.pegasus.core.users.UserService;
+import org.alsception.pegasus.features.users.UserService;
 import org.alsception.pegasus.features.order.PGSCheckoutRequestDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ public class OrderController {
     }
     
     @GetMapping
-    public ResponseEntity<List<PGSOrder>> getAll(Principal principal) 
+    public ResponseEntity<List<PGSOrder>> find(Principal principal, @RequestParam(required = false) String search) 
     {
         //TODO: IF ADMIN, HE SHOULD SEE ALL ORDERS OF ALL USERS,
         // OTHERWISE, ONLY HIS ORDERS
@@ -56,10 +56,29 @@ public class OrderController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();        
 
-        logger.debug("Getting orders for: " + username);
+        logger.debug("Getting orders for: " + username + ", search: ["+search+"]");
         
-        List<PGSOrder> orders = orderService.getByUsername(username);
+        List<PGSOrder> orders = orderService.getByUsername(username, search);
         
         return ResponseEntity.ok(orders);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id, Principal principal) 
+    {
+        try
+        {        
+            //First we must be sure that the user requesting deletion is the owner, or admin.
+            //For now, we just assume it...
+            orderService.delete(id);
+            logger.info("Deleted order "+id);
+            return ResponseEntity.noContent().build();
+        }
+        catch(Exception e)
+        {
+            //If id is null, exception will be thrown...
+            logger.error(e.getMessage(), e);
+            return ResponseEntity.notFound().build();
+        }        
     }
 }

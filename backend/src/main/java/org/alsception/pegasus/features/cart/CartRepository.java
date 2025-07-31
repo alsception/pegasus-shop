@@ -1,7 +1,7 @@
 package org.alsception.pegasus.features.cart;
 
 import java.util.Optional;
-import org.alsception.pegasus.core.users.PGSUser;
+import org.alsception.pegasus.features.users.PGSUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

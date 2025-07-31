@@ -4,7 +4,7 @@
   import { auth } from "../../core/services/SessionStore";
   import type { Product } from "./Product";
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
-  import ErrorDiv from "../../core/utils/ErrorDiv.svelte";
+  import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import AddToCartButton from "./AddToCartButton.svelte";
 
   document.title = "Product details | Pegasus";

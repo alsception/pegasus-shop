@@ -43,14 +43,16 @@
   //CSS: here we need shadow
 </script>
 
+<!-- TODO BUG TO FIX: dark:bgslate does not work if theme is switched from theme swithcer but work from browsers -->
+
 <ul
-  class="menu menu-sm dropdown-content shadow rounded-box mt-3 w-52 p-2 scale-in-ver-top bg-base-100"
+  class="menu menu-sm dropdown-content shadow rounded-box mt-3 w-52 p-2 scale-in-ver-top bg-base-100 dark:bg-slate-950 nb-table-container"
 >
   <li class="flex items-center px-3 py-2 rounded-md">
     <div class="inline-flex items-center gap-1">
       <a
         class="pgs-hyperlink inline-flex items-center max-w-[100px] whitespace-nowrap overflow-hidden text-ellipsis"
-        href="#/my-account"
+        href="#/users/my-account"
         title={getCurrentUsername()}
       >
         <i class="fas fa-user mr-1"></i>

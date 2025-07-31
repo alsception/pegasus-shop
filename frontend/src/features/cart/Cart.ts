@@ -1,5 +1,5 @@
 import type { Product } from "../products/Product";
-import type { FPGSUser } from "../../core/users/FPGSUser";
+import type { FPGSUser } from "../../features/users/FPGSUser";
 
 export interface Cart 
 {
@@ -15,7 +15,6 @@ export interface Cart
     taxPercent?: number;
     created: Date;
     modified: Date;
-
 }
 
 interface CartItem 

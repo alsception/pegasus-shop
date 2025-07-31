@@ -5,8 +5,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
-import org.alsception.pegasus.core.users.PGSUser;
-import org.alsception.pegasus.core.users.UserRepository;
+import org.alsception.pegasus.features.users.PGSUser;
+import org.alsception.pegasus.features.users.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

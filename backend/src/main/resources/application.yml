@@ -14,7 +14,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    show-sql: false
+    show-sql: true
     open-in-view: false
 
   devtools:
@@ -39,4 +39,4 @@ logging:
   level:
     root: WARN
     org.springframework: WARN
-    org.alsception.pegasus.*: INFO
+    org.alsception.pegasus.*: DEBUG

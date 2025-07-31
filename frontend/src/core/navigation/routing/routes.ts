@@ -1,17 +1,19 @@
-import type { ComponentRegistry} from "../menu/MenuTypes";
-import { navRoutes } from "../menu/navRoutes";//Routes are here
-import Home from "../../Home.svelte";
-import Users from "../../../core/users/UsersList.svelte";
-import UserDetails from "../../../core/users/UserDetails.svelte";
-import Products from "../../../features/products/ProductsList.svelte";
-import Orders from "../../../features/orders/OrdersList.svelte";
-import ProductDetail from "../../../features/products/ProductPage.svelte";
-import ProductAdministration from "../../../features/products/ProductAdministration.svelte";
-import CartDetails from "../../../features/cart/CartDetails.svelte";
-import Checkout from "../../../features/cart/Checkout.svelte";
-import Pix from "../../../features/pix/Pix.svelte";
-import Logout from "../../auth/Logout.svelte";
-import Register from "../../auth/Register.svelte";
+import type { ComponentRegistry}    from "../menu/MenuTypes";
+import { navRoutes }                from "../menu/navRoutes";//Routes are here
+import Home                         from "../../Home.svelte";
+import Users                        from "../../../features/users/UsersList.svelte";
+import UserDetails                  from "../../../features/users/UserDetails.svelte";
+import MyAccount                  from "../../../features/users/MyAccount.svelte";
+import Products                     from "../../../features/products/ProductsList.svelte";
+import Orders                       from "../../../features/orders/OrdersList.svelte";
+import ProductDetail                from "../../../features/products/ProductPage.svelte";
+import ProductAdministration        from "../../../features/products/ProductAdministration.svelte";
+import CartDetails                  from "../../../features/cart/CartDetails.svelte";
+import Checkout                     from "../../../features/cart/Checkout.svelte";
+import Pix                          from "../../../features/pix/Pix.svelte";
+import Logout                       from "../../auth/Logout.svelte";
+import Register                     from "../../auth/Register.svelte";
+import NotFound                     from "../error/NotFound.svelte"
 
 // Component Registry - central place for all components
 // Whenever new component is added it should be imported here and added its /url
@@ -24,6 +26,9 @@ export const components: ComponentRegistry =
     "/products/mngmt/:id": ProductAdministration,
     "/users": Users,
     "/users/:id": UserDetails,
+    "/users/my-account": MyAccount,     //TODO: Dali da ostavimo /users/my-account ili, ako ne onda mora da bude secured /users endpoint da nebi user dobio nekog ko nije, osim ako nije admin
+                                        // I fali za submit endpoint
+                                        //Takodje kad se zatvori user details, ako je bio my account netrab nazad na users da ide nego na home.
     "/posts": null,
     "/BB_Lists": null,
     "/BB_Cards": null,
@@ -34,7 +39,8 @@ export const components: ComponentRegistry =
     "/Hours": null,
     "/pix": Pix,
     "/logout": Logout,
-    "/register": Register
+    "/register": Register,
+    "*": NotFound, // catch-all
 };
 
 // Helper function to generate flat routes for router configuration
@@ -55,5 +61,11 @@ export function generateRoutes()
             routes[routeInfo.componentDetails] = components[routeInfo.componentDetails];
         }
     });
+
+    //Add not found component
+    
+    routes["/users/my-account"] = MyAccount;
+    routes['*'] = NotFound; //This must be last added (order matters), otherwise it catches all
+    console.log(routes)
     return routes;
 }

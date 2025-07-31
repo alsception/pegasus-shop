@@ -1,4 +1,4 @@
-package org.alsception.pegasus.core.users;
+package org.alsception.pegasus.features.users;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;

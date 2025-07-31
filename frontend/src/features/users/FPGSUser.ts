@@ -1,5 +1,7 @@
 export interface FPGSUser 
 {
+    json(): unknown;
+    ok: any;
     id: number;
     role: string;
     username: string;

@@ -1,4 +1,4 @@
-import type { FPGSUser } from "../../core/users/FPGSUser";
+import type { FPGSUser } from "../../features/users/FPGSUser";
 
 export interface Order {
   other: any;

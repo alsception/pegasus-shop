@@ -10,9 +10,9 @@
   import Login from "../../core/auth/Login.svelte";
   import api from "../../core/services/client";
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
-  import ErrorDiv from '../utils/ErrorDiv.svelte';
+  import ErrorDiv from '../../core/navigation/error/ErrorDiv.svelte';
   import NewUserModal from "./NewUserModal.svelte";
-  import { showErrorToastLongDuration, showErrorToastNoExp } from "../utils/toaster";
+  import { showErrorToastLongDuration, showErrorToastNoExp } from "../../core/utils/toaster";
 
 
   let isAuthenticated = false;  
@@ -166,14 +166,14 @@
     switch (userRole.toUpperCase()) 
     {
       case "ADMIN":
-        return " bg-info/70 text-success ml-4 ";
+        return "error ";
       case "CUSTOMER":
-        return "success text-success/60 ";
+        return "success ";
       case "EMPLOYEE":
         return "accent ";
       //Most should be covered by these 3
       case "TESTER":
-        return "error ";
+        return "primary ";
       case "VENDOR":
         return "warning ";
       case "OTHER":
@@ -245,6 +245,8 @@
 
 {#if !$auth.isAuthenticated}
   <Login />
+{:else if error}
+  <ErrorDiv {error} />
 {:else}
 <div class="w-full flex justify-center px-4">
   <div class="w-full max-w-4xl p-4 bg-transparent rounded-lg">
@@ -256,7 +258,7 @@
         type="text"
         bind:value={searchTerm}
         placeholder="Search users..."
-        class="input input-primary border-2"
+        class="input input-primary dark:input-accent border-2"
         />
       <button type="submit" class="btn btn-dash">
         <i class="fas fa-search"></i>
@@ -280,23 +282,20 @@
       
   <LoadingOverlay/>
 
-  {:else if error}
-
-  <ErrorDiv {error} />
-
   {:else}
 
   {#if (users.length === 0)}
         
-      <div class="flex justify-center items-center h-64">
-        <h3 class="text-gray-500 dark:text-gray-400">No users found.</h3>
-      </div>
+    <div class="flex justify-center items-center h-64">
+      <h3 class="text-gray-500 dark:text-gray-400">No users found.</h3>
+    </div>
 
-    {:else}
+  {:else}
 
+  <!-- TODO: VRATITI LINIJU KAO U PRODUCTS -->
   <div class="max-w-[1568px] overflow-x-auto rounded-lg align-middle mx-auto">
-          <table class="table table-zebra min-w-full divide-y divide-accent" >
-      <thead class="bg-base-200">
+      <table class="table table-zebra min-w-full divide-y divide-accent" >
+      <thead class="/*bg-base-200*/ bg-[#10273c] border-2 border-primary/10">
         <tr class="h-12">
           <th class="pgs-th">
           </th>
@@ -358,7 +357,7 @@
       <tbody class="">
 
         {#each users as user, i}     
-            <tr id="tr-{i}" class="{ getClass(user.modified) + ' bg-base-100  outline-1 outline-transparent hover:outline-blue-500 hover:bg-blue-600/15'} ">            
+            <tr id="tr-{i}" class="{ getClass(user.modified) + ' /*bg-base-200 */ outline-1 outline-transparent pgs-tr border-2 border-primary/10'} ">            
             
               <td class="justify-center pgs-td-center px-4 ">
                 <input type="checkbox" class="checkbox checkbox-accent checkbox-xs" 	on:change={(event) => handleCheckboxChange(event, i)} />
@@ -367,7 +366,7 @@
                   <a use:link href="#/users/{user.id}" class="text-gray-500  pgs-hyperlink dark:text-gray-100 text-primary font-bold block max-w-[200px] truncate">{user.username}</a>
               </td> 
               <td>
-                <span class="badge badge-outline badge-{getUserColor(user.role)} badge-{getUserColor(user.role)} font-mono font-semibold" style="text-transform: uppercase;">
+                <span class="badge badge-soft badge-{getUserColor(user.role)} badge-{getUserColor(user.role)} font-mono badge-sm" style="text-transform: uppercase;">
                   {user.role}
                 </span>
               </td>     
@@ -399,8 +398,8 @@
               </td>
             </tr>          
         {/each}
-        <tr class="bg-base-200"> 
-          <td colspan="10" class="pgs-td font-mono">Total users found: {users.length}</td>  
+        <tr class="bg-base-200 border-2 border-primary/10"> 
+          <td colspan="10" class="pgs-td font-mono h-[64px]">Total users found: {users.length}</td>  
         </tr>  
       </tbody>
     </table>
@@ -415,6 +414,15 @@
   {/if}
 {/if}
 
+<div style="display: none;">NEED THIS HERE OTHERWISE TAILWIND OR DAISY DOESNT LOAD CSS CLASSES
+<div class="badge badge-soft badge-primary">Primary</div>
+<div class="badge badge-soft badge-secondary">Secondary</div>
+<div class="badge badge-soft badge-accent">Accent</div>
+<div class="badge badge-soft badge-info">Info</div>
+<div class="badge badge-soft badge-success">Success</div>
+<div class="badge badge-soft badge-warning">Warning</div>
+<div class="badge badge-soft badge-error">Error</div>
+</div>
 <style> 
 .selected {
   background-color: #cfe2ff; /* light blue */
@@ -423,21 +431,17 @@
   background-color: #cfe2ffd5; /* slightly different light blue */
 } 
 
-/* 
-@media (prefers-color-scheme: dark) {
-  .pgs-table-tr {
-    @apply bg-linear-to-b from-gray-900 to-gray-950 text-gray-200;
-  }
-}
-.dark .pgs-table-tr {
-  @apply bg-linear-to-b from-gray-900 to-gray-950 text-gray-200;
-}
- */
+
+ 
 
 .pgs-table-tr{
 
 }
 .pgs-table-tr:hover{
   
+}
+
+.pgs-th {
+  color: white; /**or neutral*/
 }
 </style>

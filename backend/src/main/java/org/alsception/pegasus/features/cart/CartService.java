@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.alsception.pegasus.features.products.PGSProduct;
 import org.alsception.pegasus.features.products.ProductRepository;
-import org.alsception.pegasus.core.users.PGSUser;
-import org.alsception.pegasus.core.users.UserRepository;
+import org.alsception.pegasus.features.users.PGSUser;
+import org.alsception.pegasus.features.users.UserRepository;
 import org.alsception.pegasus.core.utils.UniqueIdGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -213,6 +213,7 @@ public class CartService
         order.setAddress(prc.getAddress());
         order.setEmail(prc.getEmail());
         order.setName(prc.getName());
+        order.setComment(prc.getComment());
         
         log.trace("and payment info");
         // ... and b) PaymentInfo

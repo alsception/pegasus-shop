@@ -126,194 +126,70 @@
   {#each displayedItems as item}
     <a
       href="#{item.href}"
-      class={`group block p-6 bg-base-100 text-center 
-            scale-up-center-normal transition-all duration-200 
+      class={`group block p-6 bg-base-200 dark:bg-slate-950 
+             transition-all duration-200 
             hover:bg-accent/5 border-3 border-base-100  
-            text-primary home-link
-            hover:text-white
-            hover:bg-linear-to-br hover:from-blue-600 hover:to-violet-600`}
+            text-primary dark:text-accent home-link
+            hover:text-white dark:hover:bg-black
+            hover:bg-linear-to-br hover:from-blue-600 hover:to-violet-600 nb-card
+            `}
     >
       <div
-        class="text-2xl font-semibold scale-up-center-normal text-primary/66 menu-block group-hover:text-white"
+        class="text-4xl font-semibold scale-up-center-normal text-primary/90 menu-block group-hover:text-white mb-4"
       >
         <i class="fas fa-{item.icon} w-5 mr-2"></i>
       </div>
 
-      <h2 class="text-2xl font-semibold group-hover:text-white">
+      <h2 class="text-2xl text-accent font-semibold group-hover:text-white">
         {item.title}
       </h2>
 
-      <p class="mt-2 text-base text-primary/66 group-hover:text-white">
+      <p class="mt-2 text-base dark:text-violet-400 text-primary/66 group-hover:text-white">
         {item.description}
       </p>
     </a>
   {/each}
 </div>
+<!-- 
 
-<div style="display: none;">
-  Color palete:
-  <ul>
-    <li><span class="badge badge-xs bg-primary"></span> bg-primary</li>
-    <li><span class="badge badge-xs bg-secondary"></span> bg-secondary</li>
-    <li><span class="badge badge-xs bg-accent"></span> bg-accent</li>
-    <li><span class="badge badge-xs bg-base"></span> bg-base</li>
-    <li><span class="badge badge-xs bg-base-100"></span> bg-base-100</li>
-    <li><span class="badge badge-xs bg-base-200"></span> bg-base-200</li>
-    <li><span class="badge badge-xs bg-base-300"></span> bg-base-300</li>
-  </ul>
+        <button class="nb-button default">Default</button>
+        <button class="nb-button orange">Orange</button>
+        <button class="nb-button blue">Blue</button>
+        <button class="nb-button green">Green</button>
+        
 
-  <div class="overflow-x-auto">
-    <div class="whitespace-nowrap">
-      <table>
-        <thead
-          ><tr
-            ><th></th><th><!---->Color name<!----></th><th
-              ><!---->CSS variable<!----></th
-            ><th><!---->Where to use<!----></th></tr
-          ></thead
-        ><tbody
-          ><tr
-            ><td><span class="badge bg-primary"></span></td><td
-              ><!---->primary<!----></td
-            ><td><code>--color-primary</code></td><td
-              ><!---->Primary brand color, The main color of your brand<!----></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-primary-content"></span></td><td
-              ><!---->primary-content<!----></td
-            ><td><code>--color-primary-content</code></td><td
-              ><!---->Foreground content color to use on<!----><code
-                >primary</code
-              ><!---->color<!----><br /><br /></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-secondary"></span></td><td
-              ><!---->secondary<!----></td
-            ><td><code>--color-secondary</code></td><td
-              ><!---->Secondary brand color, The optional, secondary color of
-              your brand<!----></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-secondary-content"></span></td><td
-              ><!---->secondary-content<!----></td
-            ><td><code>--color-secondary-content</code></td><td
-              ><!---->Foreground content color to use on<!----><code
-                >secondary</code
-              ><!---->color<!----><br /><br /></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-accent"></span></td><td
-              ><!---->accent<!----></td
-            ><td><code>--color-accent</code></td><td
-              ><!---->Accent brand color, The optional, accent color of your
-              brand<!----></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-accent-content"></span></td><td
-              ><!---->accent-content<!----></td
-            ><td><code>--color-accent-content</code></td><td
-              ><!---->Foreground content color to use on<!----><code
-                >accent</code
-              ><!---->color<!----><br /><br /></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-neutral"></span></td><td
-              ><!---->neutral<!----></td
-            ><td><code>--color-neutral</code></td><td
-              ><!---->Neutral dark color, For not-saturated parts of UI<!----></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-neutral-content"></span></td><td
-              ><!---->neutral-content<!----></td
-            ><td><code>--color-neutral-content</code></td><td
-              ><!---->Foreground content color to use on neutral color<!----><br
-              /><br /></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-base-100"></span></td><td
-              ><!---->base-100<!----></td
-            ><td><code>--color-base-100</code></td><td
-              ><!---->Base surface color of page, used for blank backgrounds<!----></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-base-200"></span></td><td
-              ><!---->base-200<!----></td
-            ><td><code>--color-base-200</code></td><td
-              ><!---->Base color, darker shade, to create elevations<!----></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-base-300"></span></td><td
-              ><!---->base-300<!----></td
-            ><td><code>--color-base-300</code></td><td
-              ><!---->Base color, even more darker shade, to create elevations<!----></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-base-content"></span></td><td
-              ><!---->base-content<!----></td
-            ><td><code>--color-base-content</code></td><td
-              ><!---->Foreground content color to use on<!----><code>base</code
-              ><!---->color<!----><br /><br /></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-info"></span></td><td
-              ><!---->info<!----></td
-            ><td><code>--color-info</code></td><td
-              ><!---->Info color, For informative/helpful messages<!----></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-info-content"></span></td><td
-              ><!---->info-content<!----></td
-            ><td><code>--color-info-content</code></td><td
-              ><!---->Foreground content color to use on<!----><code>info</code
-              ><!---->color<!----></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-success"></span></td><td
-              ><!---->success<!----></td
-            ><td><code>--color-success</code></td><td
-              ><!---->Success color, For success/safe messages<!----></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-success-content"></span></td><td
-              ><!---->success-content<!----></td
-            ><td><code>--color-success-content</code></td><td
-              ><!---->Foreground content color to use on<!----><code
-                >success</code
-              ><!---->color<!----></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-warning"></span></td><td
-              ><!---->warning<!----></td
-            ><td><code>--color-warning</code></td><td
-              ><!---->Warning color, For warning/caution messages<!----></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-warning-content"></span></td><td
-              ><!---->warning-content<!----></td
-            ><td><code>--color-warning-content</code></td><td
-              ><!---->Foreground content color to use on<!----><code
-                >warning</code
-              ><!---->color<!----></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-error"></span></td><td
-              ><!---->error<!----></td
-            ><td><code>--color-error</code></td><td
-              ><!---->Error color, For error/danger/destructive messages<!----></td
-            ></tr
-          ><tr
-            ><td><span class="badge bg-error-content"></span></td><td
-              ><!---->error-content<!----></td
-            ><td><code>--color-error-content</code></td><td
-              ><!---->Foreground content color to use on<!----><code>error</code
-              ><!---->color<!----></td
-            ></tr
-          ></tbody
-        >
-      </table>
-    </div>
-  </div>
-</div>
+        <button class="nb-button default rounded">Default</button>
+        <button class="nb-button orange rounded">Orange</button>
+                      
+
+
+        <input class="nb-input default" placeholder="Default" />
+        <input class="nb-input orange" placeholder="Orange" />
+        <input class="nb-input blue" placeholder="Blue" />
+        <input class="nb-input green" placeholder="Green" />
+                      
+
+
+       <div class="nb-marquee green">
+          <div class="nb-marquee-content">
+             <span>Item 1</span>
+             <span>Item 2</span>
+          </div>
+       </div>
+                      
+
+
+       <div class="nb-card">
+          <img src="..." class="nb-card-img">
+          <div class="nb-card-content">
+              <h4 class="nb-card-title">Card Title</h4>
+              <p class="nb-card-text">...</p>
+              <div class="nb-card-actions">
+                  <button class="nb-button">Learn More</button>
+              </div>
+          </div>
+       </div> -->
+                        
 
 <style>
   /*********************************/
@@ -347,5 +223,9 @@
   .gblock {
     background-color: #003153 !important;
     background-image: linear-gradient(315deg, #062840 0%, #000 74%) !important;
+  }
+  .gradient {
+ 
+
   }
 </style>

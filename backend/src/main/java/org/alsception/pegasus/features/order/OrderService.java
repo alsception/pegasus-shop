@@ -1,11 +1,12 @@
 package org.alsception.pegasus.features.order;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.alsception.pegasus.features.products.ProductRepository;
-import org.alsception.pegasus.core.users.PGSUser;
-import org.alsception.pegasus.core.users.UserRepository;
+import org.alsception.pegasus.features.users.PGSUser;
+import org.alsception.pegasus.features.users.UserRepository;
 import org.alsception.pegasus.core.utils.UniqueIdGenerator;
 import org.alsception.pegasus.features.order.PGSOrder;
 import org.springframework.stereotype.Service;
@@ -35,22 +36,36 @@ public class OrderService
         /*PGSUser user = userRepository.findById(userId)
             .orElseThrow(() -> new RuntimeException("User not found"));*/
         
-        return calculatePrice(orderRepository.findByUserId(userId));
+        return processPrice(orderRepository.findByUserId(userId));
     }
     
-    public List<PGSOrder> getByUsername(String username) 
+    public List<PGSOrder> getByUsername(String username, String search) 
     {
         /*userRepository.findByUsername(username)
             .orElseThrow(() -> new RuntimeException("User not found"));*/
 
-        return calculatePrice(orderRepository.findByUsername(username));
+        List<PGSOrder> orders;
+        
+        if(search == null || "".equals(search)) 
+        {
+            orders = orderRepository.findByUsername(username);
+        }
+        else
+        {
+            orders = orderRepository.findByUsernameAndCode(username,"%"+search.replace("-", "").toUpperCase()+"%");   //Need to remove dashes from code. And also make it case sens
+        }
+
+        //NEXT: MAKE SEARCH CASE INSENSITIVE
+
+
+        return processPrice(orders);
     }
     
     /**
      *  Price should be calculated at the moment of order creation (checkout).
      *  This is just the temporary use for old orders missing
      */
-    public List<PGSOrder> calculatePrice(List<PGSOrder> orders)
+    public List<PGSOrder> processPrice(List<PGSOrder> orders)
     {
         if(orders!=null && !orders.isEmpty())
         {
@@ -77,7 +92,7 @@ public class OrderService
     
     public List<PGSOrder> getAll(String search) 
     {
-        List<PGSUser> user = userRepository.findByUsernameContaining(search);
+        /*List<PGSUser> user = *///userRepository.findByUsernameContaining(search);
 
         return orderRepository.findAll();              
     }
@@ -87,9 +102,9 @@ public class OrderService
         return orderRepository.findById(id);//.orElse(new List<PGSOrder>());              
     }
     
-//    public void checkout(PGSOrder order)
-//    {
-//        this.orderRepository.save(order);
-//    }    
+    public void delete(Long id)
+    {
+        this.orderRepository.deleteById(id);
+    }    
     
 }

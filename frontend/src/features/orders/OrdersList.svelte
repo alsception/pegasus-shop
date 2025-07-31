@@ -9,7 +9,7 @@
   import axios from 'axios';
   import Login from "../../core/auth/Login.svelte";
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
-  import ErrorDiv from "../../core/utils/ErrorDiv.svelte";
+  import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
 
   document.title = 'Orders | Pegasus'
 
@@ -23,6 +23,7 @@
   let error: string | null = null;
   let isDark = false;
   let searchTerm = "";
+  let totalAmount = 0;
 
 
   // AUTHENTICATION
@@ -114,7 +115,7 @@
         
         // Update orders with the received data
         orders = data;
-        
+        totalAmount = calculateTotal(orders);
     } catch (error: any) 
     {
         console.error('Error during search:', error);
@@ -134,7 +135,13 @@
     } finally {
         loading = false;
     }
-}
+  }
+
+  function calculateTotal(orders: Order[]): number {
+    return orders.reduce((sum, order) => {
+      return sum + (order.price ?? 0);
+    }, 0);
+  }
 
   function openModal(order: Order): void {
     modalOrder = order;
@@ -243,22 +250,21 @@
         type="text"
         bind:value={searchTerm}
         placeholder="Search orders..."
-        class="input input-primary border-2"
+        class="nb-input default"
       />
       <!-- Search Button -->
       <button
-        type="submit"
-        class="btn btn-dash"
+        type="submit" 
+        class="nb-button default"
       >
         <i class="fas fa-search"></i>
         Search
       </button>
 
-
       <!-- Create order Button -->
       <button
         on:click={() => alert('not implemented yet')}
-        class="btn btn-dash"
+        class="nb-button default"
       >       
           <i class="fas fa-plus"></i>
           Create new order
@@ -288,15 +294,15 @@
     {:else}
 
       <div class="max-w-[2048px] w-full overflow-x-auto rounded-lg align-middle text-center mx-auto">
-          <table class="table table-zebra min-w-full divide-y divide-accent" >
+        <div class="nb-table-container">
+          <div class="nb-table-header text-left">Orders</div>
+          <table class="table table-zebra min-w-full divide-y divide-accent " >
           <thead class="bg-base-200">
             <tr class="h-12">
-              <th class="pgs-th">id</th>
+              <th class="pgs-th">Amount</th>
               <th class="pgs-th">code</th>
               <th class="pgs-th">user</th>
               <th class="pgs-th">Email</th>
-              <th class="pgs-th">Payment Method</th>
-              <th class="pgs-th">Amount</th>
               <th class="pgs-th">Items</th>
               <th class="pgs-th">Comment</th>          
               <th class="pgs-th">created</th>       
@@ -307,24 +313,23 @@
           <tbody>
             {#each orders as order, i}
               <tr class="bg-base-100  outline-1 outline-transparent hover:outline-blue-500 hover:bg-blue-600/15">
+                
+                <td class="pgs-td-num font-mono font-bold">{formatPrice(order.price)}</td>
                 <td class="pgs-td">
-                  <a use:link href="/orders/{order.id}" class="pgs-hyperlink">{order.id}</a>
+                  <a use:link href="/orders/{order.id}" class="pgs-hyperlink">{formatCode(order.code)}</a>
                 </td>
-                <td class="pgs-td font-mono">{formatCode(order.code)}</td>
                 <td class="pgs-td">{order.user?.username}</td>
                 <td class="pgs-td">{order.email}</td>
-                <td class="pgs-td">
-                  <div class="badge badge-neutral">{order.paymentMethod}</div>
-              </td>
-                <td class="pgs-td-num font-mono">{formatPrice(order.price)}</td>
                 <td class="pgs-td-num font-mono">{order.items.length}</td>
                 <td class="text-center">{@html formatCommentInfo(order.comment)}</td>            
                 <td class="pgs-td font-mono">
-                  {@html formatDate(order.created,'New - created less than 15 minutes ago',15)}
+                  {@html formatDate(order.created,'New - created less than 30 minutes ago',30)}
                 </td>
-                <td class="text-center"><div class="badge badge-primary">{order.status}</div></td>        
-
-
+                <td class="text-center">
+                 {#if (order.status !== '' && order.status !== null)}  
+                  <div class="badge badge-primary">{order.status}</div>
+                  {/if}
+                </td>     
                 <td class=" justify-center">
                   <div class="tooltip tooltip-info" data-tip="Edit"><a class="px-4" aria-label="Edit" use:link href="/orders/mngmt/{order.id}"><i class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"></i></a></div>
                   <button class="px-4" aria-label="Delete" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
@@ -333,12 +338,17 @@
                   </div></button>
                 </td>      
               </tr>
-            {/each}
-            <tr class="bg-white dark:bg-slate-900"> 
-              <td colspan="18" class="pgs-td text-left font-mono font-bold">Total orders found: {orders.length}</td>  
-            </tr>
+            {/each}           
           </tbody>
-        </table>
+          </table>
+        <div class="nb-table-footer bg-base-100 dark:bg-slate-900 text-left">
+          Total orders found:
+          <span class="font-bold"> {orders.length}</span>
+        <br>
+        <br>
+          Total amount: <span class="font-bold">{formatPrice(totalAmount)}</span>
+        </div>
+        </div>
       </div>
       
     {/if}
@@ -354,3 +364,10 @@
     />
   {/if}
 {/if}
+
+<style>
+  .badge {
+  background-color: transparent !important;
+}
+
+</style>

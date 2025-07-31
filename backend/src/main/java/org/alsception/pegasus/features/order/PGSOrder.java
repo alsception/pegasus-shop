@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.alsception.pegasus.core.users.PGSUser;
+import org.alsception.pegasus.features.users.PGSUser;
 
 @Data //Lombook for getters and setters
 @NoArgsConstructor
@@ -46,6 +46,7 @@ public class PGSOrder
     private String paymentMethod;
     private String currency;
     private String status;
+    private String comment;
     
     @Column(precision = 19, scale = 2, nullable = true)
     private BigDecimal price; 

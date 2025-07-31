@@ -1,6 +1,6 @@
 package org.alsception.pegasus.core.exception;
 
-import org.alsception.pegasus.core.utils2.ErrorResponse;
+import org.alsception.pegasus.core.utils.web.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
