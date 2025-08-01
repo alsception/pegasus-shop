@@ -8,6 +8,7 @@
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import { showSuccessToast } from "../../core/utils/toaster";
   import { formatDateTime } from "../../utils/formatting";
+  import Pix from "../pix/Pix.svelte";
 
   export let endpoint: string | null = null; // Optional if used in a route
   let resolvedEndpoint: string;
@@ -265,6 +266,10 @@ function showErrorInModal(error: any): void {
     const dialog = document.getElementById("modal") as HTMLDialogElement;
     dialog.showModal();
   }
+  function openPixModal() {
+    const dialog = document.getElementById("modal-pix") as HTMLDialogElement;
+    dialog.showModal();
+  }
 </script>
 
 <div class="relative w-full scale-up-center-normal">
@@ -408,6 +413,17 @@ MDN Reference -->
                   </p>
                 </div>
               </div>
+
+              <div class="w-full">
+
+                 <label
+                  for="img"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                  >Profile picture</label>
+                 <button class="btn" on:click={openPixModal}>Choose picture</button>
+
+              </div>
+
               <div class="w-full">
                 <div class="lg:col-span-2">
                   <div class="rounded-lg p-6">
@@ -709,14 +725,32 @@ MDN Reference -->
 </div>
  -->
 <!-- Open the modal using ID.showModal() method -->
-<!-- <button class="btn" on:click={openModal}>open modal</button>
- --><dialog id="modal" class="modal modal-bottom sm:modal-middle">
-  <div class="modal-box">
+
+<!-- TODO: WE NEED SEPARATE MODAL FOR INFO/ERROR MESSAGE AND PROFILE PIX -->
+
+<dialog id="modal-pix" class="modal modal-bottom sm:modal-middle w-full">
+  <div class="modal-box" style="min-width: min-content;">
+    <h3 class="text-lg font-bold" id="modal-title-pix">Choose a picture</h3>
+    <p class="py-4" id="modal-content-pix">
+      <Pix/>
+    </p>
+    <div class="modal-action">
+      <form method="dialog">         
+        <button class="btn">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="modal" class="modal modal-bottom sm:modal-middle w-full">
+  <div class="modal-box" style="min-width: min-content;">
     <h3 class="text-lg font-bold" id="modal-title">Error</h3>
-    <p class="py-4" id="modal-content"></p>
+    <p class="py-4" id="modal-content">
+      <Pix/>
+    </p>
     <div class="modal-action">
       <form method="dialog">
-        <!-- if there is a button in form, it will close the modal -->
+         
         <button class="btn">Close</button>
       </form>
     </div>

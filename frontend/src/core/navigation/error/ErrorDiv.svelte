@@ -1,5 +1,5 @@
 <script lang="ts">
-  import errorImg from "../../../assets/img/503-error-man.svg"; // adjust path as needed
+  import errorImg from "../../../assets/img/503-error-man.svg";
 
   export let error: string | null = null;
 
@@ -16,15 +16,14 @@
     <img src={errorImg} alt="Fetch error illustration" class="max-w-128" />
     <!-- <div class="nb-marquee" style="width: 768px;">
       <div class="nb-marquee-content"> -->
-        <h1>⛔ Error: {error} ⛔🤬</h1>
+        <h1>⛔ Error: {error} ⛔</h1>
       <!-- </div>
     </div> -->
     <h2 style="/*position: relative; top: -70px;*/" class="text-primary mt-4">
-      Looks like our server is unavailable or you are offline. Why don't you
-      take a walk and try later? ;)
+      Looks like our server is unavailable or you are offline.
     </h2>
   {:else}
-    <h1>⛔ Error: {error} ⛔💀</h1>
+    <h1>⛔ Error: {error} ⛔</h1>
   {/if}
 
 </div>

@@ -6,6 +6,17 @@
   import type { Cart } from "./Cart";
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
+  import EmptyImg1 from "../../assets/img/empty-amico-1.svg"; 
+  import EmptyImg2 from "../../assets/img/empty-amico.svg"; 
+  import EmptyImg3 from "../../assets/img/empty-bro-1.svg"; 
+  import EmptyImg4 from "../../assets/img/empty-bro.svg"; 
+  import EmptyImg5 from "../../assets/img/empty-pana.svg"; 
+  import { link } from "svelte-spa-router";
+
+  const emptyImages = [EmptyImg1, EmptyImg2, EmptyImg3, EmptyImg4, EmptyImg5];
+
+  // Get a random image (TODO: see if this has sense, to load many images at once )
+  const randomImage = emptyImages[Math.floor(Math.random() * emptyImages.length)]; 
 
   document.title = 'Cart | Pegasus'
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -103,7 +114,7 @@
 
     {#if cart}
 
-    <div class="nb-card mx-auto p-4 sm:p-6 bg-base-100 /*rounded-2xl*/ mt-6 sm:mt-10 " style="min-width: 568px;">
+    <div class="nb-card mx-auto p-4 sm:p-6 bg-base-100 /*rounded-2xl*/ mt-6 sm:mt-10 " style="min-width: 568px; transform: none">
       <h2 class="text-xl sm:text-2xl font-bold mb-4 text-center">Pegasus Shop - My Cart</h2>
       
       <div class="font-mono">
@@ -198,7 +209,13 @@
         </div>
 
         {:else}
-          <p class="text-center text-gray-500 py-4">Your cart is empty</p>
+          <p class="text-center text-gray-500 py-4">Your cart is empty. Add some <a use:link href="/products" class="pgs-hyperlink">products</a>
+
+            <img src="{randomImage}" alt="Cart empty" />
+
+                <!-- import errorimg from '../../../assets/img/404-error-landscape.gif';  -->
+
+          </p>
         {/if}       
         
       </div>
