@@ -39,4 +39,4 @@ logging:
   level:
     root: INFO
     org.springframework: INFO
-    org.alsception.pegasus.*: TRACE
+    org.alsception.pegasus.*: INFO
