@@ -37,6 +37,6 @@ jwt:
 
 logging:
   level:
-    root: WARN
-    org.springframework: WARN
-    org.alsception.pegasus.*: DEBUG
+    root: INFO
+    org.springframework: INFO
+    org.alsception.pegasus.*: TRACE

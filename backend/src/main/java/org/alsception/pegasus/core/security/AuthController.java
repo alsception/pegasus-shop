@@ -3,6 +3,7 @@ package org.alsception.pegasus.core.security;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import org.alsception.pegasus.core.config.PGSConfigService;
 import org.alsception.pegasus.features.users.PGSUser;
 import org.alsception.pegasus.features.users.UserService;
 import org.slf4j.Logger;
@@ -36,21 +37,18 @@ public class AuthController
     private final JwtUtils jwtUtils;
     private final CustomUserDetailsService userDetailsService;
     private final UserService userService;
-    private final BCryptPasswordEncoder passwordEncoder;    
+    private final PGSConfigService configService;
+
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-    private boolean registrationEnabled = true;
-    private boolean loginEnabled = true;
-
     public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils,
-                          CustomUserDetailsService userDetailsService, BCryptPasswordEncoder passwordEncoder,
-                          UserService userService) 
+                          CustomUserDetailsService userDetailsService,
+                          UserService userService, PGSConfigService configService) 
     {
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
-        this.userDetailsService = userDetailsService;
-        this.passwordEncoder = passwordEncoder;
-        this.userService = userService;
+        this.userDetailsService = userDetailsService;        this.userService = userService;
+        this.configService = configService;
     }
 
     /**
@@ -65,7 +63,7 @@ public class AuthController
         {   
             logger.info("Registering new user: " + userDTO.getUsername());    
 
-            if(!registrationEnabled)
+            if(!configService.isRegistrationEnabled())
             {
                 logger.error("Registration disabled");
                 
@@ -123,7 +121,7 @@ public class AuthController
     {
         logger.debug("Authenticating user: " + userDTO.getUsername());
 
-        if(!loginEnabled)
+        if(!configService.isLoginEnabled())
         {
             logger.error("Login is currently disabled");
             
@@ -166,7 +164,7 @@ public class AuthController
         return ResponseEntity.ok(response);
     }    
 
-     public void printErrDetails(String title, AuthRequest userDTO, String msg) throws IOException 
+    public void printErrDetails(String title, AuthRequest userDTO, String msg) throws IOException 
     {
         if(title == null || title.isEmpty()) title = "ERROR";
         logger.error("+======================================================== "+title.toUpperCase()+" ================================================+");
