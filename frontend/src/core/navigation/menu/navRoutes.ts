@@ -52,7 +52,7 @@ export const navRoutes: NavRoutesMap =
       customer: true,
     },
     "/cart": {
-      label: "My cart",
+      label: "My cart (x)",//TODO: update number of items in cart
       icon: "shopping-basket",
       href: "#/cart",
       component: null,

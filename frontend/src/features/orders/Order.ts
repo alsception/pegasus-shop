@@ -10,10 +10,12 @@ export interface Order {
   name: string;
   address: string;
   paymentMethod: string;
+  paymentStatus: string;
+  currency: string;
   price?: number; // BigDecimal maps to number in TS, nullable so optional
   items: OrderItem[];
   created?: string; // LocalDateTime as ISO string
-  modified?: string; // LocalDateTime as ISO string, nullable so optional
+  modified?: string | null; // LocalDateTime as ISO string, nullable so optional
   status?: string;
 }
 

@@ -241,7 +241,7 @@
 {:else}
 
 <div class="w-full flex justify-center px-4">
-  <div class="w-full max-w-4xl p-4 bg-transparent rounded-lg">
+  <div class="w-full max-w-4xl p-4 bg-base-200 rounded-lg">
     <form
       on:submit|preventDefault={handleFormSubmit}
       class="flex flex-col sm:flex-row items-center gap-3"
@@ -341,7 +341,7 @@
             {/each}           
           </tbody>
           </table>
-        <div class="nb-table-footer bg-base-100 dark:bg-slate-900 text-left">
+        <div class="nb-table-footer  text-left">
           Total orders found:
           <span class="font-bold"> {orders.length}</span>
         <br>

@@ -3,9 +3,10 @@ import { navRoutes }                from "../menu/navRoutes";//Routes are here
 import Home                         from "../../Home.svelte";
 import Users                        from "../../../features/users/UsersList.svelte";
 import UserDetails                  from "../../../features/users/UserDetails.svelte";
-import MyAccount                  from "../../../features/users/MyAccount.svelte";
+import MyAccount                    from "../../../features/users/MyAccount.svelte";
 import Products                     from "../../../features/products/ProductsList.svelte";
 import Orders                       from "../../../features/orders/OrdersList.svelte";
+import OrderDetails                 from "../../../features/orders/OrderDetails.svelte";
 import ProductDetail                from "../../../features/products/ProductPage.svelte";
 import ProductAdministration        from "../../../features/products/ProductAdministration.svelte";
 import CartDetails                  from "../../../features/cart/CartDetails.svelte";
@@ -33,6 +34,7 @@ export const components: ComponentRegistry =
     "/BB_Lists": null,
     "/BB_Cards": null,
     "/cart": CartDetails,
+    "/orders/:id": OrderDetails,
     "/orders": Orders,
     "/checkout": Checkout,
     "/Todo": null,
@@ -65,6 +67,7 @@ export function generateRoutes()
     //Add not found component
     
     routes["/users/my-account"] = MyAccount;
+    routes["/orders/:id"] = OrderDetails;
     routes['*'] = NotFound; //This must be last added (order matters), otherwise it catches all
     console.log(routes)
     return routes;

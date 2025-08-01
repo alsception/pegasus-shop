@@ -1,5 +1,5 @@
 import axios from "axios";
-import { showErrorToast, showSuccessToast } from "../../core/utils/toaster";
+import { showAddSuccessToastWithLink, showErrorToast } from "../../core/utils/toaster";
 import { writable } from "svelte/store";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -40,20 +40,20 @@ export async function addToCart(productId: number): Promise<void>
       }
     );
     //We assume success if no error happened
-    processSuccess(response);
+    showAddSuccessToastWithLink();
   } catch (error: any) {
     processError(error);
   } finally {
     addToCartLoading.set(0);
   }
 }
-
+/*
 export function processSuccess(response: any) {
   // Display success message
   if (response.data && response.data.message) {
-    showSuccessToast(response.data.message);
+    showAddSuccessToastWithLink();
   }
-}
+}*/
 
 export function processError(error: any) {
   // Extract message from error response
