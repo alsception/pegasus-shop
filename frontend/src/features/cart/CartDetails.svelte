@@ -26,6 +26,13 @@
   let cart: Cart | null = null;
   let error: any = null;
 
+
+  /********************************************************************
+   * TODO FIX 0 ERROR
+   * *
+   * ************************************************************
+  */
+
   // AUTHENTICATION
   $: auth.subscribe((value) => {
     isAuthenticated = value.isAuthenticated;
@@ -77,15 +84,47 @@
     window.location.href = "/checkout"; // Putanja do početne stranice
   }
   
-  function updateCart(item: any){
-    //Send to server actually
-    /* console.log(item);
-      if (!cart || !cart.items) return;
+  async function updateCart(item: any) {
+    if (!cart || !item) return;
+    loading = true;
+    error = null;
+    try {
+      await axiosInstance.put('/cart/update', null, {
+        params: {
+          productId: item.product.id,
+          quantity: item.quantity
+        }
+      });
+      await loadCart();
+    } catch (err) {
+      error = (err instanceof Error ? err.message : "Unknown error");
+    } finally {
+      loading = false;
+    }
+  }
+  function handleQuantityChange(event: Event, item: any) {
+    console.log(event)
+    const input = event.target as HTMLInputElement;
+    item.quantity = Number(input.value);
+    updateCart(item);
+  }
 
-    const index = cart.items.findIndex(i => i.id === item.id);
-    if (index !== -1) {
-      cart.items[index] = item;
-    } */
+  async function deleteCartItem(productId: number) {
+    if (!cart) return;
+    loading = true;
+    error = null;
+    try {
+      await axiosInstance.delete('/cart/delete', {
+        params: {
+          productId
+        }
+      });
+      await loadCart();
+    } catch (err) {
+      error = (err instanceof Error ? err.message : "Unknown error");
+    } finally {
+      loading = false;
+    }
   }
   
   function cancel(event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) 
@@ -102,16 +141,15 @@
 
 {:else}
 
-  {#if loading}
-
-    <LoadingOverlay/>
-
-  {:else if error}
+  {#if error}
 
     <ErrorDiv {error} />
     
   {:else}  
+    {#if loading}
 
+      <LoadingOverlay/>
+    {/if}
     {#if cart}
 
     <div class="nb-card mx-auto p-4 sm:p-6 bg-base-100 /*rounded-2xl*/ mt-6 sm:mt-10 " style="min-width: 568px; transform: none">
@@ -126,48 +164,62 @@
             {#each cart.items as item (item.id)}
 
               <div class="py-4 grid grid-cols-3 gap-2 items-center">
-                <div class="col-span-2">
+                <div class="col-span-2 flex flex-col gap-2">
                   <p class="text-base sm:text-md font-medium truncate">{item.product.name}</p>
-                  <p class="text-xs sm:text-sm text-gray-500">Quantity:   
-                    <input
-                    type="number"
-                    class="input input-ghost w-20 validator text-base color-primary"
-                    style="color: black;"
-                    required
-                    placeholder="Type a number between 1 to 10"
-                    min="0"
-                    max="100"
-                    on:change={() => updateCart(item)}
-                    on:input={() => updateCart(item)}
-                    bind:value={item.quantity}
-                  />
-
-                  <p class="validator-hint">Must be between be 1 to 10</p>
-<!--                     <input type="number" id="myNumber" value="{item.quantity}"/>                    
- -->                 
-                  <div class="relative flex items-center hidden">
-                    <button 
-                      type="button" 
-                      class="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-l-md border border-gray-300 text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      -
-                    </button>
-                    <!-- type="number"  -->
-                    <input 
-                      
-                      id="myNumber" 
-                      value="{item.quantity}"
-                      min="1"
-                      class="w-12 h-8 text-center appearance-none border border-x-0 border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 spin-button-none"
-                    />
-                    <button 
-                      type="button" 
-                      class="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-r-md border border-gray-300 text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      +
-                    </button>
+                  <div class="flex items-center gap-4">
+                    <label class="text-xs sm:text-sm text-gray-500">Quantity:</label>
+                    <div class="flex items-center rounded-md overflow-hidden">
+                      <button 
+                        type="button" 
+                        class="btn btn-ghost"
+                        on:click={() => {
+                          if (item.quantity > 1) {
+                            item.quantity = item.quantity - 1;
+                            updateCart(item);
+                          }
+                        }}
+                        aria-label="Decrease quantity"
+                      >
+                        -
+                      </button>
+                      <input 
+                        id="myNumber" 
+                        value={item.quantity}
+                        min="1"
+                        class="w-12 h-8 text-center"
+                        on:change={(e) => handleQuantityChange(e, item)}
+                      />
+                      <button 
+                        type="button" 
+                        class="btn btn-ghost"
+                        on:click={() => {
+                          if (item.quantity < 100) {
+                            item.quantity = item.quantity + 1;
+                            updateCart(item);
+                          }
+                        }}
+                        aria-label="Increase quantity"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                  <!-- Move delete button below -->
+                  <div class="flex items-center">
+                    <div class="tooltip tooltip-info" data-tip="Delete">
+                      <button
+                        type="button"
+                        class="btn primary"
+                        aria-label="Delete"
+                        on:click={() => deleteCartItem(item.product.id)}
+                      >
+                        <i class="fa fa-trash text-xl text-gray-500 hover:text-red-400 cursor-pointer"></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
+
+
                 <div class="text-right">
                   <div class="text-xs sm:text-sm text-gray-500 mb-1">
                     {item.quantity} x {formatPrice(item.product.basePrice)}
@@ -220,11 +272,18 @@
         
       </div>
     </div>    
-
-    {:else}
-      <p>Nothing to see here</p>
+    
     {/if}  
   {/if}  
-{/if}
+  {/if}  
 
 </div>
+
+<style>
+  /**need to remove this*/
+  button:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: none;
+}
+</style>

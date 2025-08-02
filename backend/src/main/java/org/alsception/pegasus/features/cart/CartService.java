@@ -151,7 +151,38 @@ public class CartService
                 });
         
     }
-    
+    @Transactional
+    public void updateProductQuantity(String username, Long productId, Integer quantity) 
+    {
+        PGSUser user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+        PGSCart cart = cartRepository.findByUser(user)
+                .orElseThrow(() -> new RuntimeException("Cart not found for user: " + username));
+
+        PGSCartItem item = cart.getItems().stream()
+                .filter(i -> i.getProduct().getId().equals(productId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Product not found in cart: " + productId));
+
+        if (quantity == null || quantity <= 0) {
+            throw new RuntimeException("Quantity must be greater than 0");
+        }
+
+        item.setQuantity(quantity);
+        cartRepository.save(cart);
+    }
+
+    @Transactional
+    public void deleteProductFromCart(String username, Long productId) 
+    {
+        PGSUser user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+        PGSCart cart = cartRepository.findByUser(user)
+                .orElseThrow(() -> new RuntimeException("Cart not found for user: " + username));
+
+        cart.getItems().removeIf(item -> item.getProduct().getId().equals(productId));
+        cartRepository.save(cart);
+    }
     /**
      * Same as other method
      *
@@ -166,11 +197,15 @@ public class CartService
         log.debug("Looking for cart...");
         
         return cartRepository.findByUser(user)
-                .orElseGet(() -> {
-                    PGSCart newPGSCart = new PGSCart();
-                    newPGSCart.setUser(user);
-                    return cartRepository.save(newPGSCart);
-                });
+            .map(cart -> {
+                cart.getItems().sort((a, b) -> a.getCreated().compareTo(b.getCreated()));
+                return cart;
+            })
+            .orElseGet(() -> {
+                PGSCart newPGSCart = new PGSCart();
+                newPGSCart.setUser(user);
+                return cartRepository.save(newPGSCart);
+            });
     }
     
     public List<PGSCart> getAll(String search) 

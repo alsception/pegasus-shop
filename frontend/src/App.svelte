@@ -12,6 +12,8 @@
   import { generateRoutes } from "./core/navigation/routing/routes";
   import { SvelteToast } from "@zerodevx/svelte-toast";
 
+  document.title = 'Pegasus'
+
   export const unauthenticatedRoutes = {
     '/login': Login,
     '/register': Register,

@@ -28,7 +28,7 @@ public class CartController {
 
     @PostMapping("/add")
     public ResponseEntity<Map<String, String>> addProductToCart(
-            Principal principal,//Spring autoinjects
+            Principal principal,
             @RequestParam Long productId,
             @RequestParam(required = false) Integer quantity) 
     {
@@ -39,8 +39,37 @@ public class CartController {
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Product added to cart");
-        
-        //TODO: Actually return cart object together with message
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Map<String, String>> updateProductQuantity(
+            Principal principal,
+            @RequestParam Long productId,
+            @RequestParam Integer quantity)
+    {
+        String username = principal.getName();
+        logger.debug("Updating quantity for product " + productId + " in cart for user: " + username);
+
+        cartService.updateProductQuantity(username, productId, quantity);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Product quantity updated");
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Map<String, String>> deleteProductFromCart(
+            Principal principal,
+            @RequestParam Long productId)
+    {
+        String username = principal.getName();
+        logger.debug("Deleting product " + productId + " from cart for user: " + username);
+
+        cartService.deleteProductFromCart(username, productId);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Product removed from cart");
         return ResponseEntity.ok(response);
     }
     
