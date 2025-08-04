@@ -79,31 +79,27 @@
       currency: 'EUR',
     }).format(price);
   }
-
-  function goToCheckout() {
-    window.location.href = "/checkout"; // Putanja do početne stranice
-  }
   
   async function updateCart(item: any) {
     if (!cart || !item) return;
     loading = true;
     error = null;
     try {
-      await axiosInstance.put('/cart/update', null, {
+      const response = axiosInstance.put('/cart/update', null, {
         params: {
           productId: item.product.id,
           quantity: item.quantity
         }
       });
-      await loadCart();
+      cart = (await response).data.cart;
     } catch (err) {
       error = (err instanceof Error ? err.message : "Unknown error");
     } finally {
       loading = false;
     }
   }
+
   function handleQuantityChange(event: Event, item: any) {
-    console.log(event)
     const input = event.target as HTMLInputElement;
     item.quantity = Number(input.value);
     updateCart(item);
@@ -167,8 +163,8 @@
                 <div class="col-span-2 flex flex-col gap-2">
                   <p class="text-base sm:text-md font-medium truncate">{item.product.name}</p>
                   <div class="flex items-center gap-4">
-                    <label class="text-xs sm:text-sm text-gray-500">Quantity:</label>
-                    <div class="flex items-center rounded-md overflow-hidden">
+                      <label class="text-xs sm:text-sm text-gray-500">Quantity:</label>
+                      <div class="flex items-center rounded-md overflow-hidden">
                       <button 
                         type="button" 
                         class="btn btn-ghost"

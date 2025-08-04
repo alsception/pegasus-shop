@@ -43,18 +43,22 @@ public class CartController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Map<String, String>> updateProductQuantity(
+    public ResponseEntity<Map<String,Object>> updateProductQuantity(
             Principal principal,
             @RequestParam Long productId,
             @RequestParam Integer quantity)
     {
         String username = principal.getName();
         logger.debug("Updating quantity for product " + productId + " in cart for user: " + username);
+        Map<String, Object> response = new HashMap<>();
+        
+        PGSCart cart = cartService.updateProductQuantity(username, productId, quantity);
+        
+        //Sort the cart items so they maintain the same order
+        cart.getItems().sort((a, b) -> a.getCreated().compareTo(b.getCreated()));
 
-        cartService.updateProductQuantity(username, productId, quantity);
-
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Product quantity updated");
+        response.put("message", "Cart updated");
+        response.put("cart", cart);
         return ResponseEntity.ok(response);
     }
 

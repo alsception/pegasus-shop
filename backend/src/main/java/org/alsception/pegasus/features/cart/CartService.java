@@ -151,8 +151,9 @@ public class CartService
                 });
         
     }
+
     @Transactional
-    public void updateProductQuantity(String username, Long productId, Integer quantity) 
+    public PGSCart updateProductQuantity(String username, Long productId, Integer quantity) 
     {
         PGSUser user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));
@@ -169,7 +170,7 @@ public class CartService
         }
 
         item.setQuantity(quantity);
-        cartRepository.save(cart);
+        return cartRepository.save(cart);
     }
 
     @Transactional
