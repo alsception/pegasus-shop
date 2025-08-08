@@ -281,9 +281,7 @@ public class CartService
                 orderItem.setProduct(cartItem.getProduct());
                 orderItem.setQuantity(cartItem.getQuantity());
                 orderItem.setPrice(cartItem.getPrice());
-                log.trace("234");
                 totalPrice.add(cartItem.getPrice());
-                log.trace("238");
                 return orderItem;
             })
             .collect(Collectors.toList());

@@ -39,4 +39,4 @@ logging:
   level:
     root: INFO
     org.springframework: INFO
-    org.alsception.pegasus.*: INFO
+    org.alsception.pegasus.*: DEBUG

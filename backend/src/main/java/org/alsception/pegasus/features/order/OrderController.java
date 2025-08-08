@@ -1,13 +1,9 @@
 package org.alsception.pegasus.features.order;
 
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.alsception.pegasus.features.users.PGSUser;
-import org.alsception.pegasus.features.order.OrderService;
 import org.alsception.pegasus.features.users.UserService;
-import org.alsception.pegasus.features.order.PGSCheckoutRequestDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

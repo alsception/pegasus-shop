@@ -380,10 +380,7 @@
               <p class="nb-card-text">
                 <span
                   class="product-detail text-xl price font-bold"
-                  class:text-green-600={product.active !== false &&
-                    product.stockQuantity !== null}
-                  class:dark:text-green-400={product.active !== false &&
-                    product.stockQuantity !== null}
+                  
                   class:text-gray-400={product.active === false ||
                     product.stockQuantity === null}
                   class:dark:text-400-600={product.active === false ||
@@ -392,10 +389,7 @@
 
                 <span
                   class="product-detail text-3xl price font-bold"
-                  class:text-green-600={product.active !== false &&
-                    product.stockQuantity !== null}
-                  class:dark:text-green-400={product.active !== false &&
-                    product.stockQuantity !== null}
+                  
                   class:text-gray-400={product.active === false ||
                     product.stockQuantity === null}
                   class:dark:text-gray-400={product.active === false ||
@@ -404,10 +398,7 @@
 
                 <span
                   class="product-detail text-xl price font-bold"
-                  class:text-green-600={product.active !== false &&
-                    product.stockQuantity !== null}
-                  class:dark:text-green-400={product.active !== false &&
-                    product.stockQuantity !== null}
+                  
                   class:text-gray-400={product.active === false ||
                     product.stockQuantity === null}
                   class:dark:text-gray-400={product.active === false ||
