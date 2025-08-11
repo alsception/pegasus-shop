@@ -215,7 +215,7 @@ function showErrorInModal(error: any): void {
     if (dialogEl) {
         dialogEl.showModal();
     }
-}
+  }
 
   function handleKeydown(event: KeyboardEvent) {
     if (event.ctrlKey && event.key === "Enter") {
@@ -729,11 +729,9 @@ MDN Reference -->
   <div class="modal-box" style="min-width: min-content;">
     <h3 class="text-lg font-bold" id="modal-title">Error</h3>
     <p class="py-4" id="modal-content">
-      <Pix/>
     </p>
     <div class="modal-action">
-      <form method="dialog">
-         
+      <form method="dialog">         
         <button class="btn">Close</button>
       </form>
     </div>

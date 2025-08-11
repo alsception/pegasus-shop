@@ -54,7 +54,7 @@ public class PGSOrder
     //@JsonIgnore
     @JsonManagedReference
     //⚠️ Ovo može izazvati probleme sa performansama ako lista items sadrži mnogo podataka.
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PGSOrderItem> items = new ArrayList<>();
     
     @Column(nullable = true, updatable = false)

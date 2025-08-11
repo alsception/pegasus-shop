@@ -31,6 +31,24 @@ public class UserDTO
         this.username = username;
     }
 
+    public UserDTO(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public UserDTO(String username, String password, String role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
+    public UserDTO(String username, String password, String role, Boolean active) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.active = active;
+    }
+
     public UserDTO(PGSUser user) {
         this.id = user.getId();
         this.username = user.getUsername();

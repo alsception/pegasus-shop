@@ -1,5 +1,6 @@
 package org.alsception.pegasus.core.security;
 
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.repository = repository;
     }
 
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException 
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DisabledException 
     {        
         logger.trace("Trying to find user: " + username);
 
@@ -30,9 +31,14 @@ public class CustomUserDetailsService implements UserDetailsService {
         {
             logger.warn("User not found in DB: " + username);
         } 
+        else if(!user.get().isActive())
+        {
+            logger.trace("Account disabled [" + username + "]");          
+            throw new DisabledException("Account disabled");  
+        }
         else 
         {
-            logger.trace("Found user in DB: " + user.get().getUsername());            
+            logger.trace("Found user in DB: " + username);            
         }
         
         // Map your User entity to Spring's UserDetails

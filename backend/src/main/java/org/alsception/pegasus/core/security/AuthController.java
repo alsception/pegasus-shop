@@ -14,7 +14,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -130,23 +129,23 @@ public class AuthController
                 .body( "Login is currently disabled");
         }    
 
-        try {
+        try 
+        {
             authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword())
-            );
+                new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword()));
         } 
         catch (AuthenticationException e) 
         {
-            logger.warn("Bad credentials");
+            //TODO: We should not return disabled message is account is disabled, and user tried to login with wrong password
             
+            logger.warn(e.getMessage()+"!");            
             return ResponseEntity
                     .status(401)
-                    .body("Bad credentials");
-        }
+                    .body(e.getMessage());
+        }        
         catch (Exception e) 
         {
-            logger.error(e.getMessage());
-            
+            logger.error(e.getMessage());            
             return ResponseEntity
                     .status(500)
                     .body(e.getMessage());
@@ -154,14 +153,20 @@ public class AuthController
 
         logger.trace("Loading user: " + userDTO.getUsername());
         
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userDTO.getUsername());
-        
-        String token = jwtUtils.generateJwtToken(userDetails);        
-        
-        Map<String, String> response = new HashMap<>();
-        response.put("token", token);
-        
-        return ResponseEntity.ok(response);
+        /* try{ */
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userDTO.getUsername());
+            String token = jwtUtils.generateJwtToken(userDetails);  
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);            
+            return ResponseEntity.ok(response);
+       /*  }
+        catch (DisabledException e) 
+        {
+            logger.warn("Account disabled");            
+            return ResponseEntity
+                    .status(403)
+                    .body("Account disabled");
+        } */
     }    
 
     public void printErrDetails(String title, AuthRequest userDTO, String msg) throws IOException 

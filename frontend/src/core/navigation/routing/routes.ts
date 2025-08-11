@@ -20,8 +20,8 @@ import NotFound                     from "../error/NotFound.svelte"
 // Whenever new component is added it should be imported here and added its /url
 export const components: ComponentRegistry = 
 {
-    "/home": Home,
     "/": Home,
+    "/home": Home,
     "/products": Products,
     "/products/:id": ProductDetail,
     "/products/mngmt/:id": ProductAdministration,
@@ -63,12 +63,14 @@ export function generateRoutes()
             routes[routeInfo.componentDetails] = components[routeInfo.componentDetails];
         }
     });
-
-    //Add not found component
     
+    //I dont know if these routes are found in navroutes, and I want them to be all the time
+    routes["/"] = Home;
     routes["/users/my-account"] = MyAccount;
     routes["/orders/:id"] = OrderDetails;
-    routes['*'] = NotFound; //This must be last added (order matters), otherwise it catches all
-    console.log(routes)
+
+    //Not found component: This must be last added (order matters), otherwise it catches all
+    routes["*"] = NotFound; 
+    
     return routes;
 }

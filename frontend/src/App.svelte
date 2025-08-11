@@ -11,6 +11,7 @@
   import Header from "./core/navigation/Header.svelte";
   import { generateRoutes } from "./core/navigation/routing/routes";
   import { SvelteToast } from "@zerodevx/svelte-toast";
+  import InfoModal from "./core/utils/InfoModal.svelte";
 
   document.title = 'Pegasus'
 
@@ -54,4 +55,5 @@
   </main>
 {/if}
 
+<InfoModal />
 <SvelteToast />

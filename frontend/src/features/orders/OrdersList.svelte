@@ -10,6 +10,7 @@
   import Login from "../../core/auth/Login.svelte";
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
+  import { showInfoModal } from "../../utils/modal";
 
   document.title = 'Orders | Pegasus'
 
@@ -31,27 +32,10 @@
     isAuthenticated = value.isAuthenticated;
   });
 
-/* 
-  function checkDarkmode()
-  {
-
-    //Ovo proverava dali je darkmode classa dodeljena na body
-    //Jer treba zbog nekih elemenata koji se drugacije prikazuju
-
-    const check = () => isDark = document.body.classList.contains('dark');
-    check();
-
-    const observer = new MutationObserver(check);
-    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
-
-    return () => observer.disconnect();
-  }
- */
 
   // Fetch the orders from the backend
-  onMount(async () => {
-/*     checkDarkmode();
- */
+  onMount(async () => 
+  {
     try {
       const { isAuthenticated } = get(auth);
 
@@ -116,9 +100,17 @@
         // Update orders with the received data
         orders = data;
         totalAmount = calculateTotal(orders);
-    } catch (error: any) 
+    } 
+    catch (error: any) 
     {
         console.error('Error during search:', error);
+
+
+        /**
+         * TODO: see if this works. should display error message.
+         */
+
+        showInfoModal(error.message);
         
         // Handle 401 Unauthorized specifically
         if (error.message.includes('401')) {

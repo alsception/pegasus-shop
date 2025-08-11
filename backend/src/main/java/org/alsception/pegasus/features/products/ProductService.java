@@ -194,14 +194,15 @@ public class ProductService
         return new PopularProductsWrapper(output);
     }
     
-    public void generateProducts(int count) 
+    public void generateSampleProducts(int count) 
     {
-        if (productRepository.count() == 0) 
+        if (productRepository.count() == 0 && count <= 1000) 
         { 
             int errors = 0;
             for (int i = 1; i <= count; i++) 
             {
                 try{
+                    logger.info("Creating sample product "+i);
                     PGSProduct product = new PGSProduct();
                     product.setCode(generateValidCode());
                     product.setName("Product " + i);
@@ -225,8 +226,12 @@ public class ProductService
                 }
             }
             
-            logger.info("✅ " + count + " Sample products initialized.");
+            logger.info("✅ Sample products initialized: "+ count);
             logger.info("Errors: "+errors);
+        }
+        else
+        {
+            logger.info("Sample products not created. Product repository already contains some products or illegal count requested.");
         }
     }
     
