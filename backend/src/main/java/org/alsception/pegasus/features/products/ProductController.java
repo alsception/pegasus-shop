@@ -30,7 +30,6 @@ public class ProductController
     
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
     
-    //TODO: pagination
     @GetMapping
     public List<PGSProductDTO> getProducts(
             @RequestParam(required = false) String search, 
@@ -40,7 +39,19 @@ public class ProductController
         logger.debug("getProducts: search=["+search+"] code=["+code+"], name=["+name+"]");
         List<PGSProductDTO> products = productService.findProducts(search, code, name);
         return products;
-    }    
+    }
+
+    @GetMapping("/p")
+    public PaginatedProductsResponse getProductsWithPagination(
+            @RequestParam(required = false) String search, 
+            @RequestParam(required = false) String code, 
+            @RequestParam(required = false) String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size)
+    {        
+        logger.debug("getProducts: search=["+search+"] code=["+code+"], name=["+name+"], page=["+page+"], size=["+size+"]");
+        return productService.findProductsWithPagination(search, code, name, page, size);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<PGSProductDTO> getProductById(@PathVariable Long id) 

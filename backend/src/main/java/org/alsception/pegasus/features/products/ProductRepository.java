@@ -1,7 +1,8 @@
 package org.alsception.pegasus.features.products;
 
 import java.util.List;
-import org.alsception.pegasus.features.products.PGSProduct;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -9,7 +10,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductRepository extends JpaRepository<PGSProduct, Long> 
 {
-    public List<PGSProduct> findByCodeContainingIgnoreCaseOrNameContainingIgnoreCase(String code, String name);       
+    List<PGSProduct> findByCodeContainingIgnoreCaseOrNameContainingIgnoreCase(String code, String name);       
+    
+    Page<PGSProduct> findByCodeContainingIgnoreCaseOrNameContainingIgnoreCase(String code, String name, Pageable pageable);
     
     @Query(nativeQuery = true, value = """
         SELECT
@@ -27,5 +30,5 @@ public interface ProductRepository extends JpaRepository<PGSProduct, Long>
             AVERAGE_RATING DESC 
         LIMIT
             3;""")
-    public List<Object[]> getPopularProducts();
+    List<Object[]> getPopularProducts();
 }

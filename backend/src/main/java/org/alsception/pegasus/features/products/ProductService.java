@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 
 @Service
 public class ProductService 
@@ -74,6 +77,32 @@ public class ProductService
                             .toList();
             }
         }
+    }
+    
+    public PaginatedProductsResponse findProductsWithPagination(String search, String code, String name, int page, int size) 
+    {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PGSProduct> productPage;
+
+        if (search != null && !search.isEmpty()) {
+            productPage = productRepository.findByCodeContainingIgnoreCaseOrNameContainingIgnoreCase(search, search, pageable);
+        } else if (code == null && name == null) {
+            productPage = productRepository.findAll(pageable);
+        } else {
+            productPage = productRepository.findByCodeContainingIgnoreCaseOrNameContainingIgnoreCase(code, name, pageable);
+        }
+
+        List<PGSProductDTO> products = productPage.getContent().stream()
+            .map(PGSProductDTO::new)
+            .toList();
+
+        return new PaginatedProductsResponse(
+            products,
+            productPage.getTotalElements(),
+            productPage.getTotalPages(),
+            page,
+            size
+        );
     }
     
     public PGSProduct createProduct(PGSProduct product) 

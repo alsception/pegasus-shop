@@ -25,6 +25,10 @@
   let isListView = false;
   let isAdminView = true;
   let isDark = true;
+  let page = 0;
+  let size = 20; // Products per page
+  let totalProducts = 0; // If backend returns total count
+  let totalPages = 0; // Total pages from backend
 
   // AUTHENTICATION
   $: auth.subscribe((value) => {
@@ -99,6 +103,7 @@
 
   function handleFormSubmit(event: { preventDefault: () => void }) {
     event.preventDefault(); // prevent page reload
+    page = 0; // Reset to first page on new search
     handleSearch();
   }
 
@@ -106,53 +111,55 @@
     const token = $auth.token;
     loading = true;
     try {
-      const res = await fetch(API_BASE_URL + `/products?search=${searchTerm}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await fetch(
+        API_BASE_URL + `/products/p?search=${searchTerm}&page=${page}&size=${size}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      // Check response status and handle specific cases
       if (!res.ok) {
         if (res.status === 401) {
-          console.log("Authentication failed - token may be expired");
-          // Clear invalid token
           localStorage.removeItem("token");
           auth.set({ token: null, isAuthenticated: false });
-          // Redirect to login or show login modal
-          // window.location.href = '/login';
-          // OR: showLoginModal = true;
-          // OR: goto('/login');
           throw new Error("Authentication failed");
         }
         throw new Error(`Fetch error: ${res.status} - ${res.statusText}`);
       }
 
-      // Parse JSON directly - no need for JSON.parse since res.json() already does this
       const data = await res.json();
 
-      // Update products with the received data
-      products = data;
+      // Use the paginated response structure
+      products = data.products;
+      totalProducts = data.totalCount;
+      totalPages = data.totalPages;
     } catch (err: any) {
       console.error(error);
-      // Handle 401 Unauthorized specifically
       if (err.message.includes("401")) {
-        console.log("Authentication failed - token may be expired");
-        // Clear invalid token
         $auth.token = null;
-        // Redirect to login or show login modal
-        // window.location.href = '/login';
-        // OR: showLoginModal = true;
-        // OR: goto('/login');
       } else {
         error = err instanceof Error ? err.message : "Unknown error";
       }
-
-      // Handle other errors appropriately (show user message, etc.)
     } finally {
       loading = false;
+    }
+  }
+
+  function nextPage() {
+    if ((page + 1) * size < totalProducts) {
+      page += 1;
+      handleSearch();
+    }
+  }
+
+  function prevPage() {
+    if (page > 0) {
+      page -= 1;
+      handleSearch();
     }
   }
 
@@ -222,6 +229,20 @@
           Create new product
         </button>
       </form>
+      <!-- Pagination Controls & Info -->
+      <div class="flex flex-col sm:flex-row justify-between items-center mt-4 gap-2">
+        <div class="flex gap-2 items-center">
+          <button class="nb-button default" title="Previous page" on:click={prevPage} disabled={page === 0}>⬅️</button>
+          <button class="nb-button default" title="Next page" on:click={nextPage} disabled={page + 1 >= totalPages}>➡️</button>
+        </div>
+        <div class="text-sm text-gray-600 dark:text-gray-400">
+          <span>
+            Page <b>{page + 1}</b> of <b>{totalPages}</b>
+            &nbsp;|&nbsp;
+            Total products: <b>{totalProducts}</b>
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -338,9 +359,10 @@
                 </tr>
               {/each}
               <tr class="bg-base-100">
-                <td colspan="18" class="pgs-td text-left font-mono font-bold"
-                  >Total products found: {products.length}</td
-                >
+                <td colspan="18" class="pgs-td text-left font-mono font-bold">
+                  Showing <b>{products.length}</b> product(s) on this page.<br>
+                  Total products found: <b>{totalProducts}</b> | Total pages: <b>{totalPages}</b>
+                </td>
               </tr>
             </tbody>
           </table>
