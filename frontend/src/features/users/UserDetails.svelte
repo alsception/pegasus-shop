@@ -184,7 +184,7 @@ async function handleSubmit() {
 }
 
 function showErrorInModal(error: any): void {
-    console.log(error);
+    console.error(error);
     const contentEl = document.getElementById("modal-content");
     const dialogEl = document.getElementById("modal") as HTMLDialogElement;
     

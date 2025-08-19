@@ -19,6 +19,7 @@
   import { login } from "../services/client";
   import LoginTest from "./LoginTest.svelte";
   import { scale } from "svelte/transition";
+  import { push } from "svelte-spa-router";
 
   document.title = "Log in | Pegasus";
 
@@ -33,7 +34,7 @@
       await login(username, password);
 
       //LLM PROMPT: I WANT TRANSITION HERE SAME AS IN FORM
-      window.location.href = "/#/home";
+      push("/home");
     } catch (err: any) {
       error = 'ERROR: ' + err.message;
     } finally {

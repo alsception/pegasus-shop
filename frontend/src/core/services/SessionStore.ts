@@ -125,6 +125,6 @@ function getTokenPart(token: string | null, part: number)
   } 
   catch (error) 
   {
-    console.log('Error parsing jwt: ',error);
+    console.error('Error parsing jwt: ',error);
   }
 }

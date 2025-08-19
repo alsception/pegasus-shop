@@ -24,7 +24,7 @@
  |_|   |_____\____/_/   \_\____/ \___/|____/ 
                                              
 
- v 1.0.9
+ v 1.0.10
 -------------------------------------------------------------------------------------------------------------------------------------------
 
  TODO:
@@ -46,5 +46,4 @@
      why dont we show comment on list?
      A sta ako user sam sebe promeni u admira???????????
 
-6. fix if user disabled cannot login [should be done, but still strange behaviour]
-
+6. fix if user disabled cannot login [done]

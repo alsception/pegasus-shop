@@ -75,8 +75,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         else
-        {           
-            printRequestDetails(request);
+        {    
+            if(shouldWePrint(request))       
+                printRequestDetails(request);
         }
 
         filterChain.doFilter(request, response);
@@ -84,21 +85,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     
     public void printRequestDetails(HttpServletRequest request) throws IOException 
     {
-        //Login and register requests are unathorized 
-        
+        /*
+         * We need to create this message as one, because of multithreading
+         */
+        String msg = "\n"+"+======================== UNATHORIZED HTTP REQUEST DETAILS ======================================+\n"; 
+        msg += "[1/2] No auth header | "+request.getMethod()+" "+request.getRequestURI()+"\n";
+
+        final String serverInfo = "Server Info [" + request.getServerName() + ":" + request.getServerPort() + "]";
+        final String remoteInfo = "Remote Info [" + request.getRemoteAddr() + ":" + request.getRemotePort() + "]";
+        final String query = "Query String [" + request.getQueryString()+"]";            
+
+        msg+= "[2/2] " + serverInfo + ", " + remoteInfo + ", " + query + "\n";
+        msg+= "+================================================================================================+";
+        logger.warn(msg);
+    }
+
+    /*
+     * Filters out unimportant requests, such as requests to / (index page), and assets
+     */
+    public boolean shouldWePrint(HttpServletRequest request)
+    {
         if( 
-            !(request.getMethod().equals("POST") 
-            && (request.getRequestURI().equals("/api/auth/login") || request.getRequestURI().equals("/api/auth/register")))
-        ){
-            logger.warn("+======================== UNATHORIZED HTTP REQUEST DETAILS ======================================+");
-            logger.warn("[1/2] No auth header | "+request.getMethod()+" "+request.getRequestURI());
-
-            final String serverInfo = "Server Info [" + request.getServerName() + ":" + request.getServerPort()+"]";
-            final String remoteInfo = "Remote Info [" + request.getRemoteAddr() + ":" + request.getRemotePort()+"]";            
-            final String query = "Query String [" + request.getQueryString()+"]";            
-
-            logger.warn("[2/2] " + serverInfo+", "+remoteInfo+", "+query);
-            logger.warn("+================================================================================================+");
+            (request.getMethod().equals("POST") 
+            && (request.getRequestURI().equals("/api/auth/login") || request.getRequestURI().equals("/api/auth/register"))))
+        {
+            //Login and register requests are unathorized 
+            return false;
         }
+        else if ((request.getMethod().equals("GET") 
+            && (request.getRequestURI().equals("/") || request.getRequestURI().startsWith("/assets/"))))
+        {
+            return false;
+        }
+        return true;
     }
 }

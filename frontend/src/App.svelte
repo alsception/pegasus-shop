@@ -37,7 +37,7 @@
       const { isAuthenticated: authStatus } = get(auth);
       isAuthenticated = authStatus;
     } catch (err) {
-       console.log(err);
+       console.error(err);
     } 
   });
 

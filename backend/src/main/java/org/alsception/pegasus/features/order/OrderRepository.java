@@ -57,5 +57,12 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long>
         """)
     List<PGSOrder> findOrdersByUsernameAndStatusWithItems(@Param("username") String username, @Param("status") String status);
 
+    @Query("""
+       SELECT DISTINCT o FROM PGSOrder o
+       LEFT JOIN FETCH o.items
+       WHERE o.id = :id
+       ORDER BY o.created DESC
+       """)
+    List<PGSOrder> findByIdWithItems(@Param("id") Long id);
     
 }

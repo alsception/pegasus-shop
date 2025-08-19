@@ -30,6 +30,7 @@ public class ProductController
     
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
     
+    //TODO: pagination
     @GetMapping
     public List<PGSProductDTO> getProducts(
             @RequestParam(required = false) String search, 

@@ -1,34 +1,27 @@
 package org.alsception.pegasus.features.order;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import org.alsception.pegasus.features.products.ProductRepository;
-import org.alsception.pegasus.features.users.PGSUser;
-import org.alsception.pegasus.features.users.UserRepository;
+import org.alsception.pegasus.core.exception.BadRequestException;
 import org.alsception.pegasus.core.utils.UniqueIdGenerator;
-import org.alsception.pegasus.features.order.PGSOrder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OrderService 
 {
-    private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
-    public OrderService(UserRepository userRepository,
-                       ProductRepository productRepository,
-                       OrderRepository orderRepository) 
+    public OrderService(ProductRepository productRepository, OrderRepository orderRepository) 
     {
-        this.userRepository = userRepository;
         this.orderRepository = orderRepository;
     }
     
-    /**
+    /*
      * TODO: Check that user is 
      * 1. owner
-     * 2. or admin (or webshop employee)     *
+     * 2. or admin (or webshop employee)     
      */
     
     public List<PGSOrder> getByUserId(Long userId) 
@@ -39,11 +32,12 @@ public class OrderService
         return processPrice(orderRepository.findByUserId(userId));
     }
     
+    /*
+     * Need transactional annotation to correctly load the orders, otherwise we'll get lazy loading exception
+     */
+    @Transactional(readOnly = true)
     public List<PGSOrder> getByUsername(String username, String search) 
-    {
-        /*userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("User not found"));*/
-
+    {    
         List<PGSOrder> orders;
         
         if(search == null || "".equals(search)) 
@@ -56,7 +50,6 @@ public class OrderService
         }
 
         //NEXT: MAKE SEARCH CASE INSENSITIVE
-
 
         return processPrice(orders);
     }
@@ -92,14 +85,15 @@ public class OrderService
     
     public List<PGSOrder> getAll(String search) 
     {
-        /*List<PGSUser> user = *///userRepository.findByUsernameContaining(search);
-
         return orderRepository.findAll();              
     }
     
-    public Optional<PGSOrder> getById(Long id) 
+    @Transactional(readOnly = true)
+    public PGSOrder getById(Long id) throws BadRequestException
     {
-        return orderRepository.findById(id);//.orElse(new List<PGSOrder>());              
+        List<PGSOrder> orders = orderRepository.findByIdWithItems(id);
+        if(orders.isEmpty()) throw new BadRequestException("Not found");
+        return orders.get(0);
     }
     
     public void delete(Long id)

@@ -2,8 +2,8 @@ package org.alsception.pegasus.features.order;
 
 import java.security.Principal;
 import java.util.List;
-import org.alsception.pegasus.features.users.PGSUser;
-import org.alsception.pegasus.features.users.UserService;
+
+import org.alsception.pegasus.core.exception.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +16,11 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     private final OrderService orderService;
-    private final UserService userService;
-    private final PGSUser user = null;
 
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
-    public OrderController(OrderService orderService, UserService userService) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
-        this.userService = userService;
     }
     
     //TODO: FIXX ERROR MESSAGE AND METHOD WHEN 
@@ -36,9 +33,17 @@ public class OrderController {
 
         logger.debug("Get order ["+id+"] for user: " + username);
         
-        PGSOrder order = orderService.getById(id).get();
-        
-        return ResponseEntity.ok(order);
+        PGSOrder order;
+        try 
+        {
+            order = orderService.getById(id);
+            return ResponseEntity.ok(order);
+        }
+        catch (BadRequestException e) 
+        {
+            logger.warn(e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
     }
     
     @GetMapping

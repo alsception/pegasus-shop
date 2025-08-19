@@ -75,7 +75,8 @@ public class GlobalExceptionHandler
     }
     
     /**
-     * Any exception that is not specifically handled, will be handled by this method
+     * Any exception that is not specifically handled, will be handled by this method.
+     * Also, wrong parameters types will be treated as bad request exception
      */
     
     @ExceptionHandler(Exception.class)
@@ -83,9 +84,20 @@ public class GlobalExceptionHandler
     {
         logger.error(ex.getMessage());
         Map<String, Object> response = new HashMap<>();
-        response.put("error", "ServerError");
-        response.put("message", ex.getMessage());
-        response.put("timestamp", Instant.now());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+
+        if(ex.getMessage().contains("Failed to convert value"))
+        {
+            response.put("error", "BAD_REQUEST");
+            response.put("message", ex.getMessage());
+            response.put("timestamp", Instant.now());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        else
+        {
+            response.put("error", "ServerError");
+            response.put("message", ex.getMessage());
+            response.put("timestamp", Instant.now());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 }

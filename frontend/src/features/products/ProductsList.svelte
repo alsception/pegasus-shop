@@ -136,7 +136,7 @@
       // Update products with the received data
       products = data;
     } catch (err: any) {
-      console.log(error);
+      console.error(error);
       // Handle 401 Unauthorized specifically
       if (err.message.includes("401")) {
         console.log("Authentication failed - token may be expired");
