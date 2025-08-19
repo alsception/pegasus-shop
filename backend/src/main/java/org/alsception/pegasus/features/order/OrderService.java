@@ -99,6 +99,26 @@ public class OrderService
     public void delete(Long id)
     {
         this.orderRepository.deleteById(id);
+    }
+
+    @Transactional
+    public PGSOrder update(Long id, PGSOrder updatedOrder) 
+    {
+        PGSOrder existingOrder = orderRepository.findById(id)
+            .orElseThrow(() -> new BadRequestException("Order not found"));
+
+        // Update fields 
+        existingOrder.setStatus(updatedOrder.getStatus());
+        existingOrder.setPrice(updatedOrder.getPrice());
+        existingOrder.setCode(updatedOrder.getCode());
+
+        // Update items collection safely
+        existingOrder.getItems().clear();
+        if (updatedOrder.getItems() != null) {
+            existingOrder.getItems().addAll(updatedOrder.getItems());
+        }
+
+        // Save and return updated order
+        return orderRepository.save(existingOrder);
     }    
-    
 }

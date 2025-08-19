@@ -64,6 +64,23 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<PGSOrder> updateOrder(
+            @PathVariable Long id,
+            @RequestBody PGSOrder updatedOrder,
+            Principal principal) 
+    {
+        try {
+            // TODO: Check if user is owner or admin here
+            PGSOrder order = orderService.update(id, updatedOrder);
+            logger.info("Updated order " + id);
+            return ResponseEntity.ok(order);
+        } catch (Exception e) {
+            logger.error("Error updating order: " + e.getMessage(), e);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id, Principal principal) 
     {
@@ -82,4 +99,6 @@ public class OrderController {
             return ResponseEntity.notFound().build();
         }        
     }
+
+    
 }
