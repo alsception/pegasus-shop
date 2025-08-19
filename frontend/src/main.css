@@ -259,13 +259,13 @@ Attention, truncate class apparently f*cks with tooltips, because of overflow: h
 /* Dark mode, we need both settings */
 @media (prefers-color-scheme: dark) {
   .pgs-hyperlink:hover {
-    color: #0ac581;
+    color: #0a99c5;
   }
 }
 
 /* Dark mode (when .dark is on <html> or <body>) */
 .dark .pgs-hyperlink:hover {
-  color: #0ac581;
+  color: #0a99c5;
 }
 
 html {
