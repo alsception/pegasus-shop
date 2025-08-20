@@ -226,6 +226,28 @@
       maximumFractionDigits: 2
     }).format(price);
   }
+
+  function getOrderStatusColor(status: string): string {
+    switch (status?.toUpperCase()) {
+      case "PAID":
+      case "DELIVERED":
+        return "success";
+      case "PENDING":
+      case "REFUNDED":
+        return "warning";
+      case "RETURNED":
+        return "error";
+      case "SHIPPED":
+        return "info";
+      case "PROCESSING":
+        return "accent";
+      case "CREATED":
+        return "info";
+      case "CANCELLED":
+      default:
+        return "secondary";
+    }
+  }
 </script>
 
 {#if !$auth.isAuthenticated}
@@ -291,8 +313,8 @@
           <table class="table table-zebra min-w-full divide-y divide-accent " >
           <thead class="bg-base-200">
             <tr class="h-12">
-              <th class="pgs-th">Amount</th>
               <th class="pgs-th">code</th>
+              <th class="pgs-th">Amount</th>
               <th class="pgs-th">Status</th>
               <th class="pgs-th">user</th>
               <th class="pgs-th">Email</th>
@@ -305,16 +327,17 @@
           <tbody>
             {#each orders as order, i}
               <tr class="bg-base-100  outline-1 outline-transparent hover:outline-blue-500 hover:bg-blue-600/15">
-                
-                <td class="pgs-td-num font-mono font-bold">{formatPrice(order.price)}</td>
                 <td class="pgs-td">
                   <a use:link href="/orders/{order.id}" class="pgs-hyperlink">{formatCode(order.code)}</a>
                 </td>
+                <td class="pgs-td-num font-mono font-bold">{formatPrice(order.price)}</td>
                 <td class="text-center">
-                 {#if (order.status !== '' && order.status !== null)}  
-                  <div class="badge badge-primary">{order.status}</div>
+                  {#if order.status}
+                    <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-sm" style="text-transform: uppercase;">
+                      {order.status}
+                    </span>
                   {/if}
-                </td>   
+                </td>
                 <td class="pgs-td">{order.user?.username}</td>
                 <td class="pgs-td">{order.email}</td>
                 <td class="pgs-td-num font-mono">{order.items.length}</td>
@@ -333,7 +356,7 @@
             {/each}           
           </tbody>
           </table>
-        <div class="nb-table-footer  text-left">
+        <div class="nb-table-footer text-left bg-secondary" style="background-color: var(--color-base-100);">
           Total orders found:
           <span class="font-bold"> {orders.length}</span>
         <br>
@@ -357,14 +380,16 @@
   {/if}
 {/if}
 
-      <!-- Header Section   style="display: none;" -->
-<div class="badge  badge pale-violet">Primary</div>
+<div style="display: none;">
+  NEED THIS HERE OTHERWISE TAILWIND OR DAISY DOESNT LOAD CSS CLASSES
+<div class="badge badge-soft badge-primary">Primary</div>
 <div class="badge badge-soft badge-secondary">Secondary</div>
 <div class="badge badge-soft badge-accent">Accent</div>
 <div class="badge badge-soft badge-info">Info</div>
 <div class="badge badge-soft badge-success">Success</div>
 <div class="badge badge-soft badge-warning">Warning</div>
 <div class="badge badge-soft badge-error">Error</div>
+</div>
 
 <style>
   .badge {
