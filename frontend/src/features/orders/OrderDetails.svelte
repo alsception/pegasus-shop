@@ -55,15 +55,15 @@
 
   let formData: Partial<Order> = {
     code: "",
-    status: "PENDING",
-    paymentStatus: "PENDING",
+    status: "",
+    paymentStatus: "",
     paymentMethod: "",
     taxAmount: 0,
     taxPercent: 0,
     shippingCost: 0,
     discount: 0,
     totalAmount: 0,
-    currency: "EUR",
+    currency: "",
     customerName: "",
     customerEmail: "",
     customerPhone: "",
@@ -77,7 +77,8 @@
     deliveredDate: null,
   };
 
-  async function fetch(id: string | number) {
+  async function fetch(id: string | number) 
+  {
     startLoadingAnimation();
 
     try {
@@ -86,7 +87,6 @@
       });
 
       formData = data;
-      console.log(data);
       document.title = `Order ${formData.code} | Pegasus`;
       error = null;
 
@@ -253,14 +253,14 @@
       <!-- Header Section -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-1">
-          <h2 class="text-4xl font-semibold text-primary">Order details</h2>
-
-          <div
-            id="loadingMessage"
-            style="display: none;"
-            class="text-2xl font-semibold text-gray-700 dark:text-gray-100 flex items-center gap-2 mt-4"
-          >
-            <span class="loading loading-dots loading-xs"></span>
+          <div class="flex items-center gap-4">
+            <h2 class="text-4xl font-semibold text-primary">Order details</h2>
+            <div
+              id="loadingMessage" style="display: none;"
+              class="text-2xl font-semibold text-gray-700 dark:text-gray-100 flex items-center gap-2"
+            >loading
+              <span class="loading loading-dots loading-md"></span>
+            </div>
           </div>
         </div>
       </div>

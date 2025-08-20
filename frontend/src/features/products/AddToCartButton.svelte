@@ -10,12 +10,12 @@
   import { addToCartLoading } from "./ProductService";
 
   export let product;
-  export let width = "96px";
+  export let width;
 </script>
 
 {#if product.active === false || product.stock === 0}
   <button
-    class="nb-button default bg-gray-300 button-fx w-full flex items-center justify-center"
+    class="btn default bg-gray-600 button-fx w-full flex items-center justify-center"
     style="width: {width}"
     disabled
     aria-label="Product not available"
@@ -24,7 +24,7 @@
   </button>
 {:else if $addToCartLoading === product.id}
   <button
-    class="nb-button blue"
+    class="btn blue"
     style="width: {width}"
     disabled
     aria-label="Adding to cart"
@@ -34,12 +34,12 @@
   </button>
 {:else}
   <button
-    class="nb-button blue"
+    class="btn bg-yellow-300"
     style="width: {width}"
     on:click={() => addToCart(product.id)}
   >
     <span data-text="Add to cart">       
-       🧺 Add to cart</span>
+       ➕ Add to cart</span>
     <div class="scan-line"></div>
   </button>
 {/if}

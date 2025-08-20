@@ -293,12 +293,12 @@
             <tr class="h-12">
               <th class="pgs-th">Amount</th>
               <th class="pgs-th">code</th>
+              <th class="pgs-th">Status</th>
               <th class="pgs-th">user</th>
               <th class="pgs-th">Email</th>
               <th class="pgs-th">Items</th>
               <th class="pgs-th">Comment</th>          
               <th class="pgs-th">created</th>       
-              <th class="pgs-th">Status</th>
               <th class="pgs-th">Actions</th>          
             </tr>
           </thead>
@@ -310,6 +310,11 @@
                 <td class="pgs-td">
                   <a use:link href="/orders/{order.id}" class="pgs-hyperlink">{formatCode(order.code)}</a>
                 </td>
+                <td class="text-center">
+                 {#if (order.status !== '' && order.status !== null)}  
+                  <div class="badge badge-primary">{order.status}</div>
+                  {/if}
+                </td>   
                 <td class="pgs-td">{order.user?.username}</td>
                 <td class="pgs-td">{order.email}</td>
                 <td class="pgs-td-num font-mono">{order.items.length}</td>
@@ -317,11 +322,6 @@
                 <td class="pgs-td font-mono">
                   {@html formatDate(order.created,'New - created less than 30 minutes ago',30)}
                 </td>
-                <td class="text-center">
-                 {#if (order.status !== '' && order.status !== null)}  
-                  <div class="badge badge-primary">{order.status}</div>
-                  {/if}
-                </td>     
                 <td class=" justify-center">
                   <div class="tooltip tooltip-info" data-tip="Edit"><a class="px-4" aria-label="Edit" use:link href="/orders/mngmt/{order.id}"><i class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"></i></a></div>
                   <button class="px-4" aria-label="Delete" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
@@ -357,9 +357,18 @@
   {/if}
 {/if}
 
+      <!-- Header Section   style="display: none;" -->
+<div class="badge  badge pale-violet">Primary</div>
+<div class="badge badge-soft badge-secondary">Secondary</div>
+<div class="badge badge-soft badge-accent">Accent</div>
+<div class="badge badge-soft badge-info">Info</div>
+<div class="badge badge-soft badge-success">Success</div>
+<div class="badge badge-soft badge-warning">Warning</div>
+<div class="badge badge-soft badge-error">Error</div>
+
 <style>
   .badge {
-  background-color: transparent !important;
-}
+/*   background-color: transparent !important;
+ */}
 
 </style>

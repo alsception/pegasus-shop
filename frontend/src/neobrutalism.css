@@ -2528,7 +2528,7 @@ input.nb-checkbox.pale-yellow:checked::before {
   transform: translate(-50%, -50%);
   font-size: 18px;
 }
-
+/* WE DONT NEED THIS BADGES NOW, IT INTERFERES WITH DAISY AND ITS UGLY
 .badge {
   background-color: var(--color-base-200);
   color: #000000;
@@ -2657,7 +2657,7 @@ input.nb-checkbox.pale-yellow:checked::before {
 .badge.pale-yellow .badge-inner {
   border: 3.5px solid #000000;
 }
-
+ */
 .alert.success {
   background-color: #92fca2;
   color: #000000;

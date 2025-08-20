@@ -17,12 +17,12 @@
   --color-primary-content: oklch(97% 0.013 17.38);
   --color-secondary: var(--color-slate-500); /*used as hover on tables*/
   --color-secondary-content: oklch(97% 0.014 343.198);
-  --color-accent: oklch(54% 0.245 262.881);
-  --color-accent-content: oklch(98% 0.016 73.684);
+  --color-info: oklch(54% 0.245 262.881);
+  --color-info-content: oklch(98% 0.016 73.684);
   --color-neutral: var(--color-slate-300);
   --color-neutral-content: oklch(96% 0.007 247.896);
-  --color-info: black;
-  --color-info-content: oklch(97% 0.013 236.62);
+  --color-accent: #6f14f4;
+  --color-accent-content: oklch(97% 0.013 236.62);
   --color-success: oklch(62% 0.194 149.214);
   --color-success-content: oklch(100% 0 0);
   --color-warning: rgb(196, 133, 14);
@@ -53,12 +53,12 @@
   --color-primary-content: blue;
   --color-secondary: var(--color-slate-600); /*used as hover on tables*/
   --color-secondary-content: orange;
-  --color-accent: rgb(0, 128, 255); /*slightly blue*/
-  --color-accent-content: oklch(97% 0.013 236.62);
+  --color-info: oklch(54% 0.245 262.881);
+  --color-info-content: oklch(98% 0.016 73.684);
   --color-neutral: var(--color-slate-700);
   --color-neutral-content: oklch(98% 0.001 106.423);
-  --color-info: black; /*rgb(0, 255, 88);green*/
-  --color-info-content: white;
+  --color-accent: #6f14f4;
+  --color-accent-content: oklch(97% 0.013 236.62);
   --color-success: /*oklch(76% 0.177 163.223);*/ rgb(0, 255, 88);
   --color-success-content: oklch(26% 0.051 172.552);
   --color-warning: oklch(85% 0.199 91.936);
@@ -366,4 +366,8 @@ body {
   */
 .feat-container{  
   @apply relative w-full;
+}
+
+.badge{
+  border-radius: 5px;
 }

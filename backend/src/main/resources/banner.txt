@@ -47,3 +47,8 @@
      A sta ako user sam sebe promeni u admira???????????
 
 6. fix if user disabled cannot login [done]
+
+--------------------------------------------------------------------------------------
+
+Next todo:
+2. save user error

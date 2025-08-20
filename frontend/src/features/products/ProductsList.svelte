@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { link } from "svelte-spa-router";
   import { get } from "svelte/store";
-  import { auth } from "../../core/services/SessionStore";
+  import { auth, isAdmin } from "../../core/services/SessionStore";
   import { formatDate } from "../../utils/formatting";
   import { formatActive } from "../../utils/formatting";
   import { formatCommentInfo } from "../../utils/formatting";
@@ -82,7 +82,7 @@
 
     try {
       const { isAuthenticated } = get(auth);
-
+      isAdminView = isAdmin();
       /**
        * TODO: this is not actually working
        */
@@ -112,7 +112,8 @@
     loading = true;
     try {
       const res = await fetch(
-        API_BASE_URL + `/products/p?search=${searchTerm}&page=${page}&size=${size}`,
+        API_BASE_URL +
+          `/products/p?search=${searchTerm}&page=${page}&size=${size}`,
         {
           method: "GET",
           headers: {
@@ -191,268 +192,199 @@
       <button class="nb-button green">Save</button>
     </div>
   </div> -->
-{#if error}
+  {#if error}
     <ErrorDiv {error} />
   {:else}
-  <div class="w-full flex justify-center px-4">
-    <div class="w-full max-w-4xl p-4 bg-transparent rounded-lg">
-      <form
-        on:submit|preventDefault={handleFormSubmit}
-        class="flex flex-col sm:flex-row items-center gap-3"
-      >
-        <input
-          type="text"
-          bind:value={searchTerm}
-          placeholder="Search products..."
-          class="nb-input default"
-        />
-        <!-- Search Button -->
-        <button type="submit" class="nb-button default">
-          <i class="fas fa-search"></i>
-          Search
-        </button>
-
-        <!-- Toggle View Button -->
-        <button on:click={toggleView} 
-        class="nb-button default"
+    <div class="w-full flex justify-center px-4">
+      <div class="w-full max-w-4xl p-4 bg-transparent rounded-lg">
+        <form
+          on:submit|preventDefault={handleFormSubmit}
+          class="flex flex-col sm:flex-row items-center gap-3"
         >
-          <i class="fas fa-th-list"></i>
-          Grid view / List view
-        </button>
+          <input
+            type="text"
+            bind:value={searchTerm}
+            placeholder="Search products..."
+            class="input input-bordered w-full max-w-xs"
+          />
+          <!-- Search Button -->
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search"></i>
+            Search
+          </button>
 
-        <!-- Create product Button -->
-        <button
-          on:click={() => alert("not implemented yet")}
-          class="nb-button default"
+          <!-- Toggle View Button -->
+          <button on:click={toggleView} class="btn btn-secondary">
+            <i class="fas fa-th-list"></i>
+            Grid view / List view
+          </button>
+
+          <!-- Create product Button -->
+          <button
+            on:click={() => alert("not implemented yet")}
+            class="btn btn-accent"
+          >
+            <i class="fas fa-plus"></i>
+            Create new product
+          </button>
+        </form>
+        <!-- Pagination Controls & Info -->
+        <div
+          class="flex flex-col sm:flex-row justify-between items-center mt-4 gap-2"
         >
-          <i class="fas fa-plus"></i>
-          Create new product
-        </button>
-      </form>
-      <!-- Pagination Controls & Info -->
-      <div class="flex flex-col sm:flex-row justify-between items-center mt-4 gap-2">
-        <div class="flex gap-2 items-center">
-          <button class="nb-button default" title="Previous page" on:click={prevPage} disabled={page === 0}>⬅️</button>
-          <button class="nb-button default" title="Next page" on:click={nextPage} disabled={page + 1 >= totalPages}>➡️</button>
-        </div>
-        <div class="text-sm text-gray-600 dark:text-gray-400">
-          <span>
-            Page <b>{page + 1}</b> of <b>{totalPages}</b>
-            &nbsp;|&nbsp;
-            Total products: <b>{totalProducts}</b>
-          </span>
+          <div class="flex gap-2 items-center">
+            <button
+              class="btn btn-outline"
+              title="Previous page"
+              on:click={prevPage}
+              disabled={page === 0}>⬅️ Prev</button
+            >
+            <button
+              class="btn btn-outline"
+              title="Next page"
+              on:click={nextPage}
+              disabled={page + 1 >= totalPages}>Next ➡️</button
+            >
+          </div>
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            <span>
+              Page <b>{page + 1}</b> of <b>{totalPages}</b>
+              &nbsp;|&nbsp; Total products: <b>{totalProducts}</b>
+            </span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div id="results" class="w-full max-w-4xl mx-auto mt-6"></div>
+    <div id="results" class="w-full max-w-4xl mx-auto mt-6"></div>
 
-  
     {#if loading}
       <LoadingOverlay />
     {/if}
 
     {#if isListView && isAdminView}
       <div
-        class="max-w-[2048px] w-full overflow-x-auto rounded-lg align-middle text-center mx-auto"
+        class="w-full max-w-[1780px] overflow-x-auto rounded-lg align-middle mx-auto"
       >
-        {#if products.length === 0}
-          no products found :/
-        {:else}
-          <table class="nb-table">
-            <thead class="bg-base-200">
-              <!-- todo: try applying this but only to darkmode
-          <table class="w-full border-separate border-spacing-0">
-          <thead class="[border-bottom:1px_solid_theme(colors.accent)] [box-shadow:0_4px_12px_#00ffff] z-10 relative"> 
-          Also this, very nice effect lol: <table class="table table-zebra min-w-full divide-y divide-accent [filter:drop-shadow(0_0_4px_#00ffff)]" >
-          -->
-
-              <tr class="h-12">
-                <th class="pgs-th">Name</th>
-                <th class="pgs-th">Code</th>
-                <th class="pgs-th">Description</th>
-                <th class="pgs-th">Category</th>
-                <th class="pgs-th">Brand</th>
-                <th class="pgs-th">Price</th>
-                <th class="pgs-th">Currency</th>
-                <th class="pgs-th">Shipping</th>
-                <th class="pgs-th">Tax</th>
-                <th class="pgs-th">Discount</th>
-                <th class="pgs-th">Stock</th>
-                <th class="pgs-th">Comment</th>
-                <th class="pgs-th">Other</th>
-                <th class="pgs-th">created</th>
-                <th class="pgs-th">modified</th>
-                <th class="pgs-th">Active</th>
-                <th class="pgs-th">Actions</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-              {#each products as product, i}
-                <tr class="bg-base-100 pgs-tr">
-                  <td class="pgs-td">
-                    <a
-                      use:link
-                      href="/products/{product.id}"
-                      class="text-primary pgs-hyperlink">{product.name}</a
-                    >
-                  </td>
-                  <td class="pgs-td">{product.code}</td>
-                  <td class="pgs-td">{product.description}</td>
-                  <td class="pgs-td">{product.category}</td>
-                  <td class="pgs-td">{product.brand}</td>
-                  <td class="pgs-td-num"> {product.basePrice}</td>
-                  <td class="pgs-td-fmc">{product.baseCurrency}</td>
-                  <td class="pgs-td-num">{product.shippingCost}</td>
-                  <td class="pgs-td-num">{product.taxAmount}</td>
-                  <td class="pgs-td-num">{product.discount}</td>
-                  <td class="pgs-td-num">{product.stockQuantity}</td>
-                  <td class="text-center"
-                    >{@html formatCommentInfo(product.comment)}</td
+        <table class="table table-zebra min-w-[1200px] divide-y divide-accent">
+          <thead class="bg-[#10273c] border-2 border-primary/10">
+            <tr class="h-12">
+              <th class="pgs-th">Name</th>
+              <th class="pgs-th">Code</th>
+              <th class="pgs-th">Description</th>
+              <th class="pgs-th">Category</th>
+              <th class="pgs-th">Brand</th>
+              <th class="pgs-th">Price</th>
+              <th class="pgs-th">Currency</th>
+              <th class="pgs-th">Shipping</th>
+              <th class="pgs-th">Tax</th>
+              <th class="pgs-th">Discount</th>
+              <th class="pgs-th">Stock</th>
+              <th class="pgs-th">Comment</th>
+              <th class="pgs-th">Other</th>
+              <th class="pgs-th">Created</th>
+              <th class="pgs-th">Modified</th>
+              <th class="pgs-th">Active</th>
+              <th class="pgs-th">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="">
+            {#each products as product, i}
+              <tr class="bg-base-100 pgs-tr border-2 border-primary/10">
+                <td class="pgs-td whitespace-nowrap">
+                  <a
+                    use:link
+                    href="/products/{product.id}"
+                    class="text-primary pgs-hyperlink">{product.name}</a
                   >
-                  <td class="pgs-td">{product.other}</td>
-                  <td class="pgs-td font-mono">
-                    {@html formatDate(product.created, "new", 15)}
-                  </td>
-                  <td class="pgs-td font-mono">
-                    {@html formatDate(
-                      product.modified,
-                      "Changed less then 10 minutes ago",
-                      15
-                    )}
-                  </td>
-
-                  <td class="pgs-td font-mono"
-                    >{formatActive(product.active)}</td
+                </td>
+                <td class="pgs-td">{product.code}</td>
+                <td class="pgs-td">{product.description}</td>
+                <td class="pgs-td">{product.category}</td>
+                <td class="pgs-td">{product.brand}</td>
+                <td class="pgs-td-num">{product.basePrice}</td>
+                <td class="pgs-td-fmc">{product.baseCurrency}</td>
+                <td class="pgs-td-num">{product.shippingCost}</td>
+                <td class="pgs-td-num">{product.taxAmount}</td>
+                <td class="pgs-td-num">{product.discount}</td>
+                <td class="pgs-td-num">{product.stockQuantity}</td>
+                <td class="text-center"
+                  >{@html formatCommentInfo(product.comment)}</td
+                >
+                <td class="pgs-td">{product.other}</td>
+                <td class="pgs-td font-mono whitespace-nowrap"
+                  >{@html formatDate(product.created, "new", 15)}</td
+                >
+                <td class="pgs-td font-mono whitespace-nowrap"
+                  >{@html formatDate(
+                    product.modified,
+                    "Changed less then 10 minutes ago",
+                    15
+                  )}</td
+                >
+                <td class="pgs-td font-mono whitespace-nowrap"
+                  >{formatActive(product.active)}</td
+                >
+                <td class="px-2">
+                  <div
+                    class="flex justify-center items-center gap-2"
+                    style="font-size: 14px;"
                   >
-
-                  <td class="px-2">
-                    <div
-                      class="flex justify-center items-center gap-2"
-                      style="font-size: 14px;"
-                    >
-                      <div class="tooltip tooltip-info" data-tip="Edit">
-                        <a
-                          class="px-4"
-                          aria-label="Edit"
-                          use:link
-                          href="/products/mngmt/{product.id}"
-                          ><i
-                            class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"
-                          ></i></a
-                        >
-                      </div>
-                      <button
+                    <div class="tooltip tooltip-info" data-tip="Edit">
+                      <a
                         class="px-4"
-                        aria-label="Delete"
-                        on:click={() => deleteDialog(product.id)}
+                        aria-label="Edit"
+                        use:link
+                        href="/products/mngmt/{product.id}"
                       >
-                        <div class="tooltip tooltip-info" data-tip="Delete">
-                          <i
-                            class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"
-                          ></i>
-                        </div></button
-                      >
+                        <i
+                          class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"
+                        ></i>
+                      </a>
                     </div>
-                  </td>
-                </tr>
-              {/each}
-              <tr class="bg-base-100">
-                <td colspan="18" class="pgs-td text-left font-mono font-bold">
-                  Showing <b>{products.length}</b> product(s) on this page.<br>
-                  Total products found: <b>{totalProducts}</b> | Total pages: <b>{totalPages}</b>
+                    <button
+                      class="px-4"
+                      aria-label="Delete"
+                      on:click={() => deleteDialog(product.id)}
+                    >
+                      <div class="tooltip tooltip-info" data-tip="Delete">
+                        <i
+                          class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"
+                        ></i>
+                      </div>
+                    </button>
+                  </div>
                 </td>
               </tr>
-            </tbody>
-          </table>
-        {/if}
+            {/each}
+            <tr class="bg-base-200 border-2 border-primary/10">
+              <td colspan="18" class="pgs-td font-mono h-[64px]">
+                Showing <b>{products.length}</b> product(s) on this page.<br />
+                Total products found: <b>{totalProducts}</b> | Total pages:
+                <b>{totalPages}</b>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     {:else if products.length === 0 && !loading}
       no products found :/
     {:else}
-      <!-- <div class="nb-card">
-          <img src="..." class="nb-card-img">
-          <div class="nb-card-content">
-              <h4 class="nb-card-title">Card Title</h4>
-              <p class="nb-card-text">...</p>
-              <div class="nb-card-actions">
-                  <button class="nb-button">Learn More</button>
-              </div>
-          </div>
-       </div> -->
       <div
-        class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8 p-4"
+        class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 gap-8 p-4"
       >
         {#each products as product, i}
-          <div class="nb-card">
-            {#if product.imageUrl}
-              <img
-                src={product.imageUrl}
-                alt={product.name}
-                class="nb-card-img"
-              />
-            {:else}
-              <span class="text-gray-400 dark:text-gray-500"
-                >No image available</span
-              >
-            {/if}
-            <div class="nb-card-content">
-              <h4 class="nb-card-title pgs-hyperlink w-fit">{product.name}</h4>
-              <p class="nb-card-text">
-                <span
-                  class="product-detail text-xl price font-bold"
-                  
-                  class:text-gray-400={product.active === false ||
-                    product.stockQuantity === null}
-                  class:dark:text-400-600={product.active === false ||
-                    product.stockQuantity === null}>€</span
-                >
-
-                <span
-                  class="product-detail text-3xl price font-bold"
-                  
-                  class:text-gray-400={product.active === false ||
-                    product.stockQuantity === null}
-                  class:dark:text-gray-400={product.active === false ||
-                    product.stockQuantity === null}>{product.priceEur}</span
-                >
-
-                <span
-                  class="product-detail text-xl price font-bold"
-                  
-                  class:text-gray-400={product.active === false ||
-                    product.stockQuantity === null}
-                  class:dark:text-gray-400={product.active === false ||
-                    product.stockQuantity === null}>, 00</span
-                >
-              </p>
-              <div class="flex">
-                <div class="">
-                  <div class="">{product.description}</div>
-                  <br>
-                  <div class="">{product.stockQuantity} left</div>
-                </div>
-                <div class="w-1/2 flex justify-center">
-                  <div class="nb-card-actions">
-                    <AddToCartButton {product} width="96px" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!--   <div
-            class="nb-card"
+          <div
+            class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden flex flex-col max-w-[384px] shadow hover:shadow-lg transition-shadow"
           >
             <div
-              class="w-full h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden rounded-md mb-4"
+              class="w-full h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden"
             >
               {#if product.imageUrl}
                 <img
+                  class="w-full h-full object-cover"
                   src={product.imageUrl}
                   alt={product.name}
-                  class="nb-card-img"
                 />
               {:else}
                 <span class="text-gray-400 dark:text-gray-500"
@@ -461,58 +393,56 @@
               {/if}
             </div>
 
-            <div class="nb-card-title">
-              <h1 class="text-xl font-semibold text-primary">
+            <div class="p-4">
+              <h3
+                class="font-semibold text-lg truncate text-primary"
+                title={product.name}
+              >
                 <a use:link href="/products/{product.id}" class="pgs-hyperlink"
                   >{product.name}</a
                 >
-              </h1>
-            </div>
+              </h3>
 
-            <div
-              class="nb-card-text"
-            >              
-              <p class="product-detail font-thin text-gray-500">
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                {product.brand} &middot; {product.category}
+              </p>
+              <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">
                 {product.description}
               </p>
-              <div class="flex">
-                <div class="nb-card-actions">
-                  <h2>
-                    <span
-                      class="product-detail text-xl price font-bold"
-                      class:text-green-600={product.active !== false && product.stockQuantity !== null}
-                      class:dark:text-green-400={product.active !== false && product.stockQuantity !== null}
-                      class:text-gray-400={product.active === false || product.stockQuantity === null}
-                      class:dark:text-400-600={product.active === false || product.stockQuantity === null}
-                    >€</span>
-
-                    <span
-                      class="product-detail text-3xl price font-bold"
-                      class:text-green-600={product.active !== false && product.stockQuantity !== null}
-                      class:dark:text-green-400={product.active !== false && product.stockQuantity !== null}
-                      class:text-gray-400={product.active === false || product.stockQuantity === null}
-                      class:dark:text-gray-400={product.active === false || product.stockQuantity === null}
-                    >{product.priceEur}</span>
-
-                    <span
-                      class="product-detail text-xl price font-bold"
-                      class:text-green-600={product.active !== false && product.stockQuantity !== null}
-                      class:dark:text-green-400={product.active !== false && product.stockQuantity !== null}
-                      class:text-gray-400={product.active === false || product.stockQuantity === null}
-                      class:dark:text-gray-400={product.active === false || product.stockQuantity === null}
-                    >, 00</span>
-                </div>
-                <div class="w-1/2 flex justify-center">
-                  
-                  <AddToCartButton
-                    product={ product } 
-                    width="96px"
-                  />
-                      
-                </div>
+              <div class="flex items-center justify-between mt-2">
+                <span
+                  class="text-2xl font-bold text-green-600 dark:text-green-400"
+                >
+                  €{product.priceEur}
+                </span>
+                <span class="text-xs text-gray-400 dark:text-gray-500">
+                  {product.stockQuantity} left
+                </span>
+                <AddToCartButton {product} width="135px" />
               </div>
+              <div class="flex justify-between items-center mt-4"></div>
+              {#if isAdminView}
+                <div class="flex gap-2">
+                  <a
+                    class="text-blue-400 hover:text-blue-300 underline"
+                    use:link
+                    href="/products/mngmt/{product.id}"
+                    title="Edit"
+                  >
+                    <i class="fas fa-pen"></i>
+                  </a>
+                  <button
+                    aria-label="Delete"
+                    on:click={() => deleteDialog(product.id)}
+                  >
+                    <i
+                      class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"
+                    ></i>
+                  </button>
+                </div>
+              {/if}
             </div>
-          </div> -->
+          </div>
         {/each}
       </div>
     {/if}
@@ -528,4 +458,13 @@
 {/if}
 
 <style>
+  .pgs-th {
+    color: white;
+  }
+  .pgs-td {
+    /* Add any custom cell styling here */
+  }
+  .pgs-tr {
+    /* Add any custom row styling here */
+  }
 </style>

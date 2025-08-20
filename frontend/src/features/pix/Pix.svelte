@@ -100,6 +100,20 @@
     const date = new Date(dateString);
     return date.getFullYear();
   }
+
+  function nextPage() {
+    if (page < totalPages) {
+      page += 1;
+      searchBackgrounds(query);
+    }
+  }
+
+  function prevPage() {
+    if (page > 1) {
+      page -= 1;
+      searchBackgrounds(query);
+    }
+  }
 </script>
 
 <div
@@ -124,15 +138,7 @@
         &nbsp;Search
       {/if}
     </button>
-    <label for="page" class="font-extralight">Page</label>
-    <input
-      type="number"
-      min="1"
-      max={totalPages}
-      bind:value={page}
-      placeholder="Page"
-      class="input w-20"
-    />
+   
     <label for="perPage" class="font-extralight">Results per page</label>
     <input
       type="number"
@@ -154,11 +160,32 @@
   </form>
 
   {#if photos !== null}
-    <div class="mt-4 text-sm text-gray-400 dark:text-gray-300">
+    
+
+  <div class="flex items-center gap-2 mt-4">
+    <button class="btn btn-ghost text-4xl" on:click={prevPage} disabled={page <= 1} aria-label="Previous page">
+      ←
+    </button>
+    <span class="text-sm text-gray-600 dark:text-gray-400">
+      Page <b><input
+        type="number"
+        min="1"
+        max={totalPages}
+        bind:value={page}
+        placeholder="Page"
+        class="input w-16 text-center"
+      /></b> of <b>{totalPages}</b>
+    </span>
+    <button class="btn btn-ghost text-4xl" on:click={nextPage} disabled={page >= totalPages} aria-label="Next page">
+      →
+    </button>
+  </div>
+<div class="mt-4 text-sm text-gray-400 dark:text-gray-300">
       {numResults} results fetched in {fetchTime} seconds, page {page} of {totalPages}
       &nbsp; &nbsp; &nbsp; Rate limit remaining: {ratelimitremaining} of {ratelimit}
     </div>
   {/if}
+
 </div>
 
 {#if isListView}

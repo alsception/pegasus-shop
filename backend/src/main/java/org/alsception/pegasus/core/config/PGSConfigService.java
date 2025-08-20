@@ -1,18 +1,8 @@
 package org.alsception.pegasus.core.config;
 
 import java.util.Optional;
-
-import org.alsception.pegasus.core.security.CustomUserDetailsService;
-import org.alsception.pegasus.core.security.JwtUtils;
-import org.alsception.pegasus.features.cart.CartRepository;
-import org.alsception.pegasus.features.cart.CartService;
-import org.alsception.pegasus.features.order.OrderRepository;
-import org.alsception.pegasus.features.products.ProductRepository;
-import org.alsception.pegasus.features.users.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
