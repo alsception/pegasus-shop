@@ -11,7 +11,7 @@
   import Login from "../../core/auth/Login.svelte";
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
-  import AddToCartButton from "./AddToCartButton.svelte";
+  import ProductCard from "./ProductCard.svelte";
 
   document.title = "Products | Pegasus";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -175,23 +175,7 @@
 
 {#if !$auth.isAuthenticated}
   <Login />
-{:else}
-  <!-- <button class="nb-button default">Default</button>
-  <button class="nb-button orange">Orange</button>
-  <button class="nb-button blue">Blue</button>
-  <button class="nb-button green">Green</button>
-
-  <button class="nb-button default rounded">Default</button>
-  <button class="nb-button orange rounded">Orange</button>
-
-  <div class="nb-dialog">
-    <div class="nb-dialog-header">Dialog Header</div>
-    <div class="nb-dialog-body">...</div>
-    <div class="nb-dialog-footer">
-      <button class="nb-button default">Cancel</button>
-      <button class="nb-button green">Save</button>
-    </div>
-  </div> -->
+{:else}  
   {#if error}
     <ErrorDiv {error} />
   {:else}
@@ -207,19 +191,24 @@
             placeholder="Search products..."
             class="input input-bordered w-full max-w-xs"
           />
-          <!-- Search Button -->
           <button type="submit" class="btn btn-primary">
             <i class="fas fa-search"></i>
             Search
           </button>
 
-          <!-- Toggle View Button -->
+          <div class="dropdown">
+            <div tabindex="0" role="button" class="btn m-1">Search by category</div>
+            <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-full p-2 shadow-sm">
+              <li><a>Item 1</a></li>
+              <li><a>Item 2</a></li>
+            </ul>
+          </div>
+
           <button on:click={toggleView} class="btn btn-secondary">
             <i class="fas fa-th-list"></i>
             Grid view / List view
           </button>
 
-          <!-- Create product Button -->
           <button
             on:click={() => alert("not implemented yet")}
             class="btn btn-accent"
@@ -299,7 +288,15 @@
                   >
                 </td>
                 <td class="pgs-td">{product.code}</td>
-                <td class="pgs-td">{product.description}</td>
+                <td class="pgs-td">
+                  <p
+                    class="text-sm text-gray-500 dark:text-gray-500 mt-1 line-clamp-3"
+                    title={product.description}
+                    style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; white-space: normal;"
+                  >
+                    {product.description}
+                  </p>  
+                </td>
                 <td class="pgs-td">{product.category}</td>
                 <td class="pgs-td">{product.brand}</td>
                 <td class="pgs-td-num">{product.basePrice}</td>
@@ -374,75 +371,7 @@
         class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 gap-8 p-4"
       >
         {#each products as product, i}
-          <div
-            class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden flex flex-col max-w-[384px] shadow hover:shadow-lg transition-shadow"
-          >
-            <div
-              class="w-full h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden"
-            >
-              {#if product.imageUrl}
-                <img
-                  class="w-full h-full object-cover"
-                  src={product.imageUrl}
-                  alt={product.name}
-                />
-              {:else}
-                <span class="text-gray-400 dark:text-gray-500"
-                  >No image available</span
-                >
-              {/if}
-            </div>
-
-            <div class="p-4">
-              <h3
-                class="font-semibold text-lg truncate text-primary"
-                title={product.name}
-              >
-                <a use:link href="/products/{product.id}" class="pgs-hyperlink"
-                  >{product.name}</a
-                >
-              </h3>
-
-              <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                {product.brand} &middot; {product.category}
-              </p>
-              <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">
-                {product.description}
-              </p>
-              <div class="flex items-center justify-between mt-2">
-                <span
-                  class="text-2xl font-bold text-green-600 dark:text-green-400"
-                >
-                  €{product.priceEur}
-                </span>
-                <span class="text-xs text-gray-400 dark:text-gray-500">
-                  {product.stockQuantity} left
-                </span>
-                <AddToCartButton {product} width="135px" />
-              </div>
-              <div class="flex justify-between items-center mt-4"></div>
-              {#if isAdminView}
-                <div class="flex gap-2">
-                  <a
-                    class="text-blue-400 hover:text-blue-300 underline"
-                    use:link
-                    href="/products/mngmt/{product.id}"
-                    title="Edit"
-                  >
-                    <i class="fas fa-pen"></i>
-                  </a>
-                  <button
-                    aria-label="Delete"
-                    on:click={() => deleteDialog(product.id)}
-                  >
-                    <i
-                      class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"
-                    ></i>
-                  </button>
-                </div>
-              {/if}
-            </div>
-          </div>
+          <ProductCard {product} />
         {/each}
       </div>
     {/if}
@@ -460,11 +389,5 @@
 <style>
   .pgs-th {
     color: white;
-  }
-  .pgs-td {
-    /* Add any custom cell styling here */
-  }
-  .pgs-tr {
-    /* Add any custom row styling here */
   }
 </style>

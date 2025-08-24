@@ -446,20 +446,6 @@ https://svelte.dev/e/a11y_no_noninteractive_element_interactionssvelte(a11y_no_n
                   rows="4"
                 ></textarea>
               </div>
-
-              <div class="w-full">
-                <label
-                  for="other"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Other</label
-                >
-                <input
-                  id="other"
-                  type="text"
-                  class="pgs-input"
-                  bind:value={formData.other}
-                />
-              </div>
             </div>
           </div>
         </div>

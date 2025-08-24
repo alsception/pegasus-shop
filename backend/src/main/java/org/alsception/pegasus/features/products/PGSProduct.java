@@ -1,10 +1,10 @@
 package org.alsception.pegasus.features.products;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Version;
@@ -70,10 +71,6 @@ public class PGSProduct {
     @Column(nullable = false)
     private Integer stockQuantity;
     
-    //@ManyToOne(fetch = FetchType.EAGER)
-    //@JoinColumn(name = "category_id")
-    private Long category;
-    
     @Getter(AccessLevel.NONE)
     @Column(nullable = false)
     private Boolean active = true;
@@ -120,7 +117,11 @@ public class PGSProduct {
     
     @Version
     private Integer version; // Optimistic locking to prevent concurrent modification issues    
-    
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id", nullable = true)
+    private PGSProductCategory category;
+
     @JsonIgnore
     @ElementCollection
     @CollectionTable(name = "pgs_product_tags", joinColumns = @JoinColumn(name = "product_id"))

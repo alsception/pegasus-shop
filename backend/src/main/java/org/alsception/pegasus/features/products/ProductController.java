@@ -30,6 +30,7 @@ public class ProductController
     
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
     
+    //Not used now, we use paginated insted
     @GetMapping
     public List<PGSProductDTO> getProducts(
             @RequestParam(required = false) String search, 
@@ -40,7 +41,8 @@ public class ProductController
         List<PGSProductDTO> products = productService.findProducts(search, code, name);
         return products;
     }
-
+    
+    //Currently we use this on frontend
     @GetMapping("/p")
     public PaginatedProductsResponse getProductsWithPagination(
             @RequestParam(required = false) String search, 

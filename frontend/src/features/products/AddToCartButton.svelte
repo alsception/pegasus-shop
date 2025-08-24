@@ -38,7 +38,7 @@
     style="width: {width}"
     on:click={() => addToCart(product.id)}
   >
-    <span data-text="Add to cart">       
+    <span data-text="Add to cart" class="text-black/80">       
        ➕ Add to cart</span>
     <div class="scan-line"></div>
   </button>

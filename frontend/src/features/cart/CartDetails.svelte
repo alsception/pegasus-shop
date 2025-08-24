@@ -148,13 +148,14 @@
     {/if}
     {#if cart}
 
-    <div class="nb-card mx-auto p-4 sm:p-6 bg-base-100 /*rounded-2xl*/ mt-6 sm:mt-10 " style="min-width: 568px; transform: none">
-      <h2 class="text-xl sm:text-2xl font-bold mb-4 text-center">Pegasus Shop - My Cart</h2>
+    <div class="nb-card mx-auto  bg-base-100 /*rounded-2xl*/ mt-6 sm:mt-10 " style="min-width: 568px; transform: none">
+      <h2 class="text-xl sm:text-2xl font-bold mb-4 text-center pt-4">Pegasus Shop - My Cart</h2>
       
       <div class="font-mono">
 
         {#if cart.items && cart.items.length > 0}
 
+        <div class="p-4 sm:p-6">
           <div class="divide-y divide-gray-200 dark:divide-slate-700">
             
             {#each cart.items as item (item.id)}
@@ -209,7 +210,7 @@
                         aria-label="Delete"
                         on:click={() => deleteCartItem(item.product.id)}
                       >
-                        <i class="fa fa-trash text-xl text-gray-500 hover:text-red-400 cursor-pointer"></i>
+                        <i class="fa fa-trash text-md text-gray-500 hover:text-red-400 cursor-pointer"></i>
                       </button>
                     </div>
                   </div>
@@ -238,31 +239,29 @@
               <p class="text-md sm:text-xl font-bold">{formatPrice(cart.tax || 0)}</p>
             </div>
              -->
-            <div class="pt-4 flex justify-between items-center">
+            <!-- <div class="pt-4 flex justify-between items-center">
               <p class="text-base sm:text-md font-semibold">Shipping:</p>
               <p class="text-md sm:text-xl font-bold">{formatPrice(cart.shippingCost || 0)}</p>
-            </div>
-            
+            </div> -->
+                      <div class="divide-y divide-gray-200 dark:divide-slate-700"></div>
+
             <div class="pt-4 flex justify-between items-center">
-              <p class="text-base sm:text-md font-semibold">Total:</p>
+              <p class="text-xl sm:text-md font-semibold">Total:</p>
               <p class="text-md sm:text-xl font-bold">{formatPrice(cart.totalPrice || 0)}</p>
             </div>
         </div>
         <br>
-        <div class="col-span-full flex justify-end">
-          <button type="button" on:click={cancel} class=" m-3 nb-button default">
-            Cancel
+        </div>
+        <div class="col-span-full flex p-4 justify-end bg-secondary/10">
+          <button type="button" on:click={cancel} class=" m-3 btn btn-secondary">
+            Close
           </button>
-          <a href="#/checkout" class=" m-3 nb-button blue"> Confirm</a>
+          <a href="#/checkout" class=" m-3 btn btn-primary"> Confirm</a>
         </div>
 
         {:else}
           <p class="text-center text-gray-500 py-4">Your cart is empty. Add some <a use:link href="/products" class="pgs-hyperlink">products</a>
-
             <img src="{randomImage}" alt="Cart empty" />
-
-                <!-- import errorimg from '../../../assets/img/404-error-landscape.gif';  -->
-
           </p>
         {/if}       
         

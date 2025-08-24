@@ -51,7 +51,8 @@ public class ProductService
                 List<PGSProduct> result = productRepository.findByCodeContainingIgnoreCaseOrNameContainingIgnoreCase(search, search);
                 
                 logger.debug("Found products: "+result.size());
-                logger.debug("Converting to dto");
+                logger.debug("Converting to dto...");
+                
                 return  result.stream()
                             .map(PGSProductDTO::new)
                             .toList();
@@ -96,6 +97,8 @@ public class ProductService
             .map(PGSProductDTO::new)
             .toList();
 
+        /*products.forEach(item -> logger.trace("Item: " + item));*/
+        
         return new PaginatedProductsResponse(
             products,
             productPage.getTotalElements(),
@@ -143,8 +146,7 @@ public class ProductService
             /*if (updatedProduct.getReviews() != null && updatedProduct.getReviews().isEmpty()) {
                 existingProduct.getReviews().clear();
             }*/
-            
-            
+                       
 
             // Update other fields
             existingProduct.setName(updatedProduct.getName());
@@ -165,10 +167,8 @@ public class ProductService
             existingProduct.setOther(updatedProduct.getOther());
             existingProduct.setShippingCost(updatedProduct.getShippingCost());
             existingProduct.setStockQuantity(updatedProduct.getStockQuantity());
-            existingProduct.setTaxPercent(updatedProduct.getTaxPercent());
-            //existingProduct.setTaxPercent(updatedProduct.getTaxAmount());//Amount is calculated
+            existingProduct.setTaxPercent(updatedProduct.getTaxPercent());            
             existingProduct.setUnit(updatedProduct.getUnit());
-            //existingProduct.setVersion(updatedProduct.getVersion());
             existingProduct.setWeightKg(updatedProduct.getWeightKg());
             existingProduct.setWidthCm(updatedProduct.getWidthCm());
 
@@ -239,7 +239,6 @@ public class ProductService
                     product.setBaseCurrency("EUR"); // Price: 10 - 109 EUR
                     product.setDescription("Description for product " + i);
                     product.setBrand("xxx");
-                    product.setCategory(1l);
                     product.setActive(Boolean.TRUE);
                     product.setStockQuantity(random.nextInt(1000) + 10);
                     product.setShippingCost(BigDecimal.ZERO);
@@ -279,7 +278,6 @@ public class ProductService
                 product.setBaseCurrency("EUR"); // Price: 10 - 109 EUR
                 product.setDescription("Description for product " + i);
                 product.setBrand("xxx");
-                product.setCategory(1l);
                 product.setActive(Boolean.TRUE);
                 product.setStockQuantity(random.nextInt(1000) + 10);
                 product.setShippingCost(BigDecimal.ZERO);
