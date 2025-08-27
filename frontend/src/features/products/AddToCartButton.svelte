@@ -39,7 +39,7 @@
     on:click={() => addToCart(product.id)}
   >
     <span data-text="Add to cart" class="text-black/80">       
-       ➕ Add to cart</span>
+       <i class="fa fa-plus" aria-hidden="true"></i> Add to cart</span>
     <div class="scan-line"></div>
   </button>
 {/if}

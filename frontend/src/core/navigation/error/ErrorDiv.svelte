@@ -3,22 +3,24 @@
 
   export let error: string | null = null;
 
-  console.log("hello error div");
-  console.log(error);
+  console.error(error);
 
+  const isErr500 = error?.toLowerCase().includes("500") ?? false;
   const isFetchError = (error?.toLowerCase().includes("fetch") || error?.toLowerCase().includes("network")) ?? false;
 </script>
 
 <div
   class="flex flex-col justify-center items-center h-full text-2xl mt-4 text-center"
 >
-  {#if isFetchError}
+  {#if isErr500}
     <img src={errorImg} alt="Fetch error illustration" class="max-w-128" />
-    <!-- <div class="nb-marquee" style="width: 768px;">
-      <div class="nb-marquee-content"> -->
-        <h1>⛔ Error: {error} ⛔</h1>
-      <!-- </div>
-    </div> -->
+    <h1>⛔ Error: {error} ⛔</h1>
+    <h2 style="/*position: relative; top: -70px;*/" class="text-primary mt-4">
+      Server error, sorry :(
+    </h2>
+  {:else if isFetchError}
+    <img src={errorImg} alt="Fetch error illustration" class="max-w-128" />
+    <h1>⛔ Error: {error} ⛔</h1>
     <h2 style="/*position: relative; top: -70px;*/" class="text-primary mt-4">
       Looks like our server is unavailable or you are offline.
     </h2>

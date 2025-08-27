@@ -12,6 +12,7 @@
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import ProductCard from "./ProductCard.svelte";
+  import ProductCategories from "./ProductCategories.svelte";
 
   document.title = "Products | Pegasus";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -29,6 +30,7 @@
   let size = 20; // Products per page
   let totalProducts = 0; // If backend returns total count
   let totalPages = 0; // Total pages from backend
+  let selectedCategory: any;
 
   // AUTHENTICATION
   $: auth.subscribe((value) => {
@@ -171,6 +173,11 @@
   function toggleView() {
     isListView = !isListView;
   }
+
+  function handleCategorySelect(category: string): void 
+  {
+    console.log('selected category: '+category);
+  }
 </script>
 
 {#if !$auth.isAuthenticated}
@@ -180,7 +187,7 @@
     <ErrorDiv {error} />
   {:else}
     <div class="w-full flex justify-center px-4">
-      <div class="w-full max-w-4xl p-4 bg-transparent rounded-lg">
+      <div class="w-full max-w-[1800px] p-4 bg-transparent rounded-lg">
         <form
           on:submit|preventDefault={handleFormSubmit}
           class="flex flex-col sm:flex-row items-center gap-3"
@@ -189,21 +196,15 @@
             type="text"
             bind:value={searchTerm}
             placeholder="Search products..."
-            class="input input-bordered w-full max-w-xs"
+            class="input input-bordered input-lg w-full"
+            style="font-size: 1.5rem; /*height: 3.5rem;*/ max-width: 100%;"
           />
           <button type="submit" class="btn btn-primary">
             <i class="fas fa-search"></i>
             Search
           </button>
-
-          <div class="dropdown">
-            <div tabindex="0" role="button" class="btn m-1">Search by category</div>
-            <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-full p-2 shadow-sm">
-              <li><a>Item 1</a></li>
-              <li><a>Item 2</a></li>
-            </ul>
-          </div>
-
+          <ProductCategories bind:selectedCategory onSelect={handleCategorySelect} />
+          
           <button on:click={toggleView} class="btn btn-secondary">
             <i class="fas fa-th-list"></i>
             Grid view / List view

@@ -142,10 +142,13 @@
     <ErrorDiv {error} />
     
   {:else}  
+
     {#if loading}
 
       <LoadingOverlay/>
+  
     {/if}
+  
     {#if cart}
 
     <div class="nb-card mx-auto  bg-base-100 /*rounded-2xl*/ mt-6 sm:mt-10 " style="min-width: 568px; transform: none">
@@ -166,40 +169,40 @@
                   <div class="flex items-center gap-4">
                       <label class="text-xs sm:text-sm text-gray-500">Quantity:</label>
                       <div class="flex items-center rounded-md overflow-hidden">
-                      <button 
-                        type="button" 
-                        class="btn btn-ghost"
-                        on:click={() => {
-                          if (item.quantity > 1) {
-                            item.quantity = item.quantity - 1;
-                            updateCart(item);
-                          }
-                        }}
-                        aria-label="Decrease quantity"
-                      >
-                        -
-                      </button>
-                      <input 
-                        id="myNumber" 
-                        value={item.quantity}
-                        min="1"
-                        class="w-12 h-8 text-center"
-                        on:change={(e) => handleQuantityChange(e, item)}
-                      />
-                      <button 
-                        type="button" 
-                        class="btn btn-ghost"
-                        on:click={() => {
-                          if (item.quantity < 100) {
-                            item.quantity = item.quantity + 1;
-                            updateCart(item);
-                          }
-                        }}
-                        aria-label="Increase quantity"
-                      >
-                        +
-                      </button>
-                    </div>
+                        <button 
+                          type="button" 
+                          class="btn btn-ghost"
+                          on:click={() => {
+                            if (item.quantity > 1) {
+                              item.quantity = item.quantity - 1;
+                              updateCart(item);
+                            }
+                          }}
+                          aria-label="Decrease quantity"
+                        >
+                          -
+                        </button>
+                        <input 
+                          id="myNumber" 
+                          value={item.quantity}
+                          min="1"
+                          class="w-12 h-8 text-center"
+                          on:change={(e) => handleQuantityChange(e, item)}
+                        />
+                        <button 
+                          type="button" 
+                          class="btn btn-ghost"
+                          on:click={() => {
+                            if (item.quantity < 100) {
+                              item.quantity = item.quantity + 1;
+                              updateCart(item);
+                            }
+                          }}
+                          aria-label="Increase quantity"
+                        >
+                          +
+                        </button>
+                      </div>
                   </div>
                   <!-- Move delete button below -->
                   <div class="flex items-center">

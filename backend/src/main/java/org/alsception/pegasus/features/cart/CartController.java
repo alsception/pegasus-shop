@@ -116,7 +116,7 @@ public class CartController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
 
-        logger.debug("Get car for user: " + username);
+        logger.debug("Get cart for user: " + username);
         
         PGSCart cart = cartService.getCartByUsername(username);
         

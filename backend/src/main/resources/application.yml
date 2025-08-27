@@ -14,7 +14,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    show-sql: false
+    show-sql: true
     open-in-view: false
 
   devtools:
@@ -40,3 +40,5 @@ logging:
     root: INFO
     org.springframework: INFO
     org.alsception.pegasus.*: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

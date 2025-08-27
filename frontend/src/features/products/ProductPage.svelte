@@ -44,6 +44,11 @@
     }
   }
 
+  function close(event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) 
+  {
+    window.location.href = "#/products"; 
+  }
+
   // Optional: You can still call this on mount if you want to double-sure it triggers
   onMount(() => {
     isAdminView = isAdmin();
@@ -110,6 +115,10 @@
     <p>{product.active === true ? "YES ✅" : "NO ⛔"}</p>
 
     <div class="w-full flex mr-0 mt-6">
+      <button type="button" on:click={close} class=" btn btn-ghost mr-5">
+      <i class="fa fa-close"></i>
+      Close
+      </button>
       <AddToCartButton {product} width="135px" />
     </div>
   </div>

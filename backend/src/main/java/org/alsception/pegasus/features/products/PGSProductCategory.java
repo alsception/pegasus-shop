@@ -14,11 +14,11 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PGSProductCategory {
-
+public class PGSProductCategory 
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // PostgreSQL identity column: autoassign by postgres db
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false, length = 255)
     private String name;
@@ -31,8 +31,8 @@ public class PGSProductCategory {
     private PGSProductCategory parent;
 
     // One parent can have many children
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
-    @JsonIgnore//We dont need it now for products, but will need it later...
+    //@JsonIgnore//We dont need it now for products, but will need it later...
     private Set<PGSProductCategory> children;
 }

@@ -7,8 +7,10 @@ import CartDetails from '../../features/cart/CartDetails.svelte';
  * Display a success toast notification
  * @param message - The success message to display
  */
-export function showSuccessToast(message: string): void {
-  toast.push('✅ ' + message, {
+export function showSuccessToast(message: string): void 
+{
+  let checkmark = '<i class="fa fa-check fa-lg text-green-600 font-bold" aria-hidden="true"></i> &nbsp;';
+  toast.push(checkmark + message, {
     theme: {
       '--toastColor': 'mintcream',
       '--toastBackground': 'rgb(72, 187, 120)',
@@ -20,9 +22,11 @@ export function showSuccessToast(message: string): void {
 
 export function showAddSuccessToastWithLink(): void 
 {
+  let checkmark = '<i class="fa fa-check fa-lg text-green-600 font-bold" aria-hidden="true"></i> &nbsp;';
   let message = 'Product added to '
   let link = '<a href="#/cart" target="_blank" class="pgs-hyperlink font-bold">cart</a>';
-  toast.push('✅ ' + message + link, {
+  let text = /*'<span style="color: green;">' +*/ checkmark + message + link /*+ '</span>'*/;
+  toast.push( text, {
     theme: {
       '--toastColor': 'black',
       '--toastBackground': '#eee',
