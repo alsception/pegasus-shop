@@ -20,16 +20,9 @@
     <h3 class="font-semibold text-lg truncate text-primary" title={product.name}>
       <a use:link href="/products/{product.id}" class="pgs-hyperlink">{product.name}</a>
     </h3>
-    <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">
-      <i class="fas fa-key text-gray-400"></i>
-      {product.code}
-    </p>
     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
         <i class="fas fa-tag text-gray-400"></i>
-        <span class="text-primary"> {product.category} </span>
-        <span class="text-sm text-gray-600 dark:text-gray-500 pl-4 text-right">
-        {product.stockQuantity} left
-        </span>
+        <span class="text-primary"> {product.category} </span>        
     </p>   
     <p
       class="text-sm text-gray-500 dark:text-gray-500 mt-1 line-clamp-3"
@@ -42,7 +35,7 @@
       <span class="text-2xl font-bold text-primary">
         € {product.priceEur}
       </span>      
-      <AddToCartButton {product} width="135px" />
+      <AddToCartButton {product} width="100px" />
     </div>    
   </div>
 </div>

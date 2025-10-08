@@ -115,10 +115,22 @@
       <div class="lg:col-span-2 ">
         <div class="">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-            
+
+            <div class="w-full md:col-span-2">
+              <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                <i class="fas fa-phone text-xs text-gray-400 mr-2"></i>Konobar
+              </label>
+              <input
+                id="phone"
+                class="nb-input default font-mono"
+                placeholder="phone"
+                bind:value={phone}
+              />
+            </div>
+
             <div class="w-full md:col-span-2">
               <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                <i class="fas fa-envelope text-xs text-gray-400 mr-2"></i>Email
+                <i class="fas fa-envelope text-xs text-gray-400 mr-2"></i>Sto
               </label>
               <input
                 id="email"
@@ -128,94 +140,18 @@
               />
             </div>
 
-            <div class="w-full md:col-span-2">
-              <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
-                <i class="fas fa-phone text-xs text-gray-400 mr-2"></i>Phone
-              </label>
-              <input
-                id="phone"
-                class="nb-input default font-mono"
-                placeholder="phone"
-                bind:value={phone}
-              />
-            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Full-width underline -->
-    <div class="h-px bg-neutral w-full"></div>
-
-    <!-- Shipping Address Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-      <div class="lg:col-span-1">
-        <h3 class="text-2xl font-semibold text-primary ">
-          Shipping Address
-        </h3>
-        <p class="text-secondary text-sm mt-2">
-          Where should we deliver your order?
-        </p>
-      </div>
-      <div class="lg:col-span-2">
-        <div class="rounded-lg">
-          <div class="w-full">
-            <label for="address" class="block text-sm font-medium text-gray-700 mb-2">
-              <i class="fas fa-map-marker-alt text-xs text-gray-400 mr-2"></i>Address
-            </label>
-            <textarea
-              id="address"
-              class="nb-textarea resize-vertical"
-              rows="6"
-              placeholder="Street and number, city, postal code, country"
-              bind:value={address}
-            ></textarea>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Full-width underline -->
-    <div class="h-px bg-neutral w-full"></div>
-
-    <!-- Payment Method Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-      <div class="lg:col-span-1">
-        <h3 class="text-2xl font-semibold text-primary ">
-          Payment Method
-        </h3>
-        <p class="text-secondary text-sm mt-2">
-          Choose your preferred payment option
-        </p>
-      </div>
-      <div class="lg:col-span-2">
-        <div class="rounded-lg">
-          <div class="w-full">
-            <label for="payment" class="block text-sm font-medium text-gray-700 mb-2">
-              <i class="fas fa-credit-card text-xs text-gray-400 mr-2"></i>Payment Method
-            </label>
-            <select
-              id="payment"
-              bind:value={paymentMethod}
-              required
-              class="nb-input default font-mono"
-            >
-              <option value="bank_transfer" selected>Bank Transfer / Invoice</option>
-              <option value="credit_card" disabled>Credit Card</option>
-              <option value="paypal" disabled>PayPal</option>
-              <option value="crypto" disabled>Crypto / Bitcoin</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="h-px bg-neutral w-full"></div>
+  
 
     <!-- Other Section -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
       <div class="lg:col-span-1">
       <h3 class="text-2xl font-semibold text-primary">
-        Other
+        Note
       </h3>
       <p class="text-secondary text-sm mt-2">
         Additional information

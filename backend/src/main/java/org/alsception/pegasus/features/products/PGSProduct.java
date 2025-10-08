@@ -51,20 +51,8 @@ public class PGSProduct {
     private BigDecimal basePrice; 
 
     @Column(length = 3, nullable = false)
-    private String baseCurrency = "EUR"; // Default currency
-    
-    @Column(precision = 19, scale = 2, nullable = true)
-    private BigDecimal shippingCost; 
-    
-    @Column(precision = 19, scale = 2, nullable = true)
-    private BigDecimal taxPercent; 
-    
-    @Column(precision = 19, scale = 2, nullable = true)
-    private BigDecimal discount; 
-    
-    @Column
-    private String discountType;
-    
+    private String baseCurrency = "EUR"; // Default currency   
+        
     @Column(length = 255)
     private String imageUrl;
     
@@ -89,19 +77,7 @@ public class PGSProduct {
     
     // SKU (Stock Keeping Unit)
     @Column(length = 50, nullable = true)
-    private String unit;
-    
-    @Column(precision = 10, scale = 2)
-    private BigDecimal weightKg;
-    
-    @Column(precision = 10, scale = 2)
-    private BigDecimal lengthCm;
-    
-    @Column(precision = 10, scale = 2)
-    private BigDecimal widthCm;
-    
-    @Column(precision = 10, scale = 2)
-    private BigDecimal heightCm;
+    private String unit;   
     
     @Column(length = 100)
     private String brand;   
@@ -136,11 +112,6 @@ public class PGSProduct {
     @PreUpdate
     protected void onUpdate() {
         modified = LocalDateTime.now();
-    }
-    
-    public BigDecimal getTaxAmount()
-    {
-        return this.basePrice.multiply(this.taxPercent).divide(BigDecimal.valueOf(100));
     }
     
     public boolean isActive() {

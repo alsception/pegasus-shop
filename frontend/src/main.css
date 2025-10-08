@@ -45,9 +45,9 @@
   prefersdark: true;
   color-scheme: 'dark';
   /*NEKA BUDE TABLE TRANSPARENT NO COLOR*/
-  --color-base-100: /*#020617*/ transparent; /* slate-950 *--color-slate-950;/*rgb(38, 38, 38);/*#1d232a00 rgb(0, 0, 0);*/
-  --color-base-200: /*oklch(20.8% 0.042 265.755)*/ transparent; /* slate-950 */ /*rgb(19, 19, 19);*/
-  --color-base-300: rgb(0, 0, 0);
+  --color-base-100: rgb(0, 8, 12);
+  --color-base-200: rgb(0, 10, 24);
+  --color-base-300: rgb(0, 20, 36);
   --color-base-content: rgb(183, 183, 183);
   --color-primary: rgb(229 231 233); /*blue 500*/
   --color-primary-content: blue;

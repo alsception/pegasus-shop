@@ -14,7 +14,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    show-sql: true
+    show-sql: false
     open-in-view: false
 
   devtools:
@@ -37,8 +37,8 @@ jwt:
 
 logging:
   level:
-    root: INFO
+    root: ERROR
     org.springframework: INFO
-    org.alsception.pegasus.*: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.alsception.pegasus: DEBUG
+    org.hibernate.SQL: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: ERROR

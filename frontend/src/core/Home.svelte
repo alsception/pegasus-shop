@@ -65,6 +65,16 @@
       customer: true,
     },
     {
+      title: "Tables",
+      description: "View and manage tables",
+      icon: "table",
+      href: "/tables",
+      color: "yellow",
+      default: false,
+      admin: true,
+      customer: true,
+    },
+    {
       title: "Gallery",
       description:
         "View and manage picture gallery. Billions of free pictures, by Unsplash API",
@@ -149,47 +159,7 @@
       </p>
     </a>
   {/each}
-</div>
-<!-- 
-
-        <button class="nb-button default">Default</button>
-        <button class="nb-button orange">Orange</button>
-        <button class="nb-button blue">Blue</button>
-        <button class="nb-button green">Green</button>
-        
-
-        <button class="nb-button default rounded">Default</button>
-        <button class="nb-button orange rounded">Orange</button>
-                      
-
-
-        <input class="nb-input default" placeholder="Default" />
-        <input class="nb-input orange" placeholder="Orange" />
-        <input class="nb-input blue" placeholder="Blue" />
-        <input class="nb-input green" placeholder="Green" />
-                      
-
-
-       <div class="nb-marquee green">
-          <div class="nb-marquee-content">
-             <span>Item 1</span>
-             <span>Item 2</span>
-          </div>
-       </div>
-                      
-
-
-       <div class="nb-card">
-          <img src="..." class="nb-card-img">
-          <div class="nb-card-content">
-              <h4 class="nb-card-title">Card Title</h4>
-              <p class="nb-card-text">...</p>
-              <div class="nb-card-actions">
-                  <button class="nb-button">Learn More</button>
-              </div>
-          </div>
-       </div> -->
-                        
+</div>                       
 
 <style>
   /*********************************/
@@ -206,7 +176,6 @@
       transform: scale(1);
     }
   }
-
   .scale-up-center-normal {
     animation: scale-up-center-normal 0.25s ease-out 0s 1 normal both;
   }
@@ -217,15 +186,9 @@
   .menu-block:hover {
     transform: scale(2.1); /* 10% bigger */
   }
-  /* .home-link:hover h2 {
-    @apply text-blue-500;
-  } */
   .gblock {
     background-color: #003153 !important;
     background-image: linear-gradient(315deg, #062840 0%, #000 74%) !important;
   }
-  .gradient {
- 
-
-  }
+  
 </style>

@@ -60,6 +60,15 @@ export const navRoutes: NavRoutesMap =
       admin: true,
       customer: true,
     },
+    "/tables": {
+      label: "Tables",
+      icon: "table",
+      href: "#/tables",
+      component: null,
+      disabled: false,
+      admin: true,
+      customer: true,
+    },
     "/checkout": {
       label: "Checkout",
       icon: "credit-card",

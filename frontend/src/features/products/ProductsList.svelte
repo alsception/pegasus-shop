@@ -195,13 +195,13 @@
           <input
             type="text"
             bind:value={searchTerm}
-            placeholder="Search products..."
+            placeholder="Traži proizvod..."
             class="input input-bordered input-lg w-full"
             style="font-size: 1.5rem; /*height: 3.5rem;*/ max-width: 100%;"
           />
           <button type="submit" class="btn btn-primary">
             <i class="fas fa-search"></i>
-            Search
+            Traži
           </button>
           <ProductCategories bind:selectedCategory onSelect={handleCategorySelect} />
           
@@ -209,14 +209,7 @@
             <i class="fas fa-th-list"></i>
             Grid view / List view
           </button>
-
-          <button
-            on:click={() => alert("not implemented yet")}
-            class="btn btn-accent"
-          >
-            <i class="fas fa-plus"></i>
-            Create new product
-          </button>
+          
         </form>
         <!-- Pagination Controls & Info -->
         <div
@@ -259,22 +252,9 @@
         <table class="table table-zebra min-w-[1200px] divide-y divide-accent">
           <thead class="bg-[#10273c] border-2 border-primary/10">
             <tr class="h-12">
-              <th class="pgs-th">Name</th>
-              <th class="pgs-th">Code</th>
-              <th class="pgs-th">Description</th>
-              <th class="pgs-th">Category</th>
+              <th class="pgs-th">Proizvod</th>
               <th class="pgs-th">Brand</th>
               <th class="pgs-th">Price</th>
-              <th class="pgs-th">Currency</th>
-              <th class="pgs-th">Shipping</th>
-              <th class="pgs-th">Tax</th>
-              <th class="pgs-th">Discount</th>
-              <th class="pgs-th">Stock</th>
-              <th class="pgs-th">Comment</th>
-              <th class="pgs-th">Other</th>
-              <th class="pgs-th">Created</th>
-              <th class="pgs-th">Modified</th>
-              <th class="pgs-th">Active</th>
               <th class="pgs-th">Actions</th>
             </tr>
           </thead>
@@ -288,24 +268,9 @@
                     class="text-primary pgs-hyperlink">{product.name}</a
                   >
                 </td>
-                <td class="pgs-td">{product.code}</td>
-                <td class="pgs-td">
-                  <p
-                    class="text-sm text-gray-500 dark:text-gray-500 mt-1 line-clamp-3"
-                    title={product.description}
-                    style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; white-space: normal;"
-                  >
-                    {product.description}
-                  </p>  
-                </td>
                 <td class="pgs-td">{product.category}</td>
                 <td class="pgs-td">{product.brand}</td>
                 <td class="pgs-td-num">{product.basePrice}</td>
-                <td class="pgs-td-fmc">{product.baseCurrency}</td>
-                <td class="pgs-td-num">{product.shippingCost}</td>
-                <td class="pgs-td-num">{product.taxAmount}</td>
-                <td class="pgs-td-num">{product.discount}</td>
-                <td class="pgs-td-num">{product.stockQuantity}</td>
                 <td class="text-center"
                   >{@html formatCommentInfo(product.comment)}</td
                 >
@@ -313,16 +278,7 @@
                 <td class="pgs-td font-mono whitespace-nowrap"
                   >{@html formatDate(product.created, "new", 15)}</td
                 >
-                <td class="pgs-td font-mono whitespace-nowrap"
-                  >{@html formatDate(
-                    product.modified,
-                    "Changed less then 10 minutes ago",
-                    15
-                  )}</td
-                >
-                <td class="pgs-td font-mono whitespace-nowrap"
-                  >{formatActive(product.active)}</td
-                >
+              
                 <td class="px-2">
                   <div
                     class="flex justify-center items-center gap-2"

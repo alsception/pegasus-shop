@@ -9,6 +9,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.alsception.pegasus.features.users.PGSUser;
+import org.alsception.pegasus.features.table.PGSTable;
 
 @Data //Lombook for getters and setters
 @NoArgsConstructor
@@ -33,6 +34,10 @@ public class PGSCart
     
     @Column(nullable = true)
     private LocalDateTime modified;
+
+    @ManyToOne
+    @JoinColumn(name = "table_id")
+    private PGSTable table;
     
     @PrePersist
     protected void onCreate() {

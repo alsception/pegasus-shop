@@ -4,12 +4,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class UniqueIdGenerator 
+public class CodeGenerator 
 {
     private static final AtomicLong counter = new AtomicLong();    
-    private static final Logger log = LoggerFactory.getLogger(UniqueIdGenerator.class);
+    private static final Logger log = LoggerFactory.getLogger(CodeGenerator.class);
     static final String BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String BASE36 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final AtomicLong threeDigitCounter = new AtomicLong(0);
     
     /**
     Uses a thread-safe counter (AtomicLong) that starts from 0.
@@ -42,6 +43,17 @@ public class UniqueIdGenerator
     public static String generateCompactNanoId() 
     {
         return toAlpha(System.nanoTime());
+    }
+
+    /**
+     * Returns a 3-digit string, zero-padded, incrementing from "000" to "999".
+     * Rolls over to "000" after "999".
+     */
+    public static String generateThreeDigitCode() {
+        long value = threeDigitCounter.getAndIncrement() % 1000;
+        String code = String.format("%03d", value);
+        log.trace("Generated 3-digit code: " + code);
+        return code;
     }
 
     /**

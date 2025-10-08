@@ -26,13 +26,13 @@ export function formatDate(dateStr: string | number | Date | null | undefined, t
     const diffInMinutes = diffInMs / (1000 * 60);
     let output = '';  
 
-    const formattedDateTime = date.toLocaleString('en-GB', {
+    const formattedDateTime = formattedTime(date) /*date.toLocaleString('en-GB', {
         day: '2-digit',
         month: 'short',
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-    });
+    });*/
 
     if (diffInMinutes < minDiff) 
     {
@@ -51,6 +51,13 @@ export function formatDate(dateStr: string | number | Date | null | undefined, t
 
     return output;
 }
+
+export const formattedTime = (value: string | number | Date | null | undefined): string => {
+    if (!value) return "-";
+    const date = new Date(value);
+    if (isNaN(date.getTime())) return "-";
+    return date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false });
+};
 
 export function formatActive(active: boolean | null | undefined)
 {
@@ -88,3 +95,4 @@ export const formatDateTime = (value: string | number | Date | null | undefined)
 
     return date.toLocaleString("en-GB");
 };
+

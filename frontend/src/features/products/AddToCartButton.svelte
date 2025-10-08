@@ -3,7 +3,7 @@
    * We will pass parameters to this button:
    * 1. product: The product to be added to the cart.
    * 2. addToCart: A function to call when the button is clicked.
-   * 3. loading: A boolean to indicate if the loding is in progress to disable button.
+   * 3. loading: A boolean to indicate if the loading is in progress to disable button.
    */
 
   import { addToCart } from "./ProductService";
@@ -34,12 +34,12 @@
   </button>
 {:else}
   <button
-    class="btn bg-yellow-300"
+    class="btn bg-green-400"
     style="width: {width}"
     on:click={() => addToCart(product.id)}
   >
     <span data-text="Add to cart" class="text-black/80">       
-       <i class="fa fa-plus" aria-hidden="true"></i> Add to cart</span>
+       <i class="fa fa-plus" aria-hidden="true"></i> Dodaj</span>
     <div class="scan-line"></div>
   </button>
 {/if}

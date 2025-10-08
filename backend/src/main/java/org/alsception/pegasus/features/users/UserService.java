@@ -2,7 +2,7 @@ package org.alsception.pegasus.features.users;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import org.alsception.pegasus.core.utils.UniqueIdGenerator;
+import org.alsception.pegasus.core.utils.CodeGenerator;
 import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ public class UserService
     {
         // Convert DTO to Entity
         PGSUser user = new PGSUser();
-        user.setId(UniqueIdGenerator.generateNanoId());
+        user.setId(CodeGenerator.generateNanoId());
         user.setUsername(userDTO.getUsername());       
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setFirstName(userDTO.getFirstName());
@@ -56,7 +56,7 @@ public class UserService
     
     public PGSUser saveUser(PGSUser user, boolean encodePassword) 
     {
-        user.setId(UniqueIdGenerator.generateNanoId());//Important
+        user.setId(CodeGenerator.generateNanoId());//Important
         if(encodePassword)
         {
             user.setPassword(passwordEncoder.encode(user.getPassword()));

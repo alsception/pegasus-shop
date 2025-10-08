@@ -7,7 +7,7 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Date;
-import org.alsception.pegasus.core.utils.UniqueIdGenerator;
+import org.alsception.pegasus.core.utils.CodeGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +35,7 @@ public class JwtUtils {
         String role = userDetails.getAuthorities().toString();
 
         String token = Jwts.builder()
-            .setId(UniqueIdGenerator.generateCompactNanoId())
+            .setId(CodeGenerator.generateCompactNanoId())
             .setSubject(userDetails.getUsername())
             .setIssuedAt(new Date())
             .setExpiration(expirationDate)

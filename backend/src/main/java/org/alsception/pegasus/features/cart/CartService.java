@@ -8,7 +8,7 @@ import org.alsception.pegasus.features.products.PGSProduct;
 import org.alsception.pegasus.features.products.ProductRepository;
 import org.alsception.pegasus.features.users.PGSUser;
 import org.alsception.pegasus.features.users.UserRepository;
-import org.alsception.pegasus.core.utils.UniqueIdGenerator;
+import org.alsception.pegasus.core.utils.CodeGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.alsception.pegasus.features.order.OrderRepository;
@@ -232,9 +232,9 @@ public class CartService
         log.trace("Creating order");
         //1. Create order
         PGSOrder order = new PGSOrder();
-        long id = UniqueIdGenerator.generateNanoId();
+        long id = CodeGenerator.generateNanoId();
         order.setId(id);
-        order.setCode(UniqueIdGenerator.toAlpha(id));
+        order.setCode(CodeGenerator.generateThreeDigitCode());
         
         log.trace("Assigning user");
         //2. Assign user

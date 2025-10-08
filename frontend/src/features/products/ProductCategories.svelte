@@ -105,7 +105,7 @@ function clickChange(value: any) {
     <div class="dropdown z-49">
       <div tabindex="0" role="button" class="btn btn-secondary w-[200px]">
         <i class="fas fa-search"></i>
-        Search by category
+        Traži po kategoriji
       </div>
       <ul tabindex="-1" class="dropdown-content menu bg-base-300 rounded-box z-1 w-[466px] p-2 shadow-sm">
         {#each $categories as category}

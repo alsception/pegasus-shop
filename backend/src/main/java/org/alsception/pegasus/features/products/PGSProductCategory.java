@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -35,4 +37,8 @@ public class PGSProductCategory
     @JsonManagedReference
     //@JsonIgnore//We dont need it now for products, but will need it later...
     private Set<PGSProductCategory> children;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference // povezuje se sa @JsonManagedReference u PGSProduct
+    private Set<PGSProduct> products = new HashSet<>();
 }

@@ -31,20 +31,9 @@ public class PGSProductDTO
     private String imageUrl;    
     
     private String baseCurrency;    
-    private BigDecimal basePrice;    
     private BigDecimal priceEur;
-    private BigDecimal taxPercent; 
-    private BigDecimal taxAmount; 
-    private BigDecimal discount;     
-    private String discountType;
     
-    private String unit;
-    private BigDecimal weightKg;
-    private BigDecimal lengthCm;
-    private BigDecimal widthCm;
-    private BigDecimal heightCm;
-    
-    private BigDecimal shippingCost; 
+    private String unit;    
     
     private List<PGSReview> reviews;   
     
@@ -68,24 +57,16 @@ public class PGSProductDTO
         this.description = getTextField(p.getDescription());
         this.imageUrl = getTextField(p.getImageUrl());
         
-        this.discountType = getTextField(p.getDiscountType());
         this.baseCurrency = getTextField(p.getBaseCurrency());
         this.unit = getTextField(p.getUnit());
         this.stockQuantity = p.getStockQuantity();       
         
-        this.discount = p.getDiscount();
-        this.basePrice = p.getBasePrice();
         this.comment = getTextField(p.getComment());
         this.other = getTextField(p.getOther());
         
         this.created = p.getCreated();
         this.modified = p.getModified();
         this.active = p.isActive();
-        
-        this.shippingCost = p.getShippingCost();
-        this.taxAmount = p.getTaxAmount();
-        this.taxPercent = p.getTaxPercent();
-        this.discount = p.getDiscount();
         this.categoryRaw = p.getCategory();                
         this.category = p.getCategory() == null ? "" : p.getCategory().getName();                
     }

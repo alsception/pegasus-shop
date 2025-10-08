@@ -82,6 +82,7 @@ public class ProductService
     
     public PaginatedProductsResponse findProductsWithPagination(String search, String code, String name, int page, int size) 
     {
+        logger.debug("Looking for products...");
         Pageable pageable = PageRequest.of(page, size);
         Page<PGSProduct> productPage;
 
@@ -93,10 +94,15 @@ public class ProductService
             productPage = productRepository.findByCodeContainingIgnoreCaseOrNameContainingIgnoreCase(code, name, pageable);
         }
 
+        logger.debug("Found products: "+productPage.getNumberOfElements());
+        
+        //Why page to list and then to page???
+        
         List<PGSProductDTO> products = productPage.getContent().stream()
             .map(PGSProductDTO::new)
             .toList();
 
+        //logger.debug("Found products: "+products.size());
         /*products.forEach(item -> logger.trace("Item: " + item));*/
         
         return new PaginatedProductsResponse(
@@ -158,19 +164,11 @@ public class ProductService
             existingProduct.setBrand(updatedProduct.getBrand());
             existingProduct.setCategory(updatedProduct.getCategory());
             existingProduct.setComment(updatedProduct.getComment());
-            existingProduct.setDiscount(updatedProduct.getDiscount());
-            existingProduct.setDiscountType(updatedProduct.getDiscountType());
             existingProduct.setImageUrl(updatedProduct.getImageUrl());
-            existingProduct.setHeightCm(updatedProduct.getHeightCm());
-            existingProduct.setLengthCm(updatedProduct.getLengthCm());
             existingProduct.setMarked(updatedProduct.getMarked());
             existingProduct.setOther(updatedProduct.getOther());
-            existingProduct.setShippingCost(updatedProduct.getShippingCost());
             existingProduct.setStockQuantity(updatedProduct.getStockQuantity());
-            existingProduct.setTaxPercent(updatedProduct.getTaxPercent());            
             existingProduct.setUnit(updatedProduct.getUnit());
-            existingProduct.setWeightKg(updatedProduct.getWeightKg());
-            existingProduct.setWidthCm(updatedProduct.getWidthCm());
 
             return productRepository.save(existingProduct);
         }).orElseThrow(() -> new EntityNotFoundException("Product not found"));
@@ -241,8 +239,6 @@ public class ProductService
                     product.setBrand("xxx");
                     product.setActive(Boolean.TRUE);
                     product.setStockQuantity(random.nextInt(1000) + 10);
-                    product.setShippingCost(BigDecimal.ZERO);
-                    product.setTaxPercent(BigDecimal.ZERO);
                     generateRandomReviews(product);
                     createProduct(product);
                 }
@@ -280,8 +276,6 @@ public class ProductService
                 product.setBrand("xxx");
                 product.setActive(Boolean.TRUE);
                 product.setStockQuantity(random.nextInt(1000) + 10);
-                product.setShippingCost(BigDecimal.ZERO);
-                product.setTaxPercent(BigDecimal.ZERO);
 
                 PGSProductDTO pp = new PGSProductDTO(product);
                 plist.add(pp);

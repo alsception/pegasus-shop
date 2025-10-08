@@ -165,9 +165,8 @@
 
               <div class="py-4 grid grid-cols-3 gap-2 items-center">
                 <div class="col-span-2 flex flex-col gap-2">
-                  <p class="text-base sm:text-md font-medium truncate">{item.product.name}</p>
+                  
                   <div class="flex items-center gap-4">
-                      <label class="text-xs sm:text-sm text-gray-500">Quantity:</label>
                       <div class="flex items-center rounded-md overflow-hidden">
                         <button 
                           type="button" 
@@ -178,7 +177,7 @@
                               updateCart(item);
                             }
                           }}
-                          aria-label="Decrease quantity"
+                          aria-label="Ukloni"
                         >
                           -
                         </button>
@@ -198,12 +197,16 @@
                               updateCart(item);
                             }
                           }}
-                          aria-label="Increase quantity"
+                          aria-label="Dodaj"
                         >
                           +
                         </button>
                       </div>
+                                        <p class="text-base sm:text-md font-medium truncate">{item.product.name}</p>
+
                   </div>
+                      
+
                   <!-- Move delete button below -->
                   <div class="flex items-center">
                     <div class="tooltip tooltip-info" data-tip="Delete">
@@ -232,20 +235,7 @@
             {/each}
           </div>
           <div class="space-y-4 mt-6 divide-y divide-gray-200 dark:divide-slate-700">
-           <!--  <div class="pt-4 flex justify-between items-center">
-              <p class="text-base sm:text-md font-semibold">Subtotal:</p>
-              <p class="text-md sm:text-xl font-bold">{formatPrice(cart.subtotal || 0)}</p>
-            </div>
-            
-            <div class="pt-4 flex justify-between items-center">
-              <p class="text-base sm:text-md font-semibold">Tax:</p>
-              <p class="text-md sm:text-xl font-bold">{formatPrice(cart.tax || 0)}</p>
-            </div>
-             -->
-            <!-- <div class="pt-4 flex justify-between items-center">
-              <p class="text-base sm:text-md font-semibold">Shipping:</p>
-              <p class="text-md sm:text-xl font-bold">{formatPrice(cart.shippingCost || 0)}</p>
-            </div> -->
+        
                       <div class="divide-y divide-gray-200 dark:divide-slate-700"></div>
 
             <div class="pt-4 flex justify-between items-center">

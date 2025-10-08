@@ -23,12 +23,7 @@ export interface Product
     discount: number;
     discountType: string;
     unit: string;
-    weightKg: number;
-    lengthCm: number;
-    
-    widthCm: number;
-    heightCm: number;
-    shippingCost: number;
+  
     stockQuantity: number;
     comment: string;
 

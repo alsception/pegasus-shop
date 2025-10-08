@@ -16,7 +16,7 @@
     "isolatedModules": true,
     "moduleDetection": "force"
   },
-  "include": ["src/**/*.ts", "src/**/*.ts.svelte", "src/**/*.js", "src/**/*.svelte"],
+  "include": ["src/**/*.ts", "src/**/*.ts.svelte", "src/**/*.js", "src/**/*.svelte", "svelte.config.js", "svelte.config.js"],
   "composite": true
 }
 

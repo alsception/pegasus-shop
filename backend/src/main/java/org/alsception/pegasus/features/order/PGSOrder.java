@@ -19,6 +19,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.alsception.pegasus.features.users.PGSUser;
+import org.alsception.pegasus.features.table.PGSTable;
 
 @Data //Lombook for getters and setters
 @NoArgsConstructor
@@ -53,6 +54,10 @@ public class PGSOrder
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PGSOrderItem> items = new ArrayList<>();
     
+    @ManyToOne
+    @JoinColumn(name = "table_id")
+    private PGSTable table;
+
     @Column(nullable = true, updatable = false)
     private LocalDateTime created;
     

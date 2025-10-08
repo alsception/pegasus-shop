@@ -25,7 +25,11 @@
   let isDark = false;
   let searchTerm = "";
   let totalAmount = 0;
+  let isBlockView = true;
 
+  function toggleView() {
+    isBlockView = !isBlockView;
+  }
 
   // AUTHENTICATION
   $: auth.subscribe((value) => {
@@ -287,87 +291,115 @@
 </div>
 </div>
 
-<div id="results" class="w-full max-w-4xl mx-auto mt-6"></div>
-
-  {#if loading}
-
-  <LoadingOverlay/>
-
-  {:else if error}
-    
-  <ErrorDiv {error} />
-    
-  {:else}
-
-    {#if (orders.length === 0)}
-        
-      <div class="flex justify-center items-center h-64">
-        <h3 class="text-gray-500 dark:text-gray-400">No orders found.</h3>
-      </div>
-
+<!-- Add toggle button to switch views -->
+<div class="flex justify-end mb-4">
+  <button class="btn btn-secondary" on:click={toggleView}>
+    <i class="fas fa-th-large"></i>
+    {#if isBlockView}
+      Table view
     {:else}
+      Card view
+    {/if}
+  </button>
+</div>
 
-      <div class="max-w-[2048px] w-full overflow-x-auto rounded-lg align-middle text-center mx-auto">
-        <div class="nb-table-container">
-          <div class="nb-table-header text-left">Orders</div>
-          <table class="table table-zebra min-w-full divide-y divide-accent " >
-          <thead class="bg-base-200">
-            <tr class="h-12">
-              <th class="pgs-th">code</th>
-              <th class="pgs-th">Amount</th>
-              <th class="pgs-th">Status</th>
-              <th class="pgs-th">user</th>
-              <th class="pgs-th">Email</th>
-              <th class="pgs-th">Items</th>
-              <th class="pgs-th">Comment</th>          
-              <th class="pgs-th">created</th>       
-              <th class="pgs-th">Actions</th>          
-            </tr>
-          </thead>
-          <tbody>
-            {#each orders as order, i}
-              <tr class="bg-base-100  outline-1 outline-transparent hover:outline-blue-500 hover:bg-blue-600/15">
-                <td class="pgs-td">
-                  <a use:link href="/orders/{order.id}" class="pgs-hyperlink">{formatCode(order.code)}</a>
-                </td>
-                <td class="pgs-td-num font-mono font-bold">{formatPrice(order.price)}</td>
-                <td class="text-center">
-                  {#if order.status}
-                    <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-sm" style="text-transform: uppercase;">
-                      {order.status}
-                    </span>
-                  {/if}
-                </td>
-                <td class="pgs-td">{order.user?.username}</td>
-                <td class="pgs-td">{order.email}</td>
-                <td class="pgs-td-num font-mono">{order.items.length}</td>
-                <td class="text-center">{@html formatCommentInfo(order.comment)}</td>            
-                <td class="pgs-td font-mono">
-                  {@html formatDate(order.created,'New - created less than 30 minutes ago',30)}
-                </td>
-                <td class=" justify-center">
-                  <div class="tooltip tooltip-info" data-tip="Edit"><a class="px-4" aria-label="Edit" use:link href="/orders/mngmt/{order.id}"><i class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"></i></a></div>
-                  <button class="px-4" aria-label="Delete" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
-                    <div class="tooltip tooltip-info" data-tip="Delete">
-                    <i class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"></i>
-                  </div></button>
-                </td>      
-              </tr>
-            {/each}           
-          </tbody>
-          </table>
-        <div class="nb-table-footer text-left bg-secondary" style="background-color: var(--color-base-100);">
-          Total orders found:
-          <span class="font-bold"> {orders.length}</span>
-        <br>
-        <br>
-          Total amount: <span class="font-bold">{formatPrice(totalAmount)}</span>
+<!-- Show each item in the order card (Block view) -->
+{#if isBlockView}
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-16 p-16">
+    {#each orders as order}
+      <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-4 flex flex-col gap-2">
+        <div class="font-bold text-lg text-primary"># {formatCode(order.code)}</div>
+        <div class="text-sm text-gray-600 dark:text-gray-400"><b>{formatPrice(order.price)}</b></div>
+        <div class="text-sm">Status: 
+          <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-sm" style="text-transform: uppercase;">
+            {order.status}
+          </span>
         </div>
+        <div class="text-sm">Konobar: <strong>{order.user?.username}</strong> </div>
+        <div class="text-sm">Items: {order.items.length}</div>
+        <div class="text-sm">{@html formatCommentInfo(order.comment)}</div>
+        <div class="text-sm">⏰ {@html formatDate(order.created,'Novo',5)}</div>
+        <!-- Show each item -->
+        <div class="mt-2">
+          <div class="font-semibold text-sm mb-1">___________________________</div>
+          <ul class="list-disc ml-4">
+            {#each order.items as item}
+              <li class="text-xs text-gray-700 dark:text-gray-300">
+                <span>{item.quantity}</span> 
+                x
+                <span class="font-bold">{item.product?.name ?? item.name}</span>
+              </li>
+            {/each}
+          </ul>
+        </div>
+        <div class="flex gap-2 mt-2">
+          <a class="btn btn-sm btn-info" use:link href="/orders/{order.id}">Details</a>
+          <button class="btn btn-sm btn-error" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
+            Delete
+          </button>
         </div>
       </div>
-      
-    {/if}
-  {/if}
+    {/each}
+  </div>
+{:else}
+  <!-- Table view (existing code) -->
+  <div class="max-w-[2048px] w-full overflow-x-auto rounded-lg align-middle text-center mx-auto">
+    <div class="nb-table-container">
+      <div class="nb-table-header text-left">Orders</div>
+      <table class="table table-zebra min-w-full divide-y divide-accent " >
+      <thead class="bg-base-200">
+        <tr class="h-12">
+          <th class="pgs-th">code</th>
+          <th class="pgs-th">Amount</th>
+          <th class="pgs-th">Status</th>
+          <th class="pgs-th">user</th>
+          <th class="pgs-th">Items</th>
+          <th class="pgs-th">Comment</th>          
+          <th class="pgs-th">created</th>       
+          <th class="pgs-th">Actions</th>          
+        </tr>
+      </thead>
+      <tbody>
+        {#each orders as order, i}
+          <tr class="bg-base-100  outline-1 outline-transparent hover:outline-blue-500 hover:bg-blue-600/15">
+            <td class="pgs-td">
+              <a use:link href="/orders/{order.id}" class="pgs-hyperlink">{formatCode(order.code)}</a>
+            </td>
+            <td class="pgs-td-num font-mono font-bold">{formatPrice(order.price)}</td>
+            <td class="text-center">
+              {#if order.status}
+                <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-sm" style="text-transform: uppercase;">
+                  {order.status}
+                </span>
+              {/if}
+            </td>
+            <td class="pgs-td">{order.user?.username}</td>
+            <td class="pgs-td-num font-mono">{order.items.length}</td>
+            <td class="text-center">{@html formatCommentInfo(order.comment)}</td>            
+            <td class="pgs-td font-mono">
+              {@html formatDate(order.created,'New - created less than 30 minutes ago',30)}
+            </td>
+            <td class=" justify-center">
+              <div class="tooltip tooltip-info" data-tip="Edit"><a class="px-4" aria-label="Edit" use:link href="/orders/mngmt/{order.id}"><i class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"></i></a></div>
+              <button class="px-4" aria-label="Delete" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
+                <div class="tooltip tooltip-info" data-tip="Delete">
+                <i class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"></i>
+              </div></button>
+            </td>      
+          </tr>
+        {/each}           
+      </tbody>
+      </table>
+    <div class="nb-table-footer text-left bg-secondary" style="background-color: var(--color-base-100);">
+      Total orders found:
+      <span class="font-bold"> {orders.length}</span>
+    <br>
+    <br>
+      Total amount: <span class="font-bold">{formatPrice(totalAmount)}</span>
+    </div>
+    </div>
+  </div>
+{/if}
 
   <!-- ovde cemo staviti order details (items) -->
   {#if modalOrder}

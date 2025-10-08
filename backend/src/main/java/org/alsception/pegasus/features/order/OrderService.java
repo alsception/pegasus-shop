@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import org.alsception.pegasus.features.products.ProductRepository;
 import org.alsception.pegasus.core.exception.BadRequestException;
-import org.alsception.pegasus.core.utils.UniqueIdGenerator;
+import org.alsception.pegasus.core.utils.CodeGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,7 +67,7 @@ public class OrderService
                 //fix code
                 if(order.getCode()==null || "".equals(order.getCode()))
                 {
-                    order.setCode(UniqueIdGenerator.toAlpha(order.getId()));
+                    order.setCode(CodeGenerator.toAlpha(order.getId()));
                 }
                  
                 BigDecimal total = order.getItems().stream()
