@@ -134,24 +134,11 @@
       (err as Error)?.message ||
       "User not found or an unknown error occurred. ERR_80";
   }
-/* 
-  onMount(async () => {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
 
-    if (id) {
-      fetch(id);
-    }
-  }); */
-
-
-//**
-// PITAJ BOGA STA SE OVDE VRACA STRING SA JSONOMO...
-// 
-// */
-
-async function handleSubmit() {
-    try {
+async function handleSubmit() 
+{
+    try 
+    {
         loading = true;
         if (formData.dob) formData.dob += "T00:00"; //hack :)
         
@@ -160,28 +147,22 @@ async function handleSubmit() {
             body: JSON.stringify(formData),
         });
         
-        console.log(1)
-        console.log(response)
-        if (!response.ok) {
-          console.log(2)
-            const errorData = await response.json();
-            console.log(errorData);
-            // Pass the parsed error object directly
-            showErrorInModal(errorData);
-            return;
-        }
-        console.log(3)
+        //Ce da baci exception api ako se desi greska
+
         showSuccessToast("Saved");
         fetch(ID);
+
     } catch (err) {
+
       console.log(4)
         // fallback if fetch itself fails (e.g. network error)
         showErrorInModal({ message: (err as Error).message });
+
     } finally {
       console.log(5)
         loading = false;
     }
-}
+  }
 
 function showErrorInModal(error: any): void {
     console.error(error);
@@ -415,16 +396,6 @@ MDN Reference -->
               </div>
 
               <div class="w-full">
-
-                 <label
-                  for="img"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Profile picture</label>
-                 <button class="btn" on:click={openPixModal}>Choose picture</button>
-
-              </div>
-
-              <div class="w-full">
                 <div class="lg:col-span-2">
                   <div class="rounded-lg p-6">
                     <div class="flex flex-col">
@@ -586,84 +557,6 @@ MDN Reference -->
       <!-- Full-width underline -->
       <div class="h-px bg-neutral w-full"></div>
 
-      <!-- Address Section
-   
-  TODO: we dont save this yet to database. Address should be only one big textarea
-  
-  -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-        <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">Address</h3>
-          <p class="text-secondary text-sm mt-2">
-            Physical location and address details
-          </p>
-        </div>
-        <div class="lg:col-span-2">
-          <div class="rounded-lg">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div class="w-full">
-                <label
-                  for="addressName"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Name</label
-                >
-                <input
-                  id="addressName"
-                  type="text"
-                  class="pgs-input"
-                  bind:value={formData.addressName}
-                />
-              </div>
-
-              <div class="w-full">
-                <label
-                  for="street"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Street</label
-                >
-                <input
-                  id="street"
-                  type="text"
-                  class="pgs-input"
-                  bind:value={formData.street}
-                />
-              </div>
-
-              <div class="w-full">
-                <label
-                  for="town"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Town</label
-                >
-                <input
-                  id="town"
-                  type="text"
-                  class="pgs-input"
-                  bind:value={formData.town}
-                />
-              </div>
-
-              <div class="w-full">
-                <label
-                  for="state"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >State</label
-                >
-                <input
-                  id="state"
-                  type="text"
-                  class="pgs-input"
-                  bind:value={formData.state}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Full-width underline -->
-      <div class="h-px bg-neutral w-full"></div>
-
       <!-- Other Section -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
         <div class="lg:col-span-1">
@@ -710,20 +603,6 @@ MDN Reference -->
   {/if}
 </div>
 <!-- TODO: WE NEED SEPARATE MODAL FOR INFO/ERROR MESSAGE AND PROFILE PIX -->
-
-<dialog id="modal-pix" class="modal modal-bottom sm:modal-middle w-full">
-  <div class="modal-box" style="min-width: min-content;">
-    <h3 class="text-lg font-bold" id="modal-title-pix">Choose a picture</h3>
-    <p class="py-4" id="modal-content-pix">
-      <Pix/>
-    </p>
-    <div class="modal-action">
-      <form method="dialog">         
-        <button class="btn">Close</button>
-      </form>
-    </div>
-  </div>
-</dialog>
 
 <dialog id="modal" class="modal modal-bottom sm:modal-middle w-full">
   <div class="modal-box" style="min-width: min-content;">

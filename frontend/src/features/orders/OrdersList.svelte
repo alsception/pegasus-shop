@@ -223,7 +223,7 @@
       return "€ 0,00";
     }
     
-    return new Intl.NumberFormat('de-DE', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'EUR',
       minimumFractionDigits: 2,
@@ -308,33 +308,41 @@
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-16 p-16">
     {#each orders as order}
       <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-4 flex flex-col gap-2">
-        <div class="font-bold text-lg text-primary"># {formatCode(order.code)}</div>
-        <div class="text-sm text-gray-600 dark:text-gray-400"><b>{formatPrice(order.price)}</b></div>
-        <div class="text-sm">Status: 
-          <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-sm" style="text-transform: uppercase;">
-            {order.status}
-          </span>
+        <!-- Nicer card header -->
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="text-xl font-extrabold text-primary">#{formatCode(order.code)}</span>
+            <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-lg" style="text-transform: uppercase;">
+              {order.status}
+            </span>
+          </div>
         </div>
-        <div class="text-sm">Konobar: <strong>{order.user?.username}</strong> </div>
-        <div class="text-sm">Items: {order.items.length}</div>
+        <div class="flex items-center gap-2 text-sm text-primary mb-1">
+          <i class="fas fa-user"></i>
+          <span>Konobar: <strong>{order.user?.username}</strong></span>
+        </div>
+       
         <div class="text-sm">{@html formatCommentInfo(order.comment)}</div>
         <div class="text-sm">⏰ {@html formatDate(order.created,'Novo',5)}</div>
-        <!-- Show each item -->
-        <div class="mt-2">
-          <div class="font-semibold text-sm mb-1">___________________________</div>
-          <ul class="list-disc ml-4">
+        <!-- Nicer items list -->
+        <div class="mt-2 bg-base-100">
+          <ul class="flex flex-col gap-0">
             {#each order.items as item}
-              <li class="text-xs text-gray-700 dark:text-gray-300">
-                <span>{item.quantity}</span> 
-                x
-                <span class="font-bold">{item.product?.name ?? item.name}</span>
+              <li class="flex items-center gap-0 p-2 rounded bg-base-100 dark:bg-base-100 border-1 border-base-300">
+                <span class="font-bold text-primary">{item.quantity} x </span>&nbsp;
+                <span class="font-bold text-primary"> {item.product?.name ?? item.name}</span>
+                {#if item.price}
+                  <span class="text-xs text-gray-500 ml-auto">{formatPrice(item.price)}</span>
+                {/if}
               </li>
             {/each}
           </ul>
+                    <span class="text-lg font-bold text-primary p-2">{formatPrice(order.price)}</span>
+
         </div>
         <div class="flex gap-2 mt-2">
-          <a class="btn btn-sm btn-info" use:link href="/orders/{order.id}">Details</a>
-          <button class="btn btn-sm btn-error" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
+          <a class="btn btn-sm btn-ghost" use:link href="/orders/{order.id}">Details</a>
+          <button class="btn btn-sm btn-ghost text-red-700" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
             Delete
           </button>
         </div>

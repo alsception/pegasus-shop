@@ -91,26 +91,24 @@ async function client<T>(
   }
 
   const response = await fetch(`${API_BASE_URL}${path}`, {...options, headers});
-  console.log(response)
+
   if (!response.ok) 
   {
-    console.log('not ok')
     let message = await processErrMsg(response, '');
     throw new Error(`${message}`);
   }
-  console.log(101)
+
   // Check if response has content before parsing JSON
   const contentLength = response.headers.get('content-length');
   const contentType = response.headers.get('content-type');
-  console.log(105)
+
   if (contentLength === '0' || response.status === 204 || !contentType?.includes('application/json')) 
   {
-    console.log(108)
     return null as T; // or return {} as T
   }
-  console.log(111)
+
   let x = await response.json(); // Add await here too!
-  console.log(113)
+
   return x;
 }
 

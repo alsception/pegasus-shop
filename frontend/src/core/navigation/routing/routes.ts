@@ -11,6 +11,7 @@ import ProductDetail                from "../../../features/products/ProductPage
 import ProductAdministration        from "../../../features/products/ProductAdministration.svelte";
 
 import Tables                     from "../../../features/tables/Tables.svelte";
+import Reservations                     from "../../../features/reservations/Reservations.svelte";
 
 import CartDetails                  from "../../../features/cart/CartDetails.svelte";
 import Checkout                     from "../../../features/cart/Checkout.svelte";
@@ -41,6 +42,7 @@ export const components: ComponentRegistry =
     "/products/:id": ProductDetail,
     "/products/mngmt/:id": ProductAdministration,
     "/tables": Tables,
+    "/reservations": Reservations,
     "/users": Users,
     "/users/:id": UserDetails,
     "/users/my-account": MyAccount,     //TODO: Dali da ostavimo /users/my-account ili, ako ne onda mora da bude secured /users endpoint da nebi user dobio nekog ko nije, osim ako nije admin

@@ -69,6 +69,15 @@ export const navRoutes: NavRoutesMap =
       admin: true,
       customer: true,
     },
+    "/reservations": {
+      label: "Rezervacije",
+      icon: "calendar",
+      href: "#/reservations",
+      component: null,
+      disabled: false,
+      admin: true,
+      customer: true,
+    },
     "/checkout": {
       label: "Checkout",
       icon: "credit-card",
