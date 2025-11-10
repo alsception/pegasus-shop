@@ -1,6 +1,6 @@
 export interface Reservation {
   id: number;
-  dan: string; // Ideally format LocalDateTime to string in backend or here
+  dan: string; 
   vreme: string;
   ime: string;
   email: string;

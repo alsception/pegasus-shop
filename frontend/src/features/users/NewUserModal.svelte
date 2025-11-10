@@ -88,11 +88,11 @@
         class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700"
       >
         <h2 class="text-xl font-semibold text-gray-800 dark:text-white">
-          Create New User
+          New User
         </h2>
         <button
           class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-          aria-label="Create New User"
+          aria-label="Close modal"
           on:click={closeModal}
         >
           <i class="fas fa-times"></i>
@@ -103,12 +103,10 @@
         <fieldset
           class="fieldset bg-base-200 border-base-300 rounded-box w-full border p-4"
         >
-          <legend class="fieldset-legend">New User</legend>
-
           <label class="label" for="username">Username</label>
           <input
             type="text"
-            class="input"
+            class="pgs-input mb-2"
             placeholder="username"
             bind:value={newUser.username}
             required
@@ -117,7 +115,7 @@
           <label class="label" for="password">Password</label>
           <input
             type="password"
-            class="input"
+            class="pgs-input mb-2"
             placeholder="password"
             bind:value={newUser.password}
             required
@@ -126,7 +124,7 @@
           <label class="label" for="firstName">First name</label>
           <input
             type="text"
-            class="input"
+            class="pgs-input mb-2"
             placeholder="First name"
             bind:value={newUser.firstName}
           />
@@ -134,7 +132,7 @@
           <label class="label" for="lastName">Last name</label>
           <input
             type="text"
-            class="input"
+            class="pgs-input mb-2"
             placeholder="Last name"
             bind:value={newUser.lastName}
           />
@@ -142,7 +140,7 @@
           <label class="label" for="email">email</label>
           <input
             type="text"
-            class="input"
+            class="pgs-input mb-2"
             placeholder="email"
             bind:value={newUser.email}
           />
@@ -150,13 +148,13 @@
           <label class="label" for="phone">phone</label>
           <input
             type="text"
-            class="input"
+            class="pgs-input mb-2"
             placeholder="phone"
             bind:value={newUser.phone}
           />
 
           <label for="role" class="label"> Role </label>
-          <select id="type" bind:value={newUser.role} class="select">
+          <select id="type" bind:value={newUser.role} class="pgs-input mb-2">
             {#each userTypes as type}
               <option value={type}>{type}</option>
             {/each}

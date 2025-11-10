@@ -337,7 +337,7 @@
               </li>
             {/each}
           </ul>
-                    <span class="text-lg font-bold text-primary p-2">{formatPrice(order.price)}</span>
+                   TOTAL:  <span class="text-lg font-bold text-primary p-2">{formatPrice(order.price)}</span>
 
         </div>
         <div class="flex gap-2 mt-2">

@@ -6,8 +6,10 @@
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import ReservationCard from "./ReservationCard.svelte";
   import Login from "../../core/auth/Login.svelte";
-  import type { Reservation } from "./Reservation.ts";
+  import type { Reservation } from "./Reservation";
   import NewReservation from "./NewReservation.svelte";
+  import SearchForm from "./SearchReservations.svelte";
+  import NewReservationModal from "./NewReservationModal.svelte";
 
   document.title = "Rezervacije | Pegasus";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -21,6 +23,8 @@
   let size = 20;
   let totalReservations = 0;
   let totalPages = 0;
+  let showCreateModal = false;
+
 
   // Auth subscription
   $: auth.subscribe((value) => {
@@ -29,7 +33,7 @@
 
   // Fetch reservations on mount
   onMount(() => {
-    fetchReservations();
+    //fetchReservations();
   });
 
   async function fetchReservations() {
@@ -64,11 +68,17 @@
       fetchReservations();
     }
   }
+
   function prevPage() {
     if (page > 0) {
       page -= 1;
       fetchReservations();
     }
+  }
+  
+  function openCreateModal() 
+  {
+    showCreateModal = true;
   }
 </script>
 
@@ -77,39 +87,20 @@
 {:else if error}
   <ErrorDiv {error} />
 {:else}
-  <div class="w-full flex justify-center px-4">
-    <div class="w-full max-w-[1800px] p-4 bg-transparent rounded-lg">
-      <!-- Add controls here if needed (search, filters, etc.) -->
 
-      <!-- Pagination Controls: hidden -->
-      <div class="flex flex-col sm:flex-row justify-between items-center mt-4 gap-2 hidden">
-        <div class="flex gap-2 items-center">
-          <button class="btn btn-outline" on:click={prevPage} disabled={page === 0}>⬅️ Prev</button>
-          <button class="btn btn-outline" on:click={nextPage} disabled={page + 1 >= totalPages}>Next ➡️</button>
-        </div>
-        <div class="text-sm text-gray-600 dark:text-gray-400">
-          Page <b>{page + 1}</b> of <b>{totalPages}</b> | Total reservations: <b>{totalReservations}</b>
-        </div>
-      </div>
-    </div>
-  </div>
-    <NewReservation />
+  <button
+    on:click={openCreateModal}
+    class="btn btn-dash"
+  >       
+      <i class="fas fa-plus"></i><i class="fas fa-table"></i>
+      Nova rezervacija
+  </button>
 
-  <div id="results" class="w-full max-w-4xl mx-auto mt-6"></div>
-
-  {#if loading}
-    <LoadingOverlay />
-  {/if}
-
-  {#if reservations.length === 0 && !loading}
-    Nema nadjenih rezervacija
-  {:else}
-    <div
-      class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 gap-8 p-4"
-    >
-      {#each reservations as reservation, i}
-        <ReservationCard {reservation} />
-       {/each}
-    </div>
-  {/if}
+  <SearchForm/>
+  
 {/if}
+
+<NewReservationModal
+    isOpen={showCreateModal}
+    on:close={() => {showCreateModal = false;}}
+  />

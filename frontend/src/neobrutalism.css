@@ -1707,13 +1707,14 @@ html {
   margin: 20px;
   border-radius: 8px;
   overflow: hidden;
-  border: 3px solid #000;
-  box-shadow: -3px 3px 0px #000000;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+/*   border: 1px solid #818181;
+ *//*   box-shadow: -3px 3px 0px #000000;
+ */  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 .card:hover {
   box-shadow: 0px 0px 0px #000000;
   transform: translate(-6px, 6px);
+  border: 1px solid #2dc7ee;
 }
 
 .card a {
