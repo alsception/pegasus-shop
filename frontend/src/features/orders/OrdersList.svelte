@@ -233,21 +233,18 @@
 
   function getOrderStatusColor(status: string): string {
     switch (status?.toUpperCase()) {
-      case "PAID":
+      case "READY":
       case "DELIVERED":
         return "success";
-      case "PENDING":
+      case "CANCELLED":
       case "REFUNDED":
         return "warning";
       case "RETURNED":
         return "error";
-      case "SHIPPED":
-        return "info";
-      case "PROCESSING":
+      case "IN_PREPARATION":
         return "accent";
-      case "CREATED":
+      case "WAITING":
         return "info";
-      case "CANCELLED":
       default:
         return "secondary";
     }
@@ -303,11 +300,15 @@
   </button>
 </div>
 
+{#if loading}
+  <LoadingOverlay />
+{/if}
+
 <!-- Show each item in the order card (Block view) -->
 {#if isBlockView}
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-16 p-16">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-16 p-2">
     {#each orders as order}
-      <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-4 flex flex-col gap-2">
+      <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-4 flex flex-col gap-2 h-fit">
         <!-- Nicer card header -->
         <div class="flex items-center justify-between mb-2">
           <div class="flex items-center gap-2">
@@ -317,32 +318,37 @@
             </span>
           </div>
         </div>
-        <div class="flex items-center gap-2 text-sm text-primary mb-1">
-          <i class="fas fa-user"></i>
-          <span>Konobar: <strong>{order.user?.username}</strong></span>
+
+        <div class="flex items-center gap-2 text-sm text-primary mb-1 ">
+          <div class="text-sm mr-4"><i class="fas fa-clock"></i> {@html formatDate(order.created,'Novo',5)}</div>
+          <div class="flex items-center gap-2 text-sm text-primary">
+            <i class="fas fa-user"></i>
+            <span><strong>{order.user?.username}</strong></span>
+          </div>          
         </div>
-       
+        
         <div class="text-sm">{@html formatCommentInfo(order.comment)}</div>
-        <div class="text-sm">⏰ {@html formatDate(order.created,'Novo',5)}</div>
         <!-- Nicer items list -->
         <div class="mt-2 bg-base-100">
           <ul class="flex flex-col gap-0">
             {#each order.items as item}
-              <li class="flex items-center gap-0 p-2 rounded bg-base-100 dark:bg-base-100 border-1 border-base-300">
-                <span class="font-bold text-primary">{item.quantity} x </span>&nbsp;
-                <span class="font-bold text-primary"> {item.product?.name ?? item.name}</span>
+              <li class="flex items-center gap-0 p-2 bg-base-100 dark:bg-base-100 border-1 border-base-300">
+                <span class="text-primary">{item.quantity} x </span>&nbsp;
+                <span class="text-primary"> {item.product?.name ?? item.name}</span>
                 {#if item.price}
                   <span class="text-xs text-gray-500 ml-auto">{formatPrice(item.price)}</span>
                 {/if}
               </li>
             {/each}
           </ul>
-                   TOTAL:  <span class="text-lg font-bold text-primary p-2">{formatPrice(order.price)}</span>
-
+            <div style="align-items: end;display:grid;align-content: end; text-align: right;"
+                  class="g-base-100 dark:bg-base-100 border-1 border-base-300">
+              <span class="text-lg font-bold text-primary p-2">{formatPrice(order.price)}</span>
+            </div>
         </div>
         <div class="flex gap-2 mt-2">
-          <a class="btn btn-sm btn-ghost" use:link href="/orders/{order.id}">Details</a>
-          <button class="btn btn-sm btn-ghost text-red-700" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
+          <a class="btn btn-sm btn-ghost hover:text-sky-400" use:link href="/orders/{order.id}">Details</a>
+          <button class="btn btn-sm btn-ghost hover:text-red-700" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
             Delete
           </button>
         </div>

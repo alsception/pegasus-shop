@@ -292,7 +292,7 @@ public class CartService
         order.setCurrency("EUR");
         
         //7. Set initial status
-        order.setStatus("CREATED");
+        order.setStatus("WAITING");
         
         log.trace("Saving order to db");
         //8. Finally, save

@@ -278,7 +278,6 @@
                           aria-label="Dodaj novu rezervaciju"
                         >
                           <i class="fas fa-plus text-xl"></i>
-                          <i class="fas fa-table text-xl"></i>
                         </button>
                       </label>
                     </div>

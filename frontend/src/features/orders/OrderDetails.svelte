@@ -28,14 +28,12 @@
 
   // Available order statuses
   const orderStatuses = [
-    "CREATED",  
-    "PENDING",
-    "CONFIRMED",
-    "PROCESSING",
-    "SHIPPED",
+    "WAITING",  
+    "IN_PREPARATION",
+    "READY",
     "DELIVERED",
+    //---------
     "CANCELLED",
-    "REFUNDED",
     "RETURNED",
   ];
 
@@ -56,9 +54,7 @@
   let formData: Partial<Order> = {
     code: "",
     status: "",
-    paymentStatus: "",
     paymentMethod: "",
-    taxAmount: 0,
     taxPercent: 0,
     shippingCost: 0,
     discount: 0,
@@ -297,22 +293,22 @@
 
             <div class="w-full">
               <label
-                for="paymentStatus"
+                for="orderStatus"
                 class="block text-sm font-medium text-gray-700 mb-2"
-                >Payment Status</label
+                >Status</label
               >
               <select
-                id="paymentStatus"
-                bind:value={formData.paymentStatus}
+                id="orderStatus"
+                bind:value={formData.status}
                 class="pgs-input font-mono"
               >
-                {#each paymentStatuses as status}
+                {#each orderStatuses as status}
                   <option value={status}>{status}</option>
                 {/each}
               </select>
             </div>
 
-            <div class="w-full">
+            <!-- <div class="w-full">
               <label
                 for="paymentMethod"
                 class="block text-sm font-medium text-gray-700 mb-2"
@@ -328,7 +324,7 @@
                   <option value={method}>{method}</option>
                 {/each}
               </select>
-            </div>
+            </div> -->
 
 
             <div class="w-full">
@@ -359,11 +355,9 @@
         </div>
       </div>
 
-      <!-- Full-width underline -->
-      <div class="h-px bg-neutral w-full"></div>
 
       <!-- Customer Information Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16 hidden">
         <div class="lg:col-span-1">
           <h3 class="text-2xl font-semibold text-primary">
             Customer Information
@@ -410,7 +404,7 @@
                   <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
                     <div class="md:col-span-2">
                       <p class="text-base font-medium">{item.product?.name || item.productName || 'Product'}</p>
-                      <p class="text-sm text-gray-500">Code: {item.product?.code || item.productCode || 'N/A'}</p>
+                      <p class="text-sm text-gray-500"> {item?.created || '-'}</p>
                     </div>
                     <div class="text-center">
                       <label class="block text-xs text-gray-500 mb-1">Quantity</label>
@@ -454,28 +448,13 @@
             Additional order notes and comments
           </p>
         </div>
+     
         <div class="lg:col-span-2">
           <div class="w-full">
             <label
               for="notes"
               class="block text-sm font-medium text-gray-700 mb-2"
-              >Customer Notes</label
-            >
-            <textarea
-              id="comment"
-              class="pgs-input resize-vertical"
-              bind:value={formData.comment}
-              rows="4"
-            ></textarea>
-          </div>
-        </div>
-        <br>
-        <div class="lg:col-span-2">
-          <div class="w-full">
-            <label
-              for="notes"
-              class="block text-sm font-medium text-gray-700 mb-2"
-              >Order Notes</label
+              > Notes</label
             >
             <textarea
               id="notes"

@@ -1707,13 +1707,12 @@ html {
   margin: 20px;
   border-radius: 8px;
   overflow: hidden;
-/*   border: 1px solid #818181;
- *//*   box-shadow: -3px 3px 0px #000000;
- */  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  border: 1px transparent;
+
 }
 .card:hover {
-  box-shadow: 0px 0px 0px #000000;
-  transform: translate(-6px, 6px);
+  /* box-shadow: 0px 0px 0px #000000;
+  transform: translate(-6px, 6px); */
   border: 1px solid #2dc7ee;
 }
 
@@ -1750,8 +1749,9 @@ html {
 .nb-card {
   background-color: var(--color-base-200);
   color: #000000;
-  border: 3.5px solid #000000;
-  box-shadow: 8px 8px 0px #000000;
+  border: none;/* 3.5px solid #000000; */
+  border-radius: 9px;
+  /* box-shadow: 8px 8px 0px #000000; */
   width: 100%;
   max-width: 100%;
   transition: all 0.15s cubic-bezier(0.77, 0, 0.18, 1);

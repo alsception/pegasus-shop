@@ -15,9 +15,9 @@
 
   const allItems: Item[] = [
     {
-      title: "Users",
-      description: "Manage and view users",
-      icon: "users",
+      title: "👤 Korisnici",
+      description: "Upravljanje korisnicima",
+      icon: "users--",
       href: "/users",
       color: "blue",
       default: false,
@@ -25,9 +25,9 @@
       customer: false,
     },
     {
-      title: "Shop",
-      description: "Browse products",
-      icon: "box",
+      title: "📓 Jelovnik",
+      description: "Pregledaj proizvode",
+      icon: "box--",
       href: "/products?listView=false",
       color: "green",
       default: true,
@@ -35,9 +35,9 @@
       customer: true,
     },
     {
-      title: "Products administration",
+      title: "📚 Upravljanje proizvodima",
       description: "Manage store items",
-      icon: "box",
+      icon: "box--",
       href: "/products?listView=true",
       color: "yellow",
       default: false,
@@ -55,9 +55,9 @@
       customer: true,
     },
     {
-      title: "Orders",
+      title: "📝 Narudzbe",
       description: "View and manage orders",
-      icon: "truck",
+      icon: "truck--",
       href: "/orders",
       color: "red",
       default: false,
@@ -139,9 +139,9 @@
       class={`group block p-6 bg-base-200 dark:bg-slate-950 
              transition-all duration-200 
             hover:bg-accent/5 border-3 border-base-100  
-            text-primary dark:text-accent home-link
+            text-primary dark:text-primary home-link
             hover:text-white dark:hover:bg-black
-            hover:bg-linear-to-br hover:from-blue-600 hover:to-violet-600 nb-card
+            hover:bg-linear-to-br hover:from-blue-600 nb-card
             `}
     >
       <div
@@ -150,11 +150,11 @@
         <i class="fas fa-{item.icon} w-5 mr-2"></i>
       </div>
 
-      <h2 class="text-2xl text-accent font-semibold group-hover:text-white">
+      <h2 class="text-2xl text-primary font-semibold group-hover:text-white">
         {item.title}
       </h2>
 
-      <p class="mt-2 text-base dark:text-violet-400 text-primary/66 group-hover:text-white">
+      <p class="mt-2 text-base dark:text-base text-primary/66 group-hover:text-white">
         {item.description}
       </p>
     </a>

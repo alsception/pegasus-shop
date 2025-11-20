@@ -1,6 +1,7 @@
 <script lang="ts">
   import LoadingOverlay from '../utils/LoadingOverlay.svelte';
   import { register } from "../services/client";
+  import HeaderLite from '../navigation/HeaderLite.svelte';
 
   document.title = 'Register | Pegasus'
 
@@ -26,6 +27,8 @@
   }
 </script>
 
+<HeaderLite/>
+
 <div class="flex items-center justify-center min-h-screen" transition:scale={{ duration: 1000, start: 0.0 }}>
   <form
     on:submit|preventDefault={handleSubmit}
@@ -34,7 +37,7 @@
     <h2
       class="text-2xl font-semibold mb-8 text-center text-primary dark:text-gray-300"
     >
-      Pegasus: Registration
+      Registration
     </h2>
 
     {#if loading}

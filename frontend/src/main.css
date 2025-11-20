@@ -142,7 +142,7 @@ button:focus {
   text-shadow: 0 0 8px #ff00ea, 0 0 16px #00fff7 !important; /* magenta & cyan glow */
 }
 
-/* This is used for logo*/
+/* This is used for logo. edit: not anymore lol*/
 .yellowtail-regular {
   font-family: 'Yellowtail', cursive;
   font-weight: 400;
@@ -370,4 +370,9 @@ body {
 
 .badge{
   border-radius: 5px;
+}
+
+/** Tooltip pozadina*/
+.tooltip::before{
+  background-color: #000 !important;
 }

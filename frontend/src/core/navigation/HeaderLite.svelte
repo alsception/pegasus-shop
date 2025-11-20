@@ -1,6 +1,5 @@
 <script>
   import { onMount } from "svelte";
-  import PrimaryMenu from "./menu/PrimaryMenu.svelte";
 
   onMount(() => {
     const themeCheckbox = document.querySelector('input.theme-controller');
@@ -38,7 +37,6 @@
         <i class="fas fa-bars text-xl"></i>
       </div>
 
-      <PrimaryMenu />
     </div>
   </div>
   <div class="navbar-center">

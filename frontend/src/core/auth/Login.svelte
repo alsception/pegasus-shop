@@ -20,6 +20,7 @@
   import LoginTest from "./LoginTest.svelte";
   import { scale } from "svelte/transition";
   import { push } from "svelte-spa-router";
+  import HeaderLite from "../navigation/HeaderLite.svelte";
 
   document.title = "Log in | Pegasus";
 
@@ -43,24 +44,19 @@
   }
 </script>
 
+<HeaderLite/>
+
 <LoginTest/>
  
 <div class="flex items-center justify-center min-h-screen relative" >
-  <div class="p-6 border-2 border-cyan-400 rounded-lg /*animate-pulse*/ shadow-[0_0_10px_cyan,0_0_20px_cyan,0_0_40px_cyan] relative z-10 bg-black bg-opacity-100" style="box-shadow: none;"  transition:scale={{ duration: 700, start: 0.5 }}>
+  <div class=" rounded-lg /*animate-pulse*/ relative z-10 bg-slate-950 bg-opacity-100" style="box-shadow: none;"  transition:scale={{ duration: 700, start: 0.5 }}>
 
-    <h1 class="text-4xl mb-4 text-center font-bold bg-gradient-to-r from-sky-400 via-blue-500 to-violet-600 text-transparent bg-clip-text font-mono uppercase tracking-widest yellowtail-regular">
-      Pegasus
-    </h1>
-    
-   <div class="w-[112%] ml-[-6%] h-1 bg-transparent mb-4 " transition:scale={{ duration: 200, start: 0.5 }}>
-      <div class="w-full h-full bg-cyan-400 /*animate-pulse*/ shadow-[0_0_10px_cyan,0_0_20px_cyan,0_0_40px_cyan]"></div>
-    </div>
 
     <form
       on:submit|preventDefault={handleLogin}
       
-      class="w-full max-w-md relative p-6 px-10 m-[5px] rounded-2xl bg-black bg-opacity-100"
-      style="background-color: rgba(0, 0, 0, 1) !important;"
+      class="w-full max-w-md relative p-6 px-10 m-[5px] rounded-2xl bg-slate-950 bg-opacity-100"
+      
       
     >
       {#if loading}

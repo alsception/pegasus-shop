@@ -4,5 +4,5 @@
   <span
     class="loading loading-infinity mb-2 text-blue-500"
     style="width: 4rem; height: 2rem;"
-  ></span>Loading
+  ></span>Učitavam...
 </div>
