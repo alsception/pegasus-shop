@@ -2,6 +2,8 @@
   import { onMount } from "svelte";
   import { getCurrentRole } from "./services/SessionStore";
 
+  document.title = "Pegasus";
+
   type Item = {
     title: string;
     description: string;
@@ -45,9 +47,9 @@
       customer: false,
     },
     {
-      title: "My Cart",
-      description: "View, update or delete items in your cart",
-      icon: "shopping-basket",
+      title: "🧺 Košarica",
+      description: "Pregledaj proizvode u košarici",
+      icon: "",//"shopping-basket",
       href: "/cart",
       color: "orange",
       default: false,
@@ -65,9 +67,19 @@
       customer: true,
     },
     {
-      title: "Tables",
+      title: "📅 Rezervacije",
+      description: "Upravljaj rezervacijama",
+      icon: "truck--",
+      href: "/reservations",
+      color: "red",
+      default: false,
+      admin: true,
+      customer: true,
+    },
+    {
+      title: "🪑 Stolovi ",
       description: "View and manage tables",
-      icon: "table",
+      icon: "--table",
       href: "/tables",
       color: "yellow",
       default: false,
@@ -75,10 +87,10 @@
       customer: true,
     },
     {
-      title: "Gallery",
+      title: "🖼️ Gallery",
       description:
         "View and manage picture gallery. Billions of free pictures, by Unsplash API",
-      icon: "image",
+      icon: "//image",
       href: "/pix",
       color: "violet",
       default: true,
@@ -141,7 +153,7 @@
             hover:bg-accent/5 border-3 border-base-100  
             text-primary dark:text-primary home-link
             hover:text-white dark:hover:bg-black
-            hover:bg-linear-to-br hover:from-blue-600 nb-card
+            hover:bg-linear-to-br hover:from-blue-600 /*nb-card*/
             `}
     >
       <div

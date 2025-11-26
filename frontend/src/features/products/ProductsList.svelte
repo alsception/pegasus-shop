@@ -253,8 +253,10 @@
           <thead class="bg-[#10273c] border-2 border-primary/10">
             <tr class="h-12">
               <th class="pgs-th">Proizvod</th>
-              <th class="pgs-th">Brand</th>
+              <th class="pgs-th">Kategorija</th>
               <th class="pgs-th">Price</th>
+              <th class="pgs-th"></th>
+              <th class="pgs-th"></th>
               <th class="pgs-th">Actions</th>
             </tr>
           </thead>
@@ -269,12 +271,10 @@
                   >
                 </td>
                 <td class="pgs-td">{product.category}</td>
-                <td class="pgs-td">{product.brand}</td>
                 <td class="pgs-td-num">{product.basePrice}</td>
                 <td class="text-center"
                   >{@html formatCommentInfo(product.comment)}</td
                 >
-                <td class="pgs-td">{product.other}</td>
                 <td class="pgs-td font-mono whitespace-nowrap"
                   >{@html formatDate(product.created, "new", 15)}</td
                 >

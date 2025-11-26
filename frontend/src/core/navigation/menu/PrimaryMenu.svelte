@@ -77,7 +77,7 @@
                  text-primary text-sm"
         >
           <i class="fas fa-{item.icon} w-5 mr-2"></i>
-          <span class="dark:text-gray-400">{item.label}</span>
+          <span class="dark:text-gray-400 hover:text-blue-400">{item.label}</span>
         </a>
       {:else}
         <div

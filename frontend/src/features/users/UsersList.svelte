@@ -3,7 +3,7 @@
   import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";
   import { get } from "svelte/store";
-  import { formatCommentInfo, formatDate } from "../../utils/formatting";
+  import { formatCommentInfo, formatDate, formatDateTime, formatTime } from "../../utils/formatting";
   import { formatActive } from "../../utils/formatting";
   import { logout } from "../../core/services/client";
   import type { FPGSUser } from "./FPGSUser";
@@ -249,7 +249,7 @@
   <ErrorDiv {error} />
 {:else}
 <div class="w-full flex justify-center px-4">
-  <div class="w-full max-w-4xl p-4 bg-transparent rounded-lg">
+  <div class="w-full max-w-4xl p-4 bg-base-200 rounded-lg">
     <form
       on:submit|preventDefault={handleFormSubmit}
       class="flex flex-col sm:flex-row items-center gap-3"
@@ -257,12 +257,11 @@
       <input
         type="text"
         bind:value={searchTerm}
-        placeholder="Search users..."
-        class="input input-primary dark:input-accent border-2"
+        class="input input-primary dark:input-info border-2"
         />
       <button type="submit" class="btn btn-dash">
         <i class="fas fa-search"></i>
-          Search
+        Traži
       </button>
      
       <button
@@ -270,7 +269,7 @@
         class="btn btn-dash"
       >       
           <i class="fas fa-plus"></i><i class="fas fa-user"></i>
-          Create new user
+          Novi korisnik
       </button>
     </form>
   </div>
@@ -357,7 +356,7 @@
       <tbody class="">
 
         {#each users as user, i}     
-            <tr id="tr-{i}" class="{ getClass(user.modified) + ' /*bg-base-200 */ outline-1 outline-transparent pgs-tr border-2 border-primary/10'} ">            
+          <tr class="bg-base-100  outline-1 outline-transparent hover:outline-blue-500 hover:bg-blue-600/15">
             
               <td class="justify-center pgs-td-center px-4 ">
                 <input type="checkbox" class="checkbox checkbox-accent checkbox-xs" 	on:change={(event) => handleCheckboxChange(event, i)} />
@@ -376,10 +375,10 @@
                   >{@html formatCommentInfo(user.comment)}</td
                 >
               <td class="pgs-td font-mono justify-right">
-                {@html formatDate(user.created,'new',15)}
+                {@html formatDate(user.created,'Novo',15)}
               </td>
               <td class="pgs-td font-mono pgs-td-num ">
-                {@html formatDate(user.modified,'Changed less then 15 minutes ago',15)}
+                {@html formatDate(user.modified,'Izmenjeno pre manje od 15 minuta',15)}
               </td>
               <td class="pgs-td font-mono"> {formatActive(user.active)}</td>      
               <td class="px-2">
@@ -398,7 +397,7 @@
               </td>
             </tr>          
         {/each}
-        <tr class="bg-base-200 border-2 border-primary/10"> 
+        <tr class="bg-base-200 "> 
           <td colspan="10" class="pgs-td font-mono h-[64px]">Total users found: {users.length}</td>  
         </tr>  
       </tbody>

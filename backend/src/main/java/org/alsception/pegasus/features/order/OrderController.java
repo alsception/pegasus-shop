@@ -6,6 +6,7 @@ import java.util.List;
 import org.alsception.pegasus.core.exception.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,9 @@ public class OrderController {
     private final OrderService orderService;
 
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
+    
+    @Autowired
+    private OrderMapper mapper;
 
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
@@ -64,17 +68,18 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<PGSOrder> updateOrder(
+    @PutMapping(value = "/{id}", consumes="application/json")
+    public ResponseEntity<PGSOrderDTO> updateOrder(
             @PathVariable Long id,
-            @RequestBody PGSOrder updatedOrder,
+            @RequestBody PGSOrderDTO updatedOrder,
             Principal principal) 
     {
+        logger.debug("Updating order "+id);
         try {
             // TODO: Check if user is owner or admin here
-            PGSOrder order = orderService.update(id, updatedOrder);
+            PGSOrder order = orderService.update(id, mapper.toEntity(updatedOrder));
             logger.info("Updated order " + id);
-            return ResponseEntity.ok(order);
+            return ResponseEntity.ok(mapper.toDTO(order));
         } catch (Exception e) {
             logger.error("Error updating order: " + e.getMessage(), e);
             return ResponseEntity.notFound().build();

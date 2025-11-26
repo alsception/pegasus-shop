@@ -99,9 +99,9 @@
         </button>
       </div>
 
-      <form on:submit|preventDefault={submitForm} class="p-4">
+      <form on:submit|preventDefault={submitForm} class="p-0">
         <fieldset
-          class="fieldset bg-base-200 border-base-300 rounded-box w-full border p-4"
+          class="fieldset bg-base-100 rounded-box w-full p-4"
         >
           <label class="label" for="username">Username</label>
           <input
@@ -171,7 +171,7 @@
           </label>
         </fieldset>
 
-        <div class="mt-6 flex justify-end space-x-3">          
+        <div class="mt-6 flex justify-end space-x-3 p-4">          
           <button type="button" on:click={closeModal} class="btn">
             Cancel
           </button>

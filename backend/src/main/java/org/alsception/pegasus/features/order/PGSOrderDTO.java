@@ -1,5 +1,6 @@
-/* package org.alsception.pegasus.features.order;
+package org.alsception.pegasus.features.order;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -23,9 +24,7 @@ import org.alsception.pegasus.features.table.PGSTable;
 
 @Data //Lombook for getters and setters
 @NoArgsConstructor
-@Entity
-@Table(name = "pgs_orders")
-public class PGSOrder
+public class PGSOrderDTO
 {
     @Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,7 +48,7 @@ public class PGSOrder
     private BigDecimal price; 
     
     //@JsonIgnore
-    @JsonManagedReference
+    @JsonIgnore
     //⚠️ Ovo može izazvati probleme sa performansama ako lista items sadrži mnogo podataka.
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PGSOrderItem> items = new ArrayList<>();
@@ -74,4 +73,4 @@ public class PGSOrder
         modified = LocalDateTime.now();
     }
     
-} */
+} 

@@ -34,12 +34,12 @@
   </button>
 {:else}
   <button
-    class="btn bg-green-400"
-    style="width: {width}"
+    class="btn"
+    style="width: {width}; background-color:#FFEB3B;"
     on:click={() => addToCart(product.id)}
   >
     <span data-text="Add to cart" class="text-black/80">       
-       <i class="fa fa-plus" aria-hidden="true"></i> Dodaj</span>
+       <i class="fa fa-cart-plus" aria-hidden="true"></i> Dodaj</span>
     <div class="scan-line"></div>
   </button>
 {/if}

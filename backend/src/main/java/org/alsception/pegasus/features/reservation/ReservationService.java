@@ -1,6 +1,7 @@
 package org.alsception.pegasus.features.reservation;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class ReservationService {
 
     private final PGSReservationRepository reservationRepository;
     private static final Logger logger = LoggerFactory.getLogger(ReservationService.class);
-
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
     /***
     
@@ -133,7 +134,15 @@ public class ReservationService {
         // Map to DTO and group by day
         // Attention: reservations with null day will be filtered out from the resultset
         Map<LocalDate, List<ReservationDTO>> grouped = reservations.stream()
-                .map(this::mapToDTO)
+                /*.map(this::mapToDTO)*/
+                .map(r -> {
+                    ReservationDTO dto = mapToDTO(r);
+                    // Ako postoji vreme i ima sekunde, skraćujemo na HH:mm
+                   /*  if (dto.getVremeRaw()!= null) {
+                        dto.setVreme(dto.getVremeRaw().getHour()+":"+dto.getVremeRaw().getMinute());
+                    } */
+                    return dto;
+                })
                 .filter(dto -> dto.getDan() != null)
                 .collect(Collectors.groupingBy(ReservationDTO::getDan));
 
@@ -205,7 +214,8 @@ public class ReservationService {
         return ReservationDTO.builder()
                 .id(entity.getId())
                 .dan(entity.getDan())
-                .vreme(entity.getVreme())
+                .vremeRaw(entity.getVreme())
+                .vreme(entity.getVreme() == null ? "" : entity.getVreme().format(formatter))
                 .ime(entity.getIme())
                 .email(entity.getEmail())
                 .telefon(entity.getTelefon())
@@ -232,7 +242,7 @@ public class ReservationService {
     private PGSReservation mapToEntity(ReservationDTO dto) {
         return PGSReservation.builder()
                 .dan(dto.getDan())
-                .vreme(dto.getVreme())
+                .vreme(dto.getVremeRaw())
                 .ime(dto.getIme())
                 .email(dto.getEmail())
                 .telefon(dto.getTelefon())
@@ -256,7 +266,7 @@ public class ReservationService {
 
     private void updateEntity(PGSReservation entity, ReservationDTO dto) {
         entity.setDan(dto.getDan());
-        entity.setVreme(dto.getVreme());
+        entity.setVreme(dto.getVremeRaw());
         entity.setIme(dto.getIme());
         entity.setEmail(dto.getEmail());
         entity.setTelefon(dto.getTelefon());

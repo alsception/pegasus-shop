@@ -42,11 +42,8 @@
 
   // Available payment methods
   const paymentMethods = [
-    "CREDIT_CARD",
-    "DEBIT_CARD",
-    "PAYPAL",
-    "BANK_TRANSFER",
-    "CASH_ON_DELIVERY",
+    "CASH",
+    "CARD",
     "CRYPTOCURRENCY",
     "OTHER",
   ];
@@ -120,7 +117,7 @@
   async function handleSubmit() {
     try {
       loading = true;
-
+      console.log('sending data',formData);
       const response = await api<Order>(`/orders/${ID}`, {
         method: "PUT",
         body: JSON.stringify(formData),
@@ -135,6 +132,7 @@
       showSuccessToast("Order updated successfully");
       fetch(resolvedEndpoint); */
     } catch (err) {
+      console.log(err)
       showErrorInModal({ message: (err as Error).message });
     } finally {
       loading = false;
@@ -377,7 +375,7 @@
               <input
                 id="customerName"
                 class="pgs-input"
-                bind:value={formData.customerName}
+                bind:value={formData.name}
               />
             </div>
 

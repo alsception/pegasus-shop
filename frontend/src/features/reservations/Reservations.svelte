@@ -33,7 +33,7 @@
 
   // Fetch reservations on mount
   onMount(() => {
-    //fetchReservations();
+    fetchReservations();
   });
 
   async function fetchReservations() {
@@ -76,10 +76,10 @@
     }
   }
   
-  function openCreateModal() 
+ /*  function openCreateModal() 
   {
     showCreateModal = true;
-  }
+  } */
 </script>
 
 {#if !$auth.isAuthenticated}
@@ -88,19 +88,9 @@
   <ErrorDiv {error} />
 {:else}
 
-  <button
-    on:click={openCreateModal}
-    class="btn btn-dash"
-  >       
-      <i class="fas fa-plus"></i><i class="fas fa-table"></i>
-      Nova rezervacija
-  </button>
+
 
   <SearchForm/>
   
 {/if}
 
-<NewReservationModal
-    isOpen={showCreateModal}
-    on:close={() => {showCreateModal = false;}}
-  />

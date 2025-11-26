@@ -3,6 +3,7 @@
  * Created: 10/6/25
  * Author: Alsception
  */
+const badgeInfo = 'NOVO'
 
 
 /**
@@ -16,7 +17,7 @@
  * 
  * 
  */
-export function formatDate(dateStr: string | number | Date | null | undefined, tooltip: string, minDiff: number): string 
+export function formatTime(dateStr: string | number | Date | null | undefined, tooltip: string, minDiff: number): string 
 {
     if (dateStr == null) return '';
 
@@ -37,10 +38,45 @@ export function formatDate(dateStr: string | number | Date | null | undefined, t
     if (diffInMinutes < minDiff) 
     {
         output = `<div>
-                    <span class="indicator-item badge badge-accent dark:text-black dark:bg-amber-300">new</span>
+                    <div class=" tooltip tooltip-info cursor-pointer" data-tip="`+tooltip+`">
+                        <span class="text-info dark:text-yellow-300 font-bold"> ${formattedDateTime} </span>
+                    </div>
+                    <span class="indicator-item badge badge-info dark:text-black dark:bg-amber-300">`+badgeInfo+`</span>
+                  </div>`;
+    }
+    else
+    {
+        output = formattedDateTime
+    }
+
+    return output;
+}
+
+export function formatDate(dateStr: string | number | Date | null | undefined, tooltip: string, minDiff: number): string 
+{
+    if (dateStr == null) return '';
+
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffInMs = now.getTime() - date.getTime();
+    const diffInMinutes = diffInMs / (1000 * 60);
+    let output = '';  
+
+    const formattedDateTime = date.toLocaleString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+
+    if (diffInMinutes < minDiff) 
+    {
+        output = `<div>
+                    <span class="indicator-item badge badge-info dark:text-black dark:bg-amber-300">`+badgeInfo+`</span>
                     <br>
                     <div class=" tooltip tooltip-info cursor-pointer" data-tip="`+tooltip+`">
-                        <span class="text-accent dark:text-yellow-300 font-bold"> ${formattedDateTime} </span>
+                        <span class="text-info dark:text-yellow-300 font-bold"> ${formattedDateTime} </span>
                     </div>
                   </div>`;
     }
@@ -51,6 +87,7 @@ export function formatDate(dateStr: string | number | Date | null | undefined, t
 
     return output;
 }
+
 
 export const formattedTime = (value: string | number | Date | null | undefined): string => {
     if (!value) return "-";

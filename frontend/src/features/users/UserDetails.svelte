@@ -118,8 +118,10 @@
         formData.modified = date.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm
       }
       if (data.dob) {
+        console.log('dob: '+data.dob)
         const date = new Date(data.dob);
-        formData.dob = date.toISOString().slice(0, 10); // YYYY-MM-DDTHH:mm
+        formData.dob = data.dob.substring(0, 10);
+        console.log('formatted: '+formData.dob)
       }
     } catch (err) {
       processError(err);

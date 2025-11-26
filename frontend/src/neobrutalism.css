@@ -1710,11 +1710,11 @@ html {
   border: 1px transparent;
 
 }
-.card:hover {
-  /* box-shadow: 0px 0px 0px #000000;
-  transform: translate(-6px, 6px); */
+/* .card:hover {
+  box-shadow: 0px 0px 0px #000000;
+  transform: translate(-6px, 6px);
   border: 1px solid #2dc7ee;
-}
+} */
 
 .card a {
   margin: 0;

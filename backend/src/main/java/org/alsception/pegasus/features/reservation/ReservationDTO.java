@@ -16,7 +16,8 @@ import lombok.NoArgsConstructor;
 public class ReservationDTO {
     private Long id;
     private LocalDate dan;
-    private LocalTime vreme;
+    private LocalTime vremeRaw;
+    private String vreme;
     private String ime;
     private String email;
     private String telefon;

@@ -29,6 +29,7 @@ public class ReservationController
         return ResponseEntity.ok(reservationService.findAll());
     }
 
+    //Ovo trenutno zovemo sa frontenda
     @GetMapping("/search")
     public ResponseEntity<List<DailyReservationSummary>> searchReservations(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,

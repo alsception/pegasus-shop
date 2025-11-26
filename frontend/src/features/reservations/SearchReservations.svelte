@@ -8,45 +8,14 @@
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import type { Reservation } from "./Reservation";
   import type { DailyReservationSummary } from "./DailyReservationSummary";
-  import { slide } from "svelte/transition";
   import { formatCommentInfo } from "../../utils/formatting";
+  import InlineEdit from "./InlineEdit.svelte";
+  import NewReservationModal from "./NewReservationModal.svelte";
 
-  // Keep track of which reservation is open (use id if available, otherwise index)
-  let open: number | null = null;
-
-  // Toggle open state
-  const toggle = (key: number | null) => (open = open === key ? null : key);
-
+  let showCreateModal = false;
   let totalReservations = 0;
 
-  /*   interface Reservation {
-    id: number;
-    dan: string; 
-    vreme: string;
-    ime: string;
-    email: string;
-    telefon: string;
-    brojGostiju: number;
-    menuStandard: number;
-    menuGold: number;
-    menuPremium: number;
-    menuVege: number;
-    menuX: number;
-    poslano: boolean;
-    potvrdjeno: boolean;
-    dogovorio: string;
-    napomena: string;
-    rucak: boolean;
-    vecera: boolean;
-    vazno: boolean;
-    otkazano: boolean;
-    created?: string;
-    updated?: string;
-    createdBy?: string;
-    updatedBy?: string;
-  } */
-
-  document.title = "Reservations | Pegasus";
+  document.title = "Rezervacije | Pegasus";
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -171,6 +140,29 @@
     return `${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}`;
   }
 
+  export function getDanUNedeljiFromString(dateStr: string): string 
+  {
+    const date = new Date(dateStr);
+
+    const dani: string[] = [
+      "nedelja",
+      "ponedeljak",
+      "utorak",
+      "sreda",
+      "četvrtak",
+      "petak",
+      "subota"
+    ];
+
+    return dani[date.getDay()];
+  }
+
+  function openCreateModal() 
+  {
+    showCreateModal = true;
+  }
+
+
   /*   const formatDate = (iso: string) => {
     try {
     const d = new Date(iso);
@@ -186,64 +178,83 @@
 {:else if error}
   <ErrorDiv {error} />
 {:else}
-  <div class="container">
+  <div class="">
     <!-- Search Form -->
+    <div class="w-full flex justify-center px-1">
+  <div class="w-full max-w-4xl p-4 bg-base-200 rounded-lg mb-1">
+    <form class="flex flex-col sm:flex-row items-center gap-3">
+      <!-- Ime -->
+       <div class="flex flex-col px-2">
+        <label for="searchName" class="text-sm font-medium text-secondary mb-1">
+          Ime
+        </label>
+        <input
+          id="searchName"
+          type="text"
+          class="input pgs-input"
+          bind:value={searchName}
+          placeholder="Upiši ime za pretragu..."
+          on:keypress={(e) => e.key === "Enter" && handleSearch()}
+        />
+      </div>      
 
-    <!-- Search Form -->
-    <div class="search-form bg-base-200">
-      <h2>Pretraga Rezervacija</h2>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="searchDateFrom">Datum od:</label>
-          <input
-            id="searchDateFrom"
-            type="date"
-            class="pgs-input"
-            bind:value={searchDateFrom}
-            placeholder="Izaberite datum"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="searchDateTo">Datum do:</label>
-          <input
-            id="searchDateTo"
-            type="date"
-            class="pgs-input"
-            bind:value={searchDateTo}
-            placeholder="Izaberite datum"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="searchName">Ime:</label>
-          <input
-            id="searchName"
-            type="text"
-            class="pgs-input"
-            bind:value={searchName}
-            on:keypress={(e) => e.key === "Enter" && handleSearch()}
-          />
-        </div>
+      <!-- Datum od -->
+      <div class="flex flex-col px-2">
+        <label for="searchDateFrom" class="text-sm font-medium text-secondary mb-1">
+          Datum od
+        </label>
+        <input
+          id="searchDateFrom"
+          type="date"
+          class="input pgs-input max-w-[9rem]"
+          bind:value={searchDateFrom}
+          placeholder="Datum od"
+        />
       </div>
 
-      <div class="button-group">
-        <button
-          class="btn btn-primary w-[100px] mr-4"
-          on:click={handleSearch}
-          disabled={loading}
-        >
-          {loading ? "Tražim..." : "Traži"}
-        </button>
-        <button
-          class="btn btn-secondary w-[100px]"
-          on:click={resetSearch}
-          disabled={loading}
-        >
-          Resetuj
-        </button>
-      </div>
-    </div>
+      <!-- Datum do -->
+      <div class="flex flex-col px-2">
+        <label for="searchDateTo" class="text-sm font-medium text-secondary mb-1">
+          Datum do
+        </label>
+        <input
+        id="searchDateTo"
+        type="date"
+        class="input pgs-input max-w-[9rem]"
+        bind:value={searchDateTo}
+        placeholder="Datum do"
+      />
+      </div>      
+
+      <!-- Dugmad -->
+      <button
+        type="button"
+        class="btn btn-dash"
+        on:click={handleSearch}
+        disabled={loading}
+      >
+        <i class="fas fa-search"></i>
+        {loading ? "Tražim..." : "Traži   "}
+      </button>
+      <button
+        type="button"
+        class="btn btn-dash"
+        on:click={resetSearch}
+        disabled={loading}
+      >
+        Resetuj
+      </button>
+      <button
+        on:click={openCreateModal}
+        class="btn btn-dash"
+      >       
+          <i class="fas fa-calendar-plus"></i>
+          Nova rezervacija
+      </button>
+    </form>
+  </div>
+</div>
+
 
     {#if loading}
       <LoadingOverlay />
@@ -251,239 +262,137 @@
 
     <!-- Results -->
     {#if !loading && dailyReservations.length > 0}
-      <div class="results-header">
-        <h2>Pronađeno rezervacija: {totalReservations}</h2>
+      <div class="results-info pl-6 pb-6">
+        <h3>Pronađeno rezervacija: {totalReservations}</h3>
       </div>
 
-      <div class="reservations-list">
-        {#each dailyReservations as summary}
-          <!-- Simple Tailwind + DaisyUI card that looks calendar-like -->
-          <div class="max-w-md mx-auto">
-            <div class="card bg-base-100 shadow-md">
-              <div class="card-body">
-                <div class="flex items-start justify-between">
-                  <div class="w-full">
-                    <div class="flex items-center justify-between">
-                      <h3 class="text-lg font-semibold">
-                        {formatDate(summary.date)}
-                      </h3>
-                      <label
-                        class="swap swap-rotate tooltip tooltip-info tooltip-left"
-                        data-tip="Dodaj novu rezervaciju"
-                      >
-                        <button
-                          on:click={openCreateModal}
-                          class="btn btn-dash"
-                          data-tip="Dodaj novu rezervaciju"
-                          aria-label="Dodaj novu rezervaciju"
-                        >
-                          <i class="fas fa-plus text-xl"></i>
-                        </button>
-                      </label>
-                    </div>
+    <!-- Updated target code with styling applied from source (Tailwind/DaisyUI) -->
+    <!-- NOTE: Only styling copied. No structure or logic was changed. -->
 
-                    <div class="text-md py-2">
-                      Rezervacije: <b>{summary.totalReservations}</b>
-                      &nbsp;&nbsp; • &nbsp;&nbsp; Ukupno gostiju:
-                      <b>{summary.totalGuests}</b>
-                    </div>
-                    <div
-                      class="grid grid-cols-2 gap-x-8 gap-y-1 my-3 mx-4"
-                      style="width: 90%;"
-                    >
-                      <div class="flex justify-between">
-                        <span>🍽️ Standard:</span>
-                        <span class="font-bold"
-                          >{summary.totalMenuStandard}</span
-                        >
-                      </div>
-                      <div class="flex justify-between">
-                        <span>🟨 Gold:</span>
-                        <span class="font-semibold"
-                          >{summary.totalMenuGold}</span
-                        >
-                      </div>
-                      <div class="flex justify-between">
-                        <span>💎 Premium:</span>
-                        <span class="font-semibold"
-                          >{summary.totalMenuPremium}</span
-                        >
-                      </div>
-                      <div class="flex justify-between">
-                        <span>☘️ Vege:</span>
-                        <span class="font-semibold"
-                          >{summary.totalMenuVege}</span
-                        >
-                      </div>
+    <div class="/*reservations-list*/ grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-4 gap-4 md:gap-16 p-2">
+
+      {#each dailyReservations as summary}
+        <div class="max-w-md mx-auto">
+          <div class="card-lg bg-base-200 shadow p-4 rounded-xl flex flex-col gap-2 h-fit">
+            <div class="card-body p-0">
+              <div class="flex items-start justify-between mb-2">
+                <div class="w-full flex items-center gap-2" style="justify-content: space-between;">
+                  
+                  <div class="flex flex-col gap-2 w-full ml-2" style="justify-content: space-between;">
+                  
+                    <span class="text-xl font-extrabold text-primary">{formatDate(summary.date)}</span>
+                    <span class="text-md font-bold text-primary/70">{getDanUNedeljiFromString(summary.date)}</span>
+                    
+                    <!-- <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-lg ml-auto" style="text-transform: uppercase;">
+                      {order.status}
+                    </span> -->
+                  </div>
+                  
+                  <div class="text-md py-2 text-primary flex items-center gap-4 ">
+                    <div class="flex items-center gap-2 text-sm text-primary mr-4">
+                      <div class="tooltip tooltip-info" data-tip="Broj rezervacija">
+                        <i class="fas fa-address-book"></i>
+                      </div>                      
+                      <span class="text-xl"><strong>{summary.totalReservations}</strong></span>
+                    </div>  
+                    <div class="flex items-center gap-2 text-sm text-primary mr-4">                      
+                      <div class="tooltip tooltip-info" data-tip="Ukupno gostiju">
+                        <i class="fas fa-users"></i>
+                      </div>                      
+                      <span class="text-xl"><strong>{summary.totalGuests}</strong></span>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <div class="divider my-2"></div>
-
-                <div class="space-y-2 max-h-48 overflow-auto">
-                  {#if summary.reservations.length === 0}
-                    <div class="text-sm text-neutral">Nema rezervacija</div>
-                  {:else}
-                    <!-- Header (jednom iznad svih redova) -->
-                    <div
-                      class="grid grid-cols-[60px_1fr_50px_50px_50px_50px_50px] gap-2 p-2 bg-base-200 font-semibold text-xs"
-                    >
-                      <div>Vreme</div>
-                      <div>Ime</div>
-                      <div class="text-center">👤</div>
-                      <div class="text-center">🍽️</div>
-                      <div class="text-center">🟨</div>
-                      <div class="text-center">💎</div>
-                      <div class="text-center">☘️</div>
-                    </div>
-                    {#each summary.reservations as r, i (r.id ?? i)}
-                      <!-- Red rezervacije -->
-                      <div class="rounded-md overflow-hidden">
-                        <button
-                          class="grid grid-cols-[60px_1fr_50px_50px_50px_50px_50px] gap-2 p-2 hover:bg-base-200 w-full text-left items-center"
-                          on:click={() => toggle(r.id ?? i)}
-                          aria-expanded={open === (r.id ?? i)}
-                        >
-                          <div class="text-xs font-medium">
-                            {formatTime(r.vreme)}
-                          </div>
-                          <div class="font-semibold">
-                            {r.ime ?? "Anonimno"}&nbsp;{@html formatCommentInfo(
-                              r.napomena
-                            )}
-                          </div>
-                          <div class="text-xs text-center">
-                            {r.brojGostiju ?? 0}
-                          </div>
-                          <div class="text-xs text-center">
-                            {r.menuStandard ?? 0}
-                          </div>
-                          <div class="text-xs text-center">
-                            {r.menuGold ?? 0}
-                          </div>
-                          <div class="text-xs text-center">
-                            {r.menuPremium ?? 0}
-                          </div>
-                          <div class="text-xs text-center">
-                            {r.menuVege ?? 0}
-                          </div>
-                        </button>
-                        {#if open === (r.id ?? i)}
-                          <div
-                            in:slide
-                            out:slide
-                            class="p-2 text-sm bg-base-100 space-y-1"
-                          >
-                            <div>
-                              <strong>Napomena:</strong>
-                              {r.napomena ?? "—"}
-                            </div>
-                            <div class="mt-2 text-xs text-neutral">
-                              Rezervacija ID: {r.id ?? i}
-                            </div>
-                          </div>
-                        {/if}
-                      </div>
-                    {/each}
-                  {/if}
+              <div class="grid grid-cols-4 gap-x-8 gap-y-2 my-3 mx-4 mr-0" style="width: 100%;">
+                <div class="flex gap-2">
+                  <div class="tooltip tooltip-info" data-tip="Standard">
+                    <i class="fas fa-utensils text-sky-500"></i>
+                    <span class="font-bold">{summary.totalMenuStandard}</span>
+                  </div> 
                 </div>
+                <div class="flex gap-2">
+                  <div class="tooltip tooltip-info" data-tip="Gold">
+                    <i class="fas fa-crown text-amber-400"></i>
+                    <span class="font-semibold">{summary.totalMenuGold}</span>
+                  </div> 
+                </div>
+                <div class="flex gap-2">
+                  <div class="tooltip tooltip-info" data-tip="Premium">
+                    <i class="fas fa-gem text-violet-500"></i>
+                    <span class="font-semibold">{summary.totalMenuPremium}</span>
+                  </div> 
+                </div>
+                <div class="flex gap-2">
+                  <div class="tooltip tooltip-info" data-tip="Vege">
+                    <i class="fas fa-leaf text-success"></i>
+                    <span class="font-semibold">{summary.totalMenuVege}</span>
+                  </div> 
+                </div>
+              </div>
+              <div class="divider my-2"></div>
+              <div class="space-y-0 /*max-h-48*/ overflow-auto">
+                {#if summary.reservations.length === 0}
+                  <div class="text-sm text-neutral">Nema rezervacija</div>
+                {:else}
+                  <table class="w-full border-collapse">
+                  <thead>
+                    <tr class="bg-base-200 border-b border-base-300">
+                      <th class="text-xs font-medium text-secondary text-left p-2">Vrijeme</th>
+                      <th class="text-xs font-medium text-secondary text-left p-2">Ime</th>
+                      <th class="text-xs font-medium text-secondary text-center p-2">Gosti</th>
+                      <th class="text-xs font-medium text-secondary text-center p-2">Standard</th>
+                      <th class="text-xs font-medium text-secondary text-center p-2">Gold</th>
+                      <th class="text-xs font-medium text-secondary text-center p-2">Premium</th>
+                      <th class="text-xs font-medium text-secondary text-center p-2">Vege</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {#each summary.reservations as r, i (r.id ?? i)}
+                      <tr class="border-b border-base-300 hover:bg-base-200">
+
+                        <td class="text-xs p-2">
+                          <InlineEdit bind:value={r.vreme} type="time" />
+                        </td>
+
+                        <td class="text-xs p-2">
+                          <InlineEdit bind:value={r.ime} />
+                        </td>
+
+                        <td class="text-xs text-center p-2">
+                          <InlineEdit bind:value={r.brojGostiju} type="number" />
+                        </td>
+
+                        <td class="text-xs text-center p-2">
+                          <InlineEdit bind:value={r.menuStandard} type="number" />
+                        </td>
+
+                        <td class="text-xs text-center p-2">
+                          <InlineEdit bind:value={r.menuGold} type="number" />
+                        </td>
+
+                        <td class="text-xs text-center p-2">
+                          <InlineEdit bind:value={r.menuPremium} type="number" />
+                        </td>
+
+                        <td class="text-xs text-center p-2">
+                          <InlineEdit bind:value={r.menuVege} type="number" />
+                        </td>
+
+                      </tr>
+                    {/each}
+
+                  </tbody>
+                </table>
+                {/if}
               </div>
             </div>
           </div>
+        </div>
+      {/each}
+    </div>
 
-          <!-- start comment -->
-          <!-- <div class="reservation-card" class:otkazano={reservation.otkazano} class:vazno={reservation.vazno}>
-              <div class="card-header">
-                <div class="card-title">
-                  <h3>{reservation.ime}</h3>
-                  <div class="badges">
-                    {#if reservation.potvrdjeno}
-                      <span class="badge badge-success">Potvrđeno</span>
-                    {/if}
-                    {#if reservation.otkazano}
-                      <span class="badge badge-danger">Otkazano</span>
-                    {/if}
-                    {#if reservation.vazno}
-                      <span class="badge badge-warning">Važno</span>
-                    {/if}
-                  </div>
-                </div>
-                <div class="card-id">ID: {reservation.id}</div>
-              </div>
-              
-              <div class="card-body">
-                <div class="info-row">
-                  <div class="info-item">
-                    <strong>📅 {formatDate(reservation.dan)}</strong>
-                  </div>
-                  <div class="info-item">
-                    <strong>🕐 {reservation.vreme} </strong>
-                  </div>
-                  <div class="info-item">
-                    <strong>👥 Gosti:</strong> {reservation.brojGostiju}
-                  </div>
-                </div>
-                
-                <div class="info-row">
-                  <div class="info-item">
-                    <strong>📧 Email:</strong> {reservation.email}
-                  </div>
-                  <div class="info-item">
-                    <strong>📞 Telefon:</strong> {reservation.telefon}
-                  </div>
-                </div>
-
-                {#if getTotalMenus(reservation) > 0}
-                  <div class="menu-section">
-                    <strong>🍽️ Meniji:</strong>
-                    <div class="menu-items">
-                      {#if reservation.menuStandard > 0}
-                        <span class="menu-badge">Standard: {reservation.menuStandard}</span>
-                      {/if}
-                      {#if reservation.menuGold > 0}
-                        <span class="menu-badge">Gold: {reservation.menuGold}</span>
-                      {/if}
-                      {#if reservation.menuPremium > 0}
-                        <span class="menu-badge">Premium: {reservation.menuPremium}</span>
-                      {/if}
-                      {#if reservation.menuVege > 0}
-                        <span class="menu-badge">Vege: {reservation.menuVege}</span>
-                      {/if}
-                      {#if reservation.menuX > 0}
-                        <span class="menu-badge">X: {reservation.menuX}</span>
-                      {/if}
-                    </div>
-                  </div>
-                {/if}
-
-                <div class="info-row">
-                  <div class="info-item">
-                    {#if reservation.rucak}
-                      <span class="tag">🌞 Ručak</span>
-                    {/if}
-                    {#if reservation.vecera}
-                      <span class="tag">🌙 Večera</span>
-                    {/if}
-                  </div>
-                </div>
-
-                {#if reservation.dogovorio}
-                  <div class="info-item">
-                    <strong>Dogovorio:</strong> {reservation.dogovorio}
-                  </div>
-                {/if}
-
-                {#if reservation.napomena}
-                  <div class="info-item note">
-                    <strong>📝 Napomena:</strong> {reservation.napomena}
-                  </div>
-                {/if}
-              </div>
-            </div> -->
-          <!-- end comment -->
-        {/each}
-      </div>
     {:else if !loading && searchDateFrom === "" && searchDateTo === "" && searchName === ""}
       <div class="no-search">
         Unesite datum ili ime za pretragu rezervacija.
@@ -496,76 +405,26 @@
   </div>
 {/if}
 
+<NewReservationModal
+    isOpen={showCreateModal}
+    on:close={() => {showCreateModal = false;}}
+  />
+
 <style>
-  .container {
-    width: 100%;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-      Ubuntu, Cantarell, sans-serif;
-  }
-
-  h1 {
-    color: #333;
-    margin-bottom: 30px;
-    font-size: 2rem;
-  }
-
-  .form-group {
-    display: flex;
-    flex-direction: column;
-  }
-
-  label {
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #555;
-  }
-
-  .button-group {
-    display: flex;
-    gap: 10px;
-    margin-top: 24px;
-  }
-
+ 
+  .results-info,
   .no-search,
   .no-results {
     text-align: center;
     padding: 40px;
-    color: #666;
     font-size: 1.1rem;
+    color: #666;
   }
 
   .results-header {
     margin: 30px 0 20px 0;
   }
 
-  .results-header h2 {
-    color: #333;
-    font-size: 1.5rem;
-  }
-
-  .reservations-list {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    width: 100%;
-  }
-
-  @media (max-width: 768px) {
-    .container {
-      padding: 10px;
-    }
-
-    .info-row {
-      grid-template-columns: 1fr;
-    }
-
-    .button-group {
-      flex-direction: column;
-      width: 100%;
-    }
-  }
 
   /*  .container {
     max-width: 1200px;
@@ -574,92 +433,11 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   } */
 
-  h2 {
-    margin-bottom: 30px;
-    font-size: 1.5rem;
-  }
-
-  .search-form {
-    padding: 25px;
-    border-radius: 8px;
-    margin-bottom: 30px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-width: 1496px;
-  }
-
-  .form-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    margin-bottom: 20px;
-  }
-
-  .form-group {
-    display: flex;
-    flex-direction: column;
-  }
-
-  label {
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #555;
-  }
-
-  /* t */
-
-  .button-group {
-    display: flex;
-    gap: 10px;
-  }
-
-  .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-
   .btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
   }
 
-  .btn-primary {
-    background-color: #007bff;
-    color: white;
-  }
-
-  .btn-primary:hover:not(:disabled) {
-    background-color: #0056b3;
-  }
-
-  .btn-secondary {
-    background-color: #6c757d;
-    color: white;
-  }
-
-  .btn-secondary:hover:not(:disabled) {
-    background-color: #545b62;
-  }
-
-  .error-message {
-    background-color: #f8d7da;
-    color: #721c24;
-    padding: 15px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    border: 1px solid #f5c6cb;
-  }
-
-  .loading {
-    text-align: center;
-    padding: 40px;
-    font-size: 1.2rem;
-    color: #666;
-  }
 
   .no-search,
   .no-results {
@@ -673,41 +451,18 @@
     margin-bottom: 20px;
   }
 
-  .results-header h2 {
-    color: #333;
-    font-size: 1.5rem;
-  }
-
   .card-body {
     display: flex;
     flex-direction: column;
     gap: 12px;
   }
 
-  @media (max-width: 768px) {
-    .container {
-      padding: 10px;
-    }
 
-    .form-row {
-      grid-template-columns: 1fr;
-    }
-
-    .info-row {
-      grid-template-columns: 1fr;
-    }
-
-    .button-group {
-      flex-direction: column;
-    }
-
-    .btn {
-      width: 100%;
-    }
-  }
-  .card {
-    width: 350px;
-    margin-left: 0px;
-    margin-right: 0px;
+  /**
+  * TODO: this is only good in night mode, fix for day
+  */
+  .highlighted {
+    border: 2px solid lime;
+    background: green;
   }
 </style>
