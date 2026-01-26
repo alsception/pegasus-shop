@@ -107,13 +107,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     {
         if( 
             (request.getMethod().equals("POST") 
-            && (request.getRequestURI().equals("/api/auth/login") || request.getRequestURI().equals("/api/auth/register"))))
+            && 
+            (
+                request.getRequestURI().equals("/api/auth/login") || 
+                request.getRequestURI().equals("/api/auth/register")            
+            )
+            )
+        )
         {
             //Login and register requests are unathorized 
             return false;
         }
         else if ((request.getMethod().equals("GET") 
-            && (request.getRequestURI().equals("/") || request.getRequestURI().startsWith("/assets/"))))
+            && 
+            (
+                request.getRequestURI().equals("/") || 
+                request.getRequestURI().startsWith("/assets/") ||
+                request.getRequestURI().equals("/pegasus-icon.png")
+            )))
         {
             return false;
         }

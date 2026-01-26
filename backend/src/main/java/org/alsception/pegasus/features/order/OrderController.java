@@ -2,11 +2,12 @@ package org.alsception.pegasus.features.order;
 
 import java.security.Principal;
 import java.util.List;
-
+import java.util.stream.Collectors;
 import org.alsception.pegasus.core.exception.BadRequestException;
+import org.alsception.pegasus.features.order.dto.OrderDTO;
+import org.alsception.pegasus.features.order.dto.OrderMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,93 +18,115 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     private final OrderService orderService;
-
-    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
     
-    @Autowired
-    private OrderMapper mapper;
+    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
-    
-    //TODO: FIXX ERROR MESSAGE AND METHOD WHEN 
-    //[org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'userId' for method parameter type Long is not present]
+
+    /* =========================
+       GET ONE
+       ========================= */
+
     @GetMapping("/{id}")
-    public ResponseEntity<PGSOrder> getOrderByUser(Principal principal, @PathVariable Long id) 
+    public ResponseEntity<OrderDTO> getOrderByUser(
+            Principal principal,
+            @PathVariable Long id) 
     {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
 
-        logger.debug("Get order ["+id+"] for user: " + username);
-        
-        PGSOrder order;
+        logger.debug("Get order [{}] for user: {}", id, username);
+
         try 
         {
-            order = orderService.getById(id);
-            return ResponseEntity.ok(order);
-        }
+            PGSOrder order = orderService.getById(id);
+            return ResponseEntity.ok(OrderMapper.toDto(order));
+        } 
         catch (BadRequestException e) 
         {
             logger.warn(e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }
-    
-    @GetMapping
-    public ResponseEntity<List<PGSOrder>> find(Principal principal, @RequestParam(required = false) String search) 
-    {
-        //TODO: IF ADMIN, HE SHOULD SEE ALL ORDERS OF ALL USERS,
-        // OTHERWISE, ONLY HIS ORDERS
-        // AND SEARCH FOR:
-        // DATE TO-FROM, AMOUNT, USER...
-        
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();        
 
-        logger.debug("Getting orders for: " + username + ", search: ["+search+"]");
-        
-        List<PGSOrder> orders = orderService.getByUsername(username, search);
-        
-        return ResponseEntity.ok(orders);
+    /* =========================
+       GET LIST
+       ========================= */
+
+    @GetMapping
+    public ResponseEntity<List<OrderDTO>> find(
+            Principal principal,
+            @RequestParam(required = false) String search) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        logger.debug("Getting orders for: {}, search: [{}]", username, search);
+
+        List<OrderDTO> result = orderService
+                .getByUsername(username, search)
+                .stream()
+                .map(OrderMapper::toDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(result);
     }
 
-    @PutMapping(value = "/{id}", consumes="application/json")
-    public ResponseEntity<PGSOrderDTO> updateOrder(
+    /* =========================
+       UPDATE
+       ========================= */
+
+    @PutMapping(value = "/{id}", consumes = "application/json")
+    public ResponseEntity<OrderDTO> updateOrder(
             @PathVariable Long id,
-            @RequestBody PGSOrderDTO updatedOrder,
+            @RequestBody OrderDTO dto,
             Principal principal) 
     {
-        logger.debug("Updating order "+id);
-        try {
-            // TODO: Check if user is owner or admin here
-            PGSOrder order = orderService.update(id, mapper.toEntity(updatedOrder));
-            logger.info("Updated order " + id);
-            return ResponseEntity.ok(mapper.toDTO(order));
-        } catch (Exception e) {
-            logger.error("Error updating order: " + e.getMessage(), e);
+
+        logger.debug("Updating order {}", id);
+        //logger.debug(dto.toString()); //OVDE exception
+
+        try 
+        {
+            OrderDTO updated = orderService.update(id, dto);
+
+            logger.info("Updated order {}", id);
+            
+            return ResponseEntity.ok(updated);
+        }
+        catch (Exception e) 
+        {
+            logger.error("Error updating order: {}", e.getMessage(), e);
             return ResponseEntity.notFound().build();
         }
     }
+
+    /* =========================
+       DELETE
+       ========================= */
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id, Principal principal) 
+    public ResponseEntity<Void> delete(
+            @PathVariable Long id,
+            Principal principal) 
     {
-        try
-        {        
+
+        try 
+        {
             //First we must be sure that the user requesting deletion is the owner, or admin.
             //For now, we just assume it...
+            
             orderService.delete(id);
-            logger.info("Deleted order "+id);
+            logger.info("Deleted order {}", id);
             return ResponseEntity.noContent().build();
-        }
-        catch(Exception e)
+        } 
+        catch (Exception e) 
         {
-            //If id is null, exception will be thrown...
             logger.error(e.getMessage(), e);
             return ResponseEntity.notFound().build();
-        }        
+        }
     }
-
-    
 }

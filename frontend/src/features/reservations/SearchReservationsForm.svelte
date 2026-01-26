@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";
   import { get } from "svelte/store";
   import Login from "../../core/auth/Login.svelte";
@@ -8,9 +7,10 @@
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import type { Reservation } from "./Reservation";
   import type { DailyReservationSummary } from "./DailyReservationSummary";
-  import { formatCommentInfo } from "../../utils/formatting";
   import InlineEdit from "./InlineEdit.svelte";
   import NewReservationModal from "./NewReservationModal.svelte";
+  import { link } from "svelte-spa-router";
+  import Chart from "./Chart.svelte";
 
   let showCreateModal = false;
   let totalReservations = 0;
@@ -31,6 +31,21 @@
   let dailyReservations: DailyReservationSummary[] = [];
   let loading = false;
   let error: string | null = null;
+  let isBlockView = false;
+  let selectedreservation: DailyReservationSummary = {
+    date: "2025-11-15", // ISO date format: "2025-11-15"
+  totalGuests: 0,
+  totalMenuStandard:0,
+  totalMenuGold: 0,
+  totalMenuPremium:0,
+  totalMenuVege:0,
+  totalReservations: 0,
+    reservations: []
+  };
+
+  function toggleView() {
+    isBlockView = !isBlockView;
+  }
 
   $: auth.subscribe((value) => {
     isAuthenticated = value.isAuthenticated;
@@ -94,6 +109,7 @@
         (sum, day) => sum + day.reservations.length,
         0
       );
+      selectedreservation = dailyReservations[0];
 
       console.log("TOTAL : " + totalReservations); // 4
     } catch (err: any) {
@@ -163,6 +179,22 @@
   }
 
 
+  function showInfoModal( day : DailyReservationSummary): void {
+    const contentEl = document.getElementById("modal-content");
+    const dialogEl = document.getElementById("modal") as HTMLDialogElement;
+
+    if (contentEl) {
+     
+      selectedreservation = day;
+    }
+
+    if (dialogEl) {
+      dialogEl.showModal();
+    }
+  }
+
+  const data = [12, 19, 3, 5, 2, 15];
+  const max = Math.max(...data);
   /*   const formatDate = (iso: string) => {
     try {
     const d = new Date(iso);
@@ -181,8 +213,8 @@
   <div class="">
     <!-- Search Form -->
     <div class="w-full flex justify-center px-1">
-  <div class="w-full max-w-4xl p-4 bg-base-200 rounded-lg mb-1">
-    <form class="flex flex-col sm:flex-row items-center gap-3">
+  <div class="w-full max-w-4xl p-4 bg-base-200 rounded-lg mb-1"  style="min-width: fit-content">
+    <form class="flex flex-col sm:flex-row items-center gap-3 w-full">
       <!-- Ime -->
        <div class="flex flex-col px-2">
         <label for="searchName" class="text-sm font-medium text-secondary mb-1">
@@ -251,6 +283,15 @@
           <i class="fas fa-calendar-plus"></i>
           Nova rezervacija
       </button>
+      <button class="btn btn-dash" on:click={toggleView}>
+        <i class="fas fa-th-large"></i>
+        {#if isBlockView}
+          Tabelarni prikaz
+        {:else}
+          Kartični prikaz
+        {/if}
+      </button>
+
     </form>
   </div>
 </div>
@@ -269,8 +310,9 @@
     <!-- Updated target code with styling applied from source (Tailwind/DaisyUI) -->
     <!-- NOTE: Only styling copied. No structure or logic was changed. -->
 
-    <div class="/*reservations-list*/ grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-4 gap-4 md:gap-16 p-2">
-
+      {#if isBlockView}
+  <div class="/*reservations-list*/ grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-4 gap-4 md:gap-16 p-2">
+    <!-- tvoj postojeći kartični prikaz ostaje isti -->
       {#each dailyReservations as summary}
         <div class="max-w-md mx-auto">
           <div class="card-lg bg-base-200 shadow p-4 rounded-xl flex flex-col gap-2 h-fit">
@@ -280,7 +322,9 @@
                   
                   <div class="flex flex-col gap-2 w-full ml-2" style="justify-content: space-between;">
                   
-                    <span class="text-xl font-extrabold text-primary">{formatDate(summary.date)}</span>
+                    <span class="text-xl font-extrabold text-primary">
+                      <a use:link href="/reservations/{summary.date}" class="pgs-hyperlink">{formatDate(summary.date)}</a>
+                    </span>
                     <span class="text-md font-bold text-primary/70">{getDanUNedeljiFromString(summary.date)}</span>
                     
                     <!-- <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-lg ml-auto" style="text-transform: uppercase;">
@@ -391,7 +435,58 @@
           </div>
         </div>
       {/each}
-    </div>
+    <!-- tvoj postojeći kartični prikaz ostaje isti -->
+  </div>
+{:else}
+  <!-- OVDE IDE NOVI TABELARNI PRIKAZ -->
+  <div class="max-w-[2048px] w-full overflow-x-auto rounded-lg align-middle text-center mx-auto mt-6 flex justify-center">
+    <table class="table table-zebra divide-y divide-accent w-auto">
+      <thead class="bg-base-200 border-b-1 border-secondary/30">
+        <tr class="h-12">
+          <th class="pgs-th">Datum</th>
+          <th class="pgs-th">Dan</th>
+          <th class="pgs-th">Rezervacije</th>
+          <th class="pgs-th">Gosti</th>
+          <th class="pgs-th">Standard</th>
+          <th class="pgs-th">Gold</th>
+          <th class="pgs-th">Premium</th>
+          <th class="pgs-th">Vege</th>
+        </tr>
+      </thead>
+      <tbody>
+        {#each dailyReservations as day}
+          <tr class="bg-base-100 hover:bg-blue-600/10">
+            <td class="pgs-td">
+              <!-- use:link href="/reservations/{day.date}" -->
+              <button  type="button"
+              on:click={showInfoModal(day)}
+             class="pgs-hyperlink">{formatDate(day.date)} 
+            
+          </button>
+            </td>
+            <td class="pgs-td">{getDanUNedeljiFromString(day.date)}</td>
+            <td class="pgs-td-num">{day.totalReservations}</td>
+            <td class="pgs-td-num">{day.totalGuests}</td>
+            <td class="pgs-td-num">{day.totalMenuStandard}</td>
+            <td class="pgs-td-num">{day.totalMenuGold}</td>
+            <td class="pgs-td-num">{day.totalMenuPremium}</td>
+            <td class="pgs-td-num">{day.totalMenuVege}</td>
+          </tr>
+        {/each}
+        <!-- Ukupno red -->
+        <tr class="font-bold border-t-1 border-secondary/30 bg-base-100">
+          <td class="pgs-td" colspan="2">UKUPNO</td>
+          <td class="pgs-td-num">{dailyReservations.reduce((sum, day) => sum + day.totalReservations, 0)}</td>
+          <td class="pgs-td-num">{dailyReservations.reduce((sum, day) => sum + day.totalGuests, 0)}</td>
+          <td class="pgs-td-num">{dailyReservations.reduce((sum, day) => sum + day.totalMenuStandard, 0)}</td>
+          <td class="pgs-td-num">{dailyReservations.reduce((sum, day) => sum + day.totalMenuGold, 0)}</td>
+          <td class="pgs-td-num">{dailyReservations.reduce((sum, day) => sum + day.totalMenuPremium, 0)}</td>
+          <td class="pgs-td-num">{dailyReservations.reduce((sum, day) => sum + day.totalMenuVege, 0)}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+{/if}
 
     {:else if !loading && searchDateFrom === "" && searchDateTo === "" && searchName === ""}
       <div class="no-search">
@@ -410,6 +505,156 @@
     on:close={() => {showCreateModal = false;}}
   />
 
+
+
+<!-- Info Modal -->
+<dialog id="modal" class="modal modal-bottom sm:modal-middle w-full">
+  <div class="modal-box" style="min-width: min-content;">
+    <h3 class="text-lg font-bold" id="modal-title"></h3>
+    <div class="py-4" id="modal-content">
+
+      <div class="max-w-md mx-auto">
+          <div class="card-lg bg-base-200 shadow p-4 rounded-xl flex flex-col gap-2 h-fit">
+            <div class="card-body p-0">
+              <div class="flex items-start justify-between mb-2">
+                <div class="w-full flex items-center gap-2" style="justify-content: space-between;">
+                  
+                  <div class="flex flex-col gap-2 w-full ml-2" style="justify-content: space-between;">
+                  
+                    <span class="text-xl font-extrabold text-primary">
+                      <a use:link href="/reservations/{selectedreservation.date}" class="pgs-hyperlink">{formatDate(selectedreservation.date)}</a>
+                    </span>
+                    <span class="text-md font-bold text-primary/70">{getDanUNedeljiFromString(selectedreservation.date)}</span>
+                    
+                    <!-- <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-lg ml-auto" style="text-transform: uppercase;">
+                      {order.status}
+                    </span> -->
+                  </div>
+                  
+                  <div class="text-md py-2 text-primary flex items-center gap-4 ">
+                    <div class="flex items-center gap-2 text-sm text-primary mr-4">
+                      <div class="tooltip tooltip-info" data-tip="Broj rezervacija">
+                        <i class="fas fa-address-book"></i>
+                      </div>                      
+                      <span class="text-xl"><strong>{selectedreservation.totalReservations}</strong></span>
+                    </div>  
+                    <div class="flex items-center gap-2 text-sm text-primary mr-4">                      
+                      <div class="tooltip tooltip-info" data-tip="Ukupno gostiju">
+                        <i class="fas fa-users"></i>
+                      </div>                      
+                      <span class="text-xl"><strong>{selectedreservation.totalGuests}</strong></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-4 gap-x-8 gap-y-2 my-3 mx-4 mr-0" style="width: 100%;">
+                <div class="flex gap-2">
+                  <div class="tooltip tooltip-info" data-tip="Standard">
+                    <i class="fas fa-utensils text-sky-500"></i>
+                    <span class="font-bold">{selectedreservation.totalMenuStandard}</span>
+                  </div> 
+                </div>
+                <div class="flex gap-2">
+                  <div class="tooltip tooltip-info" data-tip="Gold">
+                    <i class="fas fa-crown text-amber-400"></i>
+                    <span class="font-semibold">{selectedreservation.totalMenuGold}</span>
+                  </div> 
+                </div>
+                <div class="flex gap-2">
+                  <div class="tooltip tooltip-info" data-tip="Premium">
+                    <i class="fas fa-gem text-violet-500"></i>
+                    <span class="font-semibold">{selectedreservation.totalMenuPremium}</span>
+                  </div> 
+                </div>
+                <div class="flex gap-2">
+                  <div class="tooltip tooltip-info" data-tip="Vege">
+                    <i class="fas fa-leaf text-success"></i>
+                    <span class="font-semibold">{selectedreservation.totalMenuVege}</span>
+                  </div> 
+                </div>
+              </div>
+              <div class="divider my-2"></div>
+              <div class="space-y-0 /*max-h-48*/ overflow-auto">
+                {#if selectedreservation.reservations.length === 0}
+                  <div class="text-sm text-neutral">Nema rezervacija</div>
+                {:else}
+                  <table class="w-full border-collapse">
+                  <thead>
+                    <tr class="bg-base-200 border-b border-base-300">
+                      <th class="text-xs font-medium text-secondary text-left p-2">Vrijeme</th>
+                      <th class="text-xs font-medium text-secondary text-left p-2">Ime</th>
+                      <th class="text-xs font-medium text-secondary text-center p-2">Gosti</th>
+                      <th class="text-xs font-medium text-secondary text-center p-2">Standard</th>
+                      <th class="text-xs font-medium text-secondary text-center p-2">Gold</th>
+                      <th class="text-xs font-medium text-secondary text-center p-2">Premium</th>
+                      <th class="text-xs font-medium text-secondary text-center p-2">Vege</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {#each selectedreservation.reservations as r, i (r.id ?? i)}
+                      <tr class="border-b border-base-300 hover:bg-base-200">
+
+                        <td class="text-xs p-2">
+                          <InlineEdit bind:value={r.vreme} type="time" />
+                        </td>
+
+                        <td class="text-xs p-2">
+                          <InlineEdit bind:value={r.ime} />
+                        </td>
+
+                        <td class="text-xs text-center p-2">
+                          <InlineEdit bind:value={r.brojGostiju} type="number" />
+                        </td>
+
+                        <td class="text-xs text-center p-2">
+                          <InlineEdit bind:value={r.menuStandard} type="number" />
+                        </td>
+
+                        <td class="text-xs text-center p-2">
+                          <InlineEdit bind:value={r.menuGold} type="number" />
+                        </td>
+
+                        <td class="text-xs text-center p-2">
+                          <InlineEdit bind:value={r.menuPremium} type="number" />
+                        </td>
+
+                        <td class="text-xs text-center p-2">
+                          <InlineEdit bind:value={r.menuVege} type="number" />
+                        </td>
+
+                      </tr>
+                    {/each}
+
+                  </tbody>
+                </table>
+                {/if}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
+
+<svg viewBox="0 0 300 100" class="w-full h-32">
+  <polyline
+    points={data.map((val, i) => `${i * 50},${100 - (val/max * 80)}`).join(' ')}
+    fill="none"
+    stroke="#00ff9f"
+    stroke-width="2"
+  />
+</svg>
+
+
+<Chart {dailyReservations} />
+
 <style>
  
   .results-info,
@@ -421,23 +666,10 @@
     color: #666;
   }
 
-  .results-header {
-    margin: 30px 0 20px 0;
-  }
-
-
-  /*  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  } */
-
   .btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
   }
-
 
   .no-search,
   .no-results {

@@ -3,8 +3,12 @@ package org.alsception.pegasus.features.order;
 import java.math.BigDecimal;
 import java.util.List;
 import org.alsception.pegasus.features.products.ProductRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.alsception.pegasus.core.exception.BadRequestException;
 import org.alsception.pegasus.core.utils.CodeGenerator;
+import org.alsception.pegasus.features.order.dto.OrderDTO;
+import org.alsception.pegasus.features.order.dto.OrderMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderService 
 {
     private final OrderRepository orderRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     public OrderService(ProductRepository productRepository, OrderRepository orderRepository) 
     {
@@ -88,7 +94,7 @@ public class OrderService
         return orderRepository.findAll();              
     }
     
-    @Transactional(readOnly = true)
+    @Transactional()
     public PGSOrder getById(Long id) throws BadRequestException
     {
         List<PGSOrder> orders = orderRepository.findByIdWithItems(id);
@@ -101,24 +107,62 @@ public class OrderService
         this.orderRepository.deleteById(id);
     }
 
-    @Transactional
-    public PGSOrder update(Long id, PGSOrder updatedOrder) 
+//    @Transactional
+//    public PGSOrder update(Long id, PGSOrder receivedOrder) 
+//    {
+//        PGSOrder existingOrder = orderRepository.findById(id)
+//            .orElseThrow(() -> new BadRequestException("Order not found"));
+//
+//        logger.debug("Fetched order status:");
+//        logger.debug(existingOrder.getStatus());
+//        // Update fields 
+//        logger.debug("Received order status:");
+//        logger.debug(receivedOrder.getStatus());
+//        existingOrder.setStatus(receivedOrder.getStatus());
+//
+//        //Currently we only save Status, because the frontend doesnt send items list. TODO
+//
+//        /*existingOrder.setPrice(updatedOrder.getPrice());
+//        existingOrder.setCode(updatedOrder.getCode());
+//
+//        // Update items collection safely
+//        existingOrder.getItems().clear();
+//        if (updatedOrder.getItems() != null) {
+//            existingOrder.getItems().addAll(updatedOrder.getItems());
+//        }*/
+//
+//        // Save and return updated order
+//        return orderRepository.save(existingOrder);
+//    }    
+    
+    @Transactional()
+    private PGSOrder update(Long id, PGSOrder received) 
     {
-        PGSOrder existingOrder = orderRepository.findById(id)
-            .orElseThrow(() -> new BadRequestException("Order not found"));
+        logger.debug("Updating service");
 
-        // Update fields 
-        existingOrder.setStatus(updatedOrder.getStatus());
-        existingOrder.setPrice(updatedOrder.getPrice());
-        existingOrder.setCode(updatedOrder.getCode());
+        //PGSOrder existing = getById(id);
+        // Load existing order IN THIS TRANSACTION (not the read-only one)
+        List<PGSOrder> orders = orderRepository.findByIdWithItems(id);
+        if(orders.isEmpty()) throw new BadRequestException("Not found");
+        PGSOrder existing = orders.get(0);
+        logger.debug("Existing order loaded");
+        
+        existing.setStatus(received.getStatus());
+        existing.setComment(received.getComment());
+        existing.setPaymentMethod(received.getPaymentMethod());
+        existing.setAddress(received.getAddress());
+        existing.setPrice(received.getPrice());
+        existing.setCode(received.getCode());
+        existing.setItems(received.getItems());
 
-        // Update items collection safely
-        existingOrder.getItems().clear();
-        if (updatedOrder.getItems() != null) {
-            existingOrder.getItems().addAll(updatedOrder.getItems());
-        }
+        // items update logic to be added later (TODO)
 
-        // Save and return updated order
-        return orderRepository.save(existingOrder);
-    }    
+        return orderRepository.save(existing);
+    }
+    
+    public OrderDTO update(Long id, OrderDTO dto) 
+    {
+        return OrderMapper.toDto( this.update(id, OrderMapper.toEntity(dto)));        
+    }
+
 }

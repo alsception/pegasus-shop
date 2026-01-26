@@ -457,7 +457,7 @@
             <textarea
               id="notes"
               class="pgs-input resize-vertical"
-              bind:value={formData.notes}
+              bind:value={formData.comment}
               rows="4"
             ></textarea>
           </div>

@@ -4165,9 +4165,9 @@ select.nb-dropdown.pale-yellow:focus {
 }
 
 .nb-table-container {
-  border: 3px solid #000000;
-  box-shadow: 8px 8px 0px #000000;
-  overflow: hidden;
+  border: 1px solid #666;
+/*   box-shadow: 8px 8px 0px #000000;
+ */  overflow: hidden;
   background: var(--color-base-200);
 }
 .nb-table-container .nb-table {

@@ -21,11 +21,11 @@ public class PGSOrderItem {
     @JoinColumn(name = "order_id")
     private PGSOrder order;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "product_id")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = {})
+    @JoinColumn(name = "product_id", updatable = false) // Prevent updates
     private PGSProduct product;
 
-    private int quantity;//TODO: WHAT IF DECIMAL OR LITRI???
+    private double quantity;//TODO: WHAT IF DECIMAL OR LITRI???
     
     @Column(precision = 19, scale = 2, nullable = true)
     private BigDecimal price; 
@@ -47,7 +47,7 @@ public class PGSOrderItem {
     }
 
     public PGSOrderItem() {}
-
+/* 
     public Long getId() {
         return id;
     }
@@ -68,11 +68,11 @@ public class PGSOrderItem {
         this.product = product;
     }
 
-    public int getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(double quantity) {
         this.quantity = quantity;
-    }
+    } */
 }

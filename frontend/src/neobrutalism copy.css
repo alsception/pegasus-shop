@@ -4173,8 +4173,8 @@ select.nb-dropdown.pale-yellow:focus {
 }
 
 .nb-table-container {
-  border: 3px solid #000000;
-  box-shadow: 8px 8px 0px #000000;
+  border: 1px solid #000000;
+  /* box-shadow: 8px 8px 0px #000000; */
   overflow: hidden;
   background: #ffffff;
 }
@@ -4183,8 +4183,8 @@ select.nb-dropdown.pale-yellow:focus {
 }
 .nb-table-container .nb-table th,
 .nb-table-container .nb-table td {
-  border-bottom: 2px solid #ddd;
-}
+/*   border-bottom: 2px solid #ddd;
+ */}
 .nb-table-container .nb-table tr:last-child td {
   border-bottom: none;
 }

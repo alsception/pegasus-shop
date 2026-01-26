@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.alsception.pegasus.features.products.PGSReview;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
@@ -91,11 +90,12 @@ public class PGSProduct {
     @Column
     private Boolean marked = false;   
     
-    @Version
-    private Integer version; // Optimistic locking to prevent concurrent modification issues    
+//    @Version
+//    private Integer version; // Optimistic locking to prevent concurrent modification issues    
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = true)
+    @JsonIgnore //DALI NAM OVO UOPSTE TREBA SAD SAMO KOMPLIKUJE????
     private PGSProductCategory category;
 
     @JsonIgnore

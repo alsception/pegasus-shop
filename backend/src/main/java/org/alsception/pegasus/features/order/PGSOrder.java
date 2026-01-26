@@ -1,5 +1,6 @@
 package org.alsception.pegasus.features.order;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -12,6 +13,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -51,7 +53,7 @@ public class PGSOrder
     //@JsonIgnore
     @JsonManagedReference
     //⚠️ Ovo može izazvati probleme sa performansama ako lista items sadrži mnogo podataka.
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<PGSOrderItem> items = new ArrayList<>();
     
     @ManyToOne
@@ -63,6 +65,11 @@ public class PGSOrder
     
     @Column(nullable = true)
     private LocalDateTime modified;
+    
+    /* One day, if you have time and will to play with various error messages, we can include this field.
+    @Version
+    private Integer version; // Optimistic locking to prevent concurrent modification issues    
+    */
     
     @PrePersist
     protected void onCreate() {

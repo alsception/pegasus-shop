@@ -46,10 +46,13 @@
 <!-- TODO BUG TO FIX: dark:bgslate does not work if theme is switched from theme swithcer but work from browsers -->
 
 <ul
-  class="menu menu-sm dropdown-content shadow rounded-box mt-3 w-52 p-2 scale-in-ver-top bg-base-100 dark:bg-slate-950 nb-table-container"
+  class="menu menu-sm dropdown-content mt-3 w-52 p-2 scale-in-ver-top 
+         bg-base-100 dark:bg-slate-950
+         rounded shadow "
+  style="min-width: 300px;"
 >
-  <li class="flex items-center px-3 py-2 rounded-md">
-    <div class="inline-flex items-center gap-1">
+  <li class="flex  px-3 py-2 rounded-md">
+    <div class="inline-flex gap-1">
       <a
         class="pgs-hyperlink inline-flex items-center max-w-[100px] whitespace-nowrap overflow-hidden text-ellipsis"
         href="#/users/my-account"
@@ -67,7 +70,7 @@
   <li class=""></li>
 
   {#each navItems as item}
-    <li>
+    <li class="w-full">
       {#if !item.disabled}
         <a
           use:link
@@ -77,13 +80,13 @@
                  text-primary text-sm"
         >
           <i class="fas fa-{item.icon} w-5 mr-2"></i>
-          <span class="dark:text-gray-400 hover:text-blue-400">{item.label}</span>
+          <span class="dark:text-gray-400 hover:text-blue-400" style="width: 150px;">{item.label}</span>
         </a>
       {:else}
         <div
           class="flex items-center px-3 py-2 rounded-md pointer-events-none
               hover:text-gray-400 dark:hover:text-gray-500
-              text-base"
+              text-base "
         >
           <i class="fas fa-{item.icon} w-5 mr-2"></i>
           <span class="text-gray-400 dark:text-gray-400">{item.label}</span>
