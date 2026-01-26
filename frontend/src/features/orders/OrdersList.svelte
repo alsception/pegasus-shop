@@ -298,66 +298,214 @@
 
 <!-- Show each item in the order card (Block view) -->
 {#if isBlockView}
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-16 p-2">
-    {#each orders as order}
-      <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-4 flex flex-col gap-2 h-fit">
-        <!-- Nicer card header -->
-        <div class="flex items-center justify-between mb-2">
-          <div class="flex items-center gap-2 w-full" style="justify-content: space-between;">
-            <span class="text-xl font-extrabold text-primary">#{formatCode(order.code)}</span>
-            <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-lg ml-auto" style="text-transform: uppercase;">
-              {order.status}
-            </span>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-2 text-sm text-primary mb-1 ">
-          <div class="flex items-center gap-2 text-sm text-primary mr-4">
-            <i class="fas fa-user"></i>
-            <span><strong>{order.user?.username}</strong></span>
-          </div>        
-          <div class="text-sm flex items-center gap-2">
-            <i class="fas fa-clock"></i>{@html formatTime(order.created,'Novo',5)}
-          </div>  
-        </div>
-        
-        {#if order.comment && order.comment.toString.length > -1}
-          <div class="">
-            Napomena:
-            <br>
-            <div class="text-primary bg-base-100 rounded-md p-1 font-bold">          
-              {order.comment}
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-16 p-2">
+  <!-- WAITING -->
+  <div class="bg-yellow-200 dark:bg-yellow-600 rounded-xl shadow p-4">
+    <div class="mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
+      <h2 class="text-xl font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+        <span class="badge badge-soft badge-yellow">WAITING</span>
+        <span class="text-sm text-gray-500">({orders.filter(o => o.status === 'WAITING').length})</span>
+      </h2>
+    </div>
+    
+    <div class="space-y-4">
+      {#each orders.filter(o => o.status === 'WAITING') as order}
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-4 flex flex-col gap-2 h-fit">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2 w-full" style="justify-content: space-between;">
+              <span class="text-xl font-extrabold text-primary">#{formatCode(order.code)}</span>
+              <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-lg ml-auto" style="text-transform: uppercase;">
+                {order.status}
+              </span>
             </div>
           </div>
-        {/if}
 
-        <!-- Nicer items list -->
-        <div class="mt-2 bg-base-100">
-          <ul class="flex flex-col gap-0">
-            {#each order.items as item}
-              <li class="flex items-center gap-0 p-2 bg-base-100 dark:bg-base-100 border-1 border-base-300">
-                <span class="text-primary text-sm">{item.quantity} x </span>&nbsp;
-                <span class="text-primary text-sm"> {item.product?.name ?? item.name}</span>
-                {#if item.price}
-                  <span class="text-xs text-gray-500 ml-auto">{formatPrice(item.price)}</span>
-                {/if}
-              </li>
-            {/each}
-          </ul>
-            <div style="align-items: end;display:grid;align-content: end; text-align: right;"
-                  class="g-base-100 dark:bg-base-100 border-1 border-base-300">
-              <span class="text-lg font-bold text-primary p-2">{formatPrice(order.price)}</span>
+          <div class="flex items-center gap-2 text-sm text-primary mb-1 ">
+            <div class="flex items-center gap-2 text-sm text-primary mr-4">
+              <i class="fas fa-user"></i>
+              <span><strong>{order.user?.username}</strong></span>
+            </div>        
+            <div class="text-sm flex items-center gap-2">
+              <i class="fas fa-clock"></i>{@html formatTime(order.created,'Novo',5)}
+            </div>  
+          </div>
+          
+          {#if order.comment && order.comment.toString.length > -1}
+            <div class="">
+              Napomena:
+              <br>
+              <div class="text-primary bg-base-100 rounded-md p-1 font-bold">          
+                {order.comment}
+              </div>
             </div>
+          {/if}
+
+          <div class="mt-2 bg-base-100">
+            <ul class="flex flex-col gap-0">
+              {#each order.items as item}
+                <li class="flex items-center gap-0 p-2 bg-base-100 dark:bg-base-100 border-1 border-base-300">
+                  <span class="text-primary text-sm">{item.quantity} x </span>&nbsp;
+                  <span class="text-primary text-sm"> {item.product?.name ?? item.name}</span>
+                  {#if item.price}
+                    <span class="text-xs text-gray-500 ml-auto">{formatPrice(item.price)}</span>
+                  {/if}
+                </li>
+              {/each}
+            </ul>
+              <div style="align-items: end;display:grid;align-content: end; text-align: right;"
+                    class="g-base-100 dark:bg-base-100 border-1 border-base-300">
+                <span class="text-lg font-bold text-primary p-2">{formatPrice(order.price)}</span>
+              </div>
+          </div>
+          <div class="flex gap-2 mt-2">
+            <a class="btn btn-sm btn-dash hover:text-blue-600 dark:hover:text-sky-400" use:link href="/orders/{order.id}">Details</a>
+            <button class="btn btn-sm btn-dash hover:text-red-700" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
+              Delete
+            </button>
+          </div>
         </div>
-        <div class="flex gap-2 mt-2">
-          <a class="btn btn-sm btn-dash hover:text-blue-600 dark:hover:text-sky-400" use:link href="/orders/{order.id}">Details</a>
-          <button class="btn btn-sm btn-dash hover:text-red-700" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
-            Delete
-          </button>
-        </div>
-      </div>
-    {/each}
+      {/each}
+    </div>
   </div>
+
+  <!-- IN_PREPARATION -->
+  <div class="bg-sky-200 dark:bg-sky-700 rounded-xl shadow p-4">
+    <div class="mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
+      <h2 class="text-xl font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+        <span class="badge badge-soft badge-blue">IN PREPARATION</span>
+        <span class="text-sm text-gray-500">({orders.filter(o => o.status === 'IN_PREPARATION').length})</span>
+      </h2>
+    </div>
+    
+    <div class="space-y-4">
+      {#each orders.filter(o => o.status === 'IN_PREPARATION') as order}
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-4 flex flex-col gap-2 h-fit">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2 w-full" style="justify-content: space-between;">
+              <span class="text-xl font-extrabold text-primary">#{formatCode(order.code)}</span>
+              <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-lg ml-auto" style="text-transform: uppercase;">
+                {order.status}
+              </span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 text-sm text-primary mb-1 ">
+            <div class="flex items-center gap-2 text-sm text-primary mr-4">
+              <i class="fas fa-user"></i>
+              <span><strong>{order.user?.username}</strong></span>
+            </div>        
+            <div class="text-sm flex items-center gap-2">
+              <i class="fas fa-clock"></i>{@html formatTime(order.created,'Novo',5)}
+            </div>  
+          </div>
+          
+          {#if order.comment && order.comment.toString.length > -1}
+            <div class="">
+              Napomena:
+              <br>
+              <div class="text-primary bg-base-100 rounded-md p-1 font-bold">          
+                {order.comment}
+              </div>
+            </div>
+          {/if}
+
+          <div class="mt-2 bg-base-100">
+            <ul class="flex flex-col gap-0">
+              {#each order.items as item}
+                <li class="flex items-center gap-0 p-2 bg-base-100 dark:bg-base-100 border-1 border-base-300">
+                  <span class="text-primary text-sm">{item.quantity} x </span>&nbsp;
+                  <span class="text-primary text-sm"> {item.product?.name ?? item.name}</span>
+                  {#if item.price}
+                    <span class="text-xs text-gray-500 ml-auto">{formatPrice(item.price)}</span>
+                  {/if}
+                </li>
+              {/each}
+            </ul>
+              <div style="align-items: end;display:grid;align-content: end; text-align: right;"
+                    class="g-base-100 dark:bg-base-100 border-1 border-base-300">
+                <span class="text-lg font-bold text-primary p-2">{formatPrice(order.price)}</span>
+              </div>
+          </div>
+          <div class="flex gap-2 mt-2">
+            <a class="btn btn-sm btn-dash hover:text-blue-600 dark:hover:text-sky-400" use:link href="/orders/{order.id}">Details</a>
+            <button class="btn btn-sm btn-dash hover:text-red-700" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
+              Delete
+            </button>
+          </div>
+        </div>
+      {/each}
+    </div>
+  </div>
+
+  <!-- DELIVERED -->
+  <div class="bg-green-200 dark:bg-green-700 rounded-xl shadow p-4">
+    <div class="mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
+      <h2 class="text-xl font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+        <span class="badge badge-soft badge-green">READY</span>
+        <span class="text-sm text-gray-500">({orders.filter(o => (o.status === 'READY' || o.status === 'DELIVERED' )).length})</span>
+      </h2>
+    </div>
+    
+    <div class="space-y-4">
+      {#each orders.filter(o => (o.status === 'READY' || o.status === 'DELIVERED' )) as order}
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-4 flex flex-col gap-2 h-fit">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2 w-full" style="justify-content: space-between;">
+              <span class="text-xl font-extrabold text-primary">#{formatCode(order.code)}</span>
+              <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-lg ml-auto" style="text-transform: uppercase;">
+                {order.status}
+              </span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 text-sm text-primary mb-1 ">
+            <div class="flex items-center gap-2 text-sm text-primary mr-4">
+              <i class="fas fa-user"></i>
+              <span><strong>{order.user?.username}</strong></span>
+            </div>        
+            <div class="text-sm flex items-center gap-2">
+              <i class="fas fa-clock"></i>{@html formatTime(order.created,'Novo',5)}
+            </div>  
+          </div>
+          
+          {#if order.comment && order.comment.toString.length > -1}
+            <div class="">
+              Napomena:
+              <br>
+              <div class="text-primary bg-base-100 rounded-md p-1 font-bold">          
+                {order.comment}
+              </div>
+            </div>
+          {/if}
+
+          <div class="mt-2 bg-base-100">
+            <ul class="flex flex-col gap-0 hidden">
+              {#each order.items as item}
+                <li class="flex items-center gap-0 p-2 bg-base-100 dark:bg-base-100 border-1 border-base-300">
+                  <span class="text-primary text-sm">{item.quantity} x </span>&nbsp;
+                  <span class="text-primary text-sm"> {item.product?.name ?? item.name}</span>
+                  {#if item.price}
+                    <span class="text-xs text-gray-500 ml-auto">{formatPrice(item.price)}</span>
+                  {/if}
+                </li>
+              {/each}
+            </ul>
+              <div style="align-items: end;display:grid;align-content: end; text-align: right;"
+                    class="g-base-100 dark:bg-base-100 border-1 border-base-300">
+                <span class="text-lg font-bold text-primary p-2">{formatPrice(order.price)}</span>
+              </div>
+          </div>
+          <div class="flex gap-2 mt-2">
+            <a class="btn btn-sm btn-dash hover:text-blue-600 dark:hover:text-sky-400" use:link href="/orders/{order.id}">Details</a>
+            <button class="btn btn-sm btn-dash hover:text-red-700" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
+              Delete
+            </button>
+          </div>
+        </div>
+      {/each}
+    </div>
+  </div>
+</div>
 {:else}
   <!-- Table view (existing code) -->
   <div class="max-w-[2048px] w-full overflow-x-auto rounded-lg align-middle text-center mx-auto">

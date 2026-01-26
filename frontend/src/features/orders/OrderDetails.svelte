@@ -115,7 +115,8 @@
   }
 
   async function handleSubmit() {
-    try {
+    try 
+    {
       loading = true;
       console.log('sending data',formData);
       const response = await api<Order>(`/orders/${ID}`, {
@@ -123,23 +124,25 @@
         body: JSON.stringify(formData),
       });
 
-      /* if (!response.ok) {
-        const errorData = await response.json();
-        showErrorInModal(errorData);
-        return;
-      }
+      showSuccessToast("Order saved");
+      fetch(ID);
 
-      showSuccessToast("Order updated successfully");
-      fetch(resolvedEndpoint); */
-    } catch (err) {
+    }
+    catch (err) 
+    {
       console.log(err)
       showErrorInModal({ message: (err as Error).message });
-    } finally {
+    } 
+    finally 
+    {
       loading = false;
     }
   }
 
-  function showErrorInModal(error: any): void {
+  function showErrorInModal(error: any): void 
+  {
+
+    //Note to myself: moguce da nam vecina ovoga zapravo netreba
     const contentEl = document.getElementById("modal-content");
     const dialogEl = document.getElementById("modal") as HTMLDialogElement;
 
@@ -488,8 +491,8 @@
 <!-- Error Modal -->
 <dialog id="modal" class="modal modal-bottom sm:modal-middle w-full">
   <div class="modal-box" style="min-width: min-content;">
-    <h3 class="text-lg font-bold" id="modal-title">Error</h3>
-    <p class="py-4" id="modal-content">
+    <h3 class="text-lg font-bold text-red-700" id="modal-title">Error</h3>
+    <p class="py-4 text-red-600" id="modal-content">
       An error occurred while processing your request.
     </p>
     <div class="modal-action">
