@@ -9,8 +9,10 @@ import org.alsception.pegasus.core.exception.BadRequestException;
 import org.alsception.pegasus.core.utils.CodeGenerator;
 import org.alsception.pegasus.features.order.dto.OrderDTO;
 import org.alsception.pegasus.features.order.dto.OrderMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class OrderService 
@@ -48,11 +50,11 @@ public class OrderService
         
         if(search == null || "".equals(search)) 
         {
-            orders = orderRepository.findByUsername(username);
+            orders = orderRepository.findByUsernameWithItems(username);
         }
         else
         {
-            orders = orderRepository.findByUsernameAndCode(username,"%"+search.replace("-", "").toUpperCase()+"%");   //Need to remove dashes from code. And also make it case sens
+            orders = orderRepository.findByUsernameAndCodeWithItems(username,"%"+search.replace("-", "").toUpperCase()+"%");   //Need to remove dashes from code. And also make it case sens
         }
 
         //NEXT: MAKE SEARCH CASE INSENSITIVE
@@ -158,11 +160,24 @@ public class OrderService
         // items update logic to be added later (TODO)
 
         return orderRepository.save(existing);
-    }
+    }    
     
     public OrderDTO update(Long id, OrderDTO dto) 
     {
         return OrderMapper.toDto( this.update(id, OrderMapper.toEntity(dto)));        
     }
 
+    @Transactional
+    public void updateOrderStatus(Long id, String status) {
+        int rowsAffected = orderRepository.updateOrderStatus(id, status);
+        
+        if (rowsAffected == 0) {
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, 
+                "Order with id " + id + " not found"
+            );
+        }
+        
+        logger.info("Order {} status updated to {}", id, status);
+    }
 }

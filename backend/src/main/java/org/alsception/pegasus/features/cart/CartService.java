@@ -229,35 +229,29 @@ public class CartService
     @Transactional
     public void checkout(PGSCheckoutRequestDTO prc, String username)
     {
-        log.trace("Creating order");
         //1. Create order
+        log.trace("Creating order");
         PGSOrder order = new PGSOrder();
         long id = CodeGenerator.generateNanoId();
         order.setId(id);
         order.setCode(CodeGenerator.generateThreeDigitCode());
         
-        log.trace("Assigning user");
+        
         //2. Assign user
+        log.trace("Assigning user");
         PGSUser u = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found: "+username));
         
         order.setUser(u);
         
-        log.trace("Setting address");
-        //3. Assign a) Address ...
         
-        order.setAddress(prc.getAddress());
-        order.setEmail(prc.getEmail());
-        order.setName(prc.getName());
+        //3. Set table and comment ...
+        order.setStol(prc.getStol());
         order.setComment(prc.getComment());
-        
-        log.trace("and payment info");
-        // ... and b) PaymentInfo
-        order.setPaymentMethod(prc.getPaymentMethod());
-        
                 
-        log.trace("Loading cart from db");
+        
         // 4. Load cart from db
+        log.trace("Loading cart from db");
         PGSCart cart = this.getCartByUsername(username);         
         
         // 5. Assign cart items to order and calculate total price      
@@ -294,8 +288,9 @@ public class CartService
         //7. Set initial status
         order.setStatus("WAITING");
         
-        log.trace("Saving order to db");
+        
         //8. Finally, save
+        log.trace("Saving order to db");
         this.orderRepository.save(order);
         
         //9. And dont forget to clear cart.

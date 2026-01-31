@@ -40,6 +40,15 @@ public class GlobalExceptionHandler
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
+    /* @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleNotFound(HttpMessageNotWritableException ex) 
+    {
+        logger.error(ex.getMessage());        
+        Map<String, Object> response = new HashMap<>();
+        response.put("error", "Not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }//wtf ovo ide u error? */
+
     // Optional: catch LazyInitializationException separately for logging
     @ExceptionHandler(org.hibernate.LazyInitializationException.class)
     public ResponseEntity<Map<String, Object>> handleLazyInitError(Exception ex) 

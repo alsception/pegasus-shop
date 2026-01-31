@@ -2,7 +2,6 @@ package org.alsception.pegasus.features.order.dto;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.alsception.pegasus.features.order.OrderService;
 import org.alsception.pegasus.features.order.PGSOrder;
 import org.alsception.pegasus.features.order.PGSOrderItem;
 import org.alsception.pegasus.features.order.dto.OrderDTO;
@@ -12,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public final class OrderMapper {
     
-    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderMapper.class);
 
     private OrderMapper() {
         // utility class
@@ -24,7 +23,7 @@ public final class OrderMapper {
 
     public static OrderDTO toDto(PGSOrder order) 
     {
-        logger.debug("Mapping to dto");
+        logger.trace("Mapping to dto");
 
         if (order == null) {
             return null;
@@ -33,7 +32,7 @@ public final class OrderMapper {
         OrderDTO dto = new OrderDTO();
         dto.setId(order.getId());
         dto.setCode(order.getCode());
-        dto.setEmail(order.getEmail());
+        dto.setStol(order.getStol());
         dto.setName(order.getName());
         dto.setAddress(order.getAddress());
         dto.setPaymentMethod(order.getPaymentMethod());
@@ -60,7 +59,7 @@ public final class OrderMapper {
 
     private static List<OrderItemDTO> toItemDtoList(List<PGSOrderItem> items) 
     {
-        logger.debug("Mapping items list");
+        logger.trace("Mapping items list");
 
         if (items == null) {
             return List.of();
@@ -75,7 +74,7 @@ public final class OrderMapper {
 
     private static OrderItemDTO toItemDto(PGSOrderItem item) 
     {
-        logger.debug("Mapping to item dto");
+        logger.trace("Mapping to item dto");
         
         OrderItemDTO dto = new OrderItemDTO();
         
@@ -110,7 +109,7 @@ public final class OrderMapper {
         PGSOrder order = new PGSOrder();
         order.setId(dto.getId());
         order.setCode(dto.getCode());
-        order.setEmail(dto.getEmail());
+        order.setStol(dto.getStol());
         order.setName(dto.getName());
         order.setAddress(dto.getAddress());
         order.setPaymentMethod(dto.getPaymentMethod());

@@ -6,6 +6,7 @@ export interface Order {
   id: number;
   code: string;
   user?: FPGSUser; // Optional since it has @JsonBackReference
+  stol?: string;
   email: string;
   name: string;
   address: string;

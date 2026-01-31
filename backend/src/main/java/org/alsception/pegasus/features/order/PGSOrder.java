@@ -33,7 +33,7 @@ public class PGSOrder
     /*@GeneratedValue(strategy = GenerationType.IDENTITY)*/
     private Long id;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // I ovo
     @JoinColumn(name = "user_id")
     //@JsonBackReference
     private PGSUser user;
@@ -46,6 +46,7 @@ public class PGSOrder
     private String currency;
     private String status;
     private String comment;
+    private String stol;
     
     @Column(precision = 19, scale = 2, nullable = true)
     private BigDecimal price; 
@@ -53,10 +54,10 @@ public class PGSOrder
     //@JsonIgnore
     @JsonManagedReference
     //⚠️ Ovo može izazvati probleme sa performansama ako lista items sadrži mnogo podataka.
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PGSOrderItem> items = new ArrayList<>();
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // I ovo
     @JoinColumn(name = "table_id")
     private PGSTable table;
 
@@ -66,7 +67,7 @@ public class PGSOrder
     @Column(nullable = true)
     private LocalDateTime modified;
     
-    /* One day, if you have time and will to play with various error messages, we can include this field.
+    /*//One day, if you have time and will to play with various error messages, we can include this field.
     @Version
     private Integer version; // Optimistic locking to prevent concurrent modification issues    
     */

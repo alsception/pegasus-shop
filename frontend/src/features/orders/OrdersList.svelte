@@ -1,6 +1,8 @@
 <script lang="ts">
+  import OrderCardMd from './OrderCardMd.svelte';
+
   import type { Order } from "./Order";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";  
   import { get } from "svelte/store";
@@ -11,6 +13,30 @@
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import { showInfoModal } from "../../utils/modal";
+
+
+
+/* ******************************************
+
+TODO:
+
+[done] Novo da bude uokvireno jer ovo sad badge smeta i NOTIFICATION!!!!(new Order, status updated, from-to)
+i failed to fetch kad ugasim server js da stane 
+i LITE APP!!, I MOZDA i WS.....
+
+
+
+***************************************************************** */
+
+
+
+
+
+
+
+
+
+
 
   document.title = 'Orders | Pegasus'
 
@@ -26,6 +52,8 @@
   let searchTerm = "";
   let totalAmount = 0;
   let isBlockView = true;
+  let intervalId: string | number | NodeJS.Timeout | undefined;
+  const REFRESH_INTERVAL = 5000; // 5 sekundi
 
   function toggleView() {
     isBlockView = !isBlockView;
@@ -51,7 +79,13 @@
         error = "Session expired. Please login again.";
         return;
       } else {
-        handleSearch();
+        // Prvo učitavanje
+        await handleSearch(true);
+    
+        // Automatsko osvežavanje
+        intervalId = setInterval(async () => {
+          await handleSearch(false);
+        }, REFRESH_INTERVAL);
       }
     } catch (err) {
       error = err instanceof Error ? err.message : "Search failed";
@@ -60,16 +94,23 @@
     }
   });
 
+  onDestroy(() => {
+    // Cleanup - obavezno!
+    if (intervalId) {
+      clearInterval(intervalId);
+    }
+  });
+
   function handleFormSubmit(event: { preventDefault: () => void }) 
   {
     event.preventDefault(); // prevent page reload
-    handleSearch();
+    handleSearch(true);
   }
 
- async function handleSearch() 
+ async function handleSearch(showLoading: boolean) 
  {    
     const token = $auth.token;
-    loading = true;
+    if(showLoading) loading = true;
     
     try {        
 
@@ -129,7 +170,7 @@
         
         // Handle other errors appropriately (show user message, etc.)
     } finally {
-        loading = false;
+        if(showLoading) loading = false;
     }
   }
 
@@ -249,6 +290,14 @@
         return "secondary";
     }
   }
+
+  /**
+   * Kad zavrsi ajax poziv iz OrderCardMd>StatusMenu, onda ce se ovde pozvati ova funkcija i osveziti sadrzaj na ekranu
+   */
+  function handleOrderUpdateCompleted(event: { detail: any; }) 
+  {
+    handleSearch(true);
+  }
 </script>
 
 {#if !$auth.isAuthenticated}
@@ -290,8 +339,6 @@
 </div>
 </div>
 
-
-
 {#if loading}
   <LoadingOverlay />
 {/if}
@@ -300,208 +347,50 @@
 {#if isBlockView}
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-16 p-2">
   <!-- WAITING -->
-  <div class="bg-yellow-200 dark:bg-yellow-600 rounded-xl shadow p-4">
-    <div class="mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-      <h2 class="text-xl font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-        <span class="badge badge-soft badge-yellow">WAITING</span>
-        <span class="text-sm text-gray-500">({orders.filter(o => o.status === 'WAITING').length})</span>
+  <div class="rounded-xl shadow p-4" style="background: linear-gradient(to bottom right, var(--color-wait), var(--color-base-100));">
+    <div class="mb-4 pb-2">
+      <h2 class="text-xl font-bold  flex items-center gap-2">
+        <span class="badge badge-soft badge-yellow"style="background: oklch(66.6% 0.179 58.318); color: white;">⏳ NA ČEKANJU</span>
+        <span class="text-md">({orders.filter(o => o.status === 'WAITING').length})</span>
       </h2>
     </div>
     
-    <div class="space-y-4">
+    <!-- ovde su u dve kolone male slicice -->
+    <div class="grid grid-cols-2 gap-4">
       {#each orders.filter(o => o.status === 'WAITING') as order}
-        <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-4 flex flex-col gap-2 h-fit">
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-2 w-full" style="justify-content: space-between;">
-              <span class="text-xl font-extrabold text-primary">#{formatCode(order.code)}</span>
-              <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-lg ml-auto" style="text-transform: uppercase;">
-                {order.status}
-              </span>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-2 text-sm text-primary mb-1 ">
-            <div class="flex items-center gap-2 text-sm text-primary mr-4">
-              <i class="fas fa-user"></i>
-              <span><strong>{order.user?.username}</strong></span>
-            </div>        
-            <div class="text-sm flex items-center gap-2">
-              <i class="fas fa-clock"></i>{@html formatTime(order.created,'Novo',5)}
-            </div>  
-          </div>
-          
-          {#if order.comment && order.comment.toString.length > -1}
-            <div class="">
-              Napomena:
-              <br>
-              <div class="text-primary bg-base-100 rounded-md p-1 font-bold">          
-                {order.comment}
-              </div>
-            </div>
-          {/if}
-
-          <div class="mt-2 bg-base-100">
-            <ul class="flex flex-col gap-0">
-              {#each order.items as item}
-                <li class="flex items-center gap-0 p-2 bg-base-100 dark:bg-base-100 border-1 border-base-300">
-                  <span class="text-primary text-sm">{item.quantity} x </span>&nbsp;
-                  <span class="text-primary text-sm"> {item.product?.name ?? item.name}</span>
-                  {#if item.price}
-                    <span class="text-xs text-gray-500 ml-auto">{formatPrice(item.price)}</span>
-                  {/if}
-                </li>
-              {/each}
-            </ul>
-              <div style="align-items: end;display:grid;align-content: end; text-align: right;"
-                    class="g-base-100 dark:bg-base-100 border-1 border-base-300">
-                <span class="text-lg font-bold text-primary p-2">{formatPrice(order.price)}</span>
-              </div>
-          </div>
-          <div class="flex gap-2 mt-2">
-            <a class="btn btn-sm btn-dash hover:text-blue-600 dark:hover:text-sky-400" use:link href="/orders/{order.id}">Details</a>
-            <button class="btn btn-sm btn-dash hover:text-red-700" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
-              Delete
-            </button>
-          </div>
-        </div>
+         <OrderCardMd {order} liteView={true} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
       {/each}
     </div>
   </div>
 
-  <!-- IN_PREPARATION -->
-  <div class="bg-sky-200 dark:bg-sky-700 rounded-xl shadow p-4">
-    <div class="mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
+  <!-- IN_PREPARATION, ovde su velike u 1 red -->
+  <div class="rounded-xl shadow p-4" style="background: linear-gradient(to bottom right, var(--color-inprep), var(--color-base-100));">
+    <div class="mb-4">
       <h2 class="text-xl font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-        <span class="badge badge-soft badge-blue">IN PREPARATION</span>
-        <span class="text-sm text-gray-500">({orders.filter(o => o.status === 'IN_PREPARATION').length})</span>
+        <span class="badge badge-soft badge-blue" style="background: blue; color: white;">👨‍🍳 U PRIPREMI</span>
+        <span class="text-md">({orders.filter(o => o.status === 'IN_PREPARATION').length})</span>
       </h2>
     </div>
     
     <div class="space-y-4">
       {#each orders.filter(o => o.status === 'IN_PREPARATION') as order}
-        <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-4 flex flex-col gap-2 h-fit">
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-2 w-full" style="justify-content: space-between;">
-              <span class="text-xl font-extrabold text-primary">#{formatCode(order.code)}</span>
-              <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-lg ml-auto" style="text-transform: uppercase;">
-                {order.status}
-              </span>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-2 text-sm text-primary mb-1 ">
-            <div class="flex items-center gap-2 text-sm text-primary mr-4">
-              <i class="fas fa-user"></i>
-              <span><strong>{order.user?.username}</strong></span>
-            </div>        
-            <div class="text-sm flex items-center gap-2">
-              <i class="fas fa-clock"></i>{@html formatTime(order.created,'Novo',5)}
-            </div>  
-          </div>
-          
-          {#if order.comment && order.comment.toString.length > -1}
-            <div class="">
-              Napomena:
-              <br>
-              <div class="text-primary bg-base-100 rounded-md p-1 font-bold">          
-                {order.comment}
-              </div>
-            </div>
-          {/if}
-
-          <div class="mt-2 bg-base-100">
-            <ul class="flex flex-col gap-0">
-              {#each order.items as item}
-                <li class="flex items-center gap-0 p-2 bg-base-100 dark:bg-base-100 border-1 border-base-300">
-                  <span class="text-primary text-sm">{item.quantity} x </span>&nbsp;
-                  <span class="text-primary text-sm"> {item.product?.name ?? item.name}</span>
-                  {#if item.price}
-                    <span class="text-xs text-gray-500 ml-auto">{formatPrice(item.price)}</span>
-                  {/if}
-                </li>
-              {/each}
-            </ul>
-              <div style="align-items: end;display:grid;align-content: end; text-align: right;"
-                    class="g-base-100 dark:bg-base-100 border-1 border-base-300">
-                <span class="text-lg font-bold text-primary p-2">{formatPrice(order.price)}</span>
-              </div>
-          </div>
-          <div class="flex gap-2 mt-2">
-            <a class="btn btn-sm btn-dash hover:text-blue-600 dark:hover:text-sky-400" use:link href="/orders/{order.id}">Details</a>
-            <button class="btn btn-sm btn-dash hover:text-red-700" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
-              Delete
-            </button>
-          </div>
-        </div>
+        <OrderCardMd {order} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
       {/each}
     </div>
   </div>
 
-  <!-- DELIVERED -->
-  <div class="bg-green-200 dark:bg-green-700 rounded-xl shadow p-4">
-    <div class="mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
+  <!-- READY, ovde isto male u 2 -->
+  <div class="rounded-xl shadow p-4" style="background: linear-gradient(to bottom right, var(--color-ready), var(--color-base-100));">
+    <div class="mb-4">
       <h2 class="text-xl font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-        <span class="badge badge-soft badge-green">READY</span>
-        <span class="text-sm text-gray-500">({orders.filter(o => (o.status === 'READY' || o.status === 'DELIVERED' )).length})</span>
+        <span class="badge badge-soft badge-green" style="background: green;color: white;">✅ SPREMNO</span>
+        <span class="text-md">({orders.filter(o => (o.status === 'READY' || o.status === 'DELIVERED' )).length})</span>
       </h2>
     </div>
     
-    <div class="space-y-4">
+    <div class="grid grid-cols-2 gap-4">
       {#each orders.filter(o => (o.status === 'READY' || o.status === 'DELIVERED' )) as order}
-        <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-4 flex flex-col gap-2 h-fit">
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-2 w-full" style="justify-content: space-between;">
-              <span class="text-xl font-extrabold text-primary">#{formatCode(order.code)}</span>
-              <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-lg ml-auto" style="text-transform: uppercase;">
-                {order.status}
-              </span>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-2 text-sm text-primary mb-1 ">
-            <div class="flex items-center gap-2 text-sm text-primary mr-4">
-              <i class="fas fa-user"></i>
-              <span><strong>{order.user?.username}</strong></span>
-            </div>        
-            <div class="text-sm flex items-center gap-2">
-              <i class="fas fa-clock"></i>{@html formatTime(order.created,'Novo',5)}
-            </div>  
-          </div>
-          
-          {#if order.comment && order.comment.toString.length > -1}
-            <div class="">
-              Napomena:
-              <br>
-              <div class="text-primary bg-base-100 rounded-md p-1 font-bold">          
-                {order.comment}
-              </div>
-            </div>
-          {/if}
-
-          <div class="mt-2 bg-base-100">
-            <ul class="flex flex-col gap-0 hidden">
-              {#each order.items as item}
-                <li class="flex items-center gap-0 p-2 bg-base-100 dark:bg-base-100 border-1 border-base-300">
-                  <span class="text-primary text-sm">{item.quantity} x </span>&nbsp;
-                  <span class="text-primary text-sm"> {item.product?.name ?? item.name}</span>
-                  {#if item.price}
-                    <span class="text-xs text-gray-500 ml-auto">{formatPrice(item.price)}</span>
-                  {/if}
-                </li>
-              {/each}
-            </ul>
-              <div style="align-items: end;display:grid;align-content: end; text-align: right;"
-                    class="g-base-100 dark:bg-base-100 border-1 border-base-300">
-                <span class="text-lg font-bold text-primary p-2">{formatPrice(order.price)}</span>
-              </div>
-          </div>
-          <div class="flex gap-2 mt-2">
-            <a class="btn btn-sm btn-dash hover:text-blue-600 dark:hover:text-sky-400" use:link href="/orders/{order.id}">Details</a>
-            <button class="btn btn-sm btn-dash hover:text-red-700" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
-              Delete
-            </button>
-          </div>
-        </div>
+        <OrderCardMd {order} liteView={true} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
       {/each}
     </div>
   </div>
@@ -567,15 +456,7 @@
   </div>
 {/if}
 
-  <!-- ovde cemo staviti order details (items) -->
-  {#if modalOrder}
-    <Modal
-      showModal={true}
-      title="Reviews"
-      data={modalOrder.reviews}
-      on:close={closeModal}
-    />
-  {/if}
+  
 {/if}
 
 <div style="display: none;">

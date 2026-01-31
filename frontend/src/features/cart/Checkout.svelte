@@ -14,12 +14,9 @@
   let isAuthenticated = false;
   let loading: boolean = false;
   let error: string | null = null;
-  let name = "";
-  let email = "";
-  let phone = "";
-  let address = "";
+  let stol = "";
+  let user = "";
   let comment = "";
-  let paymentMethod = "bank_transfer";
 
   //Authenticacion
   $: isAuthenticated = $auth.isAuthenticated;
@@ -27,11 +24,8 @@
   async function submitForm() {
     const url = API_BASE_URL + "/cart/checkout";
     const payload = {
-      email,
-      name,
-      address,
-      phone,
-      paymentMethod,
+      stol,
+      user,
       comment
     };
 
@@ -117,26 +111,26 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
 
             <div class="w-full md:col-span-2">
-              <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
-                <i class="fas fa-phone text-xs text-gray-400 mr-2"></i>Konobar
+              <label for="user" class="block text-sm font-medium text-gray-700 mb-2">
+                <i class="fas fa-user text-xs text-gray-400 mr-2"></i>Konobar
               </label>
               <input
-                id="phone"
+                id="user"
                 class="nb-input default font-mono"
-                placeholder="phone"
-                bind:value={phone}
+                placeholder=""
+                bind:value={user}
               />
             </div>
 
             <div class="w-full md:col-span-2">
-              <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                <i class="fas fa-envelope text-xs text-gray-400 mr-2"></i>Sto
+              <label for="stol" class="block text-sm font-medium text-gray-700 mb-2">
+                <i class="fas fa-chair text-xs text-gray-400 mr-2"></i>Stol
               </label>
               <input
-                id="email"
+                id="stol"
                 class="nb-input default font-mono"
-                placeholder="e-mail"
-                bind:value={email}
+                placeholder=""
+                bind:value={stol}
               />
             </div>
 

@@ -15,6 +15,13 @@
   <title>Pegasus</title>
 </head>
 <body class="min-h-screen flex flex-col" style="font-family: Arial, Helvetica, sans-serif;">
+<div id="js-test">
+        <h1>Is it working?</h1>
+        <p id="test">no JavaScript :(</p>
+        <script>
+                document.getElementById('test').textContent = 'JavaScript works!';
+        </script>
+</div>
   <div id="app"></div>
   <script type="module" src="/src/main.ts"></script>
 </body>

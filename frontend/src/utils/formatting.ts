@@ -5,6 +5,23 @@
  */
 const badgeInfo = 'NOVO'
 
+export function isNew(dateStr: string | number | Date | null | undefined, minDiff: number): boolean 
+{
+    if (dateStr == null) return false;
+
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffInMs = now.getTime() - date.getTime();
+    const diffInMinutes = diffInMs / (1000 * 60);
+
+    if (diffInMinutes < minDiff) 
+    {
+        return true;
+    }
+
+    return false;
+}
+
 
 /**
  * @param dateStr Date in whatever format there is
@@ -38,16 +55,30 @@ export function formatTime(dateStr: string | number | Date | null | undefined, t
     if (diffInMinutes < minDiff) 
     {
         output = `<div>
-                    <div class=" tooltip tooltip-info cursor-pointer" data-tip="`+tooltip+`">
-                        <span class="text-info dark:text-yellow-300 font-bold"> ${formattedDateTime} </span>
+                    <div class=" tooltip tooltip-info cursor-pointer" data-tip="`+tooltip+` - Stiglo prije manje od `+minDiff+` minuta ">
+                        <span class="text-primary font-bold"> ${formattedDateTime} </span>
                     </div>
-                    <span class="indicator-item badge badge-info dark:text-black dark:bg-amber-300">`+badgeInfo+`</span>
+                    <span class="indicator-item badge badge-info dark:text-black dark:bg-amber-300">🔥 `+badgeInfo+`</span>
                   </div>`;
     }
     else
     {
         output = formattedDateTime
     }
+
+    return output;
+}
+
+export function formatTime2(dateStr: string | number | Date | null | undefined): string 
+{
+    if (dateStr == null) return '';
+
+    const date = new Date(dateStr);
+    let output = '';  
+
+    const formattedDateTime = formattedTime(date)
+
+    output = formattedDateTime
 
     return output;
 }
@@ -76,7 +107,7 @@ export function formatDate(dateStr: string | number | Date | null | undefined, t
                     <span class="indicator-item badge badge-info dark:text-black dark:bg-amber-300">`+badgeInfo+`</span>
                     <br>
                     <div class=" tooltip tooltip-info cursor-pointer" data-tip="`+tooltip+`">
-                        <span class="text-info dark:text-yellow-300 font-bold"> ${formattedDateTime} </span>
+                        <span class="text-primary font-bold"> ${formattedDateTime} </span>
                     </div>
                   </div>`;
     }
@@ -132,4 +163,45 @@ export const formatDateTime = (value: string | number | Date | null | undefined)
 
     return date.toLocaleString("en-GB");
 };
+
+export function getOrderStatusColor(status: string | null | undefined): string 
+{
+    switch (status?.toUpperCase()) {
+      case "READY":
+      case "DELIVERED":
+        return "success";
+      case "CANCELLED":
+      case "REFUNDED":
+        return "warning";
+      case "RETURNED":
+        return "error";
+      case "IN_PREPARATION":
+        return "info";
+      case "WAITING":
+        return "warning";
+      default:
+        return "secondary";
+    }
+  }
+
+export function getOrderStatusLabel(status: string | null | undefined): string 
+{
+    switch (status?.toUpperCase()) {
+      case "READY":      
+        return "SPREMNO";
+      case "DELIVERED":
+        return "SERVIRANO"
+      case "CANCELLED":
+      case "REFUNDED":
+        return "warning";
+      case "RETURNED":
+        return "error";
+      case "IN_PREPARATION":
+        return "U PRIPREMI";
+      case "WAITING":
+        return "NA ČEKANJU";
+      default:
+        return "-";
+    }
+  }
 

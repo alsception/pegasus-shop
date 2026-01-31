@@ -10,6 +10,23 @@ export default defineConfig({
     svelte(),
     tailwindcss(),
   ],
+  //Ovo je dodato ali nepomaze za stari televizor
+ /* build: {
+    target: 'es2015', // Ne chrome53, probaj prvo es2015
+    cssTarget: 'chrome53',
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        ecma: 5
+      }
+    }
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'es5'
+    }
+  } */
+  
   /*   zasad nekoristimo, za ngrok tunnel
   server: {
     host: true, // omogućava pristup sa spoljnog IP-a

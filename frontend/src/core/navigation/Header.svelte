@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import PrimaryMenu from "./menu/PrimaryMenu.svelte";
+  import NotificationsInfo from "./NotificationsInfo.svelte";
 
   onMount(() => {
     const themeCheckbox = document.querySelector('input.theme-controller');
@@ -50,23 +51,32 @@
     </a>
   </div>
   <div class="navbar-end"> 
+    <div class=" mr-8 tooltip tooltip-info tooltip-left text-gray-500" data-tip="Server ready. Last updated at xx.xx">
+    🟢
+    </div>
       <div class="" style="/*display: none;*/"> 
-        <label class="swap swap-rotate mr-4 tooltip tooltip-info tooltip-left" data-tip="Toggle Dark Mode">
+        <label class="swap swap-rotate mr-4 tooltip tooltip-info tooltip-left text-gray-500" data-tip="Dark Mode">
           <input id="theme-controller" type="checkbox" class="theme-controller" value="dark" />
-          <span class="swap-off text-xl">☀️</span>
-          <span class="swap-on text-xl">🌚</span>
+          <span class="swap-off text-xl">                
+            <i class="fas fa-moon text-md"></i>
+          </span>
+          <span class="swap-on text-xl">
+            <i class="fas fa-sun text-md"></i>
+          </span>
         </label>
     </div>
+    <div class="dropdown">
+      <div
+        tabindex="0"
+        role="button"
+        class="btn btn-ghost btn-circle hover:bg-neutral-700 tooltip tooltip-info tooltip-left"  
+        data-tip="Notifications"
+        aria-label="Notifications"        
+      >
+            <i class="fas fa-bell text-md"></i>
+      </div>
 
-<!-- HTML deo --><!-- 
-<label class="flex items-center gap-2 cursor-pointer">
-  <span class="text-sm">Dark mode</span>
-  <input
-    id="theme-controller"
-    type="checkbox"
-    class="toggle theme-controller"
-    value="dark"
-  />
-</label> -->
+      <NotificationsInfo/>
+    </div>
   </div>
 </div>

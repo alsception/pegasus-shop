@@ -77,7 +77,7 @@ public class OrderDTO {
     private Long tableId;
 
     private String code;
-    private String email;
+    private String stol;
     private String name;
     private String address;
     private String paymentMethod;

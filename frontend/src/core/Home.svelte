@@ -29,7 +29,7 @@
       id: 0,
     },
     {
-      title: "📓 Jelovnik",
+      title: "🍔 Jelovnik",
       description: "Pregledaj proizvode",
       icon: "box--",
       href: "/products?listView=false",
@@ -41,7 +41,7 @@
     },
     {
       id: 2,
-      title: "📚 Upravljanje proizvodima",
+      title: "🧑‍🍳 Artikli",
       description: "Manage store items",
       icon: "box--",
       href: "/products?listView=true",
@@ -63,7 +63,7 @@
     },
     {
       id: 4,
-      title: "📝 Narudzbe",
+      title: "📝 Narudžbe",
       description: "View and manage orders",
       icon: "truck--",
       href: "/orders",
@@ -145,7 +145,7 @@
 
 <div
   class="max-w-7xl mx-auto px-6 py-10
-  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 scale-up-center-normal"
+  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 scale-up-center-normal"
 >
   {#each displayedItems as item}
 
@@ -155,10 +155,10 @@
       class=""
     >
    <div class="notification">
-    <div class="notiglow"></div>
+    <div class="notiglow "></div>
     <div class="notiborderglow"></div>
-    <div class="notititle">        {item.title}</div>
-    <div class="notibody">        {item.description}</div>
+    <div class="notititle p-40">        {item.title}</div>
+    <div class="notibody text-primary/20">        {item.description}</div>
   </div>
     </a>
 
@@ -315,8 +315,8 @@
   position: relative;
   width: 18rem;
   height: 8rem;
-  background: #29292c;
-  border-radius: 1rem;
+  background: var(--color-base-300);
+  border-radius: 0rem;
   overflow: hidden;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 16px;
@@ -328,8 +328,7 @@
   position: absolute;
   content: "";
   inset: 0.0625rem;
-  border-radius: 0.9375rem;
-  background: #18181b;
+  background: var(--color-base-200);
   z-index: 2
 }
 
@@ -338,7 +337,6 @@
   content: "";
   width: 0.25rem;
   inset: 0.65rem auto 0.65rem 0.5rem;
-  border-radius: 0.125rem;
   background: var(--gradient);
   transition: transform 300ms ease;
   z-index: 4;
@@ -352,7 +350,7 @@
   color: var(--color);
   padding: 0.65rem 0.25rem 0.4rem 1.25rem;
   font-weight: 500;
-  font-size: 1.1rem;
+  font-size: 1.6rem;
   transition: transform 300ms ease;
   z-index: 5;
 }
@@ -362,7 +360,6 @@
 }
 
 .notibody {
-  color: #99999d;
   padding: 0 1.25rem;
   transition: transform 300ms ease;
   z-index: 5;

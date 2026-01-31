@@ -2,6 +2,7 @@ package org.alsception.pegasus.features.order;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.alsception.pegasus.core.exception.BadRequestException;
 import org.alsception.pegasus.features.order.dto.OrderDTO;
@@ -78,29 +79,55 @@ public class OrderController {
     /* =========================
        UPDATE
        ========================= */
+    
+    //TODO: IF ADMIN, HE SHOULD SEE/EDIT ALL ORDERS OF ALL USERS,
+        // OTHERWISE, ONLY HIS ORDERS
+        // AND SEARCH FOR:
+        // DATE TO-FROM, AMOUNT, USER...
 
     @PutMapping(value = "/{id}", consumes = "application/json")
-    public ResponseEntity<OrderDTO> updateOrder(
+    public ResponseEntity<?> updateOrder(
             @PathVariable Long id,
             @RequestBody OrderDTO dto,
             Principal principal) 
     {
-
         logger.debug("Updating order {}", id);
-        //logger.debug(dto.toString()); //OVDE exception
 
         try 
         {
             OrderDTO updated = orderService.update(id, dto);
 
-            logger.info("Updated order {}", id);
+            logger.info("Order updated {}", id);
             
             return ResponseEntity.ok(updated);
         }
         catch (Exception e) 
         {
             logger.error("Error updating order: {}", e.getMessage(), e);
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.internalServerError()
+                                .body("Error updating order: " + e.getMessage());
+        }
+    }
+
+    @PutMapping(value = "/update-status/{id}", consumes = "application/json")
+    public ResponseEntity<?> updateOrderStatus(
+            @PathVariable Long id,
+            @RequestParam String status,
+            Principal principal) 
+    {
+        logger.debug("Updating order status {}", id);
+
+        try 
+        {
+            orderService.updateOrderStatus(id, status);
+
+            return ResponseEntity.ok().build();
+        }
+        catch (Exception e) 
+        {
+            logger.error("Error updating order: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError()
+                                .body("Error updating order: " + e.getMessage());
         }
     }
 

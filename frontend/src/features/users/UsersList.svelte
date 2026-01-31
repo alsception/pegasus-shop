@@ -407,8 +407,7 @@
 
   <NewUserModal
     isOpen={showCreateModal}
-    on:close={() => {showCreateModal = false; handleSearch(false)}
-    }
+    on:close={() => {showCreateModal = false; handleSearch(false)}}
   />
   {/if}
 {/if}

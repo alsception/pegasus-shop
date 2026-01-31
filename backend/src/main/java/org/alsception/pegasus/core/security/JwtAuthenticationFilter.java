@@ -89,13 +89,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
          * We need to create this message as one, because of multithreading
          */
         String msg = "\n"+"+======================== UNATHORIZED HTTP REQUEST DETAILS ======================================+\n"; 
-        msg += "[1/2] No auth header | "+request.getMethod()+" "+request.getRequestURI()+"\n";
+        msg += "[1/3] No auth header | "+request.getMethod()+" "+request.getRequestURI()+"\n";
 
         final String serverInfo = "Server Info [" + request.getServerName() + ":" + request.getServerPort() + "]";
-        final String remoteInfo = "Remote Info [" + request.getRemoteAddr() + ":" + request.getRemotePort() + "]";
+        final String remoteInfo = "Remote Info [" + request.getRemoteAddr() + ":" + request.getRemotePort() + "]";        
         final String query = "Query String [" + request.getQueryString()+"]";            
+        final String userAgent = "User-Agent [" + request.getHeader("User-Agent") + "]";
 
-        msg+= "[2/2] " + serverInfo + ", " + remoteInfo + ", " + query + "\n";
+        msg+= "[2/3] " + serverInfo + ", " + remoteInfo + ", " + query + "\n";
+        msg+= "[3/3] " + userAgent + "\n";
+
         msg+= "+================================================================================================+";
         logger.warn(msg);
     }
@@ -105,7 +108,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      */
     public boolean shouldWePrint(HttpServletRequest request)
     {
-        if( 
+        /* if( 
             (request.getMethod().equals("POST") 
             && 
             (
@@ -127,7 +130,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             )))
         {
             return false;
-        }
+        } */
         return true;
     }
 }
