@@ -312,8 +312,8 @@ let showModal2 = false;
 
 </script>
 
- <div class="bg-white dark:bg-slate-900 rounded-xl shadow p-4 flex flex-col gap-2 h-fit border" 
-    class:card-new={isNew(order.created,10)}
+ <div class="bg-white dark:bg-zinc-900 rounded-xl shadow p-4 flex flex-col gap-2 h-fit border" 
+    class:card-new={isNew(order.created,10) && order.status == 'WAITING'}
     class:border-blue-700={order.status == 'IN_PREPARATION'}
     class:border-amber-700={order.status == 'WAITING'}
     class:border-green-700={order.status == 'READY'}
@@ -362,7 +362,7 @@ let showModal2 = false;
                 Napomena:
               </span>
                             <br>
-              <div class=" bg-base-100 dark:bg-base-100 border-1 border-base-300 text-primary p-1 font-bold py-2 px-4">          
+              <div class=" bg-base-300/66 dark:bg-base-100 border-1 border-base-300 text-primary p-1 font-bold py-2 px-4 rounded-md">          
                 {order.comment}
               </div>
             </div>
@@ -447,8 +447,8 @@ let showModal2 = false;
 
 .card-new {
   border: 2px solid 2px solid #6933ff;
-  border-radius: 22px;
-  /*padding: 20px;*/
+/*   border-radius: 22px;
+ */  /*padding: 20px;*/
   animation: pulse 6s infinite;
 }
 
@@ -457,7 +457,7 @@ let showModal2 = false;
     box-shadow: 0 0 0 0 rgba(111, 0, 255, 0.7);
   }
   50% {
-    box-shadow: 0 0 0 10px rgba(0, 4, 255, 0);
+    box-shadow: 0 0 0 21px rgba(0, 4, 255, 0);
   }
 }
 

@@ -40,8 +40,8 @@
     return () => window.removeEventListener('click', generateLines);
   });
 </script>
-<div style="position: fixed; top: 0px; left 0px; width: 100%; height:100%;">
-<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+<div style="position: fixed; top: 0px; left 0px; width: 200%; height:200%;">
+<svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet">
   <circle cx="50" cy="50" r="1" fill="white" stroke="black" />
   {#each lines as { x2, y2, opacity, strokeWidth, color }, i}
     <line

@@ -27,15 +27,9 @@ export default defineConfig({
     }
   } */
   
-  /*   zasad nekoristimo, za ngrok tunnel
   server: {
     host: true, // omogućava pristup sa spoljnog IP-a
     port: 5173, // ili bilo koji drugi port
-    strictPort: true, // ne koristi alternativni port
-    hmr: {
-      protocol: 'wss',
-      host: '84cd-5-39-135-139.ngrok-free.app',
-    }
-  }*/
+  }
 
 })

@@ -50,3 +50,6 @@ frontend/.env.*  # catches .env.local, .env.production, etc.
 
 # === Editor backup files ===
 *~
+
+# === Other ===
+backend/src/main/resources/keystore.p12

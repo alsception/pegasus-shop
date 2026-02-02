@@ -191,8 +191,6 @@ This architecture ensures that each feature contains its own:
 
 6. **Access the application**
    - Main application: `http://localhost:8080`
-   - Admin panel: `http://localhost:8080/admin`
-   - API documentation: `http://localhost:8080/swagger-ui.html`
 
 ### Docker Deployment
 

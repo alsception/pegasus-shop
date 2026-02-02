@@ -13,19 +13,27 @@
   class="flex flex-col justify-center items-center h-full text-2xl mt-4 text-center"
 >
   {#if isErr500}
+  
     <img src={errorImg} alt="Fetch error illustration" class="max-w-128" />
-    <h1>⛔ Error: {error} ⛔</h1>
     <h2 style="/*position: relative; top: -70px;*/" class="text-primary mt-4">
-      Server error, sorry :(
+      Server error :(
     </h2>
+    <p class="text-red-500 text-xl mt-8 text-center dark:text-red-400 bg-error-content p-2">
+        {error}
+    </p>
+
   {:else if isFetchError}
-    <img src={errorImg} alt="Fetch error illustration" class="max-w-128" />
-    <h1>⛔ Error: {error} ⛔</h1>
-    <h2 style="/*position: relative; top: -70px;*/" class="text-primary mt-4">
-      Looks like our server is unavailable or you are offline.
-    </h2>
+    
+    <p class="text-red-500 text-xl mt-8 text-center dark:text-red-400 bg-error-content p-2">
+        {error}
+    </p>
+
   {:else}
-    <h1>⛔ Error: {error} ⛔</h1>
+
+    <p class="text-red-500 text-xl mt-8 text-center dark:text-red-400 bg-error-content p-2">
+        {error}
+    </p>
+
   {/if}
 
 </div>
@@ -35,7 +43,7 @@
     font-size: 2rem;
     font-weight: 900;
     color: #111;
-    background: #ffdd00;
+    background: #888;
     padding: 0.5rem 1.5rem;
     border: 3px solid #111;
     margin: 1rem 0;

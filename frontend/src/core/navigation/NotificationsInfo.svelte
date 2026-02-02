@@ -44,7 +44,7 @@
     onMount(() => 
     {
         console.log('mounted');
-        fetchNotifications();
+        //fetchNotifications();
     });
 
     function fetchNotifications()

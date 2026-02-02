@@ -8,6 +8,7 @@
     title: string;
     description: string;
     icon: string;
+    emoji: string;
     href: string;
     color: string;
     admin: boolean;
@@ -18,7 +19,9 @@
 
   const allItems: Item[] = [
     {
-      title: "👤 Korisnici",
+      id: 0,
+      emoji: "👤",
+      title: "Korisnici",
       description: "Upravljanje korisnicima",
       icon: "users--",
       href: "/users",
@@ -26,10 +29,11 @@
       default: false,
       admin: true,
       customer: false,
-      id: 0,
     },
     {
-      title: "🍔 Jelovnik",
+      id: 1,
+      emoji: "🍔",
+      title: "Jelovnik",
       description: "Pregledaj proizvode",
       icon: "box--",
       href: "/products?listView=false",
@@ -37,12 +41,12 @@
       default: true,
       admin: true,
       customer: true,
-      id: 1,
     },
     {
       id: 2,
-      title: "🧑‍🍳 Artikli",
-      description: "Manage store items",
+      emoji: "🥩",
+      title: "Artikli",
+      description: "Upravljanje artiklima",
       icon: "box--",
       href: "/products?listView=true",
       color: "yellow",
@@ -52,7 +56,8 @@
     },
     {
       id: 3,
-      title: "🧺 Košarica",
+      emoji: "🧺",
+      title: "Košarica",
       description: "Pregledaj proizvode u košarici",
       icon: "", //"shopping-basket",
       href: "/cart",
@@ -63,8 +68,9 @@
     },
     {
       id: 4,
-      title: "📝 Narudžbe",
-      description: "View and manage orders",
+      emoji: "📝",
+      title: "Narudžbe",
+      description: "Pregled i upravljanje narudžbama",
       icon: "truck--",
       href: "/orders",
       color: "red",
@@ -74,8 +80,9 @@
     },
     {
       id: 5,
-      title: "📅 Rezervacije",
-      description: "Upravljaj rezervacijama",
+      emoji: "📅",
+      title: "Rezervacije",
+      description: "Upravljanje rezervacijama",
       icon: "truck--",
       href: "/reservations",
       color: "red",
@@ -85,8 +92,9 @@
     },
     {
       id: 6,
-      title: "🪑 Stolovi ",
-      description: "View and manage tables",
+      emoji: "🪑",
+      title: "Stolovi",
+      description: "Pregled i upravljanje stolovima",
       icon: "--table",
       href: "/tables",
       color: "yellow",
@@ -96,9 +104,9 @@
     },
     {
       id: 7,
-      title: "🖼️ Gallery",
-      description:
-        "View and manage picture gallery. Billions of free pictures, by Unsplash API",
+      emoji: "🖼️",
+      title: "Galerija",
+      description: "Pregled i upravljanje galerijom slika. Milijarde besplatnih slika putem Unsplash API",
       icon: "//image",
       href: "/pix",
       color: "violet",
@@ -145,7 +153,7 @@
 
 <div
   class="max-w-7xl mx-auto px-6 py-10
-  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 scale-up-center-normal"
+  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 scale-up-center-normal menu-container"
 >
   {#each displayedItems as item}
 
@@ -154,13 +162,21 @@
       href="#{item.href}"
       class=""
     >
-   <div class="notification">
-    <div class="notiglow "></div>
-    <div class="notiborderglow"></div>
-    <div class="notititle p-40">        {item.title}</div>
-    <div class="notibody text-primary/20">        {item.description}</div>
-  </div>
-    </a>
+   <div class="menu-card card-8">
+   <!--  <div class="notiglow "></div>
+    <div class="notiborderglow"></div> -->
+<!--     <div class="menu-card card-1">
+ -->            <div class="card-content">
+                <span class="icon">{item.emoji}</span>
+                 <h2 class="title">{item.title}</h2>
+                <p class="description"> {item.description}</p>
+            </div>
+            <span class="arrow">→</span>
+        </div>
+   <!--  <div class="notititle p-40">        {item.title}</div>
+    <div class="notibody text-primary/20">        {item.description}</div> -->
+<!--   </div>
+ -->    </a>
 
 
   {/each}
@@ -323,7 +339,7 @@
   --gradient: linear-gradient(to bottom, #2eadff, #3d83ff, #7e61ff);
   --color: #32a6ff
 }
-
+/* 
 .notification:before {
   position: absolute;
   content: "";
@@ -341,7 +357,7 @@
   transition: transform 300ms ease;
   z-index: 4;
 }
-
+ */
 .notification:hover:after {
   transform: translateX(0.15rem)
 }
@@ -406,4 +422,147 @@
   font-size: 0.9rem;
   width: 75%;
 }
+
+ .menu-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .menu-card {
+            background: var(--color-base-200);
+            backdrop-filter: blur(10px);
+/*             border-radius: 20px;
+ */            padding: 40px 30px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: -webkit-fill-available;
+            align-content: center;
+        }
+
+        .menu-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+            transition: color 0.4s ease;
+        }
+
+        .menu-card:hover .card-content
+        {
+            color: /*var(--color-primary)*/black;
+        }
+
+        .icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .menu-card:hover .icon {
+            transform: scale(1.1) /*rotate(5deg)*/;
+        }
+
+        .title {
+/*             font-family: 'Playfair Display', serif;
+ */            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .description {
+            font-size: 15px;
+            line-height: 1.6;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .menu-card:hover .description {
+            opacity: 0.95;
+        }
+
+        .arrow {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 24px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.4s ease;
+        }
+
+        .menu-card:hover .arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Individual card colors */
+        .card-1::before {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .card-2::before {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .card-3::before {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .card-4::before {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .card-5::before {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .card-6::before {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        }
+
+        .card-7::before {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+
+        .card-8::before {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+        }
+
+        .card-9::before {
+            background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+        }
+
+        @media (max-width: 768px) {
+            .menu-container {
+                grid-template-columns: 1fr;
+            }
+        }
 </style>

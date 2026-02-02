@@ -44,12 +44,22 @@
 </script>
 
 <!-- TODO BUG TO FIX: dark:bgslate does not work if theme is switched from theme swithcer but work from browsers -->
-
+<!--    position: absolute;
+        top: 270px;
+        left: 120px; -->
 <ul
-  class="menu menu-sm dropdown-content mt-3 w-52 p-2 scale-in-ver-top 
-         bg-base-100 dark:bg-slate-950
-         rounded shadow "
-  style="min-width: 300px;"
+  class="menu menu-sm dropdown-content  w-52 p-2 
+         bg-base-200/70 dark:bg-zinc-950/84 border-2 border-zinc-500/50 dark:border-zinc-500/20 
+         rounded shadow  fixed z-[9999] pointer-events-auto
+
+"
+  style="min-width: 280px;
+        position:fixed; top: 52px; left:1px;
+        backdrop-filter: blur(12px) !important; 
+        -webkit-backdrop-filter: blur(16px) !important;
+     
+  
+"
 >
   <li class="flex  px-3 py-2 rounded-md">
     <div class="inline-flex gap-1">
@@ -76,11 +86,11 @@
           use:link
           href={item.disabled ? "#" : item.href}
           class="flex items-center px-3 py-2 rounded-md cursor-pointer
-                  hover:bg-[#0f172a] hover:text-blue-400
-                 text-primary text-sm"
+                  hover:bg-[#c2e9fb] dark:hover:bg-[#283135]
+                 text-primary hover:text-black text-sm"
         >
           <i class="fas fa-{item.icon} w-5 mr-2"></i>
-          <span class="dark:text-gray-400 hover:text-blue-400" style="width: 150px;">{item.label}</span>
+          <span class="dark:text-gray-400" style="width: 150px;">{item.label}</span>
         </a>
       {:else}
         <div

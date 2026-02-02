@@ -1,23 +1,7 @@
 <script lang="ts">
-
-
-
-/***
- * TODO: skontati kako ovo funkckionense :), i commit i remove comment
- * 
- * 2. add some line effects  kad se upali i login
- * 
- * 3. register kad predje da bude isto ovako kao kocka da se rotira???
- * 
- * 
- * 
- * 
-*/
-
-
-  import LoadingOverlay from "../utils/LoadingOverlay.svelte";
   import { login } from "../services/client";
-  import LoginTest from "./LoginTest.svelte";
+  import LoadingOverlay from "../utils/LoadingOverlay.svelte";
+  import LoginAnimation from "./LoginAnimation.svelte";
   import { scale } from "svelte/transition";
   import { push } from "svelte-spa-router";
   import HeaderLite from "../navigation/HeaderLite.svelte";
@@ -29,16 +13,20 @@
   let error = "";
   let loading = false;
 
-  async function handleLogin() {
-    try {
+  async function handleLogin() 
+  {
+    try 
+    {
       loading = true;
       await login(username, password);
-
-      //LLM PROMPT: I WANT TRANSITION HERE SAME AS IN FORM
       push("/home");
-    } catch (err: any) {
+    } 
+    catch (err: any) 
+    {
       error = 'ERROR: ' + err.message;
-    } finally {
+    } 
+    finally 
+    {
       loading = false;
     }
   }
@@ -46,16 +34,16 @@
 
 <HeaderLite/>
 
-<LoginTest/>
+<LoginAnimation/>
  
 <div class="flex items-center justify-center min-h-screen relative" >
-  <div class=" rounded-lg /*animate-pulse*/ relative z-10 bg-slate-950 bg-opacity-100" style="box-shadow: none;"  transition:scale={{ duration: 700, start: 0.5 }}>
+  <div class=" rounded-lg /*animate-pulse*/ relative z-10 bg-zinc-950 bg-opacity-100" style="box-shadow: none;"  transition:scale={{ duration: 700, start: 0.5 }}>
 
 
     <form
       on:submit|preventDefault={handleLogin}
       
-      class="w-full max-w-md relative p-6 px-10 m-[5px] rounded-2xl bg-slate-950 bg-opacity-100"
+      class="w-full max-w-md relative p-6 px-10 m-[5px] rounded-2xl bg-zinc-950 bg-opacity-100"
       
       
     >
@@ -69,7 +57,6 @@
       <input
         type="text"
         bind:value={username}
-        placeholder="Username"
         class="pgs-input mb-8"
         disabled={loading}
       />
@@ -80,14 +67,13 @@
       <input
         type="password"
         bind:value={password}
-        placeholder="Password"
         class="pgs-input mb-8"
         disabled={loading}
       />
 
       <button
         type="submit"
-        class="btn btn-primary w-full mt-2"
+        class="btn  w-full mt-2 bg-zinc-900"
         disabled={loading}
       >
         Login
@@ -101,7 +87,7 @@
         </p>
       {/if}
 
-      <div class="mt-8">
+      <div class="mt-8 hidden">
         <label for="register" class="label">Don't have account?</label>
         <a href="#/register" class="pgs-hyperlink"> Click here to register </a>
       </div>
