@@ -53,3 +53,4 @@ frontend/.env.*  # catches .env.local, .env.production, etc.
 
 # === Other ===
 backend/src/main/resources/keystore.p12
+frontend/nbproject/private/
