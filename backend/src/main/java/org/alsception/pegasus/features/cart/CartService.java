@@ -257,8 +257,10 @@ public class CartService
         // 5. Assign cart items to order and calculate total price      
         BigDecimal totalPrice = BigDecimal.ZERO;
         log.trace("Setting cart items to order");
+        
         List<PGSOrderItem> orderItems = cart.getItems().stream()
-            .map(cartItem -> {
+            .map(cartItem -> 
+            {
                 PGSOrderItem orderItem = new PGSOrderItem();
                 log.trace("Adding product: "+cartItem.getProduct().getCode());
                 log.trace(cartItem.toString());
@@ -279,6 +281,7 @@ public class CartService
                 return orderItem;
             })
             .collect(Collectors.toList());
+        
         order.setItems(orderItems);
         
         // 6. ... dont forget the price
@@ -298,6 +301,7 @@ public class CartService
         
         log.trace("Order created, deleting cart...");
         deleteCartAsync(cart); 
+       // createNotification
     }
     
 }

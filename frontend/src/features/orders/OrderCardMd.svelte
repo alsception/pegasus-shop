@@ -331,7 +331,7 @@ let showModal2 = false;
               {#if isNew(order.created,10)}
                 <div>
                   <div class=" tooltip tooltip-info cursor-pointer" data-tip="Stiglo prije manje od 10 minuta">
-                    <span class="indicator-item badge badge-info dark:text-black dark:bg-amber-300">🔥 NOVO</span>
+                    <span class="indicator-item badge badge-info dark:text-black dark:bg-amber-300">new</span>
                   </div>
                 </div>
               {/if}

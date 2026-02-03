@@ -104,7 +104,6 @@ public class CartController {
         Map<String, String> response = new HashMap<>();
         response.put("message", msg);
         
-        //TODO: Actually return cart object together with message
         return ResponseEntity.ok(response);
     }       
 

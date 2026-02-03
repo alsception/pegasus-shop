@@ -3,7 +3,7 @@
  * Created: 10/6/25
  * Author: Alsception
  */
-const badgeInfo = 'NOVO'
+const badgeInfo = 'new'
 
 export function isNew(dateStr: string | number | Date | null | undefined, minDiff: number): boolean 
 {

@@ -15,6 +15,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -52,23 +53,33 @@ public class SecurityConfig {
             logger.info("Active Spring profile: {}", activeProfile);
         }
     }
-
+    
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        logger.info("Creating security filter chain");
         return http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                // Allow unauthenticated access to index.html, for now :)
-                .requestMatchers("/", "/index.html", "/static/**", "/assets/**", "/favicon.ico").permitAll()
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                    "/", 
+                    "/index.html", 
+                    "/static/**", 
+                    "/assets/**", 
+                    "/favicon.ico", 
+                    "/manifest.json", // za PWA
+                    "/sw.js",         // za PWA
+                    "/*.png", 
+                    "/*.js", 
+                    "/*.css",
+                    "/*.webmanifest"  // za PWA
+                ).permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/test/test-write-error", "/api/test/test-circular", "/api/test/**").permitAll() //Allow tests
+                .requestMatchers("/api/test/**").permitAll()
                 .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+            )
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .build();
     }
 
     @Bean

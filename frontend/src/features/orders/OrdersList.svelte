@@ -54,6 +54,7 @@ i LITE APP!!, I MOZDA i WS.....
   let isBlockView = true;
   let intervalId: string | number | NodeJS.Timeout | undefined;
   const REFRESH_INTERVAL = 5000; // 5 sekundi
+  const autoRefresh = false;
 
   function toggleView() {
     isBlockView = !isBlockView;
@@ -75,19 +76,27 @@ i LITE APP!!, I MOZDA i WS.....
        * TODO: this is not actually working
        */
 
-      if (!isAuthenticated) {
+      if (!isAuthenticated) 
+      {
         error = "Session expired. Please login again.";
         return;
-      } else {
+      }
+      else 
+      {
         // Prvo učitavanje
         await handleSearch(true);
     
-        // Automatsko osvežavanje
-        intervalId = setInterval(async () => {
-          await handleSearch(false);
-        }, REFRESH_INTERVAL);
+        if(autoRefresh)
+        {
+          // Automatsko osvežavanje
+          intervalId = setInterval(async () => {
+            await handleSearch(false);
+          }, REFRESH_INTERVAL);
+        }
       }
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       error = err instanceof Error ? err.message : "Search failed";
     } finally {
 

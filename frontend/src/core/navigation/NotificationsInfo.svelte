@@ -2,70 +2,71 @@
   import axios from "axios";
   import { onMount } from "svelte";
   import { link } from "svelte-spa-router";
+  import { auth } from "../services/SessionStore";
+  import { showSuccessToast } from "../utils/toaster";
 
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
     let notifications = [
     {
         icon: '',
-        label: ''
+        text: ''
     },
 /*
     {
         icon: 'check',
-        label: 'Order 234 is ready'
+        text: 'Order 234 is ready'
     },
     {
         icon: 'plus',
-        label: 'New order from X'
+        text: 'New order from X'
     },
     {
         icon: 'spoon',
-        label: 'Order 2 is in preparation'
+        text: 'Order 2 is in preparation'
     },*/
     ]
-
-    const axiosInstance = axios.create({
-        baseURL: API_BASE_URL,
-        headers: {
-        'Content-Type': 'application/json',
-        },
-    });
-
-    // Add Bearer token if available
-    axiosInstance.interceptors.request.use((config) => {
-        const token = localStorage.getItem('token'); // or getToken() if you have a helper
-        if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    });
-
     onMount(() => 
     {
         console.log('mounted');
-        //fetchNotifications();
+        fetchNotifications();
     });
 
-    function fetchNotifications()
+    async function fetchNotifications()
     {
         console.log('fetching notfs')
-        axiosInstance.get(`/notifications/`)
-            .then(response => {
-                processSuccess(response);
-            })
-            .catch(error => {
-                processError(error);
-            });
-    };
-
-    function processSuccess(response: any)
-    {
-        if (response.data && response.data.notifications) 
+        const token = $auth.token;
+        
+        fetch(API_BASE_URL + `/notifications`, 
         {
-            console.log(response);
-            notifications = response.data
-        }
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        })
+        .then(response => response.json()) // <-- Parse JSON prvo
+        .then(data => 
+        {
+            processSuccess(data);
+        })
+        .catch(error => 
+        {
+            processError(error);
+        });     
+    }
+
+    function processSuccess(data: any)
+    {
+        console.log(data);
+        notifications = data;
+        
+        // Samo za nepročitane
+        data
+            .filter((n: any) => !n.read)
+            .forEach((notification: any) => {
+                showSuccessToast(notification.text || notification.title || 'New notification');
+            });
     }
 
     /**
@@ -100,7 +101,7 @@
                  text-primary text-sm"
         >
           <i class="fas fa-{item.icon} w-5 mr-2"></i>
-          <span class="dark:text-gray-400 hover:text-blue-400" style="width: 150px;">{item.label}</span>
+          <span class="dark:text-gray-400 hover:text-blue-400" style="width: 150px;">{item.text}</span>
     </div>
    
     </li>

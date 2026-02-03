@@ -375,7 +375,7 @@
                   >{@html formatCommentInfo(user.comment)}</td
                 >
               <td class="pgs-td font-mono justify-right">
-                {@html formatDate(user.created,'Novo',15)}
+                {@html formatDate(user.created,'new',15)}
               </td>
               <td class="pgs-td font-mono pgs-td-num ">
                 {@html formatDate(user.modified,'Izmenjeno pre manje od 15 minuta',15)}

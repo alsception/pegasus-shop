@@ -108,7 +108,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      */
     public boolean shouldWePrint(HttpServletRequest request)
     {
-        /* if( 
+        if( 
             (request.getMethod().equals("POST") 
             && 
             (
@@ -124,13 +124,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         else if ((request.getMethod().equals("GET") 
             && 
             (
-                request.getRequestURI().equals("/") || 
+                request.getRequestURI().equals("/")             || 
                 request.getRequestURI().startsWith("/assets/") ||
+                request.getRequestURI().endsWith(".js")         ||
+                request.getRequestURI().endsWith(".css")         ||
                 request.getRequestURI().equals("/pegasus-icon.png")
             )))
         {
             return false;
-        } */
+        }
         return true;
     }
 }

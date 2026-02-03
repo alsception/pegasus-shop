@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.alsception.pegasus.core.exception.BadRequestException;
 import org.alsception.pegasus.core.utils.CodeGenerator;
+import org.alsception.pegasus.features.notifications.NotificationService;
 import org.alsception.pegasus.features.order.dto.OrderDTO;
 import org.alsception.pegasus.features.order.dto.OrderMapper;
 import org.springframework.http.HttpStatus;
@@ -18,12 +19,16 @@ import org.springframework.web.server.ResponseStatusException;
 public class OrderService 
 {
     private final OrderRepository orderRepository;
-
+    private final NotificationService notificationService;
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
-    public OrderService(ProductRepository productRepository, OrderRepository orderRepository) 
+    public OrderService(
+            ProductRepository productRepository, 
+            OrderRepository orderRepository,
+            NotificationService notificationService) 
     {
         this.orderRepository = orderRepository;
+        this.notificationService = notificationService;        
     }
     
     /*
@@ -140,7 +145,7 @@ public class OrderService
     @Transactional()
     private PGSOrder update(Long id, PGSOrder received) 
     {
-        logger.debug("Updating service");
+        logger.debug("Updating order "+id);
 
         //PGSOrder existing = getById(id);
         // Load existing order IN THIS TRANSACTION (not the read-only one)
@@ -157,9 +162,12 @@ public class OrderService
         existing.setCode(received.getCode());
         existing.setItems(received.getItems());
 
-        // items update logic to be added later (TODO)
-
-        return orderRepository.save(existing);
+        PGSOrder updated = orderRepository.save(existing);
+        
+        notificationService.createNotification(
+                "Narudžba "+updated.getCode()+" je: "+updated.getStatus(),"", "system", "*", "status_update");
+        
+        return updated;
     }    
     
     public OrderDTO update(Long id, OrderDTO dto) 

@@ -38,8 +38,7 @@
       <h1
         class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-tr from-slate-400 via-blue-500 to-slate-600
       text-transparent bg-clip-text font-mono uppercase tracking-widest
-      
-      font-bold bg-gradient-to-r from-sky-400 via-blue-500 to-violet-600 text-transparent bg-clip-text font-mono uppercase tracking-widest yellowtail-regular"
+      "
       >
         Pegasus
       </h1>
@@ -85,7 +84,7 @@
       <div
         tabindex="0"
         role="button"
-        class="btn btn-ghost btn-circle hover:bg-neutral-900 text-xl text-gray-500 tooltip tooltip-info tooltip-left"
+        class="btn btn-ghost btn-circle hover:bg-neutral-900 text-xl text-red-500 tooltip tooltip-info tooltip-left"
         data-tip="Notifications"
         aria-label="Notifications"
       >
