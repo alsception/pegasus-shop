@@ -48,10 +48,11 @@ public class CodeGenerator
     /**
      * Returns a 3-digit string, zero-padded, incrementing from "000" to "999".
      * Rolls over to "000" after "999".
+     * Prefix meaning: R - restoran, T - take away, D - delivery
      */
-    public static String generateThreeDigitCode() {
-        long value = threeDigitCounter.getAndIncrement() % 1000;
-        String code = String.format("%03d", value);
+    public static String generateOrderCode(String prefix) {
+        long value = 1 + threeDigitCounter.getAndIncrement() % 1000;
+        String code = prefix+String.format("%03d", value);
         log.trace("Generated 3-digit code: " + code);
         return code;
     }

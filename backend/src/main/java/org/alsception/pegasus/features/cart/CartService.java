@@ -238,7 +238,7 @@ public class CartService
         PGSOrder order = new PGSOrder();
         long id = CodeGenerator.generateNanoId();
         order.setId(id);
-        order.setCode(CodeGenerator.generateThreeDigitCode());
+        order.setCode(CodeGenerator.generateOrderCode("R"));
         
         
         //2. Assign user

@@ -322,7 +322,7 @@ i LITE APP!!, I MOZDA i WS.....
       <input
         type="text"
         bind:value={searchTerm}
-        placeholder=""
+        placeholder="Traži narudžbu"
         class="input input-primary dark:input-info border-2"
       />
       <!-- Search Button -->
@@ -354,7 +354,7 @@ i LITE APP!!, I MOZDA i WS.....
 
 <!-- Show each item in the order card (Block view) -->
 {#if isBlockView}
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-16 p-2">
+<div class="grid grid-cols-1 md-grid-cols-2 xl:grid-cols-3 gap-4 md:gap-16 p-2">
   <!-- WAITING -->
   <div class="rounded-xl shadow p-4" style="background: linear-gradient(to bottom right, var(--color-wait), var(--color-base-100));">
     <div class="mb-4 pb-2">

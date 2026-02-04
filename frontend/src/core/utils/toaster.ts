@@ -37,6 +37,42 @@ export function showAddSuccessToastWithLink(): void
   });
 }
 
+export function showInfoToast(message: String, type: String | Number): void 
+{
+  let checkmark = '<i class="fa fa-check fa-lg text-green-600 font-bold" aria-hidden="true"></i> &nbsp;';
+  let plusmark = '<i class="fa fa-plus fa-lg text-blue-600 font-bold" aria-hidden="true"></i> &nbsp;';
+  let infomark = '<i class="fa fa-info-circle fa-lg text-blue-600 font-bold" aria-hidden="true"></i> &nbsp;';
+  /*let link = '<a href="#/cart" class="pgs-hyperlink font-bold">cart</a>';*/
+  let text = checkmark + message/* + link*/;
+
+  switch(type)
+  {
+
+    case 1:
+      text = plusmark + message;
+      break;
+
+    case 2:
+      text = checkmark + message;
+      break;
+  
+    default:
+      text = infomark + message;
+      break;
+
+  }
+
+  toast.push( text, {
+    theme: {
+      '--toastColor': 'black',
+      '--toastBackground': '#eee',
+      '--toastBarBackground': '#2F855A',
+      '--toastBarHeight': 0
+    },
+    pausable: true
+  });
+}
+
 /**
  * 
  * @param message For now we not gonna use it, but some day, it should be usefull to see cart content on hover...

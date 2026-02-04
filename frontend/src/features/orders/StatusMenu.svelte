@@ -84,9 +84,9 @@
 {#if loading}
   <LoadingOverlay />
 {/if}
-<details class="dropdown bg-transparent" bind:open={dropdownOpen}>
+<details class="dropdown" bind:open={dropdownOpen}>
   <summary
-    class="btn btn-ghost btn-circle hover:bg-neutral-700/10 tooltip tooltip-info tooltip-top"
+    class="btn btn-ghost btn-circle hover:bg-neutral-700/10 tooltip tooltip-info tooltip-top bg-transparent"
     data-tip="Uredi stanje"
   >
     ☰
@@ -94,7 +94,7 @@
 
   <ul
     class="menu menu-sm dropdown-content mt-3 w-22 p-0 scale-in-ver-top
-            bg-base-100
+            bg-base-200
             rounded-md shadow
             border border-gray-600"
     style="min-width: 205px;left: -170px"

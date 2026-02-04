@@ -3,7 +3,7 @@
     import { onMount, onDestroy } from 'svelte';
     import { link } from "svelte-spa-router";
     import { auth } from "../services/SessionStore";
-    import { showSuccessToast } from "../utils/toaster";
+    import { showInfoToast, showSuccessToast } from "../utils/toaster";
 
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -21,11 +21,11 @@
     {
         console.log('Component mounted');
         // 1. Prvo učitavanje odmah
-        fetchNotifications();
+        fetchNotifications(true);
 
         // 2. Fetchuj na svakih 5 sekundi
         interval = setInterval(() => {
-            fetchNotifications();
+            fetchNotifications(false);
         }, 5000);
     });
 
@@ -35,8 +35,10 @@
         if (interval) clearInterval(interval);
     });
 
-    async function fetchNotifications() 
+    async function fetchNotifications(skipit: boolean) 
     {
+        //za sad ce da gi preskocimo na pocetku...
+
         const token = $auth.token;
         if (!token) return;
 
@@ -51,14 +53,15 @@
 
             if (response.ok) {
                 const data = await response.json();
-                processNotifications(data);
+                processNotifications(data,skipit);
             }
         } catch (error) {
             console.error("Fetch error:", error);
         }
     }
 
-    function processNotifications(data: any[]) {
+    function processNotifications(data: any[], skipit: boolean) 
+    {
         notifications = data; // Update-ujemo listu za UI
 
         data.forEach((notification: any) => {
@@ -72,7 +75,7 @@
                 // Prikaži toast (samo ako ovo nije prvo učitavanje, opciono)
                 // Ako želiš da izbegneš rafalnu paljbu tostova na samom startu,
                 // možeš dodati proveru: if (notificationsMap.size > data.length)
-                showSuccessToast(notification.text || notification.title || 'New notification');
+                if(!skipit) showInfoToast(notification.text || notification.title || 'New notification', 0);
             }
         });
     }

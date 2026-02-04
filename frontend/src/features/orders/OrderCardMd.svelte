@@ -396,7 +396,7 @@
               {#if isNew(order.created,10)}
                 <div>
                   <div class=" tooltip tooltip-info cursor-pointer" data-tip="Stiglo prije manje od 10 minuta">
-                    <span class="indicator-item badge badge-accent dark:text-black dark:bg-amber-300">novo</span>
+                    <span class="indicator-item badge badge-accent dark:text-black dark:bg-violet-500">novo</span>
                   </div>
                 </div>
               {/if}
@@ -407,23 +407,22 @@
           </div>
 
           <div class="flex items-center gap-2 text-sm text-primary mb-1 ">
-            <div class="flex items-center gap-2 text-sm text-primary mr-4">
+            <div class="flex items-center gap-2 text-sm text-primary/60 mr-4">
               <i class="fas fa-user"></i>
               <span><strong>{order.user?.username}</strong></span>
             </div>        
-            <div class="flex items-center gap-2 text-sm text-primary mr-4">
-              <i class="fas fa-chair"></i>
-              
+            <div class="flex items-center gap-2 text-sm text-primary/60 mr-4">
+              <i class="fas fa-chair"></i>              
               <span><strong>{order.stol ? order.stol : "-"}</strong></span>
             </div> 
-            <div class="text-sm flex items-center gap-2" class:hidden={liteView}>
+            <div class="text-sm flex items-center text-primary/60 gap-2" class:hidden={liteView}>
               <i class="fas fa-clock"></i>{@html formatTime2(order.created)}
             </div>  
           </div>
           
-          {#if order.comment && order.comment.toString.length > -1}
+          {#if (order.status != 'READY') && (order.comment && order.comment.toString.length > -1)}
             <div>
-              <span class="indicator-item badge badge-info text-primary bg-base-300" style="text-transform: uppercase; border-radius: inherit">
+              <span class="indicator-item badge badge-info text-primary bg-base-300/66 dark:bg-gray-800 rounded-md" style="">
                 Napomena:
               </span>
               <br>
@@ -433,21 +432,21 @@
             </div>
           {/if}
 
-          <div class="mt-2 bg-base-100" class:hidden={liteView}>
+          <div class="mt-2 " class:hidden={liteView}>
             <ul class="flex flex-col gap-0">
               {#each order.items as item}
-                <li class="flex items-center gap-0 p-2 bg-base-100 dark:bg-accent border-1 border-base-300/40">
-                  <span class="text-primary text-sm">{item.quantity} x </span>&nbsp;
-                  <span class="text-primary text-sm"> {item.product?.name ?? item.name}</span>
+                <li class="flex items-center gap-0 p-2 border-1 border-base-300/60">
+                  <span class="text-primary text-md font-semibold font">{item.quantity} x </span>&nbsp;
+                  <span class="text-primary text-md font-semibold font"> {item.product?.name ?? item.name}</span>
                   {#if item.price}
-                    <span class="text-xs text-gray-500 ml-auto">{formatPrice(item.price)}</span>
+                    <span class="text-xs text-gray-500 ml-auto font-mono">{formatPrice(item.price)}</span>
                   {/if}
                 </li>
               {/each}
             </ul>
               <div style="align-items: end;display:grid;align-content: end; text-align: right;"
                     class="g-base-100 dark:bg-base-100 border-1 border-base-300/40">
-                <span class="text-lg font-bold text-primary p-2">{formatPrice(order.price)}</span>
+                <span class="text-lg font-bold text-primary p-2 font-mono">{formatPrice(order.price)}</span>
               </div>
           </div>
 

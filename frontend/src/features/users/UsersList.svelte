@@ -259,6 +259,7 @@
       <input
         type="text"
         bind:value={searchTerm}
+        placeholder="Traži korisnika..."
         class="input input-primary dark:input-info border-2"
         />
       <button type="submit" class="btn btn-dash">
