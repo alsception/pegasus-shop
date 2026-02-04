@@ -141,7 +141,10 @@ public class OrderService
 //        // Save and return updated order
 //        return orderRepository.save(existingOrder);
 //    }    
-    
+    /**
+     * Ovaj metod se zapravo ne koristi prilikom promene statusa vec odgovarajuci ispod
+     *
+     */
     @Transactional()
     private PGSOrder update(Long id, PGSOrder received) 
     {
@@ -176,7 +179,8 @@ public class OrderService
     }
 
     @Transactional
-    public void updateOrderStatus(Long id, String status) {
+    public void updateOrderStatus(Long id, String status) 
+    {
         int rowsAffected = orderRepository.updateOrderStatus(id, status);
         
         if (rowsAffected == 0) {
@@ -187,5 +191,8 @@ public class OrderService
         }
         
         logger.info("Order {} status updated to {}", id, status);
+        
+        notificationService.createNotification(
+                "Narudžba "+id+" je: "+status,"", "system", "*", "status_update");
     }
 }

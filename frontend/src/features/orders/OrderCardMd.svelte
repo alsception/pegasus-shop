@@ -191,8 +191,6 @@
     }
   }
 
- 
-
   function deleteDialog(orderId: number, confirmMsg: string)
   {
     if (confirm(confirmMsg)) 
@@ -233,8 +231,6 @@
     
     showErrorToast(errorMessage);
   }
-
-
 
   function formatPrice(price: number | undefined): string 
   {
@@ -290,10 +286,67 @@
     }
   }
 
+  function getBgClass(status: string | null | undefined): string 
+  {
+    /**
+     * Tip narudžbe	Boja pozadine (Dark Mode)	Boja teksta/border-a	Opis
+    Žuta (Na čekanju)	bg-yellow-900/20	text-yellow-500/80	Boja ćilibara, suptilna i topla.
+    Plava (U obradi)	bg-blue-900/20	text-blue-500/80	Tamna teget-plava, smirena.
+    Zelena (Završeno)	bg-emerald-900/20	text-emerald-500/80	Duboka šumska zelena, odmara oči.
+    */
 
+    switch (status?.toUpperCase()) 
+    {
+      case "WAITING":
+        return "bg-yellow-700/30";
 
-/* drugi modal */
-let showModal2 = false;
+      case "IN_PREPARATION":
+        return "bg-blue-900/30";
+
+      case "READY":
+      case "DELIVERED":
+        return "bg-emerald-800/30";
+
+      case "CANCELLED":
+      case "REFUNDED":
+        return "warning";
+
+      case "RETURNED":
+        return "error";
+
+      default:
+        return "secondary";
+    }
+  }
+
+  function getBgStyle(status: string | null | undefined): string 
+  {
+    /**
+     * Tip narudžbe	Boja pozadine (Dark Mode)	Boja teksta/border-a	Opis
+    Žuta (Na čekanju)	bg-yellow-900/20	text-yellow-500/80	Boja ćilibara, suptilna i topla.
+    Plava (U obradi)	bg-blue-900/20	text-blue-500/80	Tamna teget-plava, smirena.
+    Zelena (Završeno)	bg-emerald-900/20	text-emerald-500/80	Duboka šumska zelena, odmara oči.
+    */
+
+    switch (status?.toUpperCase()) 
+    {
+      case "WAITING":
+        return "";
+
+      case "IN_PREPARATION":
+        return "";
+
+      case "READY":
+      case "DELIVERED":
+        return "";
+
+      default:
+        return "secondary";
+    }
+  }
+
+  /* drugi modal */
+  let showModal2 = false;
   
   function openModal2() {
     showModal2 = true;
@@ -312,17 +365,29 @@ let showModal2 = false;
 
 </script>
 
- <div class="bg-white dark:bg-zinc-900 rounded-xl shadow p-4 flex flex-col gap-2 h-fit border" 
+ <!-- class:bg-inprep={order.status == 'IN_PREPARATION'}
+    class:bg-wait={order.status == 'WAITING'}
+    class:bg-ready={order.status == 'READY'}
+    
+    
+    
+    READY COLOR: color-mix(in oklab, oklch(0.6 0.23 142.37) 30%, transparent)
+    WAITING COLOR: color-mix(in oklab, oklch(0.89 0.18 91.93) 30%, transparent)
+    
+    
+    
+    
+    -->
+
+ <div class="rounded-xl shadow p-4 flex flex-col gap-2 h-fit {getBgClass(order.status)}" 
     class:card-new={isNew(order.created,10) && order.status == 'WAITING'}
-    class:border-blue-700={order.status == 'IN_PREPARATION'}
-    class:border-amber-700={order.status == 'WAITING'}
-    class:border-green-700={order.status == 'READY'}
+   
     >
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-2 w-full" style="justify-content: space-between;">
       
               <a use:link href="/orders/{order.id}"
-              class="text-xl font-extrabold text-primary pgs-hyperlink">#{formatCode(order.code)}</a>
+              class="text-3xl font-extrabold text-primary pgs-hyperlink">{formatCode(order.code)}</a>
       
               <!-- <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-md ml-auto" style="text-transform: uppercase;">
                 {getOrderStatusLabel(order.status)}
@@ -331,7 +396,7 @@ let showModal2 = false;
               {#if isNew(order.created,10)}
                 <div>
                   <div class=" tooltip tooltip-info cursor-pointer" data-tip="Stiglo prije manje od 10 minuta">
-                    <span class="indicator-item badge badge-info dark:text-black dark:bg-amber-300">new</span>
+                    <span class="indicator-item badge badge-accent dark:text-black dark:bg-amber-300">novo</span>
                   </div>
                 </div>
               {/if}
@@ -361,8 +426,8 @@ let showModal2 = false;
               <span class="indicator-item badge badge-info text-primary bg-base-300" style="text-transform: uppercase; border-radius: inherit">
                 Napomena:
               </span>
-                            <br>
-              <div class=" bg-base-300/66 dark:bg-base-100 border-1 border-base-300 text-primary p-1 font-bold py-2 px-4 rounded-md">          
+              <br>
+              <div class=" bg-base-300/66 dark:bg-gray-800 border-1 border-base-300 dark:border-gray-800  text-primary p-1 font-bold py-2 px-4 rounded-md">          
                 {order.comment}
               </div>
             </div>
@@ -371,7 +436,7 @@ let showModal2 = false;
           <div class="mt-2 bg-base-100" class:hidden={liteView}>
             <ul class="flex flex-col gap-0">
               {#each order.items as item}
-                <li class="flex items-center gap-0 p-2 bg-base-100 dark:bg-base-100 border-1 border-base-300">
+                <li class="flex items-center gap-0 p-2 bg-base-100 dark:bg-accent border-1 border-base-300/40">
                   <span class="text-primary text-sm">{item.quantity} x </span>&nbsp;
                   <span class="text-primary text-sm"> {item.product?.name ?? item.name}</span>
                   {#if item.price}
@@ -381,12 +446,12 @@ let showModal2 = false;
               {/each}
             </ul>
               <div style="align-items: end;display:grid;align-content: end; text-align: right;"
-                    class="g-base-100 dark:bg-base-100 border-1 border-base-300">
+                    class="g-base-100 dark:bg-base-100 border-1 border-base-300/40">
                 <span class="text-lg font-bold text-primary p-2">{formatPrice(order.price)}</span>
               </div>
           </div>
 
-          <div class="flex gap-2 mt-2">
+          <div class="flex gap-2 mt-2 hidden">
             <!-- use:link href="/orders/{order.id} -->
             <button class="btn btn-sm hover:text-blue-600 dark:hover:text-sky-400"
               on:click={openModal2}>Details</button>
@@ -460,5 +525,13 @@ let showModal2 = false;
     box-shadow: 0 0 0 21px rgba(0, 4, 255, 0);
   }
 }
-
+.bg-wait{
+  background-color: #acab5e45;
+}
+.bg-inprep{
+  background-color: #5e86ac45;
+}
+.bg-ready{
+  background-color: #6bac5e45;
+}
 </style>

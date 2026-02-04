@@ -9,6 +9,7 @@ import org.alsception.pegasus.features.products.ProductRepository;
 import org.alsception.pegasus.features.users.PGSUser;
 import org.alsception.pegasus.features.users.UserRepository;
 import org.alsception.pegasus.core.utils.CodeGenerator;
+import org.alsception.pegasus.features.notifications.NotificationService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.alsception.pegasus.features.order.OrderRepository;
@@ -25,17 +26,20 @@ public class CartService
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
     private final OrderRepository orderRepository;
+    private final NotificationService notificationService;
     private static final Logger log = LoggerFactory.getLogger(CartService.class);
 
     public CartService(UserRepository userRepository,
                        ProductRepository productRepository,
                        CartRepository cartRepository,
-                       OrderRepository orderRepository) 
+                       OrderRepository orderRepository,
+                       NotificationService notificationService) 
     {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
         this.orderRepository = orderRepository;
+        this.notificationService = notificationService;        
     }       
     
     @Transactional
@@ -301,7 +305,11 @@ public class CartService
         
         log.trace("Order created, deleting cart...");
         deleteCartAsync(cart); 
-       // createNotification
+       
+        //10. finally notification
+        notificationService.createNotification(
+            "Nova narudžba stigla",
+            "Nova narudžba "+order.getCode()+", konobar "+order.getUser().getUsername()+" stol "+order.getStol(), "system", "*", "status_update");
     }
     
 }

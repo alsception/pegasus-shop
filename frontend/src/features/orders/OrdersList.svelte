@@ -54,7 +54,7 @@ i LITE APP!!, I MOZDA i WS.....
   let isBlockView = true;
   let intervalId: string | number | NodeJS.Timeout | undefined;
   const REFRESH_INTERVAL = 5000; // 5 sekundi
-  const autoRefresh = false;
+  const autoRefresh = true;
 
   function toggleView() {
     isBlockView = !isBlockView;

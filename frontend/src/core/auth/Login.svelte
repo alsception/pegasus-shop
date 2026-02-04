@@ -37,13 +37,13 @@
 <LoginAnimation/>
  
 <div class="flex items-center justify-center min-h-screen relative" >
-  <div class=" rounded-lg /*animate-pulse*/ relative z-10 bg-zinc-950 bg-opacity-100" style="box-shadow: none;"  transition:scale={{ duration: 700, start: 0.5 }}>
+  <div class=" rounded-lg /*animate-pulse*/ relative z-10 bg-gray-950 bg-opacity-100" style="box-shadow: none;"  transition:scale={{ duration: 700, start: 0.5 }}>
 
 
     <form
       on:submit|preventDefault={handleLogin}
       
-      class="w-full max-w-md relative p-6 px-10 m-[5px] rounded-2xl bg-zinc-950 bg-opacity-100"
+      class="w-full max-w-md relative p-6 px-10 m-[5px] rounded-2xl bg-gray-950 bg-opacity-100"
       
       
     >
@@ -73,7 +73,7 @@
 
       <button
         type="submit"
-        class="btn  w-full mt-2 bg-zinc-900"
+        class="btn  w-full mt-2 bg-gray-900"
         disabled={loading}
       >
         Login

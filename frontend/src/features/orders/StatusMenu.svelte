@@ -17,15 +17,15 @@
   //This object is used for displaying menu
   const statusItems = [
     { 
-      label: "⏳ NA ČEKANJU",
+      label: "NA ČEKANJU",
       status: "WAITING"
     },
     { 
-      label: "👨‍🍳 U PRIPREMI",
+      label: "U PRIPREMI",
       status: "IN_PREPARATION" 
     },
     { 
-      label: "✅ SPREMNO",
+      label: "SPREMNO",
       status: "READY" 
     },
   ];
@@ -89,7 +89,7 @@
     class="btn btn-ghost btn-circle hover:bg-neutral-700/10 tooltip tooltip-info tooltip-top"
     data-tip="Uredi stanje"
   >
-    ⚙️☰
+    ☰
   </summary>
 
   <ul
@@ -115,7 +115,7 @@ class="flex items-center px-3 py-2 rounded-md cursor-pointer
         >
         <!--                   hover:bg-[#405075] hover:text-blue-400 -->
 <!--           <i class="fas fa-{item.label} w-5 mr-2"></i>
- -->          <span class="badge badge badge-{getOrderStatusColor(item.status)} font-mono badge-lg ml-auto" style="text-transform: uppercase;">
+ -->          <span class="badge badge-{getOrderStatusColor(item.status)} font-mono badge-lg ml-auto" style="text-transform: uppercase;">
                 {item.label /*+/* getOrderStatusLabel(item.status)*/}
               </span>
           <!-- <span

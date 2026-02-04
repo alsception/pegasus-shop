@@ -29,7 +29,7 @@
  We'll leave it, for now...
   -->
 
-<div class="navbar shadow-sm fixed bg-zinc-950/84 backdrop-blur-sm z-50">
+<div class="navbar shadow-sm fixed bg-gray-950/84 backdrop-blur-sm z-50">
   <div class="navbar-start">
     
   </div>
