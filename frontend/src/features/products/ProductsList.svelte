@@ -187,7 +187,7 @@
     <ErrorDiv {error} />
   {:else}
     <div class="w-full flex justify-center px-4">
-      <div class="w-full max-w-[1800px] p-4 bg-transparent rounded-lg">
+      <div class="w-full max-w-4xl p-4 bg-base-200 rounded-lg">
         <form
           on:submit|preventDefault={handleFormSubmit}
           class="flex flex-col sm:flex-row items-center gap-3"
@@ -196,18 +196,22 @@
             type="text"
             bind:value={searchTerm}
             placeholder="Traži proizvod..."
-            class="input input-bordered input-lg w-full"
-            style="font-size: 1.5rem; /*height: 3.5rem;*/ max-width: 100%;"
+            class="input input-primary dark:input-info border-2"
           />
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" class="btn btn-dash">
             <i class="fas fa-search"></i>
             Traži
           </button>
+
           <ProductCategories bind:selectedCategory onSelect={handleCategorySelect} />
           
-          <button on:click={toggleView} class="btn btn-secondary">
+          <button on:click={toggleView} class="btn btn-dash">
             <i class="fas fa-th-list"></i>
-            Grid view / List view
+            {#if isListView}
+              List view
+            {:else}
+              Grid view
+            {/if}
           </button>
           
         </form>
@@ -215,7 +219,7 @@
         <div
           class="flex flex-col sm:flex-row justify-between items-center mt-4 gap-2"
         >
-          <div class="flex gap-2 items-center">
+          <div class="flex gap-2 items-center hidden">
             <button
               class="btn btn-outline"
               title="Previous page"
@@ -239,7 +243,7 @@
       </div>
     </div>
 
-    <div id="results" class="w-full max-w-4xl mx-auto mt-6"></div>
+    <div id="results" class="w-full max-w-4xl mx-auto mt-16"></div>
 
     {#if loading}
       <LoadingOverlay />
@@ -247,22 +251,22 @@
 
     {#if isListView && isAdminView}
       <div
-        class="w-full max-w-[1780px] overflow-x-auto rounded-lg align-middle mx-auto"
+        class="w-full max-w-[1280px] overflow-x-auto rounded-lg align-middle mx-auto"
       >
         <table class="table table-zebra min-w-[1200px] divide-y divide-accent">
-          <thead class="bg-[#10273c] border-2 border-primary/10">
+          <thead class="bg-[#10273c]">
             <tr class="h-12">
-              <th class="pgs-th">Proizvod</th>
-              <th class="pgs-th">Kategorija</th>
-              <th class="pgs-th">Price</th>
+              <th class="pgs-th-l">Proizvod</th>
+              <th class="pgs-th-l">Kategorija</th>
+              <th class="pgs-th-r">Cijena</th>
+              <th class="pgs-th-l"></th>
+              <th class="pgs-th-l"></th>
               <th class="pgs-th"></th>
-              <th class="pgs-th"></th>
-              <th class="pgs-th">Actions</th>
             </tr>
           </thead>
           <tbody class="">
             {#each products as product, i}
-              <tr class="bg-base-100 pgs-tr border-2 border-primary/10">
+              <tr class="bg-base-200/80 outline-1 outline-transparent /*hover:outline-blue-500*/ hover:bg-base-300/70">            
                 <td class="pgs-td whitespace-nowrap">
                   <a
                     use:link
@@ -271,7 +275,7 @@
                   >
                 </td>
                 <td class="pgs-td">{product.category}</td>
-                <td class="pgs-td-num">{product.basePrice}</td>
+                <td class="pgs-td-num">€ {product.priceEur}</td>
                 <td class="text-center"
                   >{@html formatCommentInfo(product.comment)}</td
                 >
@@ -311,7 +315,7 @@
                 </td>
               </tr>
             {/each}
-            <tr class="bg-base-200 border-2 border-primary/10">
+            <tr class="bg-base-200">
               <td colspan="18" class="pgs-td font-mono h-[64px]">
                 Showing <b>{products.length}</b> product(s) on this page.<br />
                 Total products found: <b>{totalProducts}</b> | Total pages:
@@ -325,7 +329,8 @@
       no products found :/
     {:else}
       <div
-        class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 gap-8 p-4"
+        class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 4xl:grid-cols-5 gap-8 p-4"
+        style="justify-items: center;"
       >
         {#each products as product, i}
           <ProductCard {product} />

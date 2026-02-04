@@ -51,12 +51,15 @@ function flattenCategories(categoryList: Category[], level: number = 0): FlatCat
   return result;
 }
 
-onMount(async () => {
-  console.log('calling product categories');
+onMount(async () => 
+{
+
   loading.set(true);
   
-  try {
-    const res = await fetch(API_BASE_URL + "/product-categories/tree", {
+  try 
+  {
+    const res = await fetch(API_BASE_URL + "/product-categories/tree", 
+    {
       method: "GET",
       headers: {
         Authorization: `Bearer ${$auth.token}`,
@@ -64,30 +67,33 @@ onMount(async () => {
       },
     });
     
-    if (res.ok) {
+    if (res.ok) 
+    {
       const data: Category[] = await res.json();
       const flattenedCategories = flattenCategories(data);
       categories.set(flattenedCategories);
-    } else {
-      console.log('not ok');
-    }
-  } catch (e) {
+    }    
+  } 
+  catch (e) 
+  {
     categories.set([]);
     console.error('Error fetching categories:', e);
-  } finally {
+  } 
+  finally 
+  {
     loading.set(false);
   }
 });
 
-function handleChange(event: Event) {
-  console.log('changed');
+function handleChange(event: Event) 
+{
   const value = (event.target as HTMLSelectElement).value;
   selectedCategory = value;
   onSelect(value);
 }
 
-function clickChange(value: any) {
-  console.log('changed2');
+function clickChange(value: any) 
+{
   selectedCategory = value;
   onSelect(value);
 }
@@ -96,15 +102,15 @@ function clickChange(value: any) {
 <div class="form-control w-full max-w-xs">
   
   {#if $loading}
-    <div tabindex="0" role="button" class="btn btn-secondary w-[200px]">
+    <div tabindex="0" role="button" class="btn btn-dash w-[200px]">
         <i class="fas fa-search"></i>
         Loading<span class="loading loading-dots loading-xs"></span>
       </div>
   {:else}  
 
     <div class="dropdown z-49">
-      <div tabindex="0" role="button" class="btn btn-secondary w-[200px]">
-        <i class="fas fa-search"></i>
+      <div tabindex="0" role="button" class="btn btn-dash w-[200px]">
+        <i class="fas fa-tag"></i>
         Traži po kategoriji
       </div>
       <ul tabindex="-1" class="dropdown-content menu bg-base-300 rounded-box z-1 w-[466px] p-2 shadow-sm">

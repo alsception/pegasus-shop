@@ -4,7 +4,7 @@
   export let product;
 </script>
 
-<div class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden flex flex-col max-w-[384px] shadow hover:shadow-lg transition-shadow">
+<div class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden flex flex-col max-w-[384px] min-w-84 shadow hover:shadow-lg transition-shadow">
   <div class="w-full h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
     {#if product.imageUrl}
       <img
