@@ -3,7 +3,7 @@
   import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";
   import { get } from "svelte/store";
-  import { formatCommentInfo, formatDate, formatDateTime, formatTime } from "../../utils/formatting";
+  import { formatCommentInfo, formatDate } from "../../utils/formatting";
   import { formatActive } from "../../utils/formatting";
   import { logout } from "../../core/services/client";
   import type { FPGSUser } from "./FPGSUser";
@@ -63,23 +63,25 @@
 
   
   // Fetch the users from the backend
-  onMount(async () => {
-    try {
+  onMount(async () => 
+  {
+    try 
+    {
       const { isAuthenticated: authStatus } = get(auth);
       isAuthenticated = authStatus;
       //TODO: if is not authenticated, then dont do search      
       handleSearch(true);
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       error = err instanceof Error ? err.message : "Unknown error";
-    } finally {
-      loading = false;
-    }
+    } 
   });
 
   function handleFormSubmit(event: { preventDefault: () => void }) 
   {
     event.preventDefault(); // prevent page reload
-    handleSearch(false);
+    handleSearch(true);
   }
 
   async function handleSearch(showLoading: boolean) 
@@ -277,24 +279,15 @@
 
   <div id="results" style="margin: 48px;"></div>
 
-  {#if loading}
-      
-  <LoadingOverlay/>
+  {#if loading}      
 
-  {:else}
+    <LoadingOverlay/>
 
-  {#if (users.length === 0)}
-        
-    <div class="flex justify-center items-center h-64">
-      <h3 class="text-gray-500 dark:text-gray-400">No users found.</h3>
-    </div>
+  {/if}
 
-  {:else}
-
-  <!-- TODO: VRATITI LINIJU KAO U PRODUCTS -->
   <div class="max-w-[1568px] overflow-x-auto rounded-lg align-middle mx-auto">
       <table class="table table-zebra min-w-full divide-y divide-accent" >
-      <thead class="/*bg-base-200*/ bg-[#10273c] border-2 border-primary/10">
+      <thead class="/*bg-base-200*/ bg-base-300/80 /*border-2 border-primary/10*/">
         <tr class="h-12">
           <th class="pgs-th">
           </th>
@@ -356,13 +349,12 @@
       <tbody class="">
 
         {#each users as user, i}     
-          <tr class="bg-base-100  outline-1 outline-transparent hover:outline-blue-500 hover:bg-blue-600/15">
-            
+          <tr class="bg-base-200/80  outline-1 outline-transparent /*hover:outline-blue-500*/ hover:bg-base-300/70">            
               <td class="justify-center pgs-td-center px-4 ">
                 <input type="checkbox" class="checkbox checkbox-accent checkbox-xs" 	on:change={(event) => handleCheckboxChange(event, i)} />
               </td>
               <td class="pgs-td">
-                  <a use:link href="#/users/{user.id}" class="text-gray-500  pgs-hyperlink dark:text-gray-100 text-primary font-bold block max-w-[200px] truncate">{user.username}</a>
+                  <a use:link href="#/users/{user.id}" class="pgs-hyperlink font-bold block max-w-[200px] truncate">{user.username}</a>
               </td> 
               <td>
                 <span class="badge badge-soft badge-{getUserColor(user.role)} badge-{getUserColor(user.role)} font-mono badge-sm" style="text-transform: uppercase;">
@@ -403,14 +395,13 @@
       </tbody>
     </table>
   </div>
-  {/if}
 
   <NewUserModal
     isOpen={showCreateModal}
     on:close={() => {showCreateModal = false; handleSearch(false)}}
   />
+
   {/if}
-{/if}
 
 <div style="display: none;">NEED THIS HERE OTHERWISE TAILWIND OR DAISY DOESNT LOAD CSS CLASSES
 <div class="badge badge-soft badge-primary">Primary</div>

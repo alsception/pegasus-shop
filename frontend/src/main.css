@@ -50,7 +50,7 @@
   color-scheme: 'dark';
   /*NEKA BUDE TABLE TRANSPARENT NO COLOR*/
   --color-base-100: --color-gray-950;
-  --color-base-200: #121212;
+  --color-base-200: #111113; /*radix colors, slate 1*/
   --color-base-300: rgb(39 39 42);
   --color-base-content: rgb(183, 183, 183);
   --color-primary: rgb(229 231 233); /*blue 500*/
@@ -176,9 +176,9 @@ Attention, truncate class apparently f*cks with tooltips, because of overflow: h
 
 /** This one is use for table header */
 .pgs-th {
-  @apply px-4 py-2 text-center text-xs font-bold uppercase tracking-wider font-mono;
-  color: var(--color-base-content); /**or neutral*/
-  background-color: var(--color-base);
+  @apply px-4 py-2 text-center text-xs font-bold uppercase tracking-wider font-mono text-primary;
+  color: var(--color-primary) !important; /**or neutral*/
+  background-color: var(--color-base-200);
   height: 64px;
 }
 

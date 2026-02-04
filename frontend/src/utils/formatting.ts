@@ -104,7 +104,7 @@ export function formatDate(dateStr: string | number | Date | null | undefined, t
     if (diffInMinutes < minDiff) 
     {
         output = `<div>
-                    <span class="indicator-item badge badge-info dark:text-black dark:bg-amber-300">`+badgeInfo+`</span>
+                    <span class="indicator-item badge badge-accent dark:text-black dark:bg-violet-500">`+badgeInfo+`</span>
                     <br>
                     <div class=" tooltip tooltip-info cursor-pointer" data-tip="`+tooltip+`">
                         <span class="text-primary font-bold"> ${formattedDateTime} </span>

@@ -31,27 +31,33 @@
    */
 
   $: {
-    console.log('hello')
-     if (endpoint) {
+     if (endpoint) 
+     {
       // Embedded mode — endpoint is passed in directly
-      console.log(endpoint)
       resolvedEndpoint = endpoint;
-    }  if ($params?.id) {
-      console.log('params?')
+    }  
+    if ($params?.id) 
+    {
       const parsedId = Number($params.id);
-      if (!isNaN(parsedId)) {
+      if (!isNaN(parsedId)) 
+      {
         resolvedEndpoint = `/users/${parsedId}`;
         ID = parsedId;
-      } else {
+      } 
+      else
+       {
         error = "Invalid ID in route.";
         resolvedEndpoint = '/users/my-account';
       }
-    }else{
+    }
+    else
+    {
       resolvedEndpoint = '/users/my-account';
     }
   }
 
-  $: if (resolvedEndpoint) {
+  $: if (resolvedEndpoint) 
+  {
     fetch(resolvedEndpoint);
   }
 
@@ -96,7 +102,8 @@
     comment: "",
   };
 
-  async function fetch(id: string | number) {
+  async function fetch(id: string | number) 
+  {
     startLoadingAnimation();
 
     try {
@@ -109,19 +116,20 @@
       error = null;
       formData.created = data.created;
       // Convert created date to datetime-local format
-      if (data.created) {
+      if (data.created) 
+      {
         const date = new Date(data.created);
         formData.created = date.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm
       }
-      if (data.modified) {
+      if (data.modified) 
+      {
         const date = new Date(data.modified);
         formData.modified = date.toISOString().slice(0, 16); // YYYY-MM-DDTHH:mm
       }
-      if (data.dob) {
-        console.log('dob: '+data.dob)
+      if (data.dob) 
+      {
         const date = new Date(data.dob);
         formData.dob = data.dob.substring(0, 10);
-        console.log('formatted: '+formData.dob)
       }
     } catch (err) {
       processError(err);
@@ -144,50 +152,64 @@ async function handleSubmit()
         loading = true;
         if (formData.dob) formData.dob += "T00:00"; //hack :)
         
-        const response = await api<FPGSUser>(`/users/${ID}`, {
+        const response = await api<FPGSUser>(`/users/${ID}`, 
+          {
             method: "PUT",
             body: JSON.stringify(formData),
         });
         
         //Ce da baci exception api ako se desi greska
 
-        showSuccessToast("Saved");
+        showSuccessToast("Sačuvano");
         fetch(ID);
 
-    } catch (err) {
+    } 
+    catch (err) 
+    {
 
-      console.log(4)
         // fallback if fetch itself fails (e.g. network error)
         showErrorInModal({ message: (err as Error).message });
 
-    } finally {
-      console.log(5)
+    } 
+    finally 
+    {
         loading = false;
     }
   }
 
-function showErrorInModal(error: any): void {
+function showErrorInModal(error: any): void 
+{
     console.error(error);
     const contentEl = document.getElementById("modal-content");
     const dialogEl = document.getElementById("modal") as HTMLDialogElement;
     
-    if (contentEl) {
+    if (contentEl) 
+    {
         let errorMessage = "An error occurred";
         
-        if (typeof error === 'string') {
+        if (typeof error === 'string') 
+        {
             // Handle case where error is a string like "Error: {json...}"
-            if (error.startsWith('Error: {')) {
-                try {
+            if (error.startsWith('Error: {')) 
+            {
+                try 
+                {
                     const jsonPart = error.substring(7); // Remove "Error: " prefix
                     const parsedError = JSON.parse(jsonPart);
                     errorMessage = parsedError.message || errorMessage;
-                } catch (e) {
+                } 
+                catch (e) 
+                {
                     errorMessage = error; // Fallback to original string
                 }
-            } else {
+            } 
+            else 
+            {
                 errorMessage = error;
             }
-        } else if (error && error.message) {
+        } 
+        else if (error && error.message) 
+        {
             // Handle case where error is already an object
             errorMessage = error.message;
         }
@@ -200,7 +222,8 @@ function showErrorInModal(error: any): void {
     }
   }
 
-  function handleKeydown(event: KeyboardEvent) {
+  function handleKeydown(event: KeyboardEvent) 
+  {
     if (event.ctrlKey && event.key === "Enter") {
       event.preventDefault();
       handleSubmit();
@@ -208,8 +231,8 @@ function showErrorInModal(error: any): void {
   }
 
   function cancelEditing(
-    event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }
-  ) {
+    event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) 
+  {
     window.location.href = "#/users"; // Back to users
   }
 
@@ -220,26 +243,31 @@ function showErrorInModal(error: any): void {
   function startLoadingAnimation(): void {
     // Remove display:none from #loadingMessage element
     const loadingMessage = document.getElementById("loadingMessage");
-    if (loadingMessage) {
+    if (loadingMessage) 
+    {
       loadingMessage.style.display = "";
     }
 
     const inputs = document.querySelectorAll<HTMLInputElement>(inputSkeletons);
-    inputs.forEach((input) => {
+    inputs.forEach((input) => 
+    {
       input.classList.add("skeleton");
       input.disabled = true;
     });
   }
 
-  function removeLoadingAnimation(): void {
+  function removeLoadingAnimation(): void 
+  {
     // Add display:none to #loadingMessage element
     const loadingMessage = document.getElementById("loadingMessage");
-    if (loadingMessage) {
+    if (loadingMessage) 
+    {
       loadingMessage.style.display = "none";
     }
 
     const inputs = document.querySelectorAll<HTMLInputElement>(inputSkeletons);
-    inputs.forEach((input) => {
+    inputs.forEach((input) => 
+    {
       input.classList.remove("skeleton");
       input.disabled = false;
     });
@@ -289,19 +317,21 @@ MDN Reference -->
       on:submit|preventDefault={handleSubmit}
       on:keydown={handleKeydown}
       id="userForm"
-      class="max-w-7xl mx-auto bg-base-100 rounded-lg p-8 w-full space-y-8"
+      class="max-w-7xl mx-auto bg-base-200 rounded-lg p-8 w-full space-y-8"
     >
       <!-- Header Section -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-1">
-          <h2 class="text-4xl font-semibold text-primary">Account details</h2>
-
-          <div
-            id="loadingMessage"
-            style="display: none;"
-            class="text-2xl font-semibold text-gray-700 dark:text-gray-100 flex items-center gap-2 mt-4"
-          >
-            <span class="loading loading-dots loading-xs"></span>
+          <div class="flex items-center gap-4">
+            <h2 class="text-4xl font-semibold text-primary/80">Account details</h2>
+            
+            <div
+              id="loadingMessage"
+              style="display: none;"
+              class="text-2xl font-semibold text-gray-700 dark:text-gray-100 flex items-center gap-2"
+            >
+              <span class="loading loading-dots loading-xs"></span>
+            </div>
           </div>
         </div>
       </div>
@@ -312,7 +342,7 @@ MDN Reference -->
       <!-- Basics Section -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
         <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">Basics</h3>
+          <h3 class="text-2xl font-semibold text-primary/80">Basics</h3>
           <p class="text-secondary text-sm mt-2">
             Essential user credentials and permissions
           </p>
@@ -381,7 +411,7 @@ MDN Reference -->
                     bind:checked={formData.active}
                     class="toggle ring-2 ring-primary bg-base-100 text-red-600 checked:text-green-600"
                   />
-                  <p class="font-mono font-bold text-primary">
+                  <p class="font-mono font-bold text-primary/80">
                     {#if formData.active}
                       ACTIVE <i
                         class="fa fa-check text-green-600"
@@ -439,7 +469,7 @@ MDN Reference -->
       <!-- Profile Section -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
         <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">Profile</h3>
+          <h3 class="text-2xl font-semibold text-primary/80">Profile</h3>
           <p class="text-secondary text-sm mt-2">
             Personal information and organization details
           </p>
@@ -513,7 +543,7 @@ MDN Reference -->
       <!-- Contact Section -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
         <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">Contact</h3>
+          <h3 class="text-2xl font-semibold text-primary/80">Contact</h3>
           <p class="text-secondary text-sm mt-2">
             Communication and contact information
           </p>
@@ -562,7 +592,7 @@ MDN Reference -->
       <!-- Other Section -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
         <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">Other</h3>
+          <h3 class="text-2xl font-semibold text-primary/80">Other</h3>
           <p class="text-secondary text-sm mt-2">
             Additional notes and comments
           </p>
