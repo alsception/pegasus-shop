@@ -186,60 +186,50 @@
   {#if error}
     <ErrorDiv {error} />
   {:else}
+      
     <div class="w-full flex justify-center px-4">
       <div class="w-full max-w-4xl p-4 bg-base-200 rounded-lg">
         <form
           on:submit|preventDefault={handleFormSubmit}
-          class="flex flex-col sm:flex-row items-center gap-3"
+          class="flex flex-col gap-3"
         >
-          <input
-            type="text"
-            bind:value={searchTerm}
-            placeholder="Traži proizvod..."
-            class="input input-primary dark:input-info border-2"
-          />
-          <button type="submit" class="btn btn-dash">
-            <i class="fas fa-search"></i>
-            Traži
-          </button>
+          <!-- Gornji red: Input i Traži dugme -->
+          <div class="flex gap-2">
+            <input
+              type="text"
+              bind:value={searchTerm}
+              placeholder="Traži proizvod..."
+              class="input input-primary dark:input-info border-2 flex-1"
+            />
+            <button type="submit" class="btn btn-dash">
+              <i class="fas fa-search"></i>
+              <span class="hidden sm:inline ml-1">Traži</span>
+            </button>
+          </div>
 
-          <ProductCategories bind:selectedCategory onSelect={handleCategorySelect} />
-          
-          <button on:click={toggleView} class="btn btn-dash">
-            <i class="fas fa-th-list"></i>
-            {#if isListView}
-              List view
-            {:else}
-              Grid view
-            {/if}
-          </button>
-          
-        </form>
-        <!-- Pagination Controls & Info -->
-        <div
-          class="flex flex-col sm:flex-row justify-between items-center mt-4 gap-2"
-        >
-          <div class="flex gap-2 items-center hidden">
-            <button
-              class="btn btn-outline"
-              title="Previous page"
-              on:click={prevPage}
-              disabled={page === 0}>⬅️ Prev</button
-            >
-            <button
-              class="btn btn-outline"
-              title="Next page"
-              on:click={nextPage}
-              disabled={page + 1 >= totalPages}>Next ➡️</button
-            >
-          </div>
-          <div class="text-sm text-gray-600 dark:text-gray-400">
-            <span>
+          <!-- Donji red: Kategorije, Pagination i View toggle -->
+          <div class="flex gap-2 items-center">
+            <div class="flex-1">
+              <ProductCategories bind:selectedCategory onSelect={handleCategorySelect} />
+            </div>
+            
+            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
               Page <b>{page + 1}</b> of <b>{totalPages}</b>
-              &nbsp;|&nbsp; Total products: <b>{totalProducts}</b>
-            </span>
+              <span class="hidden md:inline"> | Total: <b>{totalProducts}</b></span>
+            </div>
+            
+            <button type="button" on:click={toggleView} class="btn btn-dash whitespace-nowrap">
+              <i class="fas fa-th-list"></i>
+              <span class="hidden sm:inline ml-1">
+                {#if isListView}
+                  List
+                {:else}
+                  Grid
+                {/if}
+              </span>
+            </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
 

@@ -250,32 +250,37 @@
 {:else if error}
   <ErrorDiv {error} />
 {:else}
-<div class="w-full flex justify-center px-4">
-  <div class="w-full max-w-4xl p-4 bg-base-200 rounded-lg">
-    <form
-      on:submit|preventDefault={handleFormSubmit}
-      class="flex flex-col sm:flex-row items-center gap-3"
-    >
-      <input
-        type="text"
-        bind:value={searchTerm}
-        placeholder="Traži korisnika..."
-        class="input input-primary dark:input-info border-2"
+  <div class="w-full flex justify-center px-4">
+    <div class="w-full max-w-4xl p-4 bg-base-200 rounded-lg">
+      <form
+        on:submit|preventDefault={handleFormSubmit}
+        class="flex flex-col lg:flex-row items-center gap-3"
+      >
+        <input
+          type="text"
+          bind:value={searchTerm}
+          placeholder="Traži korisnika..."
+          class="input input-primary dark:input-info border-2 w-full lg:flex-1"
         />
-      <button type="submit" class="btn btn-dash">
-        <i class="fas fa-search"></i>
-        Traži
-      </button>
-     
-      <button
-        on:click={openCreateModal}
-        class="btn btn-dash"
-      >       
-          <i class="fas fa-plus"></i><i class="fas fa-user"></i>
-          Novi korisnik
-      </button>
-    </form>
-  </div>
+        
+        <div class="flex flex-row gap-3 w-full lg:w-auto">
+          <button type="submit" class="btn btn-dash flex-1 lg:flex-none whitespace-nowrap">
+            <i class="fas fa-search"></i>
+            Traži
+          </button>
+        
+          <button
+            type="button"
+            on:click={openCreateModal}
+            class="btn btn-dash flex-1 lg:flex-none whitespace-nowrap"
+          >       
+            <i class="fas fa-plus"></i>
+            <i class="fas fa-user"></i>
+            Novi korisnik
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <div id="results" style="margin: 48px;"></div>

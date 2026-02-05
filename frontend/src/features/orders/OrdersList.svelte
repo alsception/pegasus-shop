@@ -317,25 +317,29 @@ i LITE APP!!, I MOZDA i WS.....
   <div class="w-full max-w-4xl p-4 bg-base-200 rounded-lg mb-14">
     <form
       on:submit|preventDefault={handleFormSubmit}
-      class="flex flex-col sm:flex-row items-center gap-3"
+      class="flex flex-col md:flex-row items-center gap-3"
     >
       <input
         type="text"
         bind:value={searchTerm}
         placeholder="Traži narudžbu"
-        class="input input-primary dark:input-info border-2"
+        class="input input-primary dark:input-info border-2 w-full md:flex-1"
       />
-      <!-- Search Button -->
-      <button
-        type="submit" 
-        class="btn btn-dash"
-      >
-        <i class="fas fa-search"></i>
-        Traži
-      </button>
-      <!-- toggle button to switch views -->
-      <div class="">
-        <button class="btn btn-dash" on:click={toggleView}>
+      
+      <div class="flex flex-row gap-3 w-full md:w-auto">
+        <button
+          type="submit" 
+          class="btn btn-dash flex-1 md:flex-none whitespace-nowrap"
+        >
+          <i class="fas fa-search"></i>
+          Traži
+        </button>
+        
+        <button 
+          type="button" 
+          class="btn btn-dash flex-1 md:flex-none whitespace-nowrap" 
+          on:click={toggleView}
+        >
           <i class="fas fa-th-large"></i>
           {#if isBlockView}
             Tabelarni prikaz
@@ -345,7 +349,7 @@ i LITE APP!!, I MOZDA i WS.....
         </button>
       </div>
     </form>
-</div>
+  </div>
 </div>
 
 {#if loading}

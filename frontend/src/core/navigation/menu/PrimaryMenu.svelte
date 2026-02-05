@@ -49,7 +49,7 @@
         left: 120px; -->
 <ul
   class="menu menu-sm dropdown-content  w-52 p-2 
-         bg-base-200/70 dark:bg-gray-950/84 border-2 border-gray-500/50 dark:border-gray-500/20 
+         bg-base-200/70 dark:bg-zinc-950/84 border-2 border-zinc-500/50 dark:border-zinc-500/20 
          rounded shadow  fixed z-[9999] pointer-events-auto
 
 "
@@ -64,12 +64,12 @@
   <li class="flex  px-3 py-2 rounded-md">
     <div class="inline-flex gap-1">
       <a
-        class="pgs-hyperlink inline-flex items-center max-w-[100px] whitespace-nowrap overflow-hidden text-ellipsis"
+        class="text-primary pgs-hyperlink inline-flex items-center max-w-[100px] whitespace-nowrap overflow-hidden text-ellipsis"
         href="#/users/my-account"
         title={getCurrentUsername()}
       >
         <i class="fas fa-user mr-1"></i>
-        <span>{getCurrentUsername()}</span>
+        <span class="">{getCurrentUsername()}</span>
       </a>
       |
       <span class="badge badge-accent badge-outline badge-xs">
@@ -86,20 +86,19 @@
           use:link
           href={item.disabled ? "#" : item.href}
           class="flex items-center px-3 py-2 rounded-md cursor-pointer
-                  hover:bg-[#c2e9fb] dark:hover:bg-[#283135]
-                 text-primary hover:text-black text-sm"
+                  hover:bg-primary/15 text-primary/70 text-sm"
         >
           <i class="fas fa-{item.icon} w-5 mr-2"></i>
-          <span class="dark:text-gray-400" style="width: 150px;">{item.label}</span>
+          <span class="text-primary/80" style="width: 150px;">{item.label}</span>
         </a>
       {:else}
         <div
           class="flex items-center px-3 py-2 rounded-md pointer-events-none
-              hover:text-gray-400 dark:hover:text-gray-500
+              hover:text-zinc-400 dark:hover:text-zinc-500
               text-base "
         >
           <i class="fas fa-{item.icon} w-5 mr-2"></i>
-          <span class="text-gray-400 dark:text-gray-400">{item.label}</span>
+          <span class="text-zinc-400 dark:text-zinc-400">{item.label}</span>
         </div>
       {/if}
     </li>

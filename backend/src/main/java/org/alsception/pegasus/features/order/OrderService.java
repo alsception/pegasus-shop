@@ -190,6 +190,7 @@ public class OrderService
             );
         }
         
+        //TODO: Izgleda da nestampa ovo kad je na info
         logger.info("Order {} status updated to {}", id, status);
         
         notificationService.createNotification(

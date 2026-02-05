@@ -113,7 +113,7 @@ function clickChange(value: any)
         <i class="fas fa-tag"></i>
         Traži po kategoriji
       </div>
-      <ul tabindex="-1" class="dropdown-content menu bg-base-300 rounded-box z-1 w-[466px] p-2 shadow-sm">
+      <ul tabindex="-1" class="dropdown-content menu bg-base-300 rounded-box z-1 w-[266px] p-2 shadow-sm">
         {#each $categories as category}
           <!-- svelte-ignore a11y_no_static_element_interactions -->
           <li>

@@ -128,8 +128,7 @@
     window.location.href = "#/products";
   }
 </script>
-
-<div class="w-full max-w-4xl mx-auto p-4">
+<div class="w-full max-w-4xl mx-auto p-2 sm:p-4">
 
 {#if !$auth.isAuthenticated}
 
@@ -151,79 +150,78 @@
   
     {#if cart}
 
-    <div class="text-primary nb-card mx-auto  bg-base-100 /*rounded-2xl*/ mt-6 sm:mt-10 " style="min-width: 568px; transform: none">
-      <h2 class="text-xl sm:text-2xl font-bold mb-4 text-center pt-4 text-primary">Pegasus Shop - My Cart</h2>
+    <div class="text-primary mx-auto bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl" style="transform: none">
+      <h2 class="text-lg sm:text-2xl font-bold mb-4 text-center pt-4 text-primary">Pegasus Shop - My Cart</h2>
       
       <div class="font-mono">
 
         {#if cart.items && cart.items.length > 0}
 
-        <div class="p-4 sm:p-6">
-          <div class="divide-y divide-gray-200 dark:divide-slate-700">
+        <div class="p-2 sm:p-6">
+          <div class="divide-y divide-primary/30">
             
             {#each cart.items as item (item.id)}
 
-              <div class="py-4 grid grid-cols-3 gap-2 items-center">
-                <div class="col-span-2 flex flex-col gap-2">
+              <div class="py-4 grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+                
+                <div class="sm:col-span-2 flex flex-col gap-2">
                   
                   <div class="flex items-center gap-4">
-                      <div class="flex items-center rounded-md overflow-hidden">
-                        <button 
-                          type="button" 
-                          class="btn btn-ghost text-primary"
-                          on:click={() => {
-                            if (item.quantity > 1) {
-                              item.quantity = item.quantity - 1;
-                              updateCart(item);
-                            }
-                          }}
-                          aria-label="Ukloni"
-                        >
-                          -
-                        </button>
-                        <input 
-                          id="myNumber" 
-                          value={item.quantity}
-                          min="1"
-                          class="w-12 h-8 text-center text-primary"
-                          on:change={(e) => handleQuantityChange(e, item)}
-                        />
-                        <button 
-                          type="button" 
-                          class="btn btn-ghost text-primary"
-                          on:click={() => {
-                            if (item.quantity < 100) {
-                              item.quantity = item.quantity + 1;
-                              updateCart(item);
-                            }
-                          }}
-                          aria-label="Dodaj"
-                        >
-                          +
-                        </button>
-                      </div>
-                      <p class="text-base sm:text-md font-medium truncate text-primary">{item.product.name}</p>
+                    <div class="flex items-center rounded-md overflow-hidden border border-primary/10 shrink-0">
+                      <button 
+                        type="button" 
+                        class="btn btn-ghost btn-sm text-primary px-3"
+                        on:click={() => {
+                          if (item.quantity > 1) {
+                            item.quantity = item.quantity - 1;
+                            updateCart(item);
+                          }
+                        }}
+                        aria-label="Ukloni"
+                      >
+                        -
+                      </button>
+                      <input 
+                        id="myNumber" 
+                        value={item.quantity}
+                        min="1"
+                        class="w-12 h-8 text-center text-primary bg-transparent border-0"
+                        on:change={(e) => handleQuantityChange(e, item)}
+                      />
+                      <button 
+                        type="button" 
+                        class="btn btn-ghost btn-sm text-primary px-3"
+                        on:click={() => {
+                          if (item.quantity < 100) {
+                            item.quantity = item.quantity + 1;
+                            updateCart(item);
+                          }
+                        }}
+                        aria-label="Dodaj"
+                      >
+                        +
+                      </button>
+                    </div>
 
+                    <p class="text-sm sm:text-base font-medium text-primary">{item.product.name}</p>
                   </div>
                       
-
-                  <!-- Move delete button below -->
                   <div class="flex items-center">
                     <div class="tooltip tooltip-info" data-tip="Delete">
                       <button
                         type="button"
-                        class="btn primary"
+                        class="btn btn-ghost btn-sm text-error"
                         aria-label="Delete"
                         on:click={() => deleteCartItem(item.product.id)}
                       >
-                        <i class="fa fa-trash text-md text-gray-500 hover:text-red-400 cursor-pointer"></i>
+                        <i class="fa fa-remove text-md cursor-pointer"> </i>
+                        Ukloni
                       </button>
                     </div>
                   </div>
                 </div>
 
-
-                <div class="text-right">
+                <div class="text-right sm:text-right border-t sm:border-t-0 border-primary/10 pt-2 sm:pt-0">
                   <div class="text-xs sm:text-sm text-primary mb-1">
                     {item.quantity} x {formatPrice(item.product.basePrice)}
                   </div>
@@ -234,28 +232,33 @@
               </div>
             {/each}
           </div>
-          <div class="space-y-4 mt-6 divide-y divide-gray-200 dark:divide-slate-700">
-        
-                      <div class="divide-y divide-gray-200 dark:divide-slate-700"></div>
+
+          <div class="space-y-4 mt-6 divide-y divide-primary/40">
+            <div class="divide-y divide-gray-200 dark:divide-slate-700"></div>
 
             <div class="pt-4 flex justify-between items-center">
-              <p class="text-xl sm:text-md font-semibold text-primary">Total:</p>
-              <p class="text-md sm:text-xl font-bold text-primary" >{formatPrice(cart.totalPrice || 0)}</p>
+              <p class="text-lg sm:text-xl font-semibold text-primary">Total:</p>
+              <p class="text-xl sm:text-2xl font-bold text-primary">{formatPrice(cart.totalPrice || 0)}</p>
             </div>
+          </div>
+          <br>
         </div>
-        <br>
-        </div>
-        <div class="col-span-full flex p-4 justify-end bg-secondary/10">
-          <button type="button" on:click={cancel} class=" m-3 btn btn-secondary">
+
+        <div class="flex flex-row gap-2 p-4 justify-end ">
+          <button type="button" on:click={cancel} class="btn btn-outline text-primary/80 mr-6">
             Close
           </button>
-          <a href="#/checkout" class=" m-3 btn btn-primary"> Confirm</a>
+          <a href="#/checkout" class="btn btn-primary">Confirm</a>
         </div>
 
         {:else}
-          <p class="text-center text-gray-500 py-4">Your cart is empty. Add some <a use:link href="/products" class="pgs-hyperlink">products</a>
-            <img src="{randomImage}" alt="Cart empty" />
+
+          <p class="text-center text-gray-500 py-8 px-4">
+            Your cart is empty. Add some <a use:link href="/products" class="pgs-hyperlink">products</a>
           </p>
+          <div class="flex justify-center pb-4">
+            <img src="{randomImage}" alt="Cart empty" class="max-w-xs" />
+          </div>
         {/if}       
         
       </div>
@@ -263,7 +266,7 @@
     
     {/if}  
   {/if}  
-  {/if}  
+{/if}  
 
 </div>
 

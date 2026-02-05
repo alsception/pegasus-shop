@@ -152,7 +152,7 @@
 </script>
 
 <div
-  class="max-w-7xl mx-auto px-6 py-10
+  class="max-w-9xl mx-auto px-6 py-10
   grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 scale-up-center-normal menu-container"
 >
   {#each displayedItems as item}
@@ -425,8 +425,8 @@
 
  .menu-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 20px;
             max-width: 1200px;
             width: 100%;
         }
@@ -435,7 +435,9 @@
             background: var(--color-base-200);
             backdrop-filter: blur(10px);
 /*             border-radius: 20px;
- */            padding: 40px 30px;
+ */            padding: 30px 30px;
+ 
+            min-width: none; 
             position: relative;
             overflow: hidden;
             cursor: pointer;

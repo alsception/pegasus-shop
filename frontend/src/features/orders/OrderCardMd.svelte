@@ -375,7 +375,9 @@
     WAITING COLOR: color-mix(in oklab, oklch(0.89 0.18 91.93) 30%, transparent)
     
     
-    
+    TODO:
+    Probaj ovu boju za waiting: #fdc700
+
     
     -->
 

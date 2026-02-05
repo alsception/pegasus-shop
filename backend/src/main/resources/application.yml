@@ -39,6 +39,6 @@ logging:
   level:
     root: ERROR
     org.springframework: INFO
-    org.alsception.pegasus: DEBUG
+    org.alsception.pegasus: INFO
     org.hibernate.SQL: INFO
     org.hibernate.type.descriptor.sql.BasicBinder: ERROR

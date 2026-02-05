@@ -120,7 +120,7 @@ https://svelte.dev/e/a11y_no_noninteractive_element_interactionssvelte(a11y_no_n
       on:submit|preventDefault={handleSubmit}
       on:keydown={handleKeydown}
       id="productForm"
-      class="max-w-7xl mx-auto bg-base-100 rounded-lg p-8 w-full space-y-8"
+      class="max-w-7xl mx-auto bg-base-200/50 rounded-lg p-8 w-full space-y-8"
     >
       <!-- Header Section -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
