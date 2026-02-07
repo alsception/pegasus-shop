@@ -50,7 +50,7 @@
   color-scheme: 'dark';
   /*NEKA BUDE TABLE TRANSPARENT NO COLOR*/
   --color-base-100: --color-gray-950;
-  --color-base-200: #111113; /*radix colors, slate 1*/
+  --color-base-200: #1b1b1e;/*#111113; /*radix colors, slate 1*/
   --color-base-300: rgb(39 39 42);
   --color-base-content: rgb(183, 183, 183);
   --color-primary: rgb(229 231 233); /*blue 500*/
@@ -126,8 +126,8 @@ button:focus {
 /* Dark mode selection */
 @media (prefers-color-scheme: dark) {
   ::selection {
-    background: #00fff7; /* neon cyan */
-    color: #2d0036; /* deep purple */
+    background: #2b5e6b;
+    color: #ffffff; /* deep purple */
     /* text-shadow: 0 0 8px #ff00ea, 0 0 16px #00fff7;  */ /* magenta & cyan glow */
   }
 }
@@ -138,12 +138,12 @@ button:focus {
 } */
 [data-theme='dark'] {
   ::selection {
-    background-color: #00fff7 !important;
-    color: #2d0036 !important;
+    background-color: #2b5e6b !important;
+    color: #ffffff !important;
   }
 }
 
-.cyberpunk-text {
+.cyberpunk {
   color: #00fff7 !important; /* neon cyan */
   background-color: #2d0036 !important; /* deep purple */
   text-shadow: 0 0 8px #ff00ea, 0 0 16px #00fff7 !important; /* magenta & cyan glow */
@@ -304,11 +304,11 @@ body {
  */
 @media (prefers-color-scheme: dark) {
   body {
-    @apply bg-black text-gray-200;
+    @apply bg-[#121212] text-gray-200;
   }
 }
 .dark body {
-  @apply bg-black text-gray-200;
+  @apply bg-[#121212] text-gray-200;
 }
 
 .search-bar {

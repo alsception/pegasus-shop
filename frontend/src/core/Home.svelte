@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { getCurrentRole } from "./services/SessionStore";
+  import InfoBlocks from "./InfoBlocks.svelte";
 
   document.title = "Pegasus";
 
@@ -151,6 +152,9 @@
   });
 </script>
 
+
+<InfoBlocks/>
+
 <div
   class="max-w-9xl mx-auto px-6 py-10
   grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 scale-up-center-normal menu-container"
@@ -163,20 +167,14 @@
       class=""
     >
    <div class="menu-card card-8">
-   <!--  <div class="notiglow "></div>
-    <div class="notiborderglow"></div> -->
-<!--     <div class="menu-card card-1">
- -->            <div class="card-content">
+            <div class="card-content">
                 <span class="icon">{item.emoji}</span>
                  <h2 class="title">{item.title}</h2>
                 <p class="description"> {item.description}</p>
             </div>
             <span class="arrow">→</span>
         </div>
-   <!--  <div class="notititle p-40">        {item.title}</div>
-    <div class="notibody text-primary/20">        {item.description}</div> -->
-<!--   </div>
- -->    </a>
+    </a>
 
 
   {/each}

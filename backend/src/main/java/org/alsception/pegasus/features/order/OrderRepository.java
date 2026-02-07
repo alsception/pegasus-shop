@@ -79,4 +79,12 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
          """)
    int updateOrderStatus(@Param("id") Long id, @Param("status") String status);
 
+   @Query("""
+      SELECT DISTINCT o FROM PGSOrder o
+      LEFT JOIN FETCH o.items
+      LEFT JOIN FETCH o.user u
+      WHERE o.synced = false
+      """)
+   List<PGSOrder> findBySyncedFalseWithItems();
+
 }

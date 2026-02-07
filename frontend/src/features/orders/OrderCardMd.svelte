@@ -298,10 +298,10 @@
     switch (status?.toUpperCase()) 
     {
       case "WAITING":
-        return "bg-yellow-700/30";
+        return "bg-[#FEBB0036]"//"bg-yellow-700/30";//"bg-[#525214]";
 
       case "IN_PREPARATION":
-        return "bg-blue-900/30";
+        return "bg-[#0077FF3A]"/* blue-900/30"*/;
 
       case "READY":
       case "DELIVERED":
@@ -452,13 +452,15 @@
               </div>
           </div>
 
-          <div class="flex gap-2 mt-2 hidden">
+          <div class="flex gap-2 mt-2">
             <!-- use:link href="/orders/{order.id} -->
-            <button class="btn btn-sm hover:text-blue-600 dark:hover:text-sky-400"
+            <button class="btn btn-sm btn-ghost"
               on:click={openModal2}>Details</button>
-            <button class="btn btn-sm hover:text-red-700" 
+
+            <button class="btn btn-sm btn-ghost hover:text-red-700 text-primary/60"  aria-label="Obriši" 
               on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
-              Delete
+              
+               <i class="fas fa-trash text-primary/60" aria-label="Obriši"></i>  
             </button>
           </div>
         </div>

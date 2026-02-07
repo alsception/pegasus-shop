@@ -66,6 +66,9 @@ public class PGSOrder
     
     @Column(nullable = true)
     private LocalDateTime modified;
+
+    // Ključno polje za sinkronizaciju
+    private boolean synced = false;
     
     /*//One day, if you have time and will to play with various error messages, we can include this field.
     @Version

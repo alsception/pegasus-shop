@@ -31,33 +31,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException 
     {
-        logger.trace("Invoking jwt filter");
+        // Ruta za sinkronizaciju, samo proslijedi dalje, CloudSyncController ce proveriti x-api-key
+        if (request.getServletPath().contains("/api/sync")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) 
         {
-            logger.trace("Found authHeader: {}***", authHeader.substring(0, 10));
-            
             String token = authHeader.substring(7);
-            
-            logger.trace("Found token: {}***", token.substring(0, 10));
-            
+                        
             try 
             {
                 if (jwtUtils.validateJwtToken(token)) 
                 {
-                    String username = jwtUtils.getUsernameFromJwtToken(token);
-                    
-                    logger.trace("Got username from token: "+username);
-
+                    String username = jwtUtils.getUsernameFromJwtToken(token);                   
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
                     UsernamePasswordAuthenticationToken authentication
                             = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 } 
                 else 
