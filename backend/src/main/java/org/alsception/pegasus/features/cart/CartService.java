@@ -308,8 +308,12 @@ public class CartService
        
         //10. finally notification
         notificationService.createNotification(
-            "Nova narudžba stigla",
-            "Nova narudžba "+order.getCode()+", konobar "+order.getUser().getUsername()+" stol "+order.getStol(), "system", "*", "status_update");
+            "Nova narudžba", 
+            notificationService.createNewOrderText(order), order.getUser().getUsername(), 
+            "*",//order.getUser().getUsername()+",kitchen,admin", 
+            "1"
+            );
     }
+
     
 }

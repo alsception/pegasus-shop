@@ -1,6 +1,6 @@
 import type { ComponentRegistry}    from "../menu/MenuTypes";
 import { navRoutes }                from "../menu/navRoutes";//Routes are here
-import Home                         from "../../Home.svelte";
+import Home                         from "../../home/Home.svelte";
 
 import Users                        from "../../../features/users/UsersList.svelte";
 import UserDetails                  from "../../../features/users/UserDetails.svelte";

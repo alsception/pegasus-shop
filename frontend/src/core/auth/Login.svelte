@@ -34,8 +34,8 @@
 
 <HeaderLite/>
 
-<LoginAnimation/>
- 
+<!-- <LoginAnimation/>
+ --> 
 <div class="flex items-center justify-center min-h-screen relative" >
   <div class=" rounded-lg /*animate-pulse*/ relative z-10 border-0 bg-opacity-100 " style="box-shadow: none;"  transition:scale={{ duration: 700, start: 0.5 }}>
 

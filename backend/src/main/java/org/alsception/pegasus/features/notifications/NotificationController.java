@@ -27,8 +27,15 @@ public class NotificationController
         String username = principal.getName();
         
         logger.debug("Getting notifications for "+username);
-        /*List<PGSNotification> notifications = notificationService.getNotificationsForUser(username);*/
-        List<PGSNotification> notifications = notificationService.getNotificationsForUser("*");
+        /**
+         * Trenutno svi dobijaju sve
+         * Sledeci korak bi trebalo 
+         * 1: konobar da dobija samo njegove orders
+         * 2. Admin da dobija sve ili samo njegove ili nista
+         * 3. Kuhinja da dobija samo new order (i eventualno jos neki drugi status ako se pojavi)
+         */
+        
+        List<PGSNotification> notifications = notificationService.getNotificationsForUserTo("*");
         return ResponseEntity.ok(notifications);
     }
     

@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+
+import org.alsception.pegasus.features.order.PGSOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -18,8 +20,13 @@ public class NotificationService {
 
     
     // Get all notifications for a user
-    public List<PGSNotification> getNotificationsForUser(String username) {
+    public List<PGSNotification> getNotificationsForUserTo(String username) {
         return notificationRepository.findByToOrderByCreatedDesc(username);
+    }
+
+    // Get all notifications for a user
+    public List<PGSNotification> getNotificationsForUserFrom(String username) {
+        return notificationRepository.findByFromOrderByCreatedDesc(username);
     }
     
     // Get unread notifications for a user
@@ -93,5 +100,37 @@ public class NotificationService {
     public PGSNotification getNotificationById(Long id) {
         return notificationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Notification not found with id: " + id));
+    }
+
+    public String createNewOrderText(PGSOrder order)
+    {
+        String text = "Nova narudžba <b>"+order.getCode()+"</b>, konobar <b>"+order.getUser().getUsername()+"</b> "
+        + ( order.getStol().isBlank() ? "" : 
+            ("stol <b>"+order.getStol()+"</b>"));
+        return text;
+    }
+
+    public String createOrderReadyText(PGSOrder order)
+    {
+        String text = "Narudžba <b>"+order.getCode()+"</b> je spremna" + 
+        ( order.getStol().isBlank() ? "" : 
+            (", stol <b>"+order.getStol()+"</b>"));
+        return text;
+    }
+    
+    public String createOrderInprepText(PGSOrder order)
+    {
+        String text = "Narudžba <b>"+order.getCode()+"</b> je u pripremi" + 
+        ( order.getStol().isBlank() ? "" : 
+            (", stol <b>"+order.getStol()+"</b>"));
+        return text;
+    }
+
+    public String createOrderStatusText(PGSOrder order)
+    {
+        String text = "Narudžba <b>"+order.getCode()+"</b> je: <b>"+order.getStatus()+"</b>" + 
+        ( order.getStol().isBlank() ? "" : 
+            (", stol <b>"+order.getStol()+"</b>"));;
+        return text;
     }
 }

@@ -29,7 +29,7 @@
     disabled
     aria-label="Adding to cart"
   >
-    <span class="">Adding</span>
+    <span class=""></span>
     <span class="loading loading-dots loading-xs"></span>
   </button>
 {:else}

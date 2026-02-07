@@ -23,8 +23,8 @@ export function showSuccessToast(message: string): void
 export function showAddSuccessToastWithLink(): void 
 {
   let checkmark = '<i class="fa fa-check fa-lg text-green-600 font-bold" aria-hidden="true"></i> &nbsp;';
-  let message = 'Product added to '
-  let link = '<a href="#/cart" class="pgs-hyperlink font-bold">cart</a>';
+  let message = 'Dodato u '
+  let link = '<a href="#/cart" class="pgs-hyperlink font-bold">košaricu</a>';
   let text = /*'<span style="color: green;">' +*/ checkmark + message + link /*+ '</span>'*/;
   toast.push( text, {
     theme: {

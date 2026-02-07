@@ -182,6 +182,8 @@ public class OrderService
     public void updateOrderStatus(Long id, String status) 
     {
         int rowsAffected = orderRepository.updateOrderStatus(id, status);
+
+        PGSOrder order = orderRepository.getReferenceById(id);
         
         if (rowsAffected == 0) {
             throw new ResponseStatusException(
@@ -191,9 +193,25 @@ public class OrderService
         }
         
         //TODO: Izgleda da nestampa ovo kad je na info
-        logger.info("Order {} status updated to {}", id, status);
+        logger.info("Order {}, id[{}] status updated to {}", order.getCode(), id, status);
         
+        String msg = "";
+
+        if(status.equals("READY"))
+        {
+            msg = notificationService.createOrderReadyText(order);
+        }
+        else if(status.equals("IN_PREPARATION"))
+        {
+            msg = notificationService.createOrderInprepText(order);
+        }
+        else 
+        {
+            msg = notificationService.createOrderStatusText(order);
+        }
+
         notificationService.createNotification(
-                "Narudžba "+id+" je: "+status,"", "system", "*", "status_update");
+            "", msg, order.getUser().getUsername()+",kitchen,admin", "*", "2"
+        );
     }
 }

@@ -162,9 +162,10 @@ i LITE APP!!, I MOZDA i WS.....
 
         /**
          * TODO: see if this works. should display error message.
+         * ako je failed to fetch, server je nedostupan.
          */
 
-        showInfoModal(error.message);
+        showInfoModal("Greška prilikom učitavanja narudžbi: "+error.message);
         
         // Handle 401 Unauthorized specifically
         if (error.message.includes('401')) {

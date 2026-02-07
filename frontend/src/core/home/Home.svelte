@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getCurrentRole } from "./services/SessionStore";
+  import { getCurrentRole } from "../services/SessionStore";
   import InfoBlocks from "./InfoBlocks.svelte";
+  import Charts from "./Charts.svelte";
 
   document.title = "Pegasus";
 
@@ -150,10 +151,12 @@
       (item) => (displayedItems = [...displayedItems, item])
     );
   });
+
 </script>
-
-
+      
 <InfoBlocks/>
+
+<!-- <Charts/> -->
 
 <div
   class="max-w-9xl mx-auto px-6 py-10

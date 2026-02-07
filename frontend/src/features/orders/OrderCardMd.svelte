@@ -128,10 +128,11 @@
 
 
         /**
-         * TODO: see if this works. should display error message.
+         * TODO: see if this works. should display error message.__
+         * ??????? štaće ovo ovde???
          */
 
-        showInfoModal(error.message);
+        showInfoModal("Greška prilikom učitavanja narudžbi: "+error.message);
         
         // Handle 401 Unauthorized specifically
         if (error.message.includes('401')) {
@@ -428,7 +429,7 @@
                 Napomena:
               </span>
               <br>
-              <div class=" bg-base-300/66 dark:bg-gray-800 border-1 border-base-300 dark:border-gray-800  text-primary p-1 font-bold py-2 px-4 rounded-md">          
+              <div class=" bg-base-300/66 dark:bg-gray-800 border-1 border-primary/30 dark:border-gray-800 text-primary p-1 font-bold py-2 px-4 rounded-md">          
                 {order.comment}
               </div>
             </div>
@@ -437,7 +438,7 @@
           <div class="mt-2 " class:hidden={liteView}>
             <ul class="flex flex-col gap-0">
               {#each order.items as item}
-                <li class="flex items-center gap-0 p-2 border-1 border-base-300/60">
+                <li class="flex items-center gap-0 p-2 border-0">
                   <span class="text-primary text-md font-semibold font">{item.quantity} x </span>&nbsp;
                   <span class="text-primary text-md font-semibold font"> {item.product?.name ?? item.name}</span>
                   {#if item.price}
@@ -447,7 +448,7 @@
               {/each}
             </ul>
               <div style="align-items: end;display:grid;align-content: end; text-align: right;"
-                    class="g-base-100 dark:bg-base-100 border-1 border-base-300/40">
+                    class="g-base-100 dark:bg-base-100">
                 <span class="text-lg font-bold text-primary p-2 font-mono">{formatPrice(order.price)}</span>
               </div>
           </div>

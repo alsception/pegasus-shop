@@ -27,12 +27,16 @@ public class LocalSyncService {
     @Value("${sync.api.key}") // Tvoj tajni ključ
     private String apiKey;
 
+    /**
+     * TODO: dodati parametar enabled/
+     */
+
     private final RestTemplate restTemplate = new RestTemplate();
 
     private static final Logger logger = LoggerFactory.getLogger(LocalSyncService.class);
 
 
-    @Scheduled(fixedDelay = 10000) // Svakih 10 sekundi
+    @Scheduled(fixedDelay = 10000 * 60) // Svakih 10 minuta
     public void pushToCloud()
     {
        /*

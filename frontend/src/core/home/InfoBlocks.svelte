@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getCurrentRole } from "./services/SessionStore";
+  import { getCurrentRole } from "../services/SessionStore";
 
   type Item = {
     title: string;
@@ -45,30 +45,12 @@
 
   const role = getCurrentRole();
 
-  async function addItemsWithDelay(
-    sourceItems: Item[],
-    addFn: (item: Item) => void,
-    delay = 80) 
-  {
-    for (const item of sourceItems) {
-      addFn(item);
-      await new Promise((resolve) => setTimeout(resolve, delay));
-    }
-  }
-  
-  let displayedItems: Item[] = [];
-
-  onMount(() => {
-    addItemsWithDelay(
-      items,
-      (item) => (displayedItems = [...displayedItems, item])
-    );
-  });
 </script>
 
 <div class="stats-container">
-  {#each displayedItems as item, index}
-    <div class="stat-card {item.color}" style="--delay: {index * 0.1}s">
+  {#each items as item, index}
+  <!-- style="--delay: {index * 0.1}s" -->
+    <div class="stat-card {item.color}">
       <div class="card-top">
         <div class="icon-wrapper {item.color}">
           {#if item.color === 'blue'}
@@ -104,20 +86,6 @@
       <div class="card-glow {item.color}"></div>
     </div>
   {/each}
-</div>
-
-
-<h2>Statistika narudžbi</h2>
-
-<div class="chart-container">
-  <div class="pie-chart"></div>
-  
-  <ul class="legend">
-    <li><span class="dot" style="background:#4CAF50"></span> Restoran (30%)</li>
-    <li><span class="dot" style="background:#2196F3"></span> Dostava (25%)</li>
-    <li><span class="dot" style="background:#FFC107"></span> Wolt (25%)</li>
-    <li><span class="dot" style="background:#FF5722"></span> Takeaway (20%)</li>
-  </ul>
 </div>
 
 <style>
@@ -170,7 +138,8 @@
   }
 
   .stat-card {
-    background: rgba(30, 30, 40, 0.6);
+    background: var(--color-base-200);
+    color: var(--color-primary);
     backdrop-filter: blur(10px);
     border-radius: 20px;
     padding: 2rem;
@@ -279,7 +248,7 @@
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--color-primary);
     flex: 1;
   }
 
