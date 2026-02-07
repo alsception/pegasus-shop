@@ -3,7 +3,7 @@
     import { onMount, onDestroy } from 'svelte';
     import { link } from "svelte-spa-router";
     import { auth } from "../services/SessionStore";
-    import { showInfoToast, showSuccessToast } from "../utils/toaster";
+    import { showInfoToast, showPlusToast, showSuccessToast } from "../utils/toaster";
 
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -75,7 +75,11 @@
                 // Prikaži toast (samo ako ovo nije prvo učitavanje, opciono)
                 // Ako želiš da izbegneš rafalnu paljbu tostova na samom startu,
                 // možeš dodati proveru: if (notificationsMap.size > data.length)
-                if(!skipit) showInfoToast(notification.text || notification.title || 'New notification', 0);
+                if(!skipit)
+                {
+                    console.log(notification)
+                        showInfoToast(notification.text || notification.title, notification.type)
+                };
             }
         });
     }
@@ -83,7 +87,7 @@
 
 <ul
   class="menu menu-sm dropdown-content  w-52 p-2 scale-in-ver-top 
-         bg-base-100 dark:bg-gray-900
+         bg-base-100 dark:bg-zinc-900
          rounded shadow "
   style="min-width: 300px; left: -270px;"
 >

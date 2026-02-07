@@ -315,7 +315,7 @@ i LITE APP!!, I MOZDA i WS.....
 {:else}
 
 <div class="w-full flex justify-center px-1">
-  <div class="w-full max-w-4xl p-4 bg-base-200 rounded-lg mb-14">
+  <div class="w-full /*max-w-4xl*/ p-4 bg-base-200 rounded-lg mb-14">
     <form
       on:submit|preventDefault={handleFormSubmit}
       class="flex flex-col md:flex-row items-center gap-3"
@@ -324,7 +324,7 @@ i LITE APP!!, I MOZDA i WS.....
         type="text"
         bind:value={searchTerm}
         placeholder="Traži narudžbu"
-        class="input input-primary dark:input-info border-2 w-full md:flex-1"
+        class="input input-primary dark:input-info border-2 w-full md:flex-1 max-w-md"
       />
       
       <div class="flex flex-row gap-3 w-full md:w-auto">

@@ -39,7 +39,7 @@
       });
 
       //todo: show success message -> go to order details page. we dont have order details page yet.
-      showSuccessToast("Order placed successfully!");
+      showSuccessToast("Narudžba uspješno poslata!");
       push('/orders');
     } catch (err) {
       error = (err as Error).message;

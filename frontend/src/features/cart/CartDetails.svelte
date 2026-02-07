@@ -151,7 +151,10 @@
     {#if cart}
 
     <div class="text-primary mx-auto bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl" style="transform: none">
-      <h2 class="text-lg sm:text-2xl font-bold mb-4 text-center pt-4 text-primary">Pegasus Shop - My Cart</h2>
+      <div class="p-0.5">
+        <h2 class="text-lg sm:text-2xl font-bold mb-4 text-center pt-4 text-primary">Košarica</h2>
+      </div>
+      
       
       <div class="font-mono">
 
@@ -237,24 +240,25 @@
             <div class="divide-y divide-gray-200 dark:divide-slate-700"></div>
 
             <div class="pt-4 flex justify-between items-center">
-              <p class="text-lg sm:text-xl font-semibold text-primary">Total:</p>
+              <p class="text-lg sm:text-xl font-semibold text-primary">Ukupno:</p>
               <p class="text-xl sm:text-2xl font-bold text-primary">{formatPrice(cart.totalPrice || 0)}</p>
             </div>
           </div>
           <br>
         </div>
 
-        <div class="flex flex-row gap-2 p-4 justify-end ">
-          <button type="button" on:click={cancel} class="btn btn-outline text-primary/80 mr-6">
-            Close
+        <div class="flex flex-row gap-2 p-8 justify-end bg-base-300/70">
+          <button type="button" on:click={cancel} class="btn btn-neutral text-primary/80 mr-12">
+             <i class="fa fa-arrow-left text-md cursor-pointer"> </i>Zatvori
           </button>
-          <a href="#/checkout" class="btn btn-primary">Confirm</a>
+          <a href="#/checkout" class="btn btn-primary /*hover:text-info*/ bg-success">
+             <i class="fa fa-check text-md cursor-pointer"> </i>Potvrdi</a>
         </div>
 
         {:else}
 
           <p class="text-center text-gray-500 py-8 px-4">
-            Your cart is empty. Add some <a use:link href="/products" class="pgs-hyperlink">products</a>
+            Košarica je prazna.  <a use:link href="/products" class="pgs-hyperlink">Dodaj proizvod</a>
           </p>
           <div class="flex justify-center pb-4">
             <img src="{randomImage}" alt="Cart empty" class="max-w-xs" />

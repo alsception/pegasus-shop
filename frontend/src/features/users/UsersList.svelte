@@ -251,7 +251,7 @@
   <ErrorDiv {error} />
 {:else}
   <div class="w-full flex justify-center px-4">
-    <div class="w-full max-w-4xl p-4 bg-base-200 rounded-lg">
+    <div class="w-full /*max-w-4xl*/ p-4 bg-base-200 rounded-lg">
       <form
         on:submit|preventDefault={handleFormSubmit}
         class="flex flex-col lg:flex-row items-center gap-3"
@@ -260,7 +260,7 @@
           type="text"
           bind:value={searchTerm}
           placeholder="Traži korisnika..."
-          class="input input-primary dark:input-info border-2 w-full lg:flex-1"
+          class="input input-primary dark:input-info border-2 max-w-md lg:flex-1"
         />
         
         <div class="flex flex-row gap-3 w-full lg:w-auto">

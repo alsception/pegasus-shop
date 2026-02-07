@@ -20,6 +20,19 @@ export function showSuccessToast(message: string): void
   });
 }
 
+export function showPlusToast(message: string): void 
+{
+  let checkmark = '<i class="fa fa-plus fa-lg text-blue-600 font-bold" aria-hidden="true"></i> &nbsp;';
+  toast.push(checkmark + message, {
+    theme: {
+      '--toastColor': 'mintcream',
+      '--toastBackground': 'rgb(72, 187, 120)',
+      '--toastBarBackground': '#2F855A',
+      '--toastBarHeight': 0
+    }
+  });
+}
+
 export function showAddSuccessToastWithLink(): void 
 {
   let checkmark = '<i class="fa fa-check fa-lg text-green-600 font-bold" aria-hidden="true"></i> &nbsp;';
@@ -42,17 +55,22 @@ export function showInfoToast(message: String, type: String | Number): void
   let checkmark = '<i class="fa fa-check fa-lg text-green-600 font-bold" aria-hidden="true"></i> &nbsp;';
   let plusmark = '<i class="fa fa-plus fa-lg text-blue-600 font-bold" aria-hidden="true"></i> &nbsp;';
   let infomark = '<i class="fa fa-info-circle fa-lg text-blue-600 font-bold" aria-hidden="true"></i> &nbsp;';
+  let firemark = '<i class="fa fa-fire fa-lg text-orange-600 font-bold" aria-hidden="true"></i> &nbsp;';
   /*let link = '<a href="#/cart" class="pgs-hyperlink font-bold">cart</a>';*/
   let text = checkmark + message/* + link*/;
 
   switch(type)
   {
 
-    case 1:
+    case "1":
       text = plusmark + message;
       break;
 
-    case 2:
+    case "2":
+      text = firemark + message;
+      break;
+
+    case "3":
       text = checkmark + message;
       break;
   

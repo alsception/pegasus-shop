@@ -213,7 +213,7 @@
   <div class="">
     <!-- Search Form -->
     <div class="w-full flex justify-center px-1">
-  <div class="w-full max-w-4xl p-4 bg-base-200 rounded-lg mb-1"  style="min-width: fit-content">
+  <div class="w-full /*max-w-4xl*/ p-4 bg-base-200 rounded-lg mb-1"  style="min-width: fit-content">
     <form class="flex flex-col sm:flex-row items-center gap-3 w-full">
       <!-- Ime -->
        <div class="flex flex-col px-2">

@@ -196,14 +196,17 @@ public class OrderService
         logger.info("Order {}, id[{}] status updated to {}", order.getCode(), id, status);
         
         String msg = "";
+        String type = "0";
 
         if(status.equals("READY"))
         {
             msg = notificationService.createOrderReadyText(order);
+            type = "3";
         }
         else if(status.equals("IN_PREPARATION"))
         {
             msg = notificationService.createOrderInprepText(order);
+            type = "2";
         }
         else 
         {
@@ -211,7 +214,7 @@ public class OrderService
         }
 
         notificationService.createNotification(
-            "", msg, order.getUser().getUsername()+",kitchen,admin", "*", "2"
+            "", msg, order.getUser().getUsername()+",kitchen,admin", "*", type
         );
     }
 }
