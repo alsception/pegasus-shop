@@ -324,21 +324,24 @@ body {
 }
 
 .pgs-input {
-  @apply w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent /*font-bold*/ text-primary bg-base-200;
+  @apply w-full px-3 py-2 border border-base-300 rounded-md 
+  focus:outline-none focus:ring-2 focus:ring-sky-500 
+  focus:border-transparent /*font-bold*/ text-primary bg-base-200;
   min-width: max-content;
+  min-height: 40px;
 }
 
 @media (prefers-color-scheme: dark) {
   .pgs-input {
-    border-color: var(--color-slate-700);
-    background-color: var(--color-slate-800);
+    border-color: var(--color-zinc-700);
+    background-color: var(--color-zinc-800);
     @apply focus:ring-sky-500;
   }
 }
 
 .dark .pgs-input {
-  border-color: var(--color-slate-700);
-  background-color: var(--color-slate-800);
+  border-color: var(--color-zinc-700);
+  background-color: var(--color-zinc-800);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -400,4 +403,9 @@ body {
 /** Tooltip pozadina*/
 .tooltip::before{
   background-color: #000 !important;
+}
+
+.card-new {
+  border: 2px solid 2px solid #6933ff;
+  animation: pulse 6s infinite;
 }

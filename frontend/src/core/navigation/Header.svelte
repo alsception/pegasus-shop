@@ -59,10 +59,10 @@
           value="dark"
         />
         <span class="swap-off text-xl">
-          <i class="fas fa-sun text-md"></i>
+          <i class="fas fa-sun text-sm md:text-lg"></i>
         </span>
         <span class="swap-on text-xl">
-          <i class="fas fa-moon text-md"></i>
+          <i class="fas fa-moon text-sm md:text-lg"></i>
         </span>
       </label>
     </div>
@@ -73,7 +73,7 @@
         data-tip="Poruke"
       >
         <span class="text-xl">
-          <i class="fas fa-envelope text-md"></i>
+          <i class="fas fa-envelope text-sm md:text-lg"></i>
         </span>
       </div>
     </div>
@@ -86,7 +86,7 @@
         data-tip="Notifications"
         aria-label="Notifications"
       >
-        <i class="fas fa-bell text-md"></i>
+        <i class="fas fa-bell text-sm md:text-lg"></i>
       </div>
 
       <NotificationsInfo />

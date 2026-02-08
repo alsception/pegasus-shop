@@ -154,7 +154,8 @@
       <div class="p-0.5">
         <h2 class="text-lg sm:text-2xl font-bold mb-4 text-center pt-4 text-primary">Košarica</h2>
       </div>
-      
+        <div class="h-px bg-neutral w-full"></div>
+
       
       <div class="font-mono">
 
@@ -251,7 +252,7 @@
           <button type="button" on:click={cancel} class="btn btn-neutral text-primary/80 mr-12">
              <i class="fa fa-arrow-left text-md cursor-pointer"> </i>Zatvori
           </button>
-          <a href="#/checkout" class="btn btn-primary /*hover:text-info*/ bg-success">
+          <a href="#/checkout" class="btn btn-primary bg-success">
              <i class="fa fa-check text-md cursor-pointer"> </i>Potvrdi</a>
         </div>
 

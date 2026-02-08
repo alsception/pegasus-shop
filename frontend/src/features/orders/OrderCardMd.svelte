@@ -440,7 +440,7 @@
               {#each order.items as item}
                 <li class="flex items-center gap-0 p-2 border-0">
                   <span class="text-primary text-md font-semibold font">{item.quantity} x </span>&nbsp;
-                  <span class="text-primary text-md font-semibold font"> {item.product?.name ?? item.name}</span>
+                  <span class="text-primary text-md font-semibold font"> {item.product?.name}</span>
                   {#if item.price}
                     <span class="text-xs text-gray-500 ml-auto font-mono">{formatPrice(item.price)}</span>
                   {/if}

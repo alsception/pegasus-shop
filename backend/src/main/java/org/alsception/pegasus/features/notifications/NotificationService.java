@@ -104,9 +104,9 @@ public class NotificationService {
 
     public String createNewOrderText(PGSOrder order)
     {
-        String text = "Nova narudžba <b>"+order.getCode()+"</b>, konobar <b>"+order.getUser().getUsername()+"</b> "
+        String text = "Nova narudžba <b>"+order.getCode()+"</b>, konobar <b>"+order.getUser().getUsername()+"</b>"
         + ( order.getStol().isBlank() ? "" : 
-            ("stol <b>"+order.getStol()+"</b>"));
+            (", stol <b>"+order.getStol()+"</b>"));
         return text;
     }
 

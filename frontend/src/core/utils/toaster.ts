@@ -53,7 +53,7 @@ export function showAddSuccessToastWithLink(): void
 export function showInfoToast(message: String, type: String | Number): void 
 {
   let checkmark = '<i class="fa fa-check fa-lg text-green-600 font-bold" aria-hidden="true"></i> &nbsp;';
-  let plusmark = '<i class="fa fa-plus fa-lg text-blue-600 font-bold" aria-hidden="true"></i> &nbsp;';
+  let plusmark = '<i class="fa fa-square-plus fa-lg text-blue-600 font-bold" aria-hidden="true"></i> &nbsp;';
   let infomark = '<i class="fa fa-info-circle fa-lg text-blue-600 font-bold" aria-hidden="true"></i> &nbsp;';
   let firemark = '<i class="fa fa-fire fa-lg text-orange-600 font-bold" aria-hidden="true"></i> &nbsp;';
   /*let link = '<a href="#/cart" class="pgs-hyperlink font-bold">cart</a>';*/

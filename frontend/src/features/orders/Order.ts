@@ -1,4 +1,5 @@
 import type { FPGSUser } from "../../features/users/FPGSUser";
+import type { Product } from "../products/Product";
 
 export interface Order {
   other: any;
@@ -27,5 +28,6 @@ export interface OrderItem {
   quantity?: number;
   price?: number;
   productName?: string;
+  product?: Product;
   // ... other fields from your PGSOrderItem entity
 }
