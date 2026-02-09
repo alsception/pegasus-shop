@@ -59,7 +59,7 @@ public class OrderService
         }
         else
         {
-            orders = orderRepository.findByUsernameAndCodeWithItems(username,"%"+search.replace("-", "").toUpperCase()+"%");   //Need to remove dashes from code. And also make it case sens
+            orders = orderRepository.findByUsernameAndCodeOrTableWithItems(username,"%"+search.replace("-", "").toUpperCase()+"%");   //Need to remove dashes from code. And also make it case sens
         }
 
         //NEXT: MAKE SEARCH CASE INSENSITIVE

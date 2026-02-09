@@ -16,7 +16,7 @@ public class PGSTableController
 
     @GetMapping
     public List<PGSTable> getAllTables() {
-        return tableService.getAllTables();
+        return tableService.getAllTablesWithOccupation();
     }
 
     @PostMapping

@@ -283,7 +283,11 @@
           <i class="fas fa-calendar-plus"></i>
           Nova rezervacija
       </button>
-      <button class="btn btn-dash" on:click={toggleView}>
+      <button 
+                  type="button"
+
+        class="btn btn-dash" on:click={toggleView}>
+        
         <i class="fas fa-th-large"></i>
         {#if isBlockView}
           Tabelarni prikaz

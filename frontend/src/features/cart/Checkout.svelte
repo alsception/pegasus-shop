@@ -6,6 +6,7 @@
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import { push } from "svelte-spa-router";
+  import { brojStola } from './../../core/services/CheckoutStore';
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -21,12 +22,14 @@
   const stolovi = [
     "DOSTAVA",
     "ZA VAN",
+    "001",
     "100",
     "101",
     "102",
     "110",
     "120",
     "121",    
+    "129",
   ];
 
   //Authenticacion
@@ -35,7 +38,7 @@
   async function submitForm() {
     const url = API_BASE_URL + "/cart/checkout";
     const payload = {
-      stol,
+      stol: $brojStola,//ovde mora dollar sign kad ga koristimo...
       user,
       comment
     };
@@ -84,16 +87,17 @@
       <ErrorDiv {error} />
 
       {:else}
+
     <div class="text-primary mx-auto bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl" style="transform: none">
-  <!-- Header Section -->
-   <div class="p-0.5">
-        <h2 class="text-lg sm:text-2xl font-bold mb-4 text-center pt-4 text-primary">Checkout</h2>
+    <!-- Header Section -->
+     <div class="p-0 bg-primary/20 text-primary/80 rounded-t">
+        <h2 class="text-lg sm:text-2xl font-bold p-1 text-center">Checkout</h2>
       </div>
       
 
   <!-- Full-width underline -->
-  <div class="h-px bg-neutral w-full"></div>
-
+<!--   <div class="h-px bg-neutral w-full"></div>
+ -->
   <form class="p-12 w-full" on:submit|preventDefault={submitForm}>
     <!-- Contact Information Section -->
     <div class="grid grid-cols-1 mb-16 w-full">
@@ -103,11 +107,11 @@
 
             <div class="w-full md:col-span-2">
               <label for="user" class="block text-md font-medium text-gray-700 mb-2">
-                <i class="fas fa-user text-md text-gray-400 mr-2"></i>Konobar
+                <i class="fas fa-user text-md text-primary/60 mr-2"></i>Konobar
               </label>
               <input
                 id="user"
-                class="pgs-input font-mono input-ghost"
+                class="pgs-input font-mono input-ghost font-bold"
                 style="border: none;"
                 placeholder=""
                 disabled
@@ -119,12 +123,12 @@
              
               <div class="w-full">
                 <label for="stol" class="block text-md font-medium text-gray-700 mb-2">
-                <i class="fas fa-chair text-md text-gray-400 mr-2"></i>Stol
+                <i class="fas fa-chair text-md text-primary/60 mr-2"></i>Stol
               </label>
                 <select
                   id="stol"
-                  bind:value={stol}
-                  class="pgs-input font-mono"
+                  bind:value={$brojStola}
+                  class="pgs-input font-mono font-bold"
                   style="border: none;"
                 >
                   {#each stolovi as sto}

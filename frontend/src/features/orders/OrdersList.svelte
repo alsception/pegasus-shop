@@ -13,6 +13,8 @@
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import { showInfoModal } from "../../utils/modal";
+  import { fade, fly, slide } from 'svelte/transition';
+  import { quintOut } from 'svelte/easing';
 
 
 
@@ -55,6 +57,7 @@ i LITE APP!!, I MOZDA i WS.....
   let intervalId: string | number | NodeJS.Timeout | undefined;
   const REFRESH_INTERVAL = 5000; // 5 sekundi
   const autoRefresh = true;
+  let showReady = true; // Varijabla koja kontrolira vidljivost
 
   function toggleView() {
     isBlockView = !isBlockView;
@@ -323,7 +326,7 @@ i LITE APP!!, I MOZDA i WS.....
       <input
         type="text"
         bind:value={searchTerm}
-        placeholder="Traži narudžbu"
+        placeholder="Upiši broj narudžbe ili stola"
         class="input input-primary dark:input-info border-2 w-full md:flex-1 max-w-md"
       />
       
@@ -348,6 +351,14 @@ i LITE APP!!, I MOZDA i WS.....
             Kartični prikaz
           {/if}
         </button>
+
+        <button 
+          type="button"
+          on:click={() => showReady = !showReady}
+          class="btn btn-dash flex-1 md:flex-none whitespace-nowrap" 
+        >
+          {showReady ? 'Sakrij Spremne' : 'Prikaži Spremne'}
+        </button>
       </div>
     </form>
   </div>
@@ -359,56 +370,30 @@ i LITE APP!!, I MOZDA i WS.....
 
 <!-- Show each item in the order card (Block view) -->
 {#if isBlockView}
-<div class="grid grid-cols-1 md-grid-cols-2 xl:grid-cols-3 gap-4 md:gap-16 p-2">
-  <!-- WAITING -->
-  <div class="rounded-xl shadow p-4" style="background: linear-gradient(to bottom right, var(--color-wait), var(--color-base-100));">
-    <div class="mb-4 pb-2">
-      <h2 class="text-xl font-bold  flex items-center gap-2">
-        <span class="badge badge-soft badge-yellow"style="background: oklch(66.6% 0.179 58.318); color: white;">⏳ NA ČEKANJU</span>
-        <span class="text-md">({orders.filter(o => o.status === 'WAITING').length})</span>
-      </h2>
-    </div>
-    
-    <!-- ovde su u dve kolone male slicice -->
-    <div class="grid grid-cols-2 gap-4">
-      {#each orders.filter(o => o.status === 'WAITING') as order}
-         <OrderCardMd {order} liteView={true} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
-      {/each}
+<div class="flex flex-wrap md:flex-nowrap gap-4 md:gap-8 p-2">
+
+  <div class="w-full md:w-80 rounded-xl shadow p-4 pgs-orders-wait-cntr shrink-0">
+    {@render ordersWait()}
+  </div>
+
+  <div class="flex-1 rounded-xl shadow p-4 pgs-orders-inprep-cntr">
+    <div class="flex flex-wrap gap-4">
+       {@render ordersInprep()}
     </div>
   </div>
 
-  <!-- IN_PREPARATION, ovde su velike u 1 red -->
-  <div class="rounded-xl shadow p-4" style="background: linear-gradient(to bottom right, var(--color-inprep), var(--color-base-100));">
-    <div class="mb-4">
-      <h2 class="text-xl font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-        <span class="badge badge-soft badge-blue" style="background: blue; color: white;">👨‍🍳 U PRIPREMI</span>
-        <span class="text-md">({orders.filter(o => o.status === 'IN_PREPARATION').length})</span>
-      </h2>
+  {#if showReady}
+    <div 
+      class="w-full md:w-80 rounded-xl shadow p-4 pgs-orders-ready-cntr overflow-hidden"
+      in:fly={{ y: 200, duration: 400 }} 
+      out:fade={{ duration: 200 }}
+    >
+      {@render ordersReady()}
     </div>
-    
-    <div class="space-y-4">
-      {#each orders.filter(o => o.status === 'IN_PREPARATION') as order}
-        <OrderCardMd {order} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
-      {/each}
-    </div>
-  </div>
+  {/if}
 
-  <!-- READY, ovde isto male u 2 -->
-  <div class="rounded-xl shadow p-4" style="background: linear-gradient(to bottom right, var(--color-ready), var(--color-base-100));">
-    <div class="mb-4">
-      <h2 class="text-xl font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2">
-        <span class="badge badge-soft badge-green" style="background: green;color: white;">✅ SPREMNO</span>
-        <span class="text-md">({orders.filter(o => (o.status === 'READY' || o.status === 'DELIVERED' )).length})</span>
-      </h2>
-    </div>
-    
-    <div class="grid grid-cols-2 gap-4">
-      {#each orders.filter(o => (o.status === 'READY' || o.status === 'DELIVERED' )) as order}
-        <OrderCardMd {order} liteView={true} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
-      {/each}
-    </div>
-  </div>
 </div>
+
 {:else}
   <!-- Table view (existing code) -->
   <div class="max-w-[2048px] w-full overflow-x-auto rounded-lg align-middle text-center mx-auto">
@@ -484,9 +469,71 @@ i LITE APP!!, I MOZDA i WS.....
 <div class="badge badge-soft badge-error">Error</div>
 </div>
 
+{#snippet ordersWait()}     
+  <div class="mb-4 ">
+      <h2 class="text-xl  rounded font-bold  flex items-center gap-2 bg-yellow-500 text-white">
+        
+        <span class="badge badge-soft badge-lg badge-green bg-yellow-500" style="background: var(--color-yellow-500); color: white;">
+          <i class="fas fa-clock"></i> NA ČEKANJU</span>
+        <span class="text-md">({orders.filter(o => o.status === 'WAITING').length})</span>
+      </h2>
+    </div>    
+    <!-- ovde su u dve kolone male slicice -->
+    <div class="grid grid-cols-1 gap-4">
+      {#each orders.filter(o => o.status === 'WAITING') as order}
+         <OrderCardMd {order} liteView={true} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
+      {/each}
+    </div>
+{/snippet}
+
+{#snippet ordersInprep()}     
+    <div class="mb-4 w-full">
+    <h2 class="text-xl rounded font-bold   flex items-center gap-2 bg-blue-500 text-white">
+        <span class="badge badge-lg bg-blue-500 text-white flex gap-2 items-center p-3">
+          <i class="fas fa-fire-alt"></i> U PRIPREMI
+        </span>
+        <span class="text-md text-white font-bold">({orders.filter(o => o.status === 'IN_PREPARATION').length})</span>
+      </h2>
+    </div>    
+    <div class="flex flex-wrap gap-4">
+      {#each orders.filter(o => o.status === 'IN_PREPARATION') as order}
+        <div class="flex-grow min-w-[300px] max-w-[400px]">
+          <OrderCardMd {order} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
+        </div>
+      {/each}
+    </div>
+{/snippet}
+
+{#snippet ordersReady()}     
+  <div class="mb-4">
+    <h2 class="text-xl rounded font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2 bg-green-500 text-white">
+      <span class="badge badge-soft badge-lg badge-green" style="background: green; color: white;">
+        <i class="fas fa-check"></i> SPREMNO</span>
+      <span class="text-md">({orders.filter(o => (o.status === 'READY' || o.status === 'DELIVERED' )).length})</span>
+    </h2>
+  </div>  
+  <div class="grid grid-cols-1 gap-4">
+    {#each orders.filter(o => (o.status === 'READY' || o.status === 'DELIVERED' )) as order}
+      <OrderCardMd {order} liteView={true} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
+    {/each}
+  </div>
+{/snippet}
+
 <style>
   .badge {
 /*   background-color: transparent !important;
  */}
+
+ .pgs-orders-ready-cntr{
+  background: linear-gradient(to bottom right, var(--color-ready), var(--color-base-100));
+ }
+
+ .pgs-orders-wait-cntr{
+  background: linear-gradient(to bottom right, var(--color-wait), var(--color-base-100));
+ }
+
+ .pgs-orders-inprep-cntr{
+  background: linear-gradient(to bottom right, var(--color-inprep), var(--color-base-100));
+ }
 
 </style>

@@ -5,4 +5,6 @@ export interface PGSTable {
   position: string;
   rayon: string;
   department: string;
+  reserved: boolean;
+  occupied: boolean;
 }

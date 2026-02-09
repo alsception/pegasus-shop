@@ -9,7 +9,7 @@
   default: true;
   prefersdark: false;
   color-scheme: 'light';
-  --color-base-100: /*#f9f9f9*/ var(--color-stone-50);
+  --color-base-100: /*#f9f9f9*/ var(--color-stone-100);
   --color-base-200: oklch(100% 0 0);
   --color-base-300: #e7e5e4; /* This is the color of the body background in light/default theme. bg-stone-200 */
   --color-base-content: oklch(44% 0.043 257.281);
@@ -63,7 +63,7 @@
   --color-neutral-content: oklch(98% 0.001 106.423);
   --color-accent: #6f14f4;
   --color-accent-content: oklch(97% 0.013 236.62);
-  --color-success: /*oklch(76% 0.177 163.223);*/ rgb(0, 255, 88);
+  --color-success: rgb(0 255 88 / 67%);
   --color-success-content: oklch(26% 0.051 172.552);
   --color-warning: oklch(85% 0.199 91.936);
   --color-warning-content: oklch(28% 0.066 53.813);
@@ -324,9 +324,9 @@ body {
 }
 
 .pgs-input {
-  @apply w-full px-3 py-2 border border-base-300 rounded-md 
-  focus:outline-none focus:ring-2 focus:ring-sky-500 
-  focus:border-transparent /*font-bold*/ text-primary bg-base-200;
+  @apply w-full px-3 py-2 border-0 border-base-300 rounded-md 
+  focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent 
+  font-bold text-primary bg-base-100 input-ghost;
   min-width: max-content;
   min-height: 40px;
 }

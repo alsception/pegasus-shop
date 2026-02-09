@@ -8,7 +8,7 @@
   import Login from "../../core/auth/Login.svelte";
   import type { PGSTable } from "./PGSTable";
 
-  document.title = "Tables | Pegasus";
+  document.title = "Stolovi | Pegasus";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   // State variables
@@ -102,9 +102,8 @@
   {#if tables.length === 0 && !loading}
     No tables found :/
   {:else}
-    <div
-      class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 gap-8 p-4"
-    >
+    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    
       {#each tables as table, i}
         <TableCard {table} />
       {/each}

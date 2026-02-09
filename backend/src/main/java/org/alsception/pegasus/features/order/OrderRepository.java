@@ -40,10 +40,24 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
          SELECT DISTINCT o FROM PGSOrder o
          LEFT JOIN FETCH o.items
          LEFT JOIN FETCH o.user u
-         WHERE u.username = :username AND o.code LIKE :code
+         WHERE u.username = :username 
+         AND o.code LIKE :code
          ORDER BY o.created ASC
          """)
    List<PGSOrder> findByUsernameAndCodeWithItems(@Param("username") String username, @Param("code") String code);
+   
+   @Query("""
+         SELECT DISTINCT o FROM PGSOrder o
+         LEFT JOIN FETCH o.items
+         LEFT JOIN FETCH o.user u
+         WHERE u.username = :username 
+         AND 
+         (
+            o.code LIKE :search OR o.stol LIKE :search
+         )
+         ORDER BY o.created ASC
+         """)
+   List<PGSOrder> findByUsernameAndCodeOrTableWithItems(@Param("username") String username, @Param("search") String search);
 
    @Query("""
          SELECT DISTINCT o FROM PGSOrder o
@@ -69,6 +83,13 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
          ORDER BY o.created DESC
          """)
    List<PGSOrder> findByIdWithItems(@Param("id") Long id);
+   
+   @Query("""
+         SELECT DISTINCT o FROM PGSOrder o
+         LEFT JOIN FETCH o.items
+         ORDER BY o.created DESC
+         """)
+   List<PGSOrder> findAllWithItems();
 
    @Modifying
    @Transactional

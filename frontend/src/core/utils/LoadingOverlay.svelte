@@ -5,5 +5,5 @@
   <span
     class="loading loading-infinity mb-2 text-blue-500"
     style="width: 4rem; height: 2rem;"
-  ></span><span class="font-bold text-yellow-400 bg-black p-2">UČITAVAM</span>
+  ></span><span class="font-bold font-mono text-primary bg-base-200/20 p-2 text-md">UČITAVAM</span>   
 </div>

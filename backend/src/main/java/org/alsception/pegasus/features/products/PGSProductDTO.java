@@ -38,6 +38,7 @@ public class PGSProductDTO
     private List<PGSReview> reviews;   
     
     private Integer stockQuantity;
+    private Integer department;
     
     private String comment;   
     private String other;  
@@ -60,6 +61,7 @@ public class PGSProductDTO
         this.baseCurrency = getTextField(p.getBaseCurrency());
         this.unit = getTextField(p.getUnit());
         this.stockQuantity = p.getStockQuantity();       
+        this.department = p.getDepartment();       
         
         this.comment = getTextField(p.getComment());
         this.other = getTextField(p.getOther());

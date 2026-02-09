@@ -32,6 +32,10 @@ public class PGSTable
     @Column(name = "reserved", nullable = false)
     private Boolean reserved = true;
 
+    // NOVO POLJE: Postoji u JSON-u, ali se NE sprema u bazu
+    @Transient
+    private Boolean occupied = false;
+
     public PGSTable(Long id, String number, Integer capacity, String position, String rayon, String department) {
         this.id = id;
         this.number = number;

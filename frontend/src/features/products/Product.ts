@@ -21,6 +21,7 @@ export interface Product
     taxGroup: string;
 
     discount: number;
+    department: number;
     discountType: string;
     unit: string;
   

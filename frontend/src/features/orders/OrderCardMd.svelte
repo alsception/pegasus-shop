@@ -382,7 +382,7 @@
     
     -->
 
- <div class="rounded-xl shadow p-4 flex flex-col gap-2 h-fit {getBgClass(order.status)}" 
+ <div class="rounded-xl shadow p-4 flex flex-col gap-2 h-fit w-fit {liteView ? 'w-full' : 'w-fit min-w-[21rem]'} {getBgClass(order.status)}" 
     class:card-new={isNew(order.created,10) && order.status == 'WAITING'}
    
     >
@@ -425,8 +425,8 @@
           
           {#if (order.status != 'READY') && (order.comment && order.comment.toString.length > -1)}
             <div>
-              <span class="indicator-item badge badge-info text-primary bg-base-300/66 dark:bg-gray-800 rounded-md" style="">
-                Napomena:
+              <span class="indicator-item badge badge-info text-primary bg-black text-yellow-200 rounded-md" style="">
+                Napomena
               </span>
               <br>
               <div class=" bg-base-300/66 dark:bg-gray-800 border-1 border-primary/30 dark:border-gray-800 text-primary p-1 font-bold py-2 px-4 rounded-md">          
@@ -455,13 +455,18 @@
 
           <div class="flex gap-2 mt-2">
             <!-- use:link href="/orders/{order.id} -->
-            <button class="btn btn-sm btn-ghost"
-              on:click={openModal2}>Details</button>
+            <button class="btn btn-sm btn-ghost text-primary/80"
+              on:click={openModal2}>Detalji</button>
 
-            <button class="btn btn-sm btn-ghost hover:text-red-700 text-primary/60"  aria-label="Obriši" 
+            <button class="btn btn-sm btn-ghost"  aria-label="Obriši" 
               on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
+                <z
+                class=" tooltip tooltip-info tooltip-top"
+                data-tip="Obriši"
+              >
+                <i class="fas fa-trash text-primary/60" aria-label="Obriši"></i>  
+                      </z>
               
-               <i class="fas fa-trash text-primary/60" aria-label="Obriši"></i>  
             </button>
           </div>
         </div>

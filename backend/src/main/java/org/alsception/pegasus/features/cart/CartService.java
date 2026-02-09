@@ -236,10 +236,17 @@ public class CartService
         //1. Create order
         log.trace("Creating order");
         PGSOrder order = new PGSOrder();
+        
+        //assign id
         long id = CodeGenerator.generateNanoId();
         order.setId(id);
-        order.setCode(CodeGenerator.generateOrderCode("R"));
-        
+
+        //calculate suffix
+        String suffix = "R";    
+        if("DOSTAVA".equalsIgnoreCase(prc.getStol().trim())) suffix = "D";
+        else if("ZA VAN".equalsIgnoreCase(prc.getStol().trim())) suffix = "Z";
+
+        order.setCode(CodeGenerator.generateOrderCode(suffix));        
         
         //2. Assign user
         log.trace("Assigning user");

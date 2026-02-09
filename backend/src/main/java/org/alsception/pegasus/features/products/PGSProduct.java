@@ -87,6 +87,9 @@ public class PGSProduct {
     @Column
     private String other;   
     
+    @Column(nullable = false, columnDefinition = "int default 1")
+    private Integer department = 1; // 1 = KITCHEN, 2 = BAR
+    
     @Column
     private Boolean marked = false;   
     

@@ -120,7 +120,7 @@ https://svelte.dev/e/a11y_no_noninteractive_element_interactionssvelte(a11y_no_n
       on:submit|preventDefault={handleSubmit}
       on:keydown={handleKeydown}
       id="productForm"
-      class="max-w-7xl mx-auto bg-base-200/50 rounded-lg p-8 w-full space-y-8"
+      class="max-w-7xl mx-auto bg-base-200 rounded-lg p-8 w-full space-y-8"
     >
       <!-- Header Section -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -389,8 +389,7 @@ https://svelte.dev/e/a11y_no_noninteractive_element_interactionssvelte(a11y_no_n
 
       <!-- Full-width underline -->
       <div class="h-px bg-neutral w-full"></div>
-
-      <!-- Stock Section -->
+        
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
         <div class="lg:col-span-1">
           <h3 class="text-2xl font-semibold text-primary">Stock</h3>
@@ -401,6 +400,7 @@ https://svelte.dev/e/a11y_no_noninteractive_element_interactionssvelte(a11y_no_n
         <div class="lg:col-span-2">
           <div class="rounded-lg">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+              
               <div class="w-full">
                 <label
                   for="stock_quantity"
@@ -414,6 +414,23 @@ https://svelte.dev/e/a11y_no_noninteractive_element_interactionssvelte(a11y_no_n
                   bind:value={formData.stockQuantity}
                 />
               </div>
+
+              <div class="w-full">
+                <label
+                  for="department"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                  >Odjel</label
+                >
+                <select
+                  id="department"
+                  class="pgs-input"
+                  bind:value={formData.department}
+                >
+                  <option value={1}>Kuhinja</option>
+                  <option value={2}>Bar</option>
+                </select>
+              </div>
+
             </div>
           </div>
         </div>

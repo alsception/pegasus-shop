@@ -20,18 +20,7 @@
   };
 
   const allItems: Item[] = [
-    {
-      id: 0,
-      emoji: "👤",
-      title: "Korisnici",
-      description: "Upravljanje korisnicima",
-      icon: "users--",
-      href: "/users",
-      color: "blue",
-      default: false,
-      admin: true,
-      customer: false,
-    },
+    
     {
       id: 1,
       emoji: "🍔",
@@ -41,6 +30,18 @@
       href: "/products?listView=false",
       color: "green",
       default: true,
+      admin: true,
+      customer: true,
+    },
+    {
+      id: 6,
+      emoji: "🪑",
+      title: "Stolovi",
+      description: "Pregled i upravljanje stolovima",
+      icon: "--table",
+      href: "/tables",
+      color: "yellow",
+      default: false,
       admin: true,
       customer: true,
     },
@@ -93,16 +94,16 @@
       customer: true,
     },
     {
-      id: 6,
-      emoji: "🪑",
-      title: "Stolovi",
-      description: "Pregled i upravljanje stolovima",
-      icon: "--table",
-      href: "/tables",
-      color: "yellow",
+      id: 0,
+      emoji: "👤",
+      title: "Korisnici",
+      description: "Upravljanje korisnicima",
+      icon: "users--",
+      href: "/users",
+      color: "blue",
       default: false,
       admin: true,
-      customer: true,
+      customer: false,
     },
     {
       id: 7,
@@ -154,8 +155,8 @@
 
 </script>
       
-<InfoBlocks/>
-
+<!-- <InfoBlocks/>
+ -->
 <!-- <Charts/> -->
 
 <div

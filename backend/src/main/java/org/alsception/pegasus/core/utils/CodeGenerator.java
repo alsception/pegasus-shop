@@ -50,9 +50,9 @@ public class CodeGenerator
      * Rolls over to "000" after "999".
      * Prefix meaning: R - restoran, T - take away, D - delivery
      */
-    public static String generateOrderCode(String prefix) {
+    public static String generateOrderCode(String sufix) {
         long value = 1 + threeDigitCounter.getAndIncrement() % 1000;
-        String code = prefix+String.format("%03d", value);
+        String code = String.format("%03d", value)+sufix;
         log.trace("Generated 3-digit code: " + code);
         return code;
     }

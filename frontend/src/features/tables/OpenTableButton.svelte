@@ -1,19 +1,26 @@
 <script lang="ts">
+  import type { PGSTable } from "./PGSTable";
+  import { brojStola } from './../../core/services/CheckoutStore';
+  import { push } from 'svelte-spa-router';
+
   /**
    * //TODO: ovde treba videti dali se sto vec koristi prvo pre otvaranja
    */
 
-  //import { addToCart } from "./ProductService";
-  //import { addToCartLoading } from "./ProductService";
+  export let isAvailable = true;
+  export let table: PGSTable;
 
-  //export let product;
-  //export let width;
+  let width = "116px;"
+  
+  function handleClick() 
+  {
+    // Postavljaš vrijednost u store (ovo automatski sprema u localStorage)
+    brojStola.set(table.number);
 
-  let isAvailable = true;
-  let width = "136px;"
+    // Navigacija na drugu stranicu
+    push('/products');
+  }
 </script>
-
-
 
 {#if !isAvailable}
   <button
@@ -38,11 +45,11 @@
   </button> -->
 {:else}
   <button
-    class="btn bg-green-400"
-    style="width: {width}"
-    
+    class="btn btn-primary"
+    style="width: {width};"
+    on:click={handleClick}    
   >
-    <span data-text="Otvori" class="text-black/80">       
+    <span data-text="Otvori" class="font-mono">       
        <i class="fa fa-plus" aria-hidden="true"></i> Otvori</span>
     <div class="scan-line"></div>
   </button>

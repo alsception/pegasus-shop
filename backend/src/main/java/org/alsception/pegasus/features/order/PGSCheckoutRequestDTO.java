@@ -2,8 +2,8 @@ package org.alsception.pegasus.features.order;
 
 public class PGSCheckoutRequestDTO
 {
-    private String stol;
-    private String comment;
+    private String stol = "";
+    private String comment = "";
 
     public PGSCheckoutRequestDTO() {
     }

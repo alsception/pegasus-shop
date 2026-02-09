@@ -102,6 +102,14 @@ public class NotificationService {
                 .orElseThrow(() -> new RuntimeException("Notification not found with id: " + id));
     }
 
+    /**
+     * TODO: 
+     * isBlank će da uzrokuje error ako je stol null:
+     * Error updating order: Cannot invoke "String.isBlank()" because the return value of "org.alsception.pegasus.features.order.PGSOrder.getStol()" is null
+        java.lang.NullPointerException: Cannot invoke "String.isBlank()" because the return value of "org.alsception.pegasus.features.order.PGSOrder.getStol()" is null
+	    at org.alsception.pegasus.features.notifications.NotificationService.createOrderStatusText(NotificationService.java:132)
+     */
+
     public String createNewOrderText(PGSOrder order)
     {
         String text = "Nova narudžba <b>"+order.getCode()+"</b>, konobar <b>"+order.getUser().getUsername()+"</b>"
