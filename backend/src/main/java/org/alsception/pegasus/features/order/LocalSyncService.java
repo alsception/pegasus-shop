@@ -28,8 +28,9 @@ public class LocalSyncService {
     private String apiKey;
 
     /**
-     * TODO: dodati parametar enabled/
+     * TODO: dodati parametar enabled iz parameters
      */
+    boolean cloudSyncEnabled = false;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -43,37 +44,40 @@ public class LocalSyncService {
         * E sad, nebi trebalo ovde da saljemo user korisnika, dovoljno je samo ime. (todo)
         */
 
-
-        logger.info("Initiating cloud sync");
-        List<PGSOrder> unsynced = orderRepository.findBySyncedFalseWithItems();
-
-        logger.info("Found unsynced orders: "+unsynced.size());
-        for (PGSOrder order : unsynced) 
+        if(cloudSyncEnabled)
         {
-            try 
+            logger.info("Initiating cloud sync");
+            List<PGSOrder> unsynced = orderRepository.findBySyncedFalseWithItems();
+
+            logger.info("Found unsynced orders: "+unsynced.size());
+            for (PGSOrder order : unsynced) 
             {
-                // Postavljanje headera sa tajnim ključem
-                HttpHeaders headers = new HttpHeaders();
-                headers.set("X-API-KEY", apiKey);
-                headers.setContentType(MediaType.APPLICATION_JSON);
+                try 
+                {
+                    // Postavljanje headera sa tajnim ključem
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.set("X-API-KEY", apiKey);
+                    headers.setContentType(MediaType.APPLICATION_JSON);
 
-                HttpEntity<PGSOrder> request = new HttpEntity<>(order, headers);
+                    HttpEntity<PGSOrder> request = new HttpEntity<>(order, headers);
 
-                // Slanje na Cloud
-                logger.info("Sending order "+order.getId() + " " + cloudUrl + "/api/sync/orders");
-                restTemplate.postForEntity(cloudUrl + "/api/sync/orders", request, String.class);
+                    // Slanje na Cloud
+                    logger.info("Sending order "+order.getId() + " " + cloudUrl + "/api/sync/orders");
+                    restTemplate.postForEntity(cloudUrl + "/api/sync/orders", request, String.class);
 
-                // Ako je uspjelo, označi kao sinkronizirano
-                order.setSynced(true);
-                orderRepository.save(order);
+                    // Ako je uspjelo, označi kao sinkronizirano
+                    order.setSynced(true);
+                    orderRepository.save(order);
 
-                logger.info("Order sent");
-            } 
-            catch (Exception e) 
-            {
-                logger.error("Greska prilikom sinhronizacije narudzbi: " + e.getMessage());
-                break; // Prekini petlju do idućeg pokušaja
+                    logger.info("Order sent");
+                } 
+                catch (Exception e) 
+                {
+                    logger.error("Greska prilikom sinhronizacije narudzbi: " + e.getMessage());
+                    break; // Prekini petlju do idućeg pokušaja
+                }
             }
         }
+        
     }
 }

@@ -7,14 +7,14 @@
   import api from "../../core/services/client";
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
-  import { formatDateTime } from "../../utils/formatting";
+  import { formatDateTime, formattedTime, getOrderStatusColor, getOrderStatusLabel } from "../../utils/formatting";
   import { showSuccessToast } from "../../core/utils/toaster";
 
   document.title = "Order details | Pegasus";
 
   let loading: boolean = false;
   let error: string | null = null;
-  let ID: number | string;
+  export let ID: number | string;
 
   //Authenticacion
   $: isAuthenticated = $auth.isAuthenticated;
@@ -25,6 +25,10 @@
       fetch(ID); // reactively fetch when id changes
     }
   }
+
+  onMount(() => {
+    fetch(ID);
+  });
 
   // Available order statuses
   const orderStatuses = [
@@ -68,6 +72,8 @@
     modified: null,
     shippedDate: null,
     deliveredDate: null,
+    upripremiAt: null,
+    spremnoAt: null
   };
 
   async function fetch(id: string | number) 
@@ -246,10 +252,10 @@
       on:submit|preventDefault={handleSubmit}
       on:keydown={handleKeydown}
       id="orderForm"
-      class="max-w-7xl mx-auto bg-base-100 rounded-lg p-8 w-full space-y-8"
+      class="max-w-7xl mx-auto bg-base-100 rounded-lg p-2 w-full space-y-8"
     >
       <!-- Header Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 hidden">
         <div class="lg:col-span-1">
           <div class="flex items-center gap-4">
             <h2 class="text-4xl font-semibold text-primary">Order details</h2>
@@ -262,18 +268,9 @@
           </div>
         </div>
       </div>
-
-      <!-- Full-width underline -->
-      <div class="h-px bg-neutral w-full"></div>
-
       <!-- Order Information Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-        <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">Order Information</h3>
-          <p class="text-secondary text-sm mt-2">
-            Basic order details and status
-          </p>
-        </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+      
         <div class="lg:col-span-2">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div class="w-full">
@@ -281,8 +278,8 @@
                 for="code"
                 class="block text-sm font-medium text-gray-700 mb-2"
               >
-                <i class="fas fa-hashtag text-xs text-gray-400 mr-2"></i>Order
-                Number
+                <i class="fas fa-hashtag text-xs text-gray-400 mr-2"></i>
+                Broj
               </label>
               <input
                 id="code"
@@ -294,12 +291,17 @@
    
 
             <div class="w-full">
-              <label
+              {#if formData.status}
+                <span class="badge badge-soft badge-{getOrderStatusColor(formData.status)} font-mono badge-lg" style="text-transform: uppercase;">
+                  {getOrderStatusLabel( formData.status )}
+                </span>
+              {/if}
+              <!-- <label
                 for="orderStatus"
                 class="block text-sm font-medium text-gray-700 mb-2"
                 >Status</label
-              >
-              <select
+              > -->
+              <!-- <select
                 id="orderStatus"
                 bind:value={formData.status}
                 class="pgs-input font-mono"
@@ -307,7 +309,7 @@
                 {#each orderStatuses as status}
                   <option value={status}>{status}</option>
                 {/each}
-              </select>
+              </select> -->
             </div>
 
             <!-- <div class="w-full">
@@ -329,94 +331,82 @@
             </div> -->
 
 
-            <div class="w-full">
-              <div class="rounded-lg p-6">
-                <div class="flex flex-col">
+           
+
+          </div>
+        </div>
+      </div>
+
+ <div class="w-full">
+              <div class="rounded-lg p-">
+<!-- 
+<ul class="steps">
+  <li data-content="Primljeno" class="step step-primary">Register</li>
+  <li class="step step-primary">Purchase</li>
+  <li class="step">Receive Product</li>
+</ul> -->
+
+                <div class="flex">
                   <div
                     class="flex flex-col sm:flex-row flex-wrap gap-x-10 gap-y-2 text-md text-secondary"
                   >
-                    <span class="flex items-center gap-2 min-w-[200px] text-sm">
-                      <i class="fas fa-calendar-plus text-gray-400"></i>
-                      Created:
-                      <span class="font-mono"
-                        >{formatDateTime(formData.created)}</span
+                    <span class="flex items-center gap-2 min-w-[100px] text-md badge badge-warning badge-lg">
+                      <i class="fas fa-edit"></i>
+                      <span class="font-mono font-bold"
+                        >{formattedTime(formData.created)}</span
                       >
                     </span>
-                    <span class="flex items-center gap-2 min-w-[200px] text-sm">
-                      <i class="fas fa-edit text-gray-400"></i>
-                      Modified:
-                      <span class="font-mono"
-                        >{formatDateTime(formData.modified)}</span
+                    {#if formData.upripremiAt != null}
+                      <span class="flex items-center gap-2 min-w-[100px] text-md badge badge-info badge-lg">
+                      <i class="fas fa-fire"></i>
+                      <span class="font-mono font-bold"
+                        >{formattedTime(formData.upripremiAt)}</span
                       >
                     </span>
+                    {/if}
+                    
+                    {#if formData.spremnoAt != null}
+
+                    <span class="flex items-center gap-2 min-w-[100px] text-md badge badge-success badge-lg">
+                      <i class="fas fa-check"></i>
+                      <span class="font-mono font-bold"
+                        >{formattedTime(formData.spremnoAt)}</span
+                      >
+                    </span>
+                                        {/if}
+
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-
-      <!-- Customer Information Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16 hidden">
-        <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">
-            Customer Information
-          </h3>
-          <p class="text-secondary text-sm mt-2">Customer contact details</p>
-        </div>
-        <div class="lg:col-span-2">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div class="w-full">
-              <label
-                for="customerName"
-                class="block text-sm font-medium text-gray-700 mb-2"
-              >
-                <i class="fas fa-user text-xs text-gray-400 mr-2"></i>Customer
-                Name
-              </label>
-              <input
-                id="customerName"
-                class="pgs-input"
-                bind:value={formData.name}
-              />
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- Full-width underline -->
       <div class="h-px bg-neutral w-full"></div>
 
+
+
+
       <!-- Order Items Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-        <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">Order Items</h3>
-          <p class="text-secondary text-sm mt-2">
-            Products included in this order
-          </p>
-        </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">    
         <div class="lg:col-span-2">
           <div class="space-y-4">
             {#if formData.items && formData.items.length > 0}
               <div class="divide-y divide-gray-200 dark:divide-slate-700">
                 {#each formData.items as item, index (item.id || index)}
-                  <div class="py-4 grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                  <div class="py-4 grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                     <div class="md:col-span-2">
                       <p class="text-base font-medium">{item.product?.name || item.productName || 'Product'}</p>
                       <p class="text-sm text-gray-500"> {item?.created || '-'}</p>
                     </div>
-                    <div class="text-center">
+                    <!-- <div class="text-center">
                       <label class="block text-xs text-gray-500 mb-1">Quantity</label>
                       <input
+                      id="pgs-oi-{index}"
                         type="number"
                         min="1"
-                        class="pgs-input w-20 text-center"
+                        class="pgs-input text-center"
+                        style="width: 4pxm !important;"
                         bind:value={item.quantity}
                       />
-                    </div>
+                    </div> -->
                     <div class="text-right">
                       <p class="text-sm text-gray-500">
                         {item.quantity} × {formatPrice(item.unitPrice || item.product?.basePrice || 0)}
@@ -443,20 +433,20 @@
       <div class="h-px bg-neutral w-full"></div>
 
       <!-- Notes Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-        <div class="lg:col-span-1">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+       <!--  <div class="lg:col-span-1">
           <h3 class="text-2xl font-semibold text-primary">Notes</h3>
           <p class="text-secondary text-sm mt-2">
             Additional order notes and comments
           </p>
-        </div>
+        </div> -->
      
         <div class="lg:col-span-2">
           <div class="w-full">
             <label
               for="notes"
               class="block text-sm font-medium text-gray-700 mb-2"
-              > Notes</label
+              > Napomena</label
             >
             <textarea
               id="notes"
@@ -469,9 +459,9 @@
       </div>
 
       <!-- Full-width underline -->
-      <div class="h-px bg-neutral w-full"></div>
+      <div class="h-px bg-neutral w-full hidden"></div>
 
-      <div class="grid grid-cols-1">
+      <div class="grid grid-cols-1 ">
         <div class="flex justify-end gap-3 pt-4">
           <button
             type="button"

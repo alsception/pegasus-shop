@@ -495,7 +495,7 @@ i LITE APP!!, I MOZDA i WS.....
         <span class="text-md text-white font-bold">({orders.filter(o => o.status === 'IN_PREPARATION').length})</span>
       </h2>
     </div>    
-    <div class="flex flex-wrap gap-4">
+    <div class="flex flex-wrap gap-8">
       {#each orders.filter(o => o.status === 'IN_PREPARATION') as order}
         <div class="flex-grow min-w-[300px] max-w-[400px]">
           <OrderCardMd {order} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>

@@ -42,6 +42,8 @@ public final class OrderMapper {
         dto.setPrice(order.getPrice());
         dto.setCreated(order.getCreated());
         dto.setModified(order.getModified());
+        dto.setUPripremiAt(order.getUPripremiAt());
+        dto.setSpremnoAt(order.getSpremnoAt());
 
         if (order.getUser() != null) {
             dto.setUserId(order.getUser().getId());
@@ -118,7 +120,8 @@ public final class OrderMapper {
         order.setComment(dto.getComment());
         order.setPrice(dto.getPrice());
         order.setUser(dto.getUser());
-        /*order.setTable(table);*/
+        order.setUPripremiAt(dto.getUPripremiAt());
+        order.setSpremnoAt(dto.getSpremnoAt());
 
         List<PGSOrderItem> items = new ArrayList<>();
         if (dto.getItems() != null) {

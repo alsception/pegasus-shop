@@ -18,6 +18,8 @@ export interface Order {
   items: OrderItem[];
   created?: string; // LocalDateTime as ISO string
   modified?: string | null; // LocalDateTime as ISO string, nullable so optional
+  upripremiAt?: string | null;
+  spremnoAt?: string | null;
   status?: string;
 }
 

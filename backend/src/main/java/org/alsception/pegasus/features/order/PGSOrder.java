@@ -33,7 +33,7 @@ public class PGSOrder
     /*@GeneratedValue(strategy = GenerationType.IDENTITY)*/
     private Long id;
     
-    @ManyToOne(fetch = FetchType.LAZY) // I ovo
+    @ManyToOne(fetch = FetchType.EAGER) // TODO: za sad je eager, a posle bi mozda trebo da bude lazy
     @JoinColumn(name = "user_id")
     //@JsonBackReference
     private PGSUser user;
@@ -51,9 +51,7 @@ public class PGSOrder
     @Column(precision = 19, scale = 2, nullable = true)
     private BigDecimal price; 
     
-    //@JsonIgnore
     @JsonManagedReference
-    //⚠️ Ovo može izazvati probleme sa performansama ako lista items sadrži mnogo podataka.
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PGSOrderItem> items = new ArrayList<>();
     
@@ -66,6 +64,12 @@ public class PGSOrder
     
     @Column(nullable = true)
     private LocalDateTime modified;
+
+    @Column(nullable = true)
+    private LocalDateTime uPripremiAt;
+
+    @Column(nullable = true)
+    private LocalDateTime spremnoAt;
 
     // Ključno polje za sinkronizaciju
     private boolean synced = false;

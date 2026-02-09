@@ -27,12 +27,20 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
 
    // ========== LAZY LOADING: Orders bellow will be loaded WITH items (eager loading with JOIN FETCH) ==========
 
+   /**
+       * We use this one in production
+       * @param username
+       * @return
+          */
    @Query("""
-         SELECT DISTINCT o FROM PGSOrder o
-         LEFT JOIN FETCH o.items
-         LEFT JOIN FETCH o.user u
-         WHERE u.username = :username
-         ORDER BY o.created ASC
+            SELECT DISTINCT o FROM PGSOrder o
+            LEFT JOIN FETCH o.items
+            LEFT JOIN FETCH o.user u
+            WHERE u.username = :username
+            AND (
+                  o.created >= CURRENT_DATE
+            )
+            ORDER BY o.created ASC
          """)
    List<PGSOrder> findByUsernameWithItems(@Param("username") String username);
 
@@ -46,6 +54,12 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
          """)
    List<PGSOrder> findByUsernameAndCodeWithItems(@Param("username") String username, @Param("code") String code);
    
+   /**
+       * Used in production by service
+       * @param username
+       * @param search
+       * @return
+       */
    @Query("""
          SELECT DISTINCT o FROM PGSOrder o
          LEFT JOIN FETCH o.items
@@ -53,10 +67,15 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
          WHERE u.username = :username 
          AND 
          (
-            o.code LIKE :search OR o.stol LIKE :search
+            o.code LIKE :search OR o.stol LIKE :search            
          )
+         AND
+         (
+            o.created >= CURRENT_DATE
+         )   
          ORDER BY o.created ASC
          """)
+         
    List<PGSOrder> findByUsernameAndCodeOrTableWithItems(@Param("username") String username, @Param("search") String search);
 
    @Query("""

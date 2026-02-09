@@ -484,16 +484,16 @@
 <!-- Modal -->
 {#if showModal2}
   <div class="modal modal-open  pt-10" style="backdrop-filter: blur(10px);">
-  <div class="modal-box max-h-[90vh] w-11/12 max-w-5xl p-0 flex flex-col">
+  <div class="modal-box max-h-[90vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-200">
     
     <!-- Fixed Header -->
     <div class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300">
-      <h3 class="font-bold text-lg">Naslov Modala</h3>
+      <h3 class="font-bold text-lg">Detalji narudžbe</h3>
     </div>
     
     <!-- Scrollable Content -->
     <div class="overflow-y-auto flex-1 px-6 py-4">
-      <OrderDetails></OrderDetails>
+      <OrderDetails ID={order.id}></OrderDetails>
     </div>
     
     <!-- Fixed Footer -->

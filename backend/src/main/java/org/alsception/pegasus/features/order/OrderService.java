@@ -1,6 +1,7 @@
 package org.alsception.pegasus.features.order;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.alsception.pegasus.features.products.ProductRepository;
 import org.slf4j.Logger;
@@ -202,11 +203,13 @@ public class OrderService
         {
             msg = notificationService.createOrderReadyText(order);
             type = "3";
+            order.setSpremnoAt(LocalDateTime.now());
         }
         else if(status.equals("IN_PREPARATION"))
         {
             msg = notificationService.createOrderInprepText(order);
             type = "2";
+            order.setUPripremiAt(LocalDateTime.now());
         }
         else 
         {
