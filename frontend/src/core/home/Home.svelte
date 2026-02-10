@@ -174,8 +174,8 @@
             <div class="card-content">
                 <span class="icon">{item.emoji}</span>
                  <h2 class="title">{item.title}</h2>
-                <p class="description"> {item.description}</p>
-            </div>
+<!--                 <p class="description"> {item.description}</p>
+ -->            </div>
             <span class="arrow">→</span>
         </div>
     </a>

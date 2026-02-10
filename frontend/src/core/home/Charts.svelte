@@ -36,6 +36,12 @@
           },
           colors: ['#1b9e77'],
           height: 400,
+              backgroundColor_: 'transparent',
+              backgroundColor: {
+              fill: '#F4F4F4',
+              opacity: 100
+          },
+
         };
 
         var chart = new google.charts.Bar(document.getElementById('chart_div'));
@@ -92,8 +98,8 @@
     border-radius: 50%;
     /* Postotke podešavaš ovdje: */
     background: conic-gradient(
-      #4CAF50 0% 80%,      /* Restoran - 30% */
-      #2196F3 30% 55%,     /* Dostava - 25% */
+      #4caf4f7c 0% 80%,      /* Restoran - 30% */
+      #2195f39c 30% 55%,     /* Dostava - 25% */
       #FFC107 55% 80%,     /* Wolt - 25% */
       #FF5722 80% 100%     /* Takeaway - 20% */
     );
