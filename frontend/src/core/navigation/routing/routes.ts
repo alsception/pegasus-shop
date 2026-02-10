@@ -1,6 +1,7 @@
 import type { ComponentRegistry}    from "../menu/MenuTypes";
 import { navRoutes }                from "../menu/navRoutes";//Routes are here
 import Home                         from "../../home/Home.svelte";
+import Stats                         from "../../home/Stats.svelte";
 
 import Users                        from "../../../features/users/UsersList.svelte";
 import UserDetails                  from "../../../features/users/UserDetails.svelte";
@@ -38,6 +39,7 @@ export const components: ComponentRegistry =
 {
     "/": Home,
     "/home": Home,
+    "/stats": Stats,
     "/products": Products,
     "/products/:id": ProductDetail,
     "/products/mngmt/:id": ProductAdministration,
@@ -84,6 +86,7 @@ export function generateRoutes()
     
     //I dont know if these routes are found in navroutes, and I want them to be all the time
     routes["/"] = Home;
+    routes["/stats"] = Stats;
     routes["/users/my-account"] = MyAccount;
     routes["/orders/:id"] = OrderDetails;
 

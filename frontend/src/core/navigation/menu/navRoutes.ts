@@ -15,6 +15,15 @@ export const navRoutes: NavRoutesMap =
       customer: false,
       default: true,
     },
+    "/stats": {
+      label: "Stats",
+      icon: "bar-chart",
+      href: "#/stats",
+      component: "/stats",
+      admin: true,
+      customer: true,
+      default: true,
+    },
     "/users": {
       label: "Users",
       icon: "users",
