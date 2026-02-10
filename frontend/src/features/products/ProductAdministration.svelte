@@ -25,7 +25,7 @@
   $: {
     if ($params?.id) {
       ID = Number($params.id);
-      fetch(ID); // reactively fetch when id changes
+      if(ID!=0) fetch(ID); // reactively fetch when id changes, if id=0 backend will create new
     }
   }
 

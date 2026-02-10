@@ -34,7 +34,16 @@
     <div class="flex items-center justify-between mt-4">
       <span class="text-2xl font-bold text-primary">
         € {product.priceEur}
-      </span>      
+      </span>   
+      
+      {#if product.discount }
+
+      <span class="text-xl font-bold text-error">
+        € {product.discount}
+      </span>   
+
+      {/if}
+
       <AddToCartButton {product} width="100px" />
     </div>    
   </div>

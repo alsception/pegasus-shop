@@ -445,11 +445,11 @@ i LITE APP!!, I MOZDA i WS.....
       </tbody>
       </table>
     <div class="nb-table-footer text-left bg-secondary" style="background-color: var(--color-base-100);">
-      Total orders found:
+      Ukupno narudžbi:
       <span class="font-bold"> {orders.length}</span>
     <br>
     <br>
-      Total amount: <span class="font-bold">{formatPrice(totalAmount)}</span>
+      Promet: <span class="font-bold font-mono text-2xl text-success">{formatPrice(totalAmount)}</span>
     </div>
     </div>
   </div>

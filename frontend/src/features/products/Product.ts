@@ -7,11 +7,12 @@ export interface Product
     active: boolean;
     description: string;
 
+    /**
+     * jedan od ova dva ce morati da ide. todo
+     */
     priceEur: number;
     basePrice: number;
-    priceUsd: number;
     imageUrl: string;
-    reviews: ProductReview[];
 
     category: string;
     brand: string;
@@ -34,12 +35,3 @@ export interface Product
     created?: Date | EpochTimeStamp | string;
     modified?: Date | EpochTimeStamp | string;
 }
-
-// Define ProductReview type
-type ProductReview = 
-{
-    id: number;
-    rating: number;
-    reviewer: string;
-    text: string;
-};

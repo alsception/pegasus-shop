@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { link } from "svelte-spa-router";
   import { get } from "svelte/store";
-  import { auth, isAdmin } from "../../core/services/SessionStore";
+  import { auth, getCurrentRole, isAdmin } from "../../core/services/SessionStore";
   import { formatDate } from "../../utils/formatting";
   import { formatActive } from "../../utils/formatting";
   import { formatCommentInfo } from "../../utils/formatting";
@@ -209,13 +209,32 @@
 
           <!-- Donji red: Kategorije, Pagination i View toggle -->
           <div class="flex gap-2 items-center">
+            
             <div class="flex-1">
               <ProductCategories bind:selectedCategory onSelect={handleCategorySelect} />
             </div>
+
+          {#if getCurrentRole() === 'ADMIN'}
+            <button
+              type="button"
+              on:click={() => window.location.href = '#/products/mngmt/0'}
+              class="btn btn-dash flex-1 lg:flex-none whitespace-nowrap"
+            >       
+              <i class="fas fa-plus"></i>
+              Dodaj novi
+            </button>
+      <!--       <a
+  href="/novi"
+  class="btn btn-dash flex-1 lg:flex-none whitespace-nowrap"
+>
+  <i class="fas fa-plus"></i>
+  Dodaj novi
+</a> -->
+            {/if}
             
             <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
-              Page <b>{page + 1}</b> of <b>{totalPages}</b>
-              <span class="hidden md:inline"> | Total: <b>{totalProducts}</b></span>
+              Strana <b>{page + 1}</b> od <b>{totalPages}</b>
+              <span class="hidden md:inline"> | Ukupno: <b>{totalProducts}</b></span>
             </div>
             
             <button type="button" on:click={toggleView} class="btn btn-dash whitespace-nowrap">

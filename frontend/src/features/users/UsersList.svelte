@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { link } from "svelte-spa-router";
-  import { auth } from "../../core/services/SessionStore";
+  import { auth, getCurrentRole } from "../../core/services/SessionStore";
   import { get } from "svelte/store";
   import { formatCommentInfo, formatDate } from "../../utils/formatting";
   import { formatActive } from "../../utils/formatting";
@@ -268,7 +268,7 @@
             <i class="fas fa-search"></i>
             Traži
           </button>
-        
+        {#if getCurrentRole() === 'ADMIN'}
           <button
             type="button"
             on:click={openCreateModal}
@@ -278,6 +278,7 @@
             <i class="fas fa-user"></i>
             Novi korisnik
           </button>
+          {/if}
         </div>
       </form>
     </div>

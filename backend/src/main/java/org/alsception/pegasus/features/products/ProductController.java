@@ -2,9 +2,6 @@ package org.alsception.pegasus.features.products;
 
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
-import org.alsception.pegasus.features.products.PopularProductsWrapper;
-import org.alsception.pegasus.features.products.PGSProduct;
-import org.alsception.pegasus.core.security.AuthController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,12 +73,25 @@ public class ProductController
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<PGSProduct> updateProduct(@PathVariable Long id, @RequestBody PGSProduct updatedProduct) 
+    public ResponseEntity<PGSProduct> updateProduct(@PathVariable Long id, @RequestBody PGSProduct p) 
     {
+        if(id==0l)
+        {
+            try {
+                logger.debug("received new product: ");
+                logger.debug(p.toString());
+                return ResponseEntity.ok(productService.createProduct(p));
+            } 
+            catch (Exception e) 
+            {
+                logger.error("Greska prilikom kreiranja novog proizvoda", e);
+                return ResponseEntity.internalServerError().build();
+            }
+        }
         try {
             logger.debug("received product: ");
-            logger.debug(updatedProduct.toString());
-            PGSProduct product = productService.updateProduct(id, updatedProduct);
+            logger.debug(p.toString());
+            PGSProduct product = productService.updateProduct(id, p);
             return ResponseEntity.ok(product);
         } 
         catch (EntityNotFoundException e) 

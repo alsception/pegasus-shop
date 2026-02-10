@@ -32,6 +32,8 @@ public class PGSProductDTO
     
     private String baseCurrency;    
     private BigDecimal priceEur;
+    private BigDecimal basePrice;
+    private BigDecimal discount;
     
     private String unit;    
     
@@ -54,7 +56,12 @@ public class PGSProductDTO
         this.id = p.getId();
         this.name = getTextField(p.getName());
         this.code = getTextField(p.getCode());
+        /**
+         * usaglasiti sa frontendom pa videti zasto dva polja idu u jedno . todo
+         */
         this.priceEur = p.getBasePrice();
+        this.basePrice = p.getBasePrice();
+        this.discount = p.getDiscount();
         this.description = getTextField(p.getDescription());
         this.imageUrl = getTextField(p.getImageUrl());
         

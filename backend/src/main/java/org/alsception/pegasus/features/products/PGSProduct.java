@@ -49,13 +49,16 @@ public class PGSProduct {
     @Column(precision = 19, scale = 2, nullable = false)
     private BigDecimal basePrice; 
 
+    @Column(precision = 19, scale = 2, nullable = true)
+    private BigDecimal discount; 
+
     @Column(length = 3, nullable = false)
     private String baseCurrency = "EUR"; // Default currency   
         
     @Column(length = 255)
     private String imageUrl;
     
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer stockQuantity;
     
     @Getter(AccessLevel.NONE)
