@@ -7,7 +7,7 @@ import Users                        from "../../../features/users/UsersList.svel
 import UserDetails                  from "../../../features/users/UserDetails.svelte";
 import MyAccount                    from "../../../features/users/MyAccount.svelte";
 
-import Products                     from "../../../features/products/ProductsList.svelte";
+import Products                     from "../../../features/products/ProductsListBarbacoa.svelte";
 import ProductDetail                from "../../../features/products/ProductPage.svelte";
 import ProductAdministration        from "../../../features/products/ProductAdministration.svelte";
 

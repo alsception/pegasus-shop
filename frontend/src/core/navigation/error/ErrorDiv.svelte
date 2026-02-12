@@ -15,9 +15,7 @@
   {#if isErr500}
   
     <img src={errorImg} alt="Fetch error illustration" class="max-w-128" />
-    <h2 style="/*position: relative; top: -70px;*/" class="text-primary mt-4">
-      Server error :(
-    </h2>
+    
     <p class="text-red-500 text-xl mt-8 text-center dark:text-red-400 bg-error-content p-2">
         {error}
     </p>

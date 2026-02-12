@@ -3,8 +3,17 @@
   import { getCurrentRole } from "../services/SessionStore";
   import InfoBlocks from "./InfoBlocks.svelte";
   import Charts from "./Charts.svelte";
+  import api from "../../core/services/client";
+  import InfoModal from "../utils/InfoModal.svelte";
+  import { showInfoModal } from "../../utils/modal";
+  import LoadingOverlay from "../utils/LoadingOverlay.svelte";
+
 
   document.title = "Pegasus";
+
+  let isLoading = false;
+
+  const syncUrl = '/barbacoa/sync';
 
   /**
    * TODO ovde verovatno treba obrisati 90% koda lol
@@ -158,16 +167,53 @@
     );
   });
 
+  async function syncData() {
+  isLoading = true;
+    let syncMessage;
+    try 
+    {
+      let result = await api<any>(syncUrl, {
+        method: "POST",
+      });
+
+      syncMessage = await result; // ili result.message ako je objekat
+      console.log(syncMessage)
+      
+    } catch (error) {
+      console.log(error);
+      syncMessage = 'Greška pri sinhronizaciji';
+    } finally {
+     isLoading = false;
+
+      showInfoModal(syncMessage['message']);
+    }
+  }
 </script>
       
 <InfoBlocks/>
 
 <Charts/> 
 
+  {#if isLoading}
+
+      <LoadingOverlay/>
+  
+    {/if}
+
 <div
   class="max-w-9xl mx-auto px-6 py-10
   grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 scale-up-center-normal menu-container"
 >
+<div class="flex flex-row gap-3 w-full md:w-auto">
+        <button
+          type="submit" 
+          onclick={syncData}
+          class="btn btn-primary flex-1 md:flex-none whitespace-nowrap"
+        >
+          <i class="fas fa-sync"></i>
+          Importuj jelovnik
+        </button>
+</div>
   <!-- {#each displayedItems as item}
 
 

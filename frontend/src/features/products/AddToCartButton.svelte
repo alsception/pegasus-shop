@@ -33,13 +33,13 @@
     <span class="loading loading-dots loading-xs"></span>
   </button>
 {:else}
+<!-- background-color:#FFEB3B; -->
   <button
-    class="btn"
-    style="width: {width}; background-color:#FFEB3B;"
+    class="btn btn-secondary"
+    style="width: {width}; "
+    aria-label="Dodaj"
     on:click={() => addToCart(product.id)}
   >
-    <span data-text="Add to cart" class="text-black/80">       
-       <i class="fa fa-cart-plus" aria-hidden="true"></i> Dodaj</span>
-    <div class="scan-line"></div>
+       <i class="fa fa-plus" aria-hidden="true"></i>
   </button>
 {/if}

@@ -28,7 +28,7 @@
   async function fetchProduct(id: number) {
     loading = true;
     try {
-      const res = await fetch(API_BASE_URL + `/products/${id}`, {
+      const res = await fetch(API_BASE_URL + `/barbacoa/products/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -82,9 +82,9 @@
         <span class="text-gray-400 dark:text-gray-500">No image available</span>
       {/if}
     </div>
-    <h1>
-      {product.name}
-      {#if isAdminView}
+    <h1 class="text-primary text-2xl">
+      {product.title}
+      {#if false}
         <a
           class="text-gray-400 hover:text-blue-300 text-md"
           use:link
@@ -97,29 +97,23 @@
       {/if}
     </h1>
     <div class="flex gap-2"></div>
-    <p class="product-detail">Code:</p>
-    <p>{product.code}</p>
-    <p class="product-detail">Name:</p>
-    <p>{product.name}</p>
-    <p class="product-detail">Description:</p>
+    
+    {#if product.description}
     <p>{product.description}</p>
-    <p class="product-detail">Price:</p>
-    <p>€{product.priceEur}</p>
-    <p class="product-detail">Category:</p>
-    <p>{product.category}</p>
-    <p class="product-detail">Stock Quantity:</p>
-    <p>{product.stockQuantity}</p>
-    <p class="product-detail">Comment:</p>
-    <p>{product.comment}</p>
-    <p class="product-detail">Available:</p>
-    <p>{product.active === true ? "YES ✅" : "NO ⛔"}</p>
-
+     {/if}
+    <h3 class="product-detail"
+      style="font-size: x-large;">€{product.priceBottle}</h3>
+    <p></p>
+   
     <div class="w-full flex mr-0 mt-6">
       <button type="button" on:click={close} class=" btn btn-ghost mr-5">
       <i class="fa fa-close"></i>
-      Close
+      Zatvori
       </button>
-      <AddToCartButton {product} width="135px" />
+      <div class="ml-auto">
+        <AddToCartButton {product} width="75px" />
+      </div>
+
     </div>
   </div>
 {/if}
@@ -142,7 +136,6 @@
   .product-card h1 {
     margin-bottom: 1rem;
     font-size: 1.8rem;
-    color: #333;
   }
 
   .product-detail {
