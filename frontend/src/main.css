@@ -207,6 +207,11 @@ Attention, truncate class apparently f*cks with tooltips, because of overflow: h
   @apply px-4 py-2 text-sm text-gray-500 dark:text-gray-400 max-w-md font-mono text-right;
 }
 
+/** Numerical cell, with font mono and align to right, as it should be */
+.pgs-td-num-p {
+  @apply px-4 py-2 text-sm text-primary max-w-md font-mono text-right;
+}
+
 /** Font mono center, for small centered cells */
 .pgs-td-fmc {
   @apply px-4 py-2 text-sm text-gray-500 dark:text-gray-400 max-w-md truncate font-mono text-center;

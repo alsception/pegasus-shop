@@ -14,7 +14,6 @@
   import NewUserModal from "./NewUserModal.svelte";
   import { showErrorToastLongDuration, showErrorToastNoExp } from "../../core/utils/toaster";
 
-
   let isAuthenticated = false;  
   let loading: boolean = false;
   let error: string | null = null;
@@ -24,7 +23,7 @@
   let sortAsc = true;
   let searchTerm = '';
 
-  document.title = 'Users | Pegasus'
+  document.title = 'Korisnici | Pegasus'
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 

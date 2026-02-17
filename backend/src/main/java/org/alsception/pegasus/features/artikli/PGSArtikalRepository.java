@@ -1,4 +1,4 @@
-package org.alsception.pegasus.features.products.artikli;
+package org.alsception.pegasus.features.artikli;
 
 import java.math.BigDecimal;
 import org.springframework.data.jpa.repository.JpaRepository;

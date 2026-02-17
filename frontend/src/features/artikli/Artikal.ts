@@ -1,12 +1,21 @@
 export interface PGSArtikal {
-  comment: string | null | undefined;
   id?: number;
   name: string;
   barcode?: string;
-  
+
+  opis?: string;
+  napomena?: string;
+  proizvodjac?: string;
+
+  stok?: number;
+  odjel?: number;
+
+  porez?: number;
+  poreznaGrupa?: number;
+
   // ID kategorije za lak rad sa formama i selektima
   kategorijaId?: number;
-  
+
   // Kompletan objekat kategorije (ako se radi fetch sa join-om)
   kategorija?: PGSArtikalKategorija;
 
@@ -19,7 +28,7 @@ export interface PGSArtikal {
   price4?: number;
   price5?: number;
   price6?: number;
-  
+
   // Dodajemo i active polje jer smo ga pomenuli zbog soft-delete-a
   active?: boolean;
 }
@@ -29,5 +38,4 @@ export interface PGSArtikalKategorija {
   name: string;
   created?: Date | string;
   updated?: Date | string;
-  // artikli?: PGSArtikal[]; // Opciono, zavisi da li ih šalješ sa backenda
 }

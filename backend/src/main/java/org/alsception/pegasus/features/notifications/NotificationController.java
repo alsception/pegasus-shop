@@ -26,7 +26,8 @@ public class NotificationController
     {
         String username = principal.getName();
         
-        logger.debug("Getting notifications for "+username);
+        logger.trace("Getting notifications for "+username);
+        logger.debug(".");
         /**
          * Trenutno svi dobijaju sve
          * Sledeci korak bi trebalo 

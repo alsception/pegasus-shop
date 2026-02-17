@@ -1,4 +1,4 @@
-package org.alsception.pegasus.features.products.artikli;
+package org.alsception.pegasus.features.artikli;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,6 +30,27 @@ public class PGSArtikal {
     
     @Column(unique = true, length = 15, nullable = true)
     private String barcode;
+
+    @Column(nullable = true, columnDefinition = "TEXT")
+    private String opis;
+
+    @Column(nullable = true)
+    private String napomena;
+
+    @Column(nullable = true)
+    private String proizvodjac;
+
+    @Column(nullable = true)
+    private Integer stok;
+
+    @Column(nullable = true)
+    private Integer odjel;
+
+    @Column(precision = 5, scale = 2, nullable = true)
+    private BigDecimal porez;
+
+    @Column(nullable = true)
+    private Integer poreznaGrupa;
     
     // Objekat za relaciju
     @ManyToOne(fetch = FetchType.EAGER)

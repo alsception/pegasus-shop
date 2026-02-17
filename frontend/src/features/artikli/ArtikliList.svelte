@@ -2,16 +2,16 @@
   import { onMount } from "svelte";
   import { link } from "svelte-spa-router";
   import { get } from "svelte/store";
-  import { auth, getCurrentRole, isAdmin } from "../../../core/services/SessionStore";
-  import { formatDate, formatPrice } from "../../../utils/formatting";
-  import { formatActive } from "../../../utils/formatting";
-  import { formatCommentInfo } from "../../../utils/formatting";
+  import { auth, getCurrentRole, isAdmin } from "../../core/services/SessionStore";
+  import { formatDate, formatPrice } from "../../utils/formatting";
+  import { formatCommentInfo } from "../../utils/formatting";
   import type { PGSArtikal } from "./Artikal";
-  import Login from "../../../core/auth/Login.svelte";
-  import LoadingOverlay from "../../../core/utils/LoadingOverlay.svelte";
-  import ErrorDiv from "../../../core/navigation/error/ErrorDiv.svelte";
+  import Login from "../../core/auth/Login.svelte";
+  import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
+  import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
 
   document.title = "Artikli | Pegasus";
+
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   //DEFINITIONS
@@ -26,7 +26,6 @@
   let size = 20; // Products per page
   let totalProducts = 0; // If backend returns total count
   let totalPages = 0; // Total pages from backend
-  let selectedCategory: any;
 
   // AUTHENTICATION
   $: auth.subscribe((value) => {
@@ -326,7 +325,7 @@
           </thead>
           <tbody class="">
             {#each artikli as artikal, i}
-              <tr class="bg-base-200/80 outline-1 outline-transparent /*hover:outline-blue-500*/ hover:bg-base-300/70">            
+              <tr class="bg-base-200/50 outline-1 outline-transparent /*hover:outline-blue-500*/ hover:bg-info/10">            
                 <td class="pgs-td whitespace-nowrap">
                   <a
                     use:link
@@ -339,12 +338,12 @@
                     {artikal.kategorija?.name}
                   </span>
                 </td>
-                <td class="pgs-td-num">{formatPrice(artikal.price1)}</td>
-                <td class="pgs-td-num">{formatPrice(artikal.price2)}</td>
-                <td class="pgs-td-num">{formatPrice(artikal.price3)}</td>
-                <td class="pgs-td-num">{formatPrice(artikal.price4)}</td>
+                <td class="pgs-td-num-p">{formatPrice(artikal.price1)}</td>
+                <td class="pgs-td-num-p">{formatPrice(artikal.price2)}</td>
+                <td class="pgs-td-num-p">{formatPrice(artikal.price3)}</td>
+                <td class="pgs-td-num-p">{formatPrice(artikal.price4)}</td>
                 <td class="text-center"
-                  >{@html formatCommentInfo(artikal.comment)}</td
+                  >{@html formatCommentInfo(artikal.napomena)}</td
                 >
                 <td class="pgs-td font-mono whitespace-nowrap"
                   >{@html formatDate(artikal.created, "new", 15)}</td

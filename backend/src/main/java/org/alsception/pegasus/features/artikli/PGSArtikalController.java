@@ -1,4 +1,4 @@
-package org.alsception.pegasus.features.products.artikli;
+package org.alsception.pegasus.features.artikli;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

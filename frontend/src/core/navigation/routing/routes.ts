@@ -7,8 +7,9 @@ import Users                        from "../../../features/users/UsersList.svel
 import UserDetails                  from "../../../features/users/UserDetails.svelte";
 import MyAccount                    from "../../../features/users/MyAccount.svelte";
 
+import Artikli                     from "../../../features/artikli/ArtikliList.svelte";
+import ArtikliAdministration                     from "../../../features/artikli/ArtikliAdministration.svelte";
 import Products                     from "../../../features/products/ProductsListBarbacoa.svelte";
-import Artikli                     from "../../../features/products/artikli/ArtikliList.svelte";
 //import Products                     from "../../../features/products/ProductsListBarbacoa.svelte";
 import ProductDetail                from "../../../features/products/ProductPage.svelte";
 import ProductAdministration        from "../../../features/products/ProductAdministration.svelte";
@@ -90,6 +91,7 @@ export function generateRoutes()
     routes["/"] = Home;
     routes["/stats"] = Stats;
     routes["/artikli"] = Artikli;
+    routes["/artikli/:id"] = ArtikliAdministration;
     routes["/users/my-account"] = MyAccount;
     routes["/orders/:id"] = OrderDetails;
 
