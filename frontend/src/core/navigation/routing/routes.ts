@@ -8,6 +8,8 @@ import UserDetails                  from "../../../features/users/UserDetails.sv
 import MyAccount                    from "../../../features/users/MyAccount.svelte";
 
 import Products                     from "../../../features/products/ProductsListBarbacoa.svelte";
+import Artikli                     from "../../../features/products/artikli/ArtikliList.svelte";
+//import Products                     from "../../../features/products/ProductsListBarbacoa.svelte";
 import ProductDetail                from "../../../features/products/ProductPage.svelte";
 import ProductAdministration        from "../../../features/products/ProductAdministration.svelte";
 
@@ -87,6 +89,7 @@ export function generateRoutes()
     //I dont know if these routes are found in navroutes, and I want them to be all the time
     routes["/"] = Home;
     routes["/stats"] = Stats;
+    routes["/artikli"] = Artikli;
     routes["/users/my-account"] = MyAccount;
     routes["/orders/:id"] = OrderDetails;
 

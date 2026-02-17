@@ -7,7 +7,7 @@
   import api from "../../core/services/client";
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
-  import { formatDateTime, formattedTime, getOrderStatusColor, getOrderStatusLabel } from "../../utils/formatting";
+  import { formatDateTime, formatPrice, formattedTime, getOrderStatusColor, getOrderStatusLabel } from "../../utils/formatting";
   import { showSuccessToast } from "../../core/utils/toaster";
 
   document.title = "Order details | Pegasus";
@@ -190,13 +190,7 @@
     window.location.href = "#/orders";
   }
 
-  function formatPrice(price: number): string {
-    return new Intl.NumberFormat("de-DE", {
-      style: "currency",
-      currency: formData.currency || "EUR",
-    }).format(price || 0);
-  }
-
+ 
   const inputSkeletons =
     "#orderForm input, #orderForm select, #orderForm textarea";
 
@@ -409,10 +403,10 @@
                     </div> -->
                     <div class="text-right">
                       <p class="text-sm text-gray-500">
-                        {item.quantity} × {formatPrice(item.unitPrice || item.product?.basePrice || 0)}
+                        {item.quantity} × {formatPrice(item.price || item.product?.basePrice || 0)}
                       </p>
                       <p class="text-base font-semibold">
-                        {formatPrice((item.quantity || 0) * (item.unitPrice || item.product?.basePrice || 0))}
+                        {formatPrice((item.quantity || 0) * (item.price || item.product?.basePrice || 0))}
                       </p>
                     </div>
                   </div>

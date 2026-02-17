@@ -12,6 +12,7 @@
   import EmptyImg4 from "../../assets/img/empty-bro.svg"; 
   import EmptyImg5 from "../../assets/img/empty-pana.svg"; 
   import { link } from "svelte-spa-router";
+  import { formatPrice } from "../../utils/formatting";
 
   const emptyImages = [EmptyImg1, EmptyImg2, EmptyImg3, EmptyImg4, EmptyImg5];
 
@@ -71,14 +72,7 @@
     } finally {
       loading = false;
     }
-  };  
-
-  function formatPrice(price: number): string {
-    return new Intl.NumberFormat('de-DE', {
-      style: 'currency',
-      currency: 'EUR',
-    }).format(price);
-  }
+  };    
   
   async function updateCart(item: any) {
     if (!cart || !item) return;

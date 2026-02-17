@@ -100,7 +100,7 @@ public class CartService
         if(quantity < 0)
             throw new RuntimeException("Illegal quantity: ["+quantity+"]. Must be > 0");
 
-        if (!product.isActive() || product.getStockQuantity()<= 0 || (product.getStockQuantity() - quantity < 0)) 
+        if (!product.isActive() /*|| product.getStockQuantity()<= 0 || (product.getStockQuantity() - quantity < 0)-*/) 
         {
             throw new RuntimeException("Product is not available or out of stock");
         }

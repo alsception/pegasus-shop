@@ -27,7 +27,7 @@ public class ProductController
     
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
     
-    //Not used now, we use paginated insted
+    //Trenutno zovemo ovaj sa frontenda
     @GetMapping
     public List<PGSProductDTO> getProducts(
             @RequestParam(required = false) String search, 
@@ -39,16 +39,16 @@ public class ProductController
         return products;
     }
     
-    //Currently we use this on frontend
+    //Ovo ne koristimo sad
     @GetMapping("/p")
     public PaginatedProductsResponse getProductsWithPagination(
             @RequestParam(required = false) String search, 
             @RequestParam(required = false) String code, 
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size)
+            @RequestParam(defaultValue = "250") int size)
     {        
-        logger.debug("getProducts: search=["+search+"] code=["+code+"], name=["+name+"], page=["+page+"], size=["+size+"]");
+        logger.debug("getProductsWithPagination: search=["+search+"] code=["+code+"], name=["+name+"], page=["+page+"], size=["+size+"]");
         return productService.findProductsWithPagination(search, code, name, page, size);
     }
 
@@ -60,12 +60,13 @@ public class ProductController
             .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/popular")
-    public PopularProductsWrapper getPopularProducts() 
-    {
-        return productService.getPopularProducts();
-    }
-    
+    //TODO: ovde cemo dodati most popular products
+//    @GetMapping("/popular")
+//    public PopularProductsWrapper getPopularProducts() 
+//    {
+//        return productService.getPopularProducts();
+//    }
+//    
     @PostMapping
     public PGSProduct createProduct(@RequestBody PGSProduct product) 
     {

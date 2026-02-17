@@ -28,7 +28,7 @@
   async function fetchProduct(id: number) {
     loading = true;
     try {
-      const res = await fetch(API_BASE_URL + `/barbacoa/products/${id}`, {
+      const res = await fetch(API_BASE_URL + `/products/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -83,8 +83,8 @@
       {/if}
     </div>
     <h1 class="text-primary text-2xl">
-      {product.title}
-      {#if false}
+      {product.name}
+      {#if true}
         <a
           class="text-gray-400 hover:text-blue-300 text-md"
           use:link
@@ -102,7 +102,7 @@
     <p>{product.description}</p>
      {/if}
     <h3 class="product-detail"
-      style="font-size: x-large;">€{product.priceBottle}</h3>
+      style="font-size: x-large;">€{product.basePrice}</h3>
     <p></p>
    
     <div class="w-full flex mr-0 mt-6">

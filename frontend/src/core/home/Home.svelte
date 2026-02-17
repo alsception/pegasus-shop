@@ -51,7 +51,7 @@
       title: "Artikli",
       description: "Upravljanje artiklima",
       icon: "box--",
-      href: "/products?listView=true",
+      href: "/artikli",
       color: "yellow",
       default: false,
       admin: true,

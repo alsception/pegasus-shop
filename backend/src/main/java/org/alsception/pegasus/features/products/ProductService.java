@@ -48,7 +48,7 @@ public class ProductService
         { 
             try
             {
-                List<PGSProduct> result = productRepository.findByCodeContainingIgnoreCaseOrNameContainingIgnoreCase(search, search);
+                List<PGSProduct> result = productRepository.searchActiveProducts(search);
                 
                 logger.debug("Found products: "+result.size());
                 logger.debug("Converting to dto...");
@@ -67,7 +67,7 @@ public class ProductService
         {
             if(code==null && name == null)
             { 
-                return productRepository.findAll().stream()
+                return productRepository.findByActiveTrue().stream()
                             .map(PGSProductDTO::new)
                             .toList();
             }
@@ -85,6 +85,9 @@ public class ProductService
         logger.debug("Looking for products...");
         Pageable pageable = PageRequest.of(page, size);
         Page<PGSProduct> productPage;
+        
+        //TODO: ovde moramo izvuci samo products koji us active = true;
+        //A zatim dodati drugi metod za prikazivanje i sakrivenih
 
         if (search != null && !search.isEmpty()) {
             productPage = productRepository.findByCodeContainingIgnoreCaseOrNameContainingIgnoreCase(search, search, pageable);
@@ -207,19 +210,20 @@ public class ProductService
         return productRepository.existsById(id);
     } 
     
-    public PopularProductsWrapper getPopularProducts() 
-    {
-        List<Object[]> pproducts = productRepository.getPopularProducts();
-    
-        List<PopularProduct> output = pproducts.stream()
-        .map(obj -> new PopularProduct(
-            (String) obj[1],    // Product Name
-            (Double) obj[2]     // Average Rating
-        ))
-        .collect(Collectors.toList());
-        
-        return new PopularProductsWrapper(output);
-    }
+    //TODO: ovde cemo dodati most popular product kasnije
+//    public PopularProductsWrapper getPopularProducts() 
+//    {
+//        List<Object[]> pproducts = productRepository.getPopularProducts();
+//    
+//        List<PopularProduct> output = pproducts.stream()
+//        .map(obj -> new PopularProduct(
+//            (String) obj[1],    // Product Name
+//            (Double) obj[2]     // Average Rating
+//        ))
+//        .collect(Collectors.toList());
+//        
+//        return new PopularProductsWrapper(output);
+//    }
     
     public void generateSampleProducts(int count) 
     {

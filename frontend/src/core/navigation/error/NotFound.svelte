@@ -27,8 +27,8 @@
   h1 {
     font-size: 4rem;
     font-weight: 900;
-    color: #111;
-    background: #ffdd00;
+   /*  color: #111;
+    background: #ffdd00; */
     padding: 0.5rem 1.5rem;
     border: 3px solid #111;
     margin: 1rem 0;
@@ -49,7 +49,7 @@
 </style>
 
 <div class="wrapper">
-  <img src="{errorimg}" alt="404 - Page not found" />
-  <h1 style="position: relative; top: -70px;">Page not found.</h1>
+<!--   <img src="{errorimg}" alt="404 - Page not found" />
+ -->  <h1 style="position: relative; top: -70px;">Not found.</h1>
   <!-- 🙉 Our team of highly trained personell is fixing it right now.🖳🔨🐒 😎  -->
 </div>

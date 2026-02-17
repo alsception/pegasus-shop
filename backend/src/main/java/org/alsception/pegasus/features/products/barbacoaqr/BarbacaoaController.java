@@ -26,7 +26,7 @@ public class BarbacaoaController {
     @PostMapping("/sync")
     public ResponseEntity<Map<String, Object>> syncProducts() 
     {
-        int result = apiService.fetchAndSaveProducts();
+        int result = apiService.processQRMasterProducts();
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Sync completed successfully! Products imported: "+result);

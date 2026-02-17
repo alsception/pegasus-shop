@@ -3,10 +3,10 @@
     <div class="ml-16">
       <a href="/#/home">
       <h1
-            class="text-xl sm:text-2xl md:text-2xl lg:text-2xl font-bold bg-gradient-to-tr from-slate-400 via-blue-500 to-zinc-600
+            class="text-xl sm:text-2xl md:text-2xl lg:text-2xl font-bold bg-gradient-to-tr from-slate-400 via-orange-500 to-zinc-600
           text-transparent bg-clip-text font-mono uppercase tracking-widest"
           >
-          Pegasus
+          Barbacoa
         </h1>
       </a>
     </div>

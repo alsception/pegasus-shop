@@ -100,16 +100,18 @@ public class SecurityConfig {
         else 
         {   
             List allowedServers = Arrays.asList(
-                    "http://localhost:5173",                   //Local dev
+                    "http://localhost:5173",                        //Local dev
                     "http://localhost:8080",                        //Local build
-                    "https://localhost",                        //Local build
+                    "https://localhost",                            //Local build
                     "http://192.168.1.70:8080",                     //Local network build
                     "http://192.168.1.70:5173",                     //Local network dev
-                    "https://192.168.1.70",                    //Local network secure
+                    "https://192.168.1.70",                         //Local network secure
                     "https://192.168.1.70:5173",                    //Local dev secure
                     "https://2799-5-39-135-139.ngrok-free.app",     //ngrok tunnel
                     "https://6bccb69e3fd5.ngrok-free.app",          //ngrok2
-                    "https://pegasus-uvnn.onrender.com"             //Render public
+                    "https://pegasus-uvnn.onrender.com",            //Render public
+                    "http://192.168.178.66",                        //Barbacoa network
+                    "http://192.168.178.66:5173"                    ////Barbacoa network
             );
             
             configuration.setAllowedOrigins(allowedServers);

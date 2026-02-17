@@ -4,7 +4,7 @@
   import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";  
   import { get } from "svelte/store";
-  import { formatCode, formatTime, formatCommentInfo, isNew, formatTime2 } from "../../utils/formatting";
+  import { formatCode, formatTime, formatCommentInfo, isNew, formatTime2, formatPrice } from "../../utils/formatting";
   import { showSuccessToast, showErrorToast } from '../../core/utils/toaster';
   import axios from 'axios';
   import { showInfoModal } from "../../utils/modal";
@@ -233,21 +233,6 @@
     showErrorToast(errorMessage);
   }
 
-  function formatPrice(price: number | undefined): string 
-  {
-    if (price === undefined || price === null) 
-    {
-      return "€ 0,00";
-    }
-    
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'EUR',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(price);
-  }
-
   function getOrderStatusColor(status: string | null | undefined): string {
     switch (status?.toUpperCase()) {
       case "READY":
@@ -298,11 +283,16 @@
 
     switch (status?.toUpperCase()) 
     {
-      case "WAITING":
+
+      default:
+        return "bg-base-200 ";
+
+     /* case "WAITING":
         return "bg-[#FEBB0036]"//"bg-yellow-700/30";//"bg-[#525214]";
 
       case "IN_PREPARATION":
-        return "bg-[#0077FF3A]"/* blue-900/30"*/;
+        //return "bg-[#0077FF3A]"/* blue-900/30"/;
+        return "bg-base-200 "
 
       case "READY":
       case "DELIVERED":
@@ -313,10 +303,9 @@
         return "warning";
 
       case "RETURNED":
-        return "error";
+        return "error";*/
 
-      default:
-        return "secondary";
+      
     }
   }
 

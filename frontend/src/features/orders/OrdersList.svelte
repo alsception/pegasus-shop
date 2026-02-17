@@ -6,7 +6,7 @@
   import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";  
   import { get } from "svelte/store";
-  import { formatCode, formatTime, formatCommentInfo } from "../../utils/formatting";
+  import { formatCode, formatTime, formatCommentInfo, formatPrice } from "../../utils/formatting";
   import { showSuccessToast, showErrorToast } from '../../core/utils/toaster';
   import axios from 'axios';
   import Login from "../../core/auth/Login.svelte";
@@ -266,23 +266,6 @@ i LITE APP!!, I MOZDA i WS.....
     }
     
     showErrorToast(errorMessage);
-  }
-
-
-
-  function formatPrice(price: number | undefined): string {
-
-    if (price === undefined || price === null) 
-    {
-      return "€ 0,00";
-    }
-    
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'EUR',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(price);
   }
 
   function getOrderStatusColor(status: string | null | undefined): string {

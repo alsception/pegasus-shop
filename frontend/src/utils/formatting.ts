@@ -186,7 +186,8 @@ export function getOrderStatusColor(status: string | null | undefined): string
 
 export function getOrderStatusLabel(status: string | null | undefined): string 
 {
-    switch (status?.toUpperCase()) {
+    switch (status?.toUpperCase()) 
+    {
       case "READY":      
         return "SPREMNO";
       case "DELIVERED":
@@ -203,5 +204,17 @@ export function getOrderStatusLabel(status: string | null | undefined): string
       default:
         return "-";
     }
-  }
+}
 
+export function formatPrice(price: number | undefined): string 
+{
+  if (price === undefined || price === null) 
+  {
+    return "0,00 €";
+  }
+  
+  return new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(
+    price,
+  )
+
+}  

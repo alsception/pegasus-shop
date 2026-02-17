@@ -1,5 +1,6 @@
 <script lang="ts">
-  import AddToCartButton from "./AddToCartButton.svelte";
+  import { formatPrice } from "../../utils/formatting";
+import AddToCartButton from "./AddToCartButton.svelte";
   import { link } from "svelte-spa-router";
   export let product;
 </script>
@@ -10,15 +11,15 @@
       <img
         class="w-full h-full object-cover"
         src={product.imageUrl}
-        alt={product.title}
+        alt={product.name}
       />
     {:else}
       <span class="text-gray-400 dark:text-gray-500">No image available</span>
     {/if}
   </div>
   <div class="p-6">
-    <h3 class="font-semibold text-lg truncate text-primary" title={product.title}>
-      <a use:link href="/products/{product.id}" class="pgs-hyperlink">{product.title}</a>
+    <h3 class="font-semibold text-lg truncate text-primary" title={product.name}>
+      <a use:link href="/products/{product.id}" class="pgs-hyperlink">{product.name}</a>
     </h3>
    <!--  <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
         <i class="fas fa-tag text-gray-400"></i>
@@ -33,7 +34,7 @@
     </p>
     <div class="flex items-center justify-between mt-4">
       <span class="text-2xl font-bold text-primary">
-        € {product.priceBottle}
+        { formatPrice( product.basePrice )}
       </span>   
       
       {#if product.discount }

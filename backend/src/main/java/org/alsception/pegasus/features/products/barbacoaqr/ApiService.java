@@ -2,6 +2,8 @@ package org.alsception.pegasus.features.products.barbacoaqr;
 
 import java.util.Arrays;
 import java.util.List;
+import org.alsception.pegasus.features.products.PGSProduct;
+import org.alsception.pegasus.features.products.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,11 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class ApiService {  
+    
+    private final RestTemplate restTemplate;
+    private final BRBProductRepository brbpRepository;    
+    private final ProductRepository pgspRepository;
+    private final BRBProductToPGSProductMapper mapper;
     
     private final String[] urls =
             """
@@ -44,17 +51,21 @@ public class ApiService {
             https://api.master-fb.com/qr/clients/5285/426/client_products
             https://api.master-fb.com/qr/clients/5285/1040/client_products""".split("\\r?\\n");
 
-    private final RestTemplate restTemplate;
-    private final BRBProductRepository repository;
+    
+
     
     private static final Logger logger = LoggerFactory.getLogger(ApiService.class);
     
-    public ApiService(RestTemplate restTemplate, BRBProductRepository repository) {
-        this.repository = repository;
+    public ApiService(RestTemplate restTemplate, BRBProductRepository brbpRepository, BRBProductToPGSProductMapper mapper,
+            ProductRepository pgspRepository) {
+        this.brbpRepository = brbpRepository;
         this.restTemplate = restTemplate;
+        this.mapper = mapper;
+        this.pgspRepository = pgspRepository;
     }
     
-    public int fetchAndSaveProducts() {
+    public int fetchAndSaveProducts() 
+    {
         logger.warn("========================================");
         logger.warn("Initializing barbacoa master-fb sync");
         logger.warn("========================================");
@@ -75,7 +86,7 @@ public class ApiService {
                 }
                 
                 // Čuvanje u bazu
-                List<BRBProduct> savedProducts = repository.saveAll(Arrays.asList(products));
+                List<BRBProduct> savedProducts = brbpRepository.saveAll(Arrays.asList(products));
                 int savedCount = savedProducts.size();
                 totalSaved += savedCount;
                 
@@ -94,5 +105,27 @@ public class ApiService {
         logger.warn("========================================");
 
         return totalSaved;
+    }
+    
+    public int processQRMasterProducts()
+    {
+        //1. Get all qr master products
+        //2. for each qr product map to pgs product
+        //3. save
+        
+        logger.warn("========================================");
+        logger.warn("Initializing masterqr sync");
+        logger.warn("========================================");
+        
+        int totalSaved = 0;   
+        
+        List<BRBProduct> lp = brbpRepository.findAll();
+        List<PGSProduct> pgsProducts = mapper.mapList(lp);
+        
+        pgspRepository.saveAll(pgsProducts);
+        
+        logger.warn("masterqr sync done");
+        
+        return totalSaved;        
     }
 }

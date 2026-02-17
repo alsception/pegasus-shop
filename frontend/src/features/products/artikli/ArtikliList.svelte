@@ -2,26 +2,21 @@
   import { onMount } from "svelte";
   import { link } from "svelte-spa-router";
   import { get } from "svelte/store";
-  import { auth, getCurrentRole, isAdmin } from "../../core/services/SessionStore";
-  import { formatDate } from "../../utils/formatting";
-  import { formatActive } from "../../utils/formatting";
-  import { formatCommentInfo } from "../../utils/formatting";
-  import type { Product } from "./Product";
-  import Modal from "./ProductModal.svelte";
-  import Login from "../../core/auth/Login.svelte";
-  import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
-  import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
-  import ProductCard from "./ProductCard.svelte";
-  import ProductCategories from "./ProductCategories.svelte";
-  import AddToCartButton from "./AddToCartButton.svelte";
+  import { auth, getCurrentRole, isAdmin } from "../../../core/services/SessionStore";
+  import { formatDate, formatPrice } from "../../../utils/formatting";
+  import { formatActive } from "../../../utils/formatting";
+  import { formatCommentInfo } from "../../../utils/formatting";
+  import type { PGSArtikal } from "./Artikal";
+  import Login from "../../../core/auth/Login.svelte";
+  import LoadingOverlay from "../../../core/utils/LoadingOverlay.svelte";
+  import ErrorDiv from "../../../core/navigation/error/ErrorDiv.svelte";
 
-  document.title = "Products | Pegasus";
+  document.title = "Artikli | Pegasus";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   //DEFINITIONS
   let isAuthenticated = false;
-  let modalProduct: Product | null = null;
-  let products: Product[] = [];
+  let artikli: PGSArtikal[] = [];
   let loading: boolean = false;
   let error: string | null = null;
   let isListView = false;
@@ -109,16 +104,46 @@
     page = 0; // Reset to first page on new search
     handleSearch();
   }
-//barbacoa
-          //
+
   async function handleSearch() {
     const token = $auth.token;
     loading = true;
-    try {
+    try 
+    {
+
+      let kategorijaId = "";
+
+      if(searchTerm!=null)
+      {
+        switch (searchTerm.toLowerCase()) {
+        case 'pivo':
+        case 'vopi':
+        case 'vops':
+          kategorijaId = '3';
+          break;
+        case 'rakije':
+        case 'likeri':
+        case 'rakije i likeri':
+          kategorijaId = '4';
+          break;  
+        case 'vino':
+          kategorijaId = '5';
+          break;
+        case 'bezalkoholna pića':
+          kategorijaId = '2';
+          break;
+        case 'alkoholna pića':
+          kategorijaId = '1';
+          break;  
+        default:
+          // Opciono: šta se dešava ako se ništa ne poklopi
+          kategorijaId = ''; 
+      }
+      }
+
       const res = await fetch(
         API_BASE_URL +
-          `/products?search=${searchTerm}&page=${page}&size=${size}`,
-          
+          `/artikli?search=${searchTerm}&kategorijaId=${kategorijaId}&size=${size}`,
         {
           method: "GET",
           headers: {
@@ -139,11 +164,10 @@
 
       const data = await res.json();
 
-      console.log(data);
-
       // Use the paginated response structure
-      products = data;
-      totalProducts = products.length;
+      artikli = data;
+      totalProducts = data.totalCount;
+      totalPages = data.totalPages;
     } catch (err: any) {
       console.error(error);
       if (err.message.includes("401")) {
@@ -169,10 +193,10 @@
       handleSearch();
     }
   }
-
+/* 
   function closeModal(): void {
     modalProduct = null;
-  }
+  } */
 
   function toggleView() {
     isListView = !isListView;
@@ -181,6 +205,37 @@
   function handleCategorySelect(category: string): void 
   {
     console.log('selected category: '+category);
+  }
+
+  function getArtikalColor(kategorija: string | undefined): string 
+  {
+    if(kategorija == undefined)
+    {
+      return "secondary ";
+    }    
+    else
+    {
+      switch (kategorija.toLowerCase()) 
+      {
+        case "vino":
+          return "error ";
+
+        case "bezalkoholna pića":
+          return "success ";
+
+        case "alkoholna pića":
+          return "info ";
+
+        case "pivo":
+          return "warning ";
+        
+        case "rakije i likeri":
+          return "accent ";
+
+        default:
+          return "secondary "; // ili neka podrazumevana boja
+      }
+    }
   }
 </script>
 
@@ -202,7 +257,7 @@
             <input
               type="text"
               bind:value={searchTerm}
-              placeholder="Traži proizvod..."
+              placeholder="Traži artikal..."
               class="input input-primary dark:input-info border-2 flex-1"
             />
             <button type="submit" class="btn btn-dash">
@@ -212,17 +267,17 @@
           </div>
 
           <!-- Donji red: Kategorije, Pagination i View toggle -->
-          <div class="flex gap-2 items-center ">
+          <div class="flex gap-2 items-center">
             
-            <div class="flex-1 hidden">
+           <!--  <div class="flex-1">
               <ProductCategories bind:selectedCategory onSelect={handleCategorySelect} />
             </div>
-
+ -->
           {#if getCurrentRole() === 'ADMIN'}
             <button
               type="button"
               on:click={() => window.location.href = '#/products/mngmt/0'}
-              class="btn btn-dash flex-1 lg:flex-none whitespace-nowrap hidden"
+              class="btn btn-dash flex-1 lg:flex-none whitespace-nowrap"
             >       
               <i class="fas fa-plus"></i>
               Dodaj novi
@@ -237,122 +292,111 @@
             {/if}
             
             <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
-<!--               Strana <b>{page + 1}</b> od <b>{totalPages}</b>
- -->              <span class="md:inline"> | Ukupno: <b>{products.length}</b></span>
+              <span class="md:inline"> | Ukupno nadjeno artikala: <b>{artikli.length}</b></span>
             </div>
             
-            <button type="button" on:click={toggleView} class="btn btn-dash whitespace-nowrap">
-              <i class="fas fa-th-list"></i>
-              <span class="sm:inline ml-1">
-                {#if isListView}
-                  Prikaz: Lista
-                {:else}
-                  Prikaz: Grid
-                {/if}
-              </span>
-            </button>
           </div>
         </form>
       </div>
     </div>
 
     <div id="results" class="w-full max-w-4xl mx-auto mt-16"></div>
-
+ 
     {#if loading}
       <LoadingOverlay />
     {/if}
 
-    {#if isListView && isAdminView}
-   <div class="w-full max-w-[382px] mx-auto p-0">
-  <div class="w-full overflow-x-auto">
-    <table class="table table-zebra w-full min-w-[382px] ">
-
-     
-
-         <!--  <thead class="bg-[#10273c]">
+      <div
+        class="w-full max-w-[1480px] overflow-x-auto rounded-lg align-middle mx-auto"
+      >
+        <table class="table table-zebra min-w-[1200px] divide-y divide-accent">
+          <thead class="bg-[#10273c]">
             <tr class="h-12">
-              <th class="pgs-th-l">Proizvod</th>
+              <th class="pgs-th-l">Artikal</th>
               <th class="pgs-th-l">Kategorija</th>
-              <th class="pgs-th-r">Cijena</th>
-              <th class="pgs-th-l"></th>
-              <th class="pgs-th-l"></th>
-              <th class="pgs-th"></th>
+              <th class="pgs-th-r">Cijena 1</th>
+              <th class="pgs-th-r">Cijena 2</th>
+              <th class="pgs-th-r">Cijena 3</th>
+              <th class="pgs-th-r">Cijena 4</th>
+              <th class="pgs-th-l"></th><!-- prazno za komentar -->
+              <th class="pgs-th-l">Datum upisa</th>
+              <th class="pgs-th-l">Datum zadnje izmjene</th>
+              <th class="pgs-th"></th><!-- Akcije -->
             </tr>
-          </thead> -->
+          </thead>
           <tbody class="">
-            {#each products as product, i}
-              <tr class="bg-base-200/80 outline-1 outline-transparent /*hover:outline-blue-500*/ hover:bg-base-300/70 border-b border-b-base-300">            
-                <td class="pgs-td whitespace-nowrap p-0">
-                 <!--  <a
+            {#each artikli as artikal, i}
+              <tr class="bg-base-200/80 outline-1 outline-transparent /*hover:outline-blue-500*/ hover:bg-base-300/70">            
+                <td class="pgs-td whitespace-nowrap">
+                  <a
                     use:link
-                    href="/products/{product.id}"
-                    class="text-primary pgs-hyperlink">{product.title}</a
-                  > -->
-                  <div class="">
-                     <h3 class="font-semibold text-lg max-w-[382px;] truncate text-primary" title={product.name}>
-      <a use:link href="/products/{product.id}" class="pgs-hyperlink">{product.name}</a>
-    </h3>
-    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-       <!--  <i class="fas fa-tag text-gray-400"></i>
-        <span class="text-primary"> {product.category} </span>    -->     
-    </p>   
-    <p
-      class="text-sm text-primary/50 mt-1 line-clamp-3 max-w-[80%;]"
-      title={product.description}
-      style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; white-space: normal;"
-    >
-      {product.description}
-    </p>
-    <table class="w-full">
-      <tbody>
-        <tr>
-         <td class="pgs-td text-left text-4xl "><h3 class="font-semibold text-lg truncate text-primary/50" >€ {product.basePrice}</h3></td>
-               
-                <td class="p-0">
+                    href="/artikli/{artikal.id}"
+                    class="text-primary pgs-hyperlink">{artikal.name}</a
+                  >
+                </td>
+                <td class="pgs-td">
+                  <span class="badge badge-soft badge-{getArtikalColor(artikal.kategorija?.name)} badge-{getArtikalColor(artikal.kategorija?.name)} font-mono badge-sm" style="text-transform: uppercase;">
+                    {artikal.kategorija?.name}
+                  </span>
+                </td>
+                <td class="pgs-td-num">{formatPrice(artikal.price1)}</td>
+                <td class="pgs-td-num">{formatPrice(artikal.price2)}</td>
+                <td class="pgs-td-num">{formatPrice(artikal.price3)}</td>
+                <td class="pgs-td-num">{formatPrice(artikal.price4)}</td>
+                <td class="text-center"
+                  >{@html formatCommentInfo(artikal.comment)}</td
+                >
+                <td class="pgs-td font-mono whitespace-nowrap"
+                  >{@html formatDate(artikal.created, "new", 15)}</td
+                >
+                <td class="pgs-td font-mono whitespace-nowrap"
+                  >{@html formatDate(artikal.updated, "new", 15)}</td
+                >
+              
+                <td class="px-2">
                   <div
-                    class="flex justify-end items-end gap-2"
+                    class="flex justify-center items-center gap-2"
                     style="font-size: 14px;"
                   >
-                    <div class="tooltip tooltip-info" data-tip="Dodaj">
-                     <AddToCartButton {product} width="40px" />
+                    <div class="tooltip tooltip-info" data-tip="Edit">
+                      <a
+                        class="px-4"
+                        aria-label="Edit"
+                        use:link
+                        href="/products/mngmt/{artikal.id}"
+                      >
+                        <i
+                          class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"
+                        ></i>
+                      </a>
                     </div>
-                   
+                    <button
+                      class="px-4"
+                      aria-label="Delete"
+                      on:click={() => deleteDialog(artikal.id)}
+                    >
+                      <div class="tooltip tooltip-info" data-tip="Delete">
+                        <i
+                          class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"
+                        ></i>
+                      </div>
+                    </button>
                   </div>
                 </td>
-                </tr>
-      </tbody>
-      
-    </table>
-                  </div>
-                </td>
-
-               
               </tr>
             {/each}
-            <tr class="bg-base-200">
+            <!-- <tr class="bg-base-200">
               <td colspan="18" class="pgs-td font-mono h-[64px]">
-                Showing <b>{products.length}</b> product(s) on this page.<br />
+                Ukupno <b>{artikli.length}</b> artikala na ovoj stranica.<br />
                 <b>{totalPages}</b>
               </td>
-            </tr>
+            </tr> -->
           </tbody>
         </table>
-        </div>
       </div>
-    {:else if !products && !loading}
-      no products found :/
-    {:else}
-      <div
-        class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-4 4xl:grid-cols-5 gap-8 p-4"
-        style="justify-items: center;"
-      >
-        {#each products as product, i}
-          <ProductCard {product} />
-        {/each}
-      </div>
-    {/if}
+  
   {/if}
-
+ 
 {/if}
 
 <style>
