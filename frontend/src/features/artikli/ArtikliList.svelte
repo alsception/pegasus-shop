@@ -14,7 +14,6 @@
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-  //DEFINITIONS
   let isAuthenticated = false;
   let artikli: PGSArtikal[] = [];
   let loading: boolean = false;
@@ -23,70 +22,115 @@
   let isAdminView = true;
   let isDark = true;
   let page = 0;
-  let size = 20; // Products per page
-  let totalProducts = 0; // If backend returns total count
-  let totalPages = 0; // Total pages from backend
+  let size = 20;
+  let totalProducts = 0;
+  let totalPages = 0;
 
-  // AUTHENTICATION
+  // Sort state
+  let sortKey = '';
+  let sortAsc = true;
+
+  // Reactive sort headers
+  $: nameHeader = sortKey === 'name'
+    ? sortAsc ? 'ARTIKAL ▼' : 'ARTIKAL ▲'
+    : 'ARTIKAL&nbsp;&nbsp;';
+
+  $: kategorijaHeader = sortKey === 'kategorija'
+    ? sortAsc ? 'KATEGORIJA ▼' : 'KATEGORIJA ▲'
+    : 'KATEGORIJA&nbsp;&nbsp;';
+
+  $: price1Header = sortKey === 'price1'
+    ? sortAsc ? 'Prodajna<br>cijena ▼' : 'Prodajna<br>cijena ▲'
+    : 'Prodajna<br>cijena&nbsp;&nbsp;';
+
+  $: price2Header = sortKey === 'price2'
+    ? sortAsc ? 'Nabavna<br>cijena 1 ▼' : 'Nabavna<br>cijena 1 ▲'
+    : 'Nabavna<br>cijena 1&nbsp;&nbsp;';
+
+  $: price3Header = sortKey === 'price3'
+    ? sortAsc ? 'Nabavna<br>cijena 2 ▼' : 'Nabavna<br>cijena 2 ▲'
+    : 'Nabavna<br>cijena 2&nbsp;&nbsp;';
+
+  $: price4Header = sortKey === 'price4'
+    ? sortAsc ? 'Nabavna<br>cijena 3 ▼' : 'Nabavna<br>cijena 3 ▲'
+    : 'Nabavna<br>cijena 3&nbsp;&nbsp;';
+
+  $: createdHeader = sortKey === 'created'
+    ? sortAsc ? 'DATUM<br>UPISA ▼' : 'DATUM<br>UPISA ▲'
+    : 'DATUM<br>UPISA&nbsp;&nbsp;';
+
+  $: updatedHeader = sortKey === 'updated'
+    ? sortAsc ? 'ZADNJA<br>IZMJENA ▼' : 'ZADNJA<br>IZMJENA ▲'
+    : 'ZADNJA<br>IZMJENA&nbsp;&nbsp;';
+
   $: auth.subscribe((value) => {
     isAuthenticated = value.isAuthenticated;
   });
 
-  function checkDarkmode() {
-    //Ovo proverava dali je darkmode classa dodeljena na body
-    //Jer treba zbog nekih elemenata koji se drugacije prikazuju
+  function isActiveHeader(name: string) {
+    return sortKey === name;
+  }
 
+  function sortBy(key: keyof PGSArtikal) {
+    if (sortKey === key) {
+      sortAsc = !sortAsc;
+    } else {
+      sortKey = key;
+      sortAsc = true;
+    }
+
+    artikli = [...artikli].sort((a, b) => {
+      let valA: string;
+      let valB: string;
+
+      // Specijalan slucaj za nested objekat kategorija
+      if (key === 'kategorija') {
+        valA = a.kategorija?.name ?? '';
+        valB = b.kategorija?.name ?? '';
+      } else {
+        valA = String(a[key] ?? '');
+        valB = String(b[key] ?? '');
+      }
+
+      // Numericki sort za price polja
+      if (['price1', 'price2', 'price3', 'price4'].includes(key as string)) {
+        const numA = parseFloat(valA) || 0;
+        const numB = parseFloat(valB) || 0;
+        return sortAsc ? numA - numB : numB - numA;
+      }
+
+      return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+    });
+  }
+
+  function checkDarkmode() {
     const check = () => (isDark = document.body.classList.contains("dark"));
     check();
-
     const observer = new MutationObserver(check);
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-
+    observer.observe(document.body, { attributes: true, attributeFilter: ["class"] });
     return () => observer.disconnect();
   }
 
-  /**
-   * Apparently, the query param ?listview=true is not accessible in the window.location.search
-   * but in window.location.hash (spa logic), so we need to use this ai slop to make it work...
-   */
   function checkListViewParam() {
-    // Support hash-based routing: extract query params from hash if present
     let search = window.location.search;
     if (!search && window.location.hash.includes("?")) {
-      search = window.location.hash.substring(
-        window.location.hash.indexOf("?")
-      );
+      search = window.location.hash.substring(window.location.hash.indexOf("?"));
     }
     const params = new URLSearchParams(search);
-    // Use lowercase 'listview' for consistency
     let listViewParam = params.get("listview");
-    if (listViewParam !== null) {
-      isListView = listViewParam === "true";
-    }
+    if (listViewParam !== null) isListView = listViewParam === "true";
     listViewParam = params.get("listView");
-    if (listViewParam !== null) {
-      isListView = listViewParam === "true";
-    }
+    if (listViewParam !== null) isListView = listViewParam === "true";
   }
 
-  // Fetch the products from the backend
   onMount(async () => {
     checkDarkmode();
     checkListViewParam();
-
     try {
       const { isAuthenticated } = get(auth);
       isAdminView = isAdmin();
-      /**
-       * TODO: this is not actually working
-       */
-
       if (!isAuthenticated) {
         error = "Session expired. Please login again.";
-        // goto('/login?return=' + encodeURIComponent(currentPath));
         return;
       } else {
         handleSearch();
@@ -99,50 +143,29 @@
   let searchTerm = "";
 
   function handleFormSubmit(event: { preventDefault: () => void }) {
-    event.preventDefault(); // prevent page reload
-    page = 0; // Reset to first page on new search
+    event.preventDefault();
+    page = 0;
     handleSearch();
   }
 
   async function handleSearch() {
     const token = $auth.token;
     loading = true;
-    try 
-    {
-
+    try {
       let kategorijaId = "";
-
-      if(searchTerm!=null)
-      {
+      if (searchTerm != null) {
         switch (searchTerm.toLowerCase()) {
-        case 'pivo':
-        case 'vopi':
-        case 'vops':
-          kategorijaId = '3';
-          break;
-        case 'rakije':
-        case 'likeri':
-        case 'rakije i likeri':
-          kategorijaId = '4';
-          break;  
-        case 'vino':
-          kategorijaId = '5';
-          break;
-        case 'bezalkoholna pića':
-          kategorijaId = '2';
-          break;
-        case 'alkoholna pića':
-          kategorijaId = '1';
-          break;  
-        default:
-          // Opciono: šta se dešava ako se ništa ne poklopi
-          kategorijaId = ''; 
-      }
+          case 'pivo': case 'vopi': case 'vops': kategorijaId = '3'; break;
+          case 'rakije': case 'likeri': case 'rakije i likeri': kategorijaId = '4'; break;
+          case 'vino': kategorijaId = '5'; break;
+          case 'bezalkoholna pića': kategorijaId = '2'; break;
+          case 'alkoholna pića': kategorijaId = '1'; break;
+          default: kategorijaId = '';
+        }
       }
 
       const res = await fetch(
-        API_BASE_URL +
-          `/artikli?search=${searchTerm}&kategorijaId=${kategorijaId}&size=${size}`,
+        API_BASE_URL + `/artikli?search=${searchTerm}&kategorijaId=${kategorijaId}&size=${size}`,
         {
           method: "GET",
           headers: {
@@ -162,11 +185,14 @@
       }
 
       const data = await res.json();
-
-      // Use the paginated response structure
       artikli = data;
       totalProducts = data.totalCount;
       totalPages = data.totalPages;
+
+      // Reset sorta pri svakom novom searchu
+      sortKey = '';
+      sortAsc = true;
+
     } catch (err: any) {
       console.error(error);
       if (err.message.includes("401")) {
@@ -179,79 +205,39 @@
     }
   }
 
-  function nextPage() {
-    if ((page + 1) * size < totalProducts) {
-      page += 1;
-      handleSearch();
-    }
-  }
-
-  function prevPage() {
-    if (page > 0) {
-      page -= 1;
-      handleSearch();
-    }
-  }
-/* 
-  function closeModal(): void {
-    modalProduct = null;
-  } */
-
   function toggleView() {
     isListView = !isListView;
   }
 
-  function handleCategorySelect(category: string): void 
-  {
-    console.log('selected category: '+category);
+  function handleCategorySelect(category: string): void {
+    console.log('selected category: ' + category);
   }
 
   function getArtikalColor(kategorija: string | undefined): string 
   {
-    if(kategorija == undefined)
+    if (kategorija == undefined) return "secondary ";
+    switch (kategorija.toLowerCase()) 
     {
-      return "secondary ";
-    }    
-    else
-    {
-      switch (kategorija.toLowerCase()) 
-      {
-        case "vino":
-          return "error ";
-
-        case "bezalkoholna pića":
-          return "success ";
-
-        case "alkoholna pića":
-          return "info ";
-
-        case "pivo":
-          return "warning ";
-        
-        case "rakije i likeri":
-          return "accent ";
-
-        default:
-          return "secondary "; // ili neka podrazumevana boja
-      }
+      case "vino": return "error ";
+      case "bezalkoholna pića": return "success ";
+      case "alkoholna pića": return "info ";
+      case "pivo": return "warning ";
+      case "rakije i likeri": return "accent ";
+      default: return "secondary ";
     }
   }
 </script>
 
 {#if !$auth.isAuthenticated}
   <Login />
-{:else}  
+{:else}
   {#if error}
     <ErrorDiv {error} />
   {:else}
-      
+
     <div class="w-full flex justify-center px-4">
       <div class="w-full max-w-4xl p-4 bg-base-200 rounded-lg">
-        <form
-          on:submit|preventDefault={handleFormSubmit}
-          class="flex flex-col gap-3"
-        >
-          <!-- Gornji red: Input i Traži dugme -->
+        <form on:submit|preventDefault={handleFormSubmit} class="flex flex-col gap-3">
           <div class="flex gap-2">
             <input
               type="text"
@@ -265,137 +251,127 @@
             </button>
           </div>
 
-          <!-- Donji red: Kategorije, Pagination i View toggle -->
           <div class="flex gap-2 items-center">
-            
-           <!--  <div class="flex-1">
-              <ProductCategories bind:selectedCategory onSelect={handleCategorySelect} />
-            </div>
- -->
-          {#if getCurrentRole() === 'ADMIN'}
-            <button
-              type="button"
-              on:click={() => window.location.href = '#/products/mngmt/0'}
-              class="btn btn-dash flex-1 lg:flex-none whitespace-nowrap"
-            >       
-              <i class="fas fa-plus"></i>
-              Dodaj novi
-            </button>
-      <!--       <a
-  href="/novi"
-  class="btn btn-dash flex-1 lg:flex-none whitespace-nowrap"
->
-  <i class="fas fa-plus"></i>
-  Dodaj novi
-</a> -->
+            {#if getCurrentRole() === 'ADMIN'}
+              <button
+                type="button"
+                on:click={() => window.location.href = '#/artikli/0'}
+                class="btn btn-dash flex-1 lg:flex-none whitespace-nowrap"
+              >
+                <i class="fas fa-plus"></i>
+                Dodaj novi
+              </button>
             {/if}
-            
+
             <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
               <span class="md:inline"> | Ukupno nadjeno artikala: <b>{artikli.length}</b></span>
             </div>
-            
           </div>
         </form>
       </div>
     </div>
 
     <div id="results" class="w-full max-w-4xl mx-auto mt-16"></div>
- 
+
     {#if loading}
       <LoadingOverlay />
     {/if}
 
-      <div
-        class="w-full max-w-[1480px] overflow-x-auto rounded-lg align-middle mx-auto"
-      >
-        <table class="table table-zebra min-w-[1200px] divide-y divide-accent">
-          <thead class="bg-[#10273c]">
-            <tr class="h-12">
-              <th class="pgs-th-l">Artikal</th>
-              <th class="pgs-th-l">Kategorija</th>
-              <th class="pgs-th-r">Cijena 1</th>
-              <th class="pgs-th-r">Cijena 2</th>
-              <th class="pgs-th-r">Cijena 3</th>
-              <th class="pgs-th-r">Cijena 4</th>
-              <th class="pgs-th-l"></th><!-- prazno za komentar -->
-              <th class="pgs-th-l">Datum upisa</th>
-              <th class="pgs-th-l">Datum zadnje izmjene</th>
-              <th class="pgs-th"></th><!-- Akcije -->
-            </tr>
-          </thead>
-          <tbody class="">
-            {#each artikli as artikal, i}
-              <tr class="bg-base-200/50 outline-1 outline-transparent /*hover:outline-blue-500*/ hover:bg-info/10">            
-                <td class="pgs-td whitespace-nowrap">
-                  <a
-                    use:link
-                    href="/artikli/{artikal.id}"
-                    class="text-primary pgs-hyperlink">{artikal.name}</a
-                  >
-                </td>
-                <td class="pgs-td">
-                  <span class="badge badge-soft badge-{getArtikalColor(artikal.kategorija?.name)} badge-{getArtikalColor(artikal.kategorija?.name)} font-mono badge-sm" style="text-transform: uppercase;">
-                    {artikal.kategorija?.name}
-                  </span>
-                </td>
-                <td class="pgs-td-num-p">{formatPrice(artikal.price1)}</td>
-                <td class="pgs-td-num-p">{formatPrice(artikal.price2)}</td>
-                <td class="pgs-td-num-p">{formatPrice(artikal.price3)}</td>
-                <td class="pgs-td-num-p">{formatPrice(artikal.price4)}</td>
-                <td class="text-center"
-                  >{@html formatCommentInfo(artikal.napomena)}</td
-                >
-                <td class="pgs-td font-mono whitespace-nowrap"
-                  >{@html formatDate(artikal.created, "new", 15)}</td
-                >
-                <td class="pgs-td font-mono whitespace-nowrap"
-                  >{@html formatDate(artikal.updated, "new", 15)}</td
-                >
-              
-                <td class="px-2">
-                  <div
-                    class="flex justify-center items-center gap-2"
-                    style="font-size: 14px;"
-                  >
-                    <div class="tooltip tooltip-info" data-tip="Edit">
-                      <a
-                        class="px-4"
-                        aria-label="Edit"
-                        use:link
-                        href="/products/mngmt/{artikal.id}"
-                      >
-                        <i
-                          class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"
-                        ></i>
-                      </a>
-                    </div>
-                    <button
-                      class="px-4"
-                      aria-label="Delete"
-                      on:click={() => deleteDialog(artikal.id)}
-                    >
-                      <div class="tooltip tooltip-info" data-tip="Delete">
-                        <i
-                          class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"
-                        ></i>
-                      </div>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            {/each}
-            <!-- <tr class="bg-base-200">
-              <td colspan="18" class="pgs-td font-mono h-[64px]">
-                Ukupno <b>{artikli.length}</b> artikala na ovoj stranica.<br />
-                <b>{totalPages}</b>
+    <div class="w-full max-w-[1580px] overflow-x-auto rounded-lg align-middle mx-auto">
+      <table class="table table-zebra min-w-[1200px] divide-y divide-accent">
+        <thead class="bg-info/10">
+          <tr class="h-12">
+            <th class="pgs-th-l cursor-pointer"
+              title="Klikni za sortiranje"
+              class:pgs-gradient-text={isActiveHeader('name')}
+              on:click={() => sortBy('name')}>
+              {@html nameHeader}
+            </th>
+            <th class="pgs-th-l cursor-pointer"
+              title="Klikni za sortiranje"
+              class:pgs-gradient-text={isActiveHeader('kategorija')}
+              on:click={() => sortBy('kategorija')}>
+              {@html kategorijaHeader}
+            </th>
+            <th class="pgs-th-l cursor-pointer"
+              title="Klikni za sortiranje"
+              class:pgs-gradient-text={isActiveHeader('price1')}
+              on:click={() => sortBy('price1')}>
+              {@html price1Header}
+            </th>
+            <th class="pgs-th-l cursor-pointer"
+              title="Klikni za sortiranje"
+              class:pgs-gradient-text={isActiveHeader('price2')}
+              on:click={() => sortBy('price2')}>
+              {@html price2Header}
+            </th>
+            <th class="pgs-th-l cursor-pointer"
+              title="Klikni za sortiranje"
+              class:pgs-gradient-text={isActiveHeader('price3')}
+              on:click={() => sortBy('price3')}>
+              {@html price3Header}
+            </th>
+            <th class="pgs-th-l cursor-pointer"
+              title="Klikni za sortiranje"
+              class:pgs-gradient-text={isActiveHeader('price4')}
+              on:click={() => sortBy('price4')}>
+              {@html price4Header}
+            </th>
+            <th class="pgs-th-l"></th>
+            <th class="pgs-th-l cursor-pointer"
+              title="Klikni za sortiranje"
+              class:pgs-gradient-text={isActiveHeader('created')}
+              on:click={() => sortBy('created')}>
+              {@html createdHeader}
+            </th>
+            <th class="pgs-th-l cursor-pointer"
+              title="Klikni za sortiranje"
+              class:pgs-gradient-text={isActiveHeader('updated')}
+              on:click={() => sortBy('updated')}>
+              {@html updatedHeader}
+            </th>
+            <th class="pgs-th"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {#each artikli as artikal, i}
+            <tr class="bg-base-200/50 outline-1 outline-transparent hover:bg-info/10">
+              <td class="pgs-td whitespace-nowrap">
+                <a use:link href="/artikli/{artikal.id}" class="text-primary pgs-hyperlink">{artikal.name}</a>
               </td>
-            </tr> -->
-          </tbody>
-        </table>
-      </div>
-  
+              <td class="pgs-td">
+                <span class="badge badge-soft badge-{getArtikalColor(artikal.kategorija?.name)} font-mono badge-sm" style="text-transform: uppercase;">
+                  {artikal.kategorija?.name}
+                </span>
+              </td>
+              <td class="pgs-td-num-p">{formatPrice(artikal.price1)}</td>
+              <td class="pgs-td-num-p">{formatPrice(artikal.price2)}</td>
+              <td class="pgs-td-num-p">{formatPrice(artikal.price3)}</td>
+              <td class="pgs-td-num-p">{formatPrice(artikal.price4)}</td>
+              <td class="text-center">{@html formatCommentInfo(artikal.napomena)}</td>
+              <td class="pgs-td font-mono whitespace-nowrap">{@html formatDate(artikal.created, "new", 15)}</td>
+              <td class="pgs-td font-mono whitespace-nowrap">{@html formatDate(artikal.updated, "new", 15)}</td>
+              <td class="px-2">
+                <div class="flex justify-center items-center gap-2" style="font-size: 14px;">
+                  <div class="tooltip tooltip-info" data-tip="Edit">
+                    <a class="px-4" aria-label="Edit" use:link href="/artikli/{artikal.id}">
+                      <i class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"></i>
+                    </a>
+                  </div>
+                  <button class="px-4" aria-label="Delete" on:click={() => deleteDialog(artikal.id)}>
+                    <div class="tooltip tooltip-info" data-tip="Delete">
+                      <i class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"></i>
+                    </div>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+    </div>
+
   {/if}
- 
 {/if}
 
 <style>

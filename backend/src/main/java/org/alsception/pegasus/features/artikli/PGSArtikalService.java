@@ -29,7 +29,8 @@ public class PGSArtikalService {
     }
 
     @Transactional
-    public PGSArtikal save(PGSArtikal artikal) {
+    public PGSArtikal save(PGSArtikal artikal) 
+    {
         return repository.save(artikal);
     }
 

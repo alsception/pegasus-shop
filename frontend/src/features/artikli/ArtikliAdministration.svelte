@@ -190,6 +190,19 @@
 
               <div class="w-full md:col-span-2">
                 <label
+                  for="proizvodjac"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                  >Proizvođač</label
+                >
+                <input
+                  id="proizvodjac"
+                  class="pgs-input"
+                  bind:value={formData.proizvodjac}
+                />
+              </div>
+
+              <div class="w-full md:col-span-2">
+                <label
                   for="description"
                   class="block text-sm font-medium text-gray-700 mb-2"
                   >Opis</label
@@ -256,7 +269,7 @@
                 <label
                   for="price"
                   class="block text-sm font-medium text-gray-700 mb-2"
-                  >Cijena 1</label
+                  >Prodajna cijena</label
                 >
                 <input
                   id="currency1"
@@ -272,7 +285,7 @@
                 <label
                   for="currency"
                   class="block text-sm font-medium text-gray-700 mb-2"
-                  >Cijena 2</label
+                  >Nabavna cijena 1</label
                 >
                <input
                 id="currency2"
@@ -288,7 +301,7 @@
                 <label
                   for="shipping_cost"
                   class="block text-sm font-medium text-gray-700 mb-2"
-                  >Cijena 3</label
+                  >Nabavna cijena 2</label
                 >
                 <input
                   id="currency3"
@@ -304,7 +317,7 @@
                 <label
                   for="tax_amount"
                   class="block text-sm font-medium text-gray-700 mb-2"
-                  >Cijena 4</label
+                  >Nabavna cijena 3</label
                 >
                 <input
                   id="currency4"
@@ -316,7 +329,7 @@
                 />
               </div>
 
-              <div class="w-full">
+              <div class="w-full hidden">
                 <label
                   for="currency5"
                   class="block text-sm font-medium text-gray-700 mb-2"
@@ -332,7 +345,7 @@
                 />
               </div>
 
-              <div class="w-full">
+              <div class="w-full hidden">
                 <label
                   for="price6"
                   class="block text-sm font-medium text-gray-700 mb-2"

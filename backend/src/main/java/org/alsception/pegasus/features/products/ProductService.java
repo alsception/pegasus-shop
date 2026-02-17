@@ -124,7 +124,7 @@ public class ProductService
         //This checks for code and other business logic constraints. Will thorw exception if product not valid  
         ProductValidator.validate(product);
         
-        
+        //TODO: ovo mora da sklonimo
         final List<PGSReview> reviews = product.getReviews();
         
         //New product with reviews (needs to be saved separately)

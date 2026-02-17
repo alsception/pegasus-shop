@@ -4,6 +4,7 @@
     import { link } from "svelte-spa-router";
     import { auth } from "../services/SessionStore";
     import { showInfoToast, showPlusToast, showSuccessToast } from "../utils/toaster";
+  import { playNotificationSound } from "../../utils/sound";
 
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -79,6 +80,8 @@
                 {
                     console.log(notification)
                         showInfoToast(notification.text || notification.title, notification.type)
+                        playNotificationSound('success');
+                        //playNotificationSound('info');
                 };
             }
         });

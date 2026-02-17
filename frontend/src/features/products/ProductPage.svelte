@@ -6,6 +6,7 @@
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import AddToCartButton from "./AddToCartButton.svelte";
+  import { formatPrice } from "../../utils/formatting";
 
   document.title = "Product details | Pegasus";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -102,12 +103,12 @@
     <p>{product.description}</p>
      {/if}
     <h3 class="product-detail"
-      style="font-size: x-large;">€{product.basePrice}</h3>
+      style="font-size: x-large;">{formatPrice( product.basePrice   )}</h3>
     <p></p>
    
     <div class="w-full flex mr-0 mt-6">
       <button type="button" on:click={close} class=" btn btn-ghost mr-5">
-      <i class="fa fa-close"></i>
+      <!-- <i class="fa fa-close"></i> -->
       Zatvori
       </button>
       <div class="ml-auto">
