@@ -48,7 +48,7 @@
         top: 270px;
         left: 120px; -->
 <ul
-  class="menu menu-sm dropdown-content  w-52 p-2 
+  class="menu menu-md dropdown-content  w-52 p-2 
          bg-base-200/70 dark:bg-zinc-950/84 border-2 border-zinc-500/50 dark:border-zinc-500/20 
          rounded shadow  fixed z-[9999] pointer-events-auto
 

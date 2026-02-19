@@ -97,18 +97,18 @@
 </div>
 
 <div class="dropdown"
-        style="    
-              z-index: 9999;
-              position: fixed;
-              top: 12px;
-              left: 8px;"
+      style="    
+            z-index: 9999;
+            position: fixed;
+            top: 12px;
+            left: 8px;"
 >
-      <div
-        tabindex="0"
-        role="button"
-        class="btn btn-ghost btn-circle text-gray-500 hover:bg-neutral-900"
-      >
-        <i class="fas fa-bars text-xl"></i>
-        <PrimaryMenu />
-      </div>
-    </div>
+  <div
+    tabindex="0"
+    role="button"
+    class="btn btn-ghost btn-circle text-gray-500 hover:bg-neutral-900"
+  >
+    <i class="fas fa-bars text-xl"></i>
+  </div>
+  <PrimaryMenu />
+</div>
