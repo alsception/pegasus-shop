@@ -161,7 +161,6 @@
 >
   {#each displayedItems as item}
 
-
     <a
       href="#{item.href}"
       class=""
@@ -169,12 +168,11 @@
    <div class="menu-card card-8 ">
             <div class="card-content hover:bg-primary/20 flex flex-col items-center justify-center">
                 <span class="icon">{item.emoji}</span>
-                 <h2 class="title text-primary/60 text">{item.title}</h2>
+                 <h2 class="title text-primary/60 ">{item.title}</h2>
             </div>
             <span class="arrow">→</span>
         </div>
     </a>
-
 
   {/each}
 </div>
@@ -263,10 +261,6 @@
  */            z-index: 0;
         }
 
-        .menu-card:hover {
-/*             transform: translateY(-10px) scale(1.02);
- *//*             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
- */        }
 
         .menu-card:hover::before {
             opacity: 1;
@@ -275,8 +269,7 @@
         .card-content {
             position: relative;
             z-index: 1;
-/*             transition: color 0.4s ease;
- */        }
+ }
 
         .menu-card:hover .card-content
         {
@@ -286,9 +279,7 @@
         .icon {
             font-size: 48px;
             margin-bottom: 20px;
-/*             display: block;
- *//*             transition: transform 0.4s ease;
- */        }
+         }
 
 
         .title {
@@ -315,42 +306,7 @@
             transform: translateX(0);
         }
 
-        /* Individual card colors */
-        .card-1::before {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
 
-        .card-2::before {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-
-        .card-3::before {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-        }
-
-        .card-4::before {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-        }
-
-        .card-5::before {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-        }
-
-        .card-6::before {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-        }
-
-        .card-7::before {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-        }
-
-        .card-8::before {
-            /* background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); */
-        }
-
-        .card-9::before {
-            background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
-        }
 
         @media (max-width: 768px) {
             .menu-container {
@@ -358,11 +314,5 @@
             }
         }
 
-       
-      .menu-card:hover h2 {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+
 </style>

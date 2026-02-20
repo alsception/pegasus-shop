@@ -81,11 +81,10 @@
   // Available user types
   const userTypes = [
     "ADMIN",
-    "CUSTOMER",
-    "VENDOR",
+    "WAITER",
+    "KITCHEN",
     "EMPLOYEE",
     "TESTER",
-    "USER",
     "OTHER",
   ];
 
@@ -637,7 +636,7 @@ MDN Reference -->
 <!-- TODO: WE NEED SEPARATE MODAL FOR INFO/ERROR MESSAGE AND PROFILE PIX -->
 
 <dialog id="modal" class="modal modal-bottom sm:modal-middle w-full">
-  <div class="modal-box" style="min-width: min-content;">
+  <div class="modal-box bg-red-200 text-red-700" style="min-width: min-content;">
     <h3 class="text-lg font-bold" id="modal-title">Error</h3>
     <p class="py-4" id="modal-content">
     </p>

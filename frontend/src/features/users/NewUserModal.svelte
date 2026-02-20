@@ -28,7 +28,14 @@
   }
 
   // Available user types
-  const userTypes = ["ADMIN", "CUSTOMER", "VENDOR", "EMPLOYEE", "TESTER", "USER", "OTHER"];
+  const userTypes = [
+  "ADMIN",
+    "WAITER",
+    "KITCHEN",
+    "EMPLOYEE",
+    "TESTER",
+    "OTHER",
+  ]
 
   function closeModal() {
     isOpen = false;

@@ -50,7 +50,12 @@ export function showAddSuccessToastWithLink(): void
   });
 }
 
-export function showInfoToast(message: String, type: String | Number): void 
+/**
+ * 
+ * @param message 
+ * @param type: 1,2,3
+ */
+export function showInfoToast(message: String, type: String | Number | undefined): void 
 {
   let checkmark = '<i class="fa fa-check fa-lg text-green-600 font-bold" aria-hidden="true"></i> &nbsp;';
   let plusmark = '<i class="fa fa-square-plus fa-lg text-blue-600 font-bold" aria-hidden="true"></i> &nbsp;';
@@ -62,15 +67,15 @@ export function showInfoToast(message: String, type: String | Number): void
   switch(type)
   {
 
-    case "1":
+    case 1:
       text = plusmark + message;
       break;
 
-    case "2":
+    case 2:
       text = firemark + message;
       break;
 
-    case "3":
+    case 3:
       text = checkmark + message;
       break;
   

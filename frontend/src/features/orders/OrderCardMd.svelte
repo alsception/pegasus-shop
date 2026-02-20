@@ -9,9 +9,9 @@
   import axios from 'axios';
   import { showInfoModal } from "../../utils/modal";
   import StatusMenu from "./StatusMenu.svelte";
-  import OrderModal from "./OrderModal.svelte";
   import OrderDetails from "./OrderDetails.svelte";
-  import { fade } from "svelte/transition";
+  import OrderButtonReady from "./OrderButtonReady.svelte";
+  import OrderButtonInPreparation from "./OrderButtonInPreparation.svelte";
 
   export let order: Order;
   export let liteView = false;
@@ -285,7 +285,7 @@
     {
 
       default:
-        return "bg-base-200 ";
+        return "bg-base-300/60 dark:bg-base-200 ";
 
      /* case "WAITING":
         return "bg-[#FEBB0036]"//"bg-yellow-700/30";//"bg-[#525214]";
@@ -371,7 +371,7 @@
     
     -->
 
- <div class="rounded-xl shadow p-4 flex flex-col gap-2 h-fit w-fit {liteView ? 'w-full' : 'w-fit min-w-[21rem]'} {getBgClass(order.status)}" 
+ <div class="rounded-xl shadow p-4 flex flex-col gap-2 h-fit w-fit shadow border border-primary/12 {liteView ? 'w-full' : 'w-fit min-w-[21rem]'} {getBgClass(order.status)}" 
     class:card-new={isNew(order.created,10) && order.status == 'WAITING'}
    
     >
@@ -443,7 +443,6 @@
           </div>
 
           <div class="flex gap-2 mt-2">
-            <!-- use:link href="/orders/{order.id} -->
             <button class="btn btn-sm btn-ghost text-primary/80"
               on:click={openModal2}>Detalji</button>
 
@@ -453,33 +452,22 @@
                 class=" tooltip tooltip-info tooltip-top"
                 data-tip="Obriši"
               >
-                <i class="fas fa-trash text-primary/60" aria-label="Obriši"></i>  
-                      </z>
+                <i class="fas fa-trash text-error" aria-label="Obriši"></i>  
+                </z>
               
             </button>
             {#if order.status == 'IN_PREPARATION'}
-            <button class="btn btn-sm btn-success text-primary-content"
-              on:click={alert('hello')}><i class="fa fa-check text-md cursor-pointer"></i>Spremno</button>
+              <OrderButtonReady {order} on:orderUpdateCompleted/>
             {/if}  
             {#if order.status == 'WAITING'}
-            <button class="btn btn-sm btn-info text-primary-content"
-              on:click={alert('hello')}><i class="fa fa-fire text-md cursor-pointer"></i>U pripremi</button>
+              <OrderButtonInPreparation {order} on:orderUpdateCompleted/>           
             {/if}  
           </div>
           
         </div>
 
 
-      <!-- ovde cemo staviti order details modal -->
-   <!--  <OrderModal
-      isOpen={isModalOpen}
-      order={modalOrder}
-      on:close={closeModal}
-    />
- -->
-
-
-<!-- Modal -->
+ <!-- ovde cemo staviti order details modal -->
 {#if showModal2}
   <div class="modal modal-open  pt-10" style="backdrop-filter: blur(10px);">
   <div class="modal-box max-h-[90vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-200">
@@ -513,14 +501,9 @@
 {/if}
 
 <style>
-  .badge {
-/*   background-color: transparent !important;
- */}
 
 .card-new {
   border: 2px solid 2px solid #6933ff;
-/*   border-radius: 22px;
- */  /*padding: 20px;*/
   animation: pulse 6s infinite;
 }
 

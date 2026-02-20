@@ -5,7 +5,7 @@
   import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";  
   import { get } from "svelte/store";
-  import { formatCode, formatTime, formatCommentInfo, formatPrice } from "../../utils/formatting";
+  import { formatCode, formatTime, formatCommentInfo, formatPrice, formatTime2 } from "../../utils/formatting";
   import { showSuccessToast, showErrorToast } from '../../core/utils/toaster';
   import axios from 'axios';
   import Login from "../../core/auth/Login.svelte";
@@ -352,11 +352,11 @@ i LITE APP!!, I MOZDA i WS.....
 {#if isBlockView}
 <div class="flex flex-wrap md:flex-nowrap gap-4 md:gap-8 p-2">
 
-  <div class="w-full md:w-80 rounded-xl shadow p-4 pgs-orders-wait-cntr shrink-0">
+  <div class="w-full md:w-80 shadow p-4 pgs-orders-wait-cntr shrink-0">
     {@render ordersWait()}
   </div>
 
-  <div class="flex-1 rounded-xl shadow p-4 pgs-orders-inprep-cntr">
+  <div class="flex-1 shadow p-4 pgs-orders-inprep-cntr">
     <div class="flex flex-wrap gap-4">
        {@render ordersInprep()}
     </div>
@@ -364,7 +364,7 @@ i LITE APP!!, I MOZDA i WS.....
 
   {#if showReady}
     <div 
-      class="w-full md:w-80 rounded-xl shadow p-4 pgs-orders-ready-cntr overflow-hidden"
+      class="w-full md:w-80 shadow p-4 pgs-orders-ready-cntr overflow-hidden"
       in:fly={{ y: 200, duration: 400 }} 
       out:fade={{ duration: 200 }}
     >
@@ -381,14 +381,16 @@ i LITE APP!!, I MOZDA i WS.....
       <table class="table table-zebra min-w-full divide-y divide-accent " >
       <thead class="bg-base-300">
         <tr class="h-12">
-          <th class="pgs-th">code</th>
-          <th class="pgs-th">Amount</th>
+          <th class="pgs-th">Broj</th>
+          <th class="pgs-th">Iznos</th>
           <th class="pgs-th">Status</th>
-          <th class="pgs-th">user</th>
-          <th class="pgs-th">Items</th>
-          <th class="pgs-th">Comment</th>          
-          <th class="pgs-th">created</th>       
-          <th class="pgs-th">Actions</th>          
+          <th class="pgs-th">Korisnik</th>
+          <th class="pgs-th">Ukupno stavki</th>
+          <th class="pgs-th">Napomena</th>          
+          <th class="pgs-th">Primljeno</th>       
+          <th class="pgs-th">U pripremi</th>       
+          <th class="pgs-th">Spremno</th>       
+          <th class="pgs-th"></th>       
         </tr>
       </thead>
       <tbody>
@@ -409,7 +411,13 @@ i LITE APP!!, I MOZDA i WS.....
             <td class="pgs-td-num font-mono">{order.items.length}</td>
             <td class="text-center">{@html formatCommentInfo(order.comment)}</td>            
             <td class="pgs-td font-mono">
-              {@html formatTime(order.created,'New - created less than 30 minutes ago',30)}
+              {@html formatTime2(order.created)}
+            </td>
+            <td class="pgs-td font-mono">
+              {@html formatTime2(order.upripremiAt)}
+            </td>
+            <td class="pgs-td font-mono">
+              {@html formatTime2(order.spremnoAt)}
             </td>
             <td class=" justify-center">
               <div class="tooltip tooltip-info" data-tip="Edit"><a class="px-4" aria-label="Edit" use:link href="/orders/mngmt/{order.id}"><i class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"></i></a></div>
@@ -450,9 +458,10 @@ i LITE APP!!, I MOZDA i WS.....
 
 {#snippet ordersWait()}     
   <div class="mb-4 ">
-      <h2 class="text-xl  rounded font-bold  flex items-center gap-2 bg-yellow-500 text-white">
+      <h2 class="text-xl rounded-lg font-bold  flex items-center gap-2 bg-yellow-500 text-primary-content">
         
-        <span class="badge badge-soft badge-lg badge-green bg-yellow-500" style="background: var(--color-yellow-500); color: white;">
+        <span class="badge  badge-lg badge-green bg-yellow-500 ml-1" 
+        style="background: var(--color-yellow-500);color: black;">
           <i class="fas fa-clock"></i> NA ČEKANJU</span>
         <span class="text-md">({orders.filter(o => o.status === 'WAITING').length})</span>
       </h2>
@@ -467,8 +476,8 @@ i LITE APP!!, I MOZDA i WS.....
 
 {#snippet ordersInprep()}     
     <div class="mb-4 w-full">
-    <h2 class="text-xl rounded font-bold   flex items-center gap-2 bg-blue-500 text-white">
-        <span class="badge badge-lg bg-blue-500 text-white flex gap-2 items-center p-3">
+    <h2 class="text-xl rounded-lg font-bold   flex items-center gap-2 bg-blue-500 text-white">
+        <span class="badge badge-lg bg-blue-500 text-white flex gap-2 items-center p-3 ml-1">
           <i class="fas fa-fire-alt"></i> U PRIPREMI
         </span>
         <span class="text-md text-white font-bold">({orders.filter(o => o.status === 'IN_PREPARATION').length})</span>
@@ -485,8 +494,8 @@ i LITE APP!!, I MOZDA i WS.....
 
 {#snippet ordersReady()}     
   <div class="mb-4">
-    <h2 class="text-xl rounded font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2 bg-green-500 text-white">
-      <span class="badge badge-soft badge-lg badge-green" style="background: green; color: white;">
+    <h2 class="text-xl rounded-lg font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2 bg-green-500 text-black">
+      <span class="badge badge-soft badge-lg badge-green bg-green-500" style="background: var(--color-green-500); color: black;">
         <i class="fas fa-check"></i> SPREMNO</span>
       <span class="text-md">({orders.filter(o => (o.status === 'READY' || o.status === 'DELIVERED' )).length})</span>
     </h2>
@@ -499,20 +508,17 @@ i LITE APP!!, I MOZDA i WS.....
 {/snippet}
 
 <style>
-  .badge {
-/*   background-color: transparent !important;
- */}
 
  .pgs-orders-ready-cntr{
-  background: linear-gradient(to bottom right, var(--color-ready), var(--color-base-100));
- }
+  background-color: var(--color-base-200);
+  }
 
  .pgs-orders-wait-cntr{
-  background: linear-gradient(to bottom right, var(--color-wait), var(--color-base-100));
+  background-color: var(--color-base-200);
  }
 
  .pgs-orders-inprep-cntr{
-  background: linear-gradient(to bottom right, var(--color-inprep), var(--color-base-100));
+    background-color: var(--color-base-200);
  }
 
 </style>

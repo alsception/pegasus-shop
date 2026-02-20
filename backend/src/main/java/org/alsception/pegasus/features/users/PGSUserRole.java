@@ -1,5 +1,6 @@
 package org.alsception.pegasus.features.users;
 
 public enum PGSUserRole {
-    ADMIN, USER, EMPLOYEE, TESTER, CUSTOMER, VENDOR, OTHER
+    ADMIN, WAITER, KITCHEN, EMPLOYEE, TESTER, OTHER,
+    CUSTOMER //ovo cemo morati da obrisemo, ali kad izmenimo sve u bazi podataka
 }

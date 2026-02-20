@@ -78,10 +78,8 @@
                 // možeš dodati proveru: if (notificationsMap.size > data.length)
                 if(!skipit)
                 {
-                    console.log(notification)
-                        showInfoToast(notification.text || notification.title, notification.type)
-                        playNotificationSound('success');
-                        //playNotificationSound('info');
+                    showInfoToast(notification.text || notification.title, notification.type)
+                    playNotificationSound('info');
                 };
             }
         });

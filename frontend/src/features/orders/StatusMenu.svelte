@@ -1,6 +1,6 @@
 <script lang="ts">
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
-  import { showErrorToast, showSuccessToast } from "../../core/utils/toaster";
+  import { showErrorToast, showInfoToast, showSuccessToast } from "../../core/utils/toaster";
   import { getOrderStatusColor, getOrderStatusLabel } from "../../utils/formatting";
   import type { Order } from "./Order";
   import axios from "axios";
@@ -59,7 +59,7 @@
         }
       });
       (await response);
-      showSuccessToast("Sačuvano");
+      showInfoToast("Sačuvano",3);
       closeDropdown();
       dispatch('orderUpdateCompleted', { id, status }); // Šalje event
 
