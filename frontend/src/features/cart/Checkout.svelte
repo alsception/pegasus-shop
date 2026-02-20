@@ -90,7 +90,7 @@
 
     <div class="text-primary mx-auto bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl" style="transform: none">
     <!-- Header Section -->
-     <div class="p-0 bg-primary/20 text-primary/80 rounded-t">
+     <div class="p-0 bg-accent text-primary/80 rounded-t">
         <h2 class="text-lg sm:text-2xl font-bold p-1 text-center">Checkout</h2>
       </div>
       

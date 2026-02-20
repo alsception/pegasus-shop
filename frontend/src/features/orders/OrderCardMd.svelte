@@ -425,7 +425,7 @@
           {/if}
 
           <div class="mt-2 " class:hidden={liteView}>
-            <ul class="flex flex-col gap-0">
+            <ul class="flex flex-col gap-0 bg-base-300">
               {#each order.items as item}
                 <li class="flex items-center gap-0 p-2 border-0">
                   <span class="text-primary text-md font-semibold font">{item.quantity} x </span>&nbsp;
@@ -436,8 +436,8 @@
                 </li>
               {/each}
             </ul>
-              <div style="align-items: end;display:grid;align-content: end; text-align: right;"
-                    class="g-base-100 dark:bg-base-100">
+              <div style="align-items: end;display:grid;align-content: end; text-align: right; "
+                    class=" bg-base-300">
                 <span class="text-lg font-bold text-primary p-2 font-mono">{formatPrice(order.price)}</span>
               </div>
           </div>
@@ -457,7 +457,16 @@
                       </z>
               
             </button>
+            {#if order.status == 'IN_PREPARATION'}
+            <button class="btn btn-sm btn-success text-primary-content"
+              on:click={alert('hello')}><i class="fa fa-check text-md cursor-pointer"></i>Spremno</button>
+            {/if}  
+            {#if order.status == 'WAITING'}
+            <button class="btn btn-sm btn-info text-primary-content"
+              on:click={alert('hello')}><i class="fa fa-fire text-md cursor-pointer"></i>U pripremi</button>
+            {/if}  
           </div>
+          
         </div>
 
 

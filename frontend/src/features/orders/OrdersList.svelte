@@ -1,6 +1,5 @@
 <script lang="ts">
   import OrderCardMd from './OrderCardMd.svelte';
-
   import type { Order } from "./Order";
   import { onDestroy, onMount } from "svelte";
   import { link } from "svelte-spa-router";
@@ -11,10 +10,8 @@
   import axios from 'axios';
   import Login from "../../core/auth/Login.svelte";
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
-  import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import { showInfoModal } from "../../utils/modal";
   import { fade, fly, slide } from 'svelte/transition';
-  import { quintOut } from 'svelte/easing';
 
 
 
@@ -57,7 +54,7 @@ i LITE APP!!, I MOZDA i WS.....
   let intervalId: string | number | NodeJS.Timeout | undefined;
   const REFRESH_INTERVAL = 5000; // 5 sekundi
   const autoRefresh = true;
-  let showReady = true; // Varijabla koja kontrolira vidljivost
+  let showReady = false; // Varijabla koja kontrolira vidljivost gotovih orders
 
   function toggleView() {
     isBlockView = !isBlockView;
@@ -380,10 +377,9 @@ i LITE APP!!, I MOZDA i WS.....
 {:else}
   <!-- Table view (existing code) -->
   <div class="max-w-[2048px] w-full overflow-x-auto rounded-lg align-middle text-center mx-auto">
-    <div class="nb-table-container">
-      <div class="nb-table-header text-left">Orders</div>
+    <div class="">
       <table class="table table-zebra min-w-full divide-y divide-accent " >
-      <thead class="bg-base-200">
+      <thead class="bg-base-300">
         <tr class="h-12">
           <th class="pgs-th">code</th>
           <th class="pgs-th">Amount</th>
@@ -397,7 +393,7 @@ i LITE APP!!, I MOZDA i WS.....
       </thead>
       <tbody>
         {#each orders as order, i}
-          <tr class="bg-base-100  outline-1 outline-transparent hover:outline-blue-500 hover:bg-blue-600/15">
+          <tr class="bg-base-200/60  outline-1 outline-transparent hover:outline-blue-500 hover:bg-blue-600/15">
             <td class="pgs-td">
               <a use:link href="/orders/{order.id}" class="pgs-hyperlink">{formatCode(order.code)}</a>
             </td>

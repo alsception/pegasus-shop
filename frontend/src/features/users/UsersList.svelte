@@ -355,7 +355,7 @@
       <tbody class="">
 
         {#each users as user, i}     
-          <tr class="bg-base-200/80 outline-1 outline-transparent /*hover:outline-blue-500*/ hover:bg-base-300/70">            
+          <tr class="bg-base-200/60 outline-1 outline-transparent /*hover:outline-blue-500*/ hover:bg-base-300/70">            
               <td class="justify-center pgs-td-center px-4 ">
                 <input type="checkbox" class="checkbox checkbox-accent checkbox-xs" 	on:change={(event) => handleCheckboxChange(event, i)} />
               </td>

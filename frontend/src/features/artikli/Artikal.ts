@@ -22,10 +22,10 @@ export interface PGSArtikal {
   created?: Date | string;
   updated?: Date | string;
 
-  price1?: number;
-  price2?: number;
-  price3?: number;
-  price4?: number;
+  price1: number;
+  price2: number;
+  price3: number;
+  price4: number;
   price5?: number;
   price6?: number;
 

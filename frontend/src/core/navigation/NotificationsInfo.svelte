@@ -89,10 +89,11 @@
 </script>
 
 <ul
-  class="menu menu-sm dropdown-content  w-52 p-2 scale-in-ver-top 
+  class="menu menu-sm dropdown-content w-52 p-2 scale-in-ver-top
          bg-base-100 dark:bg-zinc-900
-         rounded shadow "
-  style="min-width: 300px; left: -270px;"
+         rounded shadow
+         max-h-180 overflow-x-auto block"
+  style="min-width: 300px; left: -270px; top: 54px"
 >
     {#if notifications.length == 0}
   <li class="flex  px-3 py-2 rounded-md">
@@ -105,17 +106,17 @@
    {#each notifications as item}
         <li class="w-full border-t border-primary/10">
             <div class="flex items-center px-3 py-2 rounded-md cursor-pointer
-                        hover:bg-[#0f172a] hover:text-blue-400
+                        hover:bg-base-200 hover:text-blue-400
                         text-primary text-sm"
             >
                 <i class="fas fa-{item.icon} w-5 mr-3"></i>
 
                 <div class="flex flex-col">
-                <p class="font-bold dark:text-gray-400 hover:text-blue-400">
+                <p class="font-bold dark:text-gray-400">
                     {item.title}
                 </p>
-                <p class="text-xs dark:text-gray-500 hover:text-blue-300">
-                    {item.text}
+                <p class="text-xs dark:text-gray-500 ">
+                    {@html item.text}
                 </p>
                 </div>
             </div>

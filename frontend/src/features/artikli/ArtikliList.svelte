@@ -226,6 +226,47 @@
       default: return "secondary ";
     }
   }
+
+  function isMax(artikal: PGSArtikal, price: number)
+  {
+    if(price == null || price==0) 
+      return false;
+    
+    return (
+        
+        price >= artikal.price2 &&
+        price >= artikal.price3 &&
+        price >= artikal.price4)      
+  }
+
+  function isMin(artikal: PGSArtikal, price: number)
+  {
+    if(price == null || price==0) 
+      return false;
+
+    return (
+      
+      price <= artikal.price2 &&
+      price <= artikal.price3 &&
+      price <= artikal.price4)      
+  }
+
+  function getClass(artikal: PGSArtikal, price: number)
+  {
+    if( isMin(artikal,price) )
+    {
+      return "success";
+    }
+    else if( isMax(artikal,price) )
+    {
+      return "error";
+    }
+    else
+    {
+      return ""
+    }
+
+  }
 </script>
 
 {#if !$auth.isAuthenticated}
@@ -279,7 +320,7 @@
 
     <div class="w-full max-w-[1580px] overflow-x-auto rounded-lg align-middle mx-auto">
       <table class="table table-zebra min-w-[1200px] divide-y divide-accent">
-        <thead class="bg-info/10">
+        <thead class="bg-primary/10">
           <tr class="h-12">
             <th class="pgs-th-l cursor-pointer"
               title="Klikni za sortiranje"
@@ -335,19 +376,19 @@
         </thead>
         <tbody>
           {#each artikli as artikal, i}
-            <tr class="bg-base-200/50 outline-1 outline-transparent hover:bg-info/10">
+            <tr class="bg-base-200/60 outline-1 outline-transparent hover:bg-primary/10">
               <td class="pgs-td whitespace-nowrap">
-                <a use:link href="/artikli/{artikal.id}" class="text-primary pgs-hyperlink">{artikal.name}</a>
+                <a use:link href="/artikli/{artikal.id}" class="text-primary/80 pgs-hyperlink">{artikal.name}</a>
               </td>
               <td class="pgs-td">
                 <span class="badge badge-soft badge-{getArtikalColor(artikal.kategorija?.name)} font-mono badge-sm" style="text-transform: uppercase;">
                   {artikal.kategorija?.name}
                 </span>
               </td>
-              <td class="pgs-td-num-p">{formatPrice(artikal.price1)}</td>
-              <td class="pgs-td-num-p">{formatPrice(artikal.price2)}</td>
-              <td class="pgs-td-num-p">{formatPrice(artikal.price3)}</td>
-              <td class="pgs-td-num-p">{formatPrice(artikal.price4)}</td>
+              <td class="">{formatPrice(artikal.price1)}</td>
+              <td class="text-{getClass(artikal,artikal.price2)}">{formatPrice(artikal.price2)}</td>
+              <td class="text-{getClass(artikal,artikal.price3)}">{formatPrice(artikal.price3)}</td>
+              <td class="text-{getClass(artikal,artikal.price4)}">{formatPrice(artikal.price4)}</td>
               <td class="text-center">{@html formatCommentInfo(artikal.napomena)}</td>
               <td class="pgs-td font-mono whitespace-nowrap">{@html formatDate(artikal.created, "new", 15)}</td>
               <td class="pgs-td font-mono whitespace-nowrap">{@html formatDate(artikal.updated, "new", 15)}</td>

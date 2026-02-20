@@ -155,13 +155,9 @@
 
 </script>
       
-<!-- <InfoBlocks/>
- -->
-<!-- <Charts/> -->
-
 <div
-  class="max-w-9xl mx-auto px-6 py-10
-  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 scale-up-center-normal menu-container"
+  class="max-w-9xl mx-auto px-6 py-10 sm:pt-0
+  grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-1 scale-up-center-normal menu-container"
 >
   {#each displayedItems as item}
 
@@ -170,12 +166,11 @@
       href="#{item.href}"
       class=""
     >
-   <div class="menu-card card-8">
-            <div class="card-content">
+   <div class="menu-card card-8 ">
+            <div class="card-content hover:bg-primary/20 flex flex-col items-center justify-center">
                 <span class="icon">{item.emoji}</span>
-                 <h2 class="title">{item.title}</h2>
-<!--                 <p class="description"> {item.description}</p>
- -->            </div>
+                 <h2 class="title text-primary/60 text">{item.title}</h2>
+            </div>
             <span class="arrow">→</span>
         </div>
     </a>
@@ -232,213 +227,19 @@
   .scale-up-center-normal {
     animation: scale-up-center-normal 0.25s ease-out 0s 1 normal both;
   }
-  .menu-block {
-    display: inline-block; /* needed for transform to work properly */
-    transition: transform 0.2s ease;
-  }
-  .menu-block:hover {
-    transform: scale(2.1); /* 10% bigger */
-  }
-  .gblock {
-    background-color: #003153 !important;
-    background-image: linear-gradient(315deg, #062840 0%, #000 74%) !important;
-  }
-
-  /* From Uiverse.io by ElSombrero2 */ 
-.card {
-  width: 190px;
-  height: 254px;
-  background: #171717;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  position: relative;
-  box-shadow: 0px 0px 3px 1px #00000088;
-  cursor: pointer;
-}
-
-.card .content {
-  border-radius: 5px;
-  background: #171717;
-  width: 186px;
-  height: 250px;
-  z-index: 1;
-  padding: 20px;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.content::before {
-  opacity: 0;
-  transition: opacity 300ms;
-  content: " ";
-  display: block;
-  background: white;
-  width: 5px;
-  height: 50px;
-  position: absolute;
-  filter: blur(50px);
-  overflow: hidden;
-}
-
-.card:hover .content::before {
-  opacity: 1;
-}
-
-.card::before {
-  opacity: 0;
-  content: " ";
-  position: absolute;
-  display: block;
-  width: 80px;
-  height: 360px;
-  background: linear-gradient(#ff2288, #387ef0);
-  transition: opacity 300ms;
-  animation: rotation_9018 8000ms infinite linear;
-  animation-play-state: paused;
-}
-
-.card:hover::before {
-  opacity: 1;
-  animation-play-state: running;
-}
-
-.card::after {
-  position: absolute;
-  content: " ";
-  display: block;
-  width: 250px;
-  height: 360px;
-  background: #17171733;
-  backdrop-filter: blur(50px);
-}
-
-@keyframes rotation_9018 {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-/* From Uiverse.io by SouravBandyopadhyay */ 
-.notification {
-  display: flex;
-  flex-direction: column;
-  isolation: isolate;
-  position: relative;
-  width: 18rem;
-  height: 8rem;
-  background: var(--color-base-300);
-  border-radius: 0rem;
-  overflow: hidden;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  font-size: 16px;
-  --gradient: linear-gradient(to bottom, #2eadff, #3d83ff, #7e61ff);
-  --color: #32a6ff
-}
-/* 
-.notification:before {
-  position: absolute;
-  content: "";
-  inset: 0.0625rem;
-  background: var(--color-base-200);
-  z-index: 2
-}
-
-.notification:after {
-  position: absolute;
-  content: "";
-  width: 0.25rem;
-  inset: 0.65rem auto 0.65rem 0.5rem;
-  background: var(--gradient);
-  transition: transform 300ms ease;
-  z-index: 4;
-}
- */
-.notification:hover:after {
-  transform: translateX(0.15rem)
-}
-
-.notititle {
-  color: var(--color);
-  padding: 0.65rem 0.25rem 0.4rem 1.25rem;
-  font-weight: 500;
-  font-size: 1.6rem;
-  transition: transform 300ms ease;
-  z-index: 5;
-}
-
-.notification:hover .notititle {
-  transform: translateX(0.15rem)
-}
-
-.notibody {
-  padding: 0 1.25rem;
-  transition: transform 300ms ease;
-  z-index: 5;
-}
-
-.notification:hover .notibody {
-  transform: translateX(0.25rem)
-}
-
-.notiglow,
-.notiborderglow {
-  position: absolute;
-  width: 20rem;
-  height: 20rem;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle closest-side at center, white, transparent);
-  opacity: 0;
-  transition: opacity 300ms ease;
-}
-
-.notiglow {
-  z-index: 3;
-}
-
-.notiborderglow {
-  z-index: 1;
-}
-
-.notification:hover .notiglow {
-  opacity: 0.1
-}
-
-.notification:hover .notiborderglow {
-  opacity: 0.1
-}
-
-.note {
-  color: var(--color);
-  position: fixed;
-  top: 80%;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  font-size: 0.9rem;
-  width: 75%;
-}
+ 
 
  .menu-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-            gap: 20px;
+            grid-template-columns: revert-layer !important;
+            gap: 20px; 
             max-width: 1200px;
             width: 100%;
         }
 
         .menu-card {
             background: var(--color-base-200);
-            backdrop-filter: blur(10px);
-/*             border-radius: 20px;
- */            padding: 30px 30px;
- 
+            backdrop-filter: blur(10px); 
             min-width: none; 
             position: relative;
             overflow: hidden;
@@ -456,16 +257,16 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: 0;
+/*             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+ */            opacity: 0;
+/*             transition: opacity 0.4s ease;
+ */            z-index: 0;
         }
 
         .menu-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
+/*             transform: translateY(-10px) scale(1.02);
+ *//*             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+ */        }
 
         .menu-card:hover::before {
             opacity: 1;
@@ -474,8 +275,8 @@
         .card-content {
             position: relative;
             z-index: 1;
-            transition: color 0.4s ease;
-        }
+/*             transition: color 0.4s ease;
+ */        }
 
         .menu-card:hover .card-content
         {
@@ -485,32 +286,19 @@
         .icon {
             font-size: 48px;
             margin-bottom: 20px;
-            display: block;
-            transition: transform 0.4s ease;
-        }
+/*             display: block;
+ *//*             transition: transform 0.4s ease;
+ */        }
 
-        .menu-card:hover .icon {
-            transform: scale(1.1) /*rotate(5deg)*/;
-        }
 
         .title {
-/*             font-family: 'Playfair Display', serif;
- */            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 12px;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
             letter-spacing: -0.5px;
         }
 
-        .description {
-            font-size: 15px;
-            line-height: 1.6;
-            opacity: 0.8;
-            font-weight: 400;
-        }
-
-        .menu-card:hover .description {
-            opacity: 0.95;
-        }
+    
 
         .arrow {
             position: absolute;
@@ -557,7 +345,7 @@
         }
 
         .card-8::before {
-            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            /* background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); */
         }
 
         .card-9::before {
@@ -569,4 +357,12 @@
                 grid-template-columns: 1fr;
             }
         }
+
+       
+      .menu-card:hover h2 {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 </style>

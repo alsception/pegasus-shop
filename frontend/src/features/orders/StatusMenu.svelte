@@ -113,15 +113,10 @@ class="flex items-center px-3 py-2 rounded-md cursor-pointer
                   font-semibold font-stretch-150% badge"
           style="font-size: small;"
         >
-        <!--                   hover:bg-[#405075] hover:text-blue-400 -->
-<!--           <i class="fas fa-{item.label} w-5 mr-2"></i>
- -->          <span class="badge badge-{getOrderStatusColor(item.status)} font-mono badge-lg ml-auto" style="text-transform: uppercase;">
+           <span class="badge badge-{getOrderStatusColor(item.status)} font-mono badge-lg ml-auto" style="text-transform: uppercase;">
                 {item.label /*+/* getOrderStatusLabel(item.status)*/}
               </span>
-          <!-- <span
-            class="text-white hover:text-blue-400"
-            style="width: 150px;color:white">{item.label}</span
-          > -->
+        
       </button>
       </li>
       {/if}
