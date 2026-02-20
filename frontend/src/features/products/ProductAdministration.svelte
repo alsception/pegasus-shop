@@ -472,15 +472,7 @@ https://svelte.dev/e/a11y_no_noninteractive_element_interactionssvelte(a11y_no_n
       <div class="h-px bg-neutral w-full"></div>
 
       <div class="grid grid-cols-1">
-        <!-- <div class="lg:col-span-1">
-      <h3 class="text-2xl font-semibold text-primary">
-        Actions
-      </h3>
-      <p class="text-secondary text-sm mt-2">
-        Save the changes or close without saving
-      </p>
-    </div> -->
-        <div class="flex justify-end gap-3 pt-4">
+            <div class="flex justify-end gap-3 pt-4">
           <button
             type="button"
             on:click={cancelEditing}
@@ -496,10 +488,6 @@ https://svelte.dev/e/a11y_no_noninteractive_element_interactionssvelte(a11y_no_n
 </div>
 
 <style>
-  .acc-disabled {
-    background-color: #f8f8f8 !important;
-    /*darkmode?*/
-  }
   .toggle {
     background-color: rgb(57, 57, 36);
   }

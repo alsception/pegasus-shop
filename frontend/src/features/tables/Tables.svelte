@@ -110,9 +110,3 @@
     </div>
   {/if}
 {/if}
-
-<style>
-  .pgs-th {
-    color: white;
-  }
-</style>

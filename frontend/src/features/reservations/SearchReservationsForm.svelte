@@ -683,22 +683,10 @@
     font-size: 1.1rem;
   }
 
-  .results-header {
-    margin-bottom: 20px;
-  }
-
   .card-body {
     display: flex;
     flex-direction: column;
     gap: 12px;
   }
 
-
-  /**
-  * TODO: this is only good in night mode, fix for day
-  */
-  .highlighted {
-    border: 2px solid lime;
-    background: green;
-  }
 </style>

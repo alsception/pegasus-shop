@@ -191,11 +191,3 @@
   {/if}
   {/if}
 </div>
-<style>
-  .nb-card:hover {
-  transform: none;
-}
-.nb-card:hover {
-/*   box-shadow: reset;
- */}
-</style>

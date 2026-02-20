@@ -340,13 +340,5 @@
   :global(body) {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   }
-    .modal {
-  /*   background: white;
-    border-radius: 12px;
-    padding: 2rem; */
-    max-width: 500px;
-    width: 100%;
-    max-height: 90vh; /* ograničava visinu na 90% visine ekrana */
-    overflow-y: auto; /* omogućava vertikalni scroll unutar modala */
-}
+
 </style>

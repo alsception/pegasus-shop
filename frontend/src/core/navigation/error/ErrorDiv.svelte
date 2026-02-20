@@ -35,16 +35,3 @@
   {/if}
 
 </div>
-
-<style>
-  h1 {
-    font-size: 2rem;
-    font-weight: 900;
-    color: #111;
-    background: #888;
-    padding: 0.5rem 1.5rem;
-    border: 3px solid #111;
-    margin: 1rem 0;
-    box-shadow: 6px 6px 0 #111;
-  }
-</style>

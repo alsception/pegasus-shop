@@ -114,11 +114,6 @@
     padding: 0;
   }
 
-  .legend li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-  }
 
   .dot {
     width: 12px;
@@ -315,13 +310,6 @@
   .card-footer {
     padding-top: 1rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .card-footer p {
-    margin: 0;
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.6);
-    line-height: 1.5;
   }
 
   @media (max-width: 640px) {

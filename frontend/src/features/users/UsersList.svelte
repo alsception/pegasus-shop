@@ -427,15 +427,6 @@
 } 
 
 
- 
-
-.pgs-table-tr{
-
-}
-.pgs-table-tr:hover{
-  
-}
-
 .pgs-th {
   color: white; /**or neutral*/
 }
