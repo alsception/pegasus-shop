@@ -1,33 +1,51 @@
-export function showInfoModal(/*title: string, */message: string): void 
+export function showErrorModal(message: string): void 
 {
-    const contentEl = document.getElementById("info-modal-content");
-    const dialogEl = document.getElementById("info-modal") as HTMLDialogElement;
+    const contentEl = document.getElementById("error-modal-content");
+    const dialogEl = document.getElementById("error-modal") as HTMLDialogElement;
     
-    if (contentEl) {
-        /* let errorMessage = "An error occurred";
-        
-        if (typeof error === 'string') {
-            // Handle case where error is a string like "Error: {json...}"
-            if (error.startsWith('Error: {')) {
-                try {
-                    const jsonPart = error.substring(7); // Remove "Error: " prefix
-                    const parsedError = JSON.parse(jsonPart);
-                    errorMessage = parsedError.message || errorMessage;
-                } catch (e) {
-                    errorMessage = error; // Fallback to original string
-                }
-            } else {
-                errorMessage = error;
-            }
-        } else if (error && error.message) {
-            // Handle case where error is already an object
-            errorMessage = error.message;
-        } */
-        
+    if (contentEl) 
+    {       
         contentEl.textContent = message;
     }
     
-    if (dialogEl) {
+    if (dialogEl) 
+    {
         dialogEl.showModal();
     }
-  }
+}
+
+export function showErrorModalWithTitle(title:string, message: any): void 
+{
+    const contentEl = document.getElementById("error-modal-content");
+    const titleEl = document.getElementById("error-modal-title");
+    const dialogEl = document.getElementById("error-modal") as HTMLDialogElement;
+    
+    //If there is only title, it is actualy message hah   
+    //???
+
+    if(title && message === undefined)
+    {
+        message = title;
+        title = '';
+        if (contentEl) 
+        {       
+            contentEl.textContent = message;
+        }
+    }
+    else
+    {
+        if (contentEl) 
+        {       
+            contentEl.textContent = message;
+        }
+        if (titleEl) 
+        {       
+            titleEl.textContent = title;
+        }
+    }
+
+    if (dialogEl) 
+    {
+        dialogEl.showModal();
+    }
+}

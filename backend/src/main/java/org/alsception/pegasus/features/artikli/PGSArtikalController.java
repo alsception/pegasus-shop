@@ -44,7 +44,7 @@ public class PGSArtikalController
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PGSArtikal> update(@PathVariable Long id, @RequestBody PGSArtikal artikal) 
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody PGSArtikal artikal) 
     {
         if(id==0l)
         {
@@ -57,7 +57,9 @@ public class PGSArtikalController
             catch (Exception e) 
             {
                 logger.error("Greska prilikom kreiranja novog artikla", e);
-                return ResponseEntity.internalServerError().build();
+                
+                return ResponseEntity.badRequest()
+                    .body("ERROR: " + e.getMessage());
             }
         }
         else

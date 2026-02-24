@@ -132,7 +132,7 @@ async function processErrMsg(response: any, path: any)
       message += 'Forbidden';
       break;
     case 404:
-      message += `NOT FOUND: ${path}`;
+      message += `NOT FOUND`;
       break;
     case 500:
       message += 'Internal server error';

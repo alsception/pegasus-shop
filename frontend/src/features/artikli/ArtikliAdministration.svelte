@@ -8,19 +8,15 @@
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import { formatDateTime } from "../../utils/formatting";
-  import { showSuccessToast } from "../../core/utils/toaster";
+  import { showInfoToast, showSuccessToast } from "../../core/utils/toaster";
+  import { showErrorModal, showErrorModalWithTitle } from "../../utils/modal";
 
-  let isAuthenticated = false;
   let loading: boolean = false;
   let error: string | null = null;
-/*   let artikal: PGSArtikal | null = null;
- */  let ID: number | string;
+  let ID: number | string;
   const codeLength = 15;
 
   document.title = "Artikli | Pegasus";
-
-  //Authenticacion
-  $: isAuthenticated = $auth.isAuthenticated;
 
   $: {
     if ($params?.id) {
@@ -34,17 +30,21 @@
   async function fetch(id: string | number) 
   {
     loading = true;
-    try {
+    try 
+    {
       let data = await api<PGSArtikal>("/artikli/" + id, 
       {
         method: "GET",
       });
-      //samo jedan treba da ostane
       formData = data;
-/*       artikal = data;
- */    } catch (err) {
+    } 
+    catch (err) 
+    {
+      console.error(err)
       error = (err as Error).message;
-    } finally {
+    } 
+    finally 
+    {
       loading = false;
     }
   }
@@ -60,20 +60,26 @@
     }
   });
 
-  async function handleSubmit() {
-    try {
-      await api<PGSArtikal>(`/artikli/${ID}`, {
+  async function handleSubmit() 
+  {
+    try 
+    {
+      await api<PGSArtikal>(`/artikli/${ID}`, 
+      {
         method: "PUT",
         body: JSON.stringify(formData),
       });
 
       showSuccessToast("Sačuvano");
       push('/artikli');
-      //window.location.href = "/#/Artikals";
       fetch(ID);
-    } catch (err) {
-      alert((err as Error).message);
-    } finally {
+    } 
+    catch (err: any) 
+    {
+      showErrorModal(err.message);
+    } 
+    finally 
+    {
       loading = false;
     }
   }
@@ -90,15 +96,52 @@
     window.location.href = "#/artikli"; // Putanja do početne stranice
   }
 
+  function deleteDialog()
+  {
+    if (confirm("Jeste li sigurni?") == true) 
+    {
+      deleteItem();      
+    } 
+  }
+
+  async function executeDelete() 
+  {
+    return api("/artikli/"+ID, {
+      method: "DELETE",
+    });
+  }
+
+  async function deleteItem() 
+  {
+    try 
+    {
+      await executeDelete();
+      //We just assume its deleted if no error happens...
+      showInfoToast('Obrisano',0);
+      push('/artikli');      
+    } 
+    catch (error) 
+    {
+      showErrorModalWithTitle("Greška prilikom brisanja artikla", error);
+    }
+  }
+
 </script>
 
 <div class="relative w-full h-full scale-up-center-normal">
+
   {#if !$auth.isAuthenticated}
+
     <Login />
+
   {:else if loading}
+
     <LoadingOverlay />
+
   {:else if error}
+
     <ErrorDiv {error} />
+
   {:else}
     <!-- FIX TODO
     Non-interactive element `<form>` should not be assigned mouse or keyboard event listeners
@@ -106,390 +149,185 @@
 
     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <form
-      on:submit|preventDefault={handleSubmit}
-      on:keydown={handleKeydown}
-      id="ArtikalForm"
-      class="max-w-7xl mx-auto bg-base-200 rounded-lg p-8 w-full space-y-8"
-    >
-      <!-- Header Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-1">
-          <h3 class="text-3xl font-semibold text-primary">Artikal</h3>
-
-          <div
-            id="loadingMessage"
-            style="display: none;"
-            class="text-2xl font-semibold text-gray-700 dark:text-gray-100 flex items-center gap-2 mt-4"
-          >
-            <span class="loading loading-dots loading-xs"></span>
-          </div>
+    on:submit|preventDefault={handleSubmit}
+    on:keydown={handleKeydown}
+    id="ArtikalForm"
+    class="max-w-[100rem] mx-auto bg-base-200 rounded-lg p-8 w-full space-y-8"
+  >
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div>
+        <h3 class="text-3xl font-semibold text-primary">Artikal</h3>
+        <div id="loadingMessage" style="display: none;" class="mt-2">
+          <span class="loading loading-dots loading-xs"></span>
         </div>
       </div>
-
-      <!-- Full-width underline -->
-      <div class="h-px bg-neutral w-full"></div>
-
-      <!-- General Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-        <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">Osnovno</h3>
-          <p class="text-secondary text-sm mt-2">
-              Osnovne informacije o artiklu
-            </p>
-        </div>
-        <div class="lg:col-span-2">
-          <div class="">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div class="w-full md:col-span-2">
-                <label
-                  for="Artikalname"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Ime</label
-                >
-                <input
-                  id="Artikalname"
-                  class="pgs-input"
-                  bind:value={formData.name}
-                />
-              </div>
-
-              <div class="w-full">
-                <label
-                  for="code"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Barcode</label
-                >
-                <input
-                  id="code"
-                  type="text"
-                  class="pgs-input"
-                  maxlength={codeLength}
-                  size={codeLength}
-                  bind:value={formData.barcode}
-                />
-              </div>
-
-              <div class="w-full">
-                <label
-                  for="department"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Kategorija</label
-                >
-                <select
-                  id="department"
-                  class="pgs-input"
-                  bind:value={formData.kategorijaId}
-                >
-                  <option value={1}>Alkoholna pića</option>
-                  <option value={2}>Bezalkoholna pića</option>
-                  <option value={3}>Pivo</option>
-                  <option value={4}>Rakije i likeri</option>
-                  <option value={5}>Vino</option>
-                </select>
-              </div>
-
-              <div class="w-full md:col-span-2">
-                <label
-                  for="proizvodjac"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Proizvođač</label
-                >
-                <input
-                  id="proizvodjac"
-                  class="pgs-input"
-                  bind:value={formData.proizvodjac}
-                />
-              </div>
-
-              <div class="w-full md:col-span-2">
-                <label
-                  for="description"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Opis</label
-                >
-                 <textarea
-                  id="description"
-                  class="pgs-input resize-vertical"
-                  bind:value={formData.opis}
-                  rows="4"
-                ></textarea>               
-              </div>
-
-              <div class="w-full">
-                <div class="lg:col-span-2">
-                  <div class="rounded-lg p-6">
-                    <div class="flex flex-col">
-                      <!-- Metadata -->
-                      <div
-                        class="flex flex-col sm:flex-row flex-wrap gap-x-10 gap-y-2 text-md text-secondary"
-                      >
-                        <span
-                          class="flex items-center gap-2 min-w-[200px] text-sm"
-                        >
-                          <i class="fas fa-calendar-plus text-gray-400"></i>
-                          Datum upisa:
-                          <span class="font-mono"
-                            >{formatDateTime(formData.created)}</span
-                          >
-                        </span>
-                        <span
-                          class="flex items-center gap-2 min-w-[200px] text-sm"
-                        >
-                          <i class="fas fa-edit text-gray-400"></i>
-                          Datum zadnje izmjene:
-                          <span class="font-mono"
-                            >{formatDateTime(formData.updated)}</span
-                          >
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="flex gap-3">
+        <button type="button" on:click={cancelEditing} class="btn btn-outline">
+          <i class="fas fa-arrow-left text-primary/60"></i> Nazad</button>
+        <button type="button" on:click={deleteDialog} class="btn btn-outline hover:text-error group">
+          <i class="fas fa-trash text-primary/60 group-hover:text-error text-xs"></i> Obriši</button>
+        <button type="submit" class="btn btn-primary px-8">
+          <i class="far fa-save text-primary-content"></i> Spremi</button>
       </div>
+    </div>
 
-      <!-- Full-width underline -->
-      <div class="h-px bg-neutral w-full"></div>
-
-      <!-- Pricing Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-        <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">Cijene</h3>
-          <p class="text-secondary text-sm mt-2">
-            Informacije o cijenama i porezu
-          </p>
-        </div>
-        <div class="lg:col-span-2">
-          <div class="rounded-lg">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div class="w-full">
-                <label
-                  for="price"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Prodajna cijena</label
-                >
-                <input
-                  id="currency1"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  class="pgs-input"
-                  bind:value={formData.price1}
-                />
-              </div>
-
-              <div class="w-full">
-                <label
-                  for="currency"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Nabavna cijena 1</label
-                >
-               <input
-                id="currency2"
-                type="number"
-                step="0.01"
-                min="0"
-                class="pgs-input"
-                bind:value={formData.price2}
-              />
-              </div>
-
-              <div class="w-full">
-                <label
-                  for="shipping_cost"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Nabavna cijena 2</label
-                >
-                <input
-                  id="currency3"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  class="pgs-input"
-                  bind:value={formData.price3}
-                />
-              </div>
-
-              <div class="w-full">
-                <label
-                  for="tax_amount"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Nabavna cijena 3</label
-                >
-                <input
-                  id="currency4"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  class="pgs-input"
-                  bind:value={formData.price4}
-                />
-              </div>
-
-              <div class="w-full hidden">
-                <label
-                  for="currency5"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Cijena 5</label
-                >
-                <input
-                  id="currency5"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  class="pgs-input"
-                  bind:value={formData.price5}
-                />
-              </div>
-
-              <div class="w-full hidden">
-                <label
-                  for="price6"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Cijena 6</label
-                >
-                <input
-                  id="currency6"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  class="pgs-input"
-                  bind:value={formData.price6}
-                />
-              </div>
-              <div class="w-full">
-                <label
-                  for="porez"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Porez</label
-                >
-                <input
-                  id="tax_percent"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  class="pgs-input"
-                  bind:value={formData.porez}
-                />
-              </div>
-
-              <div class="w-full">
-                <label
-                  for="discount"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Porezna grupa</label
-                >
-                <input
-                  id="discount"
-                  type="number"
-                  class="pgs-input"
-                  bind:value={formData.poreznaGrupa}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Full-width underline -->
-      <div class="h-px bg-neutral w-full"></div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <div class="lg:col-span-7 space-y-8">
         
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-        <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">Stok</h3>
-          <p class="text-secondary text-sm mt-2">
-            Inventar i količina na skladištu
-          </p>
-        </div>
-        <div class="lg:col-span-2">
-          <div class="rounded-lg">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-              
-              <div class="w-full">
-                <label
-                  for="stock_quantity"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Stok količina</label
-                >
-                <input
-                  id="stock_quantity"
-                  type="number"
-                  class="pgs-input"
-                  bind:value={formData.stok}
-                />
-              </div>
+        <div class="bg-base-200 p-6 rounded-xl shadow-sm border border-neutral/20">
+          <div class="mb-6">
+            <h3 class="text-xl font-semibold text-primary">Osnovne informacije</h3>
+            <p class="text-secondary text-sm uppercase tracking-wider">Identifikacija i kategorizacija</p>
+          </div>
 
-              <div class="w-full">
-                <label
-                  for="department"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Odjel</label
-                >
-                <select
-                  id="department"
-                  class="pgs-input"
-                  bind:value={formData.odjel}
-                >
-                  <option value={1}>Kuhinja</option>
-                  <option value={2}>Bar</option>
-                </select>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="md:col-span-2">
+              <label for="Artikalname" class="block text-sm font-medium text-secondary mb-2">Ime</label>
+              <input id="Artikalname" class="pgs-input w-full" bind:value={formData.name} />
+            </div>
+
+            <div>
+              <label for="code" class="block text-sm font-medium text-secondary mb-2">Barcode</label>
+              <input id="code" type="text" class="pgs-input w-full" maxlength={codeLength} bind:value={formData.barcode} />
+            </div>
+
+            <div>
+              <label for="department" class="block text-sm font-medium text-secondary mb-2">Kategorija</label>
+              <select id="department" class="pgs-input w-full" bind:value={formData.kategorijaId}>
+                <option value={1}>Alkoholna pića</option>
+                <option value={2}>Bezalkoholna pića</option>
+                <option value={3}>Pivo</option>
+                <option value={4}>Rakije i likeri</option>
+                <option value={5}>Vino</option>
+              </select>
+            </div>
+
+            <div class="md:col-span-1">
+              <label for="proizvodjac" class="block text-sm font-medium text-secondary mb-2">Proizvođač</label>
+              <input id="proizvodjac" class="pgs-input w-full" bind:value={formData.proizvodjac} />
+            </div>
+
+            <div>
+              <label for="dept_select" class="block text-sm font-medium text-secondary mb-2">Odjel</label>
+              <select id="dept_select" class="pgs-input w-full" bind:value={formData.odjel}>
+                <option value={1}>Kuhinja</option>
+                <option value={2}>Bar</option>
+              </select>
+            </div>
+
+            <div class="md:col-span-2">
+              <label for="description" class="block text-sm font-medium text-secondary mb-2">Opis</label>
+              <textarea id="description" class="pgs-input w-full resize-vertical" bind:value={formData.opis} rows="4"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-base-200 p-6 rounded-xl shadow-sm border border-neutral/20">
+          <h3 class="text-xl font-semibold text-primary mb-4">Ostalo</h3>
+          <label for="comment" class="block text-sm font-medium text-secondary mb-2">Napomena</label>
+          <textarea id="comment" class="pgs-input w-full resize-vertical" bind:value={formData.napomena} rows="3"></textarea>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5 space-y-8">
+        
+        <div class="bg-base-200 p-6 rounded-xl shadow-sm border border-neutral/20">
+          <div class="mb-6 border-b border-neutral/10 pb-2">
+            <h3 class="text-xl font-semibold text-primary">Cijene i Porez</h3>
+          </div>
+          
+          <div class="space-y-4">
+            <div>
+              <label for="currency1" class="block text-sm text-secondary mb-1">Prodajna cijena</label>
+              <input id="currency1" type="number" step="0.01" class="pgs-input w-full font-bold text-lg" bind:value={formData.price1} />
+            </div>
+
+          <div class="grid grid-cols-1 gap-4 pt-2">
+            <div class="flex flex-col lg:flex-row gap-2">
+              <div class="flex-1">
+                <label for="currency2" class="block text-sm font-medium text-secondary mb-1">Nabavna cijena 1</label>
+                <input id="currency2" type="number" step="0.01" 
+                  class="pgs-input" style="min-width: fit-content;"
+                  bind:value={formData.price2} />
+              </div>
+              <div class="flex-[2]">
+                <label for="supplier1" class="block text-sm font-medium text-secondary mb-1">Dobavljač 1</label>
+                <input id="supplier1" type="text" 
+                style="min-width: fit-content;"
+                class="pgs-input w-fit" 
+                bind:value={formData.dobavljac1} />
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2">
+              <div class="flex-1">
+                <label for="currency3" class="block text-sm font-medium text-secondary mb-1">Nabavna cijena 2</label>
+                <input id="currency3" type="number" step="0.01" 
+                class="pgs-input w-fit" style="min-width: fit-content;"
+                bind:value={formData.price3} />
+              </div>
+              <div class="flex-[2]">
+                <label for="supplier2" class="block text-sm font-medium text-secondary mb-1">Dobavljač 2</label>
+                <input id="supplier2" type="text" class="pgs-input w-full" bind:value={formData.dobavljac2} />
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2">
+              <div class="flex-1">
+                <label for="currency4" class="block text-sm font-medium text-secondary mb-1">Nabavna cijena 3</label>
+                <input id="currency4" type="number" step="0.01" 
+                class="pgs-input w-fit" style="min-width: fit-content;"
+                bind:value={formData.price4} />
+              </div>
+              <div class="flex-[2]">
+                <label for="supplier3" class="block text-sm font-medium text-secondary mb-1">Dobavljač 3</label>
+                <input id="supplier3" type="text" class="pgs-input w-full" bind:value={formData.dobavljac3} />
+              </div>
+            </div>
+          </div>
+
+            <div class="grid grid-cols-1 gap-4 border-t border-neutral/10 pt-4 mt-4">
+              <div>
+                <label for="tax_percent" class="block text-sm font-medium text-secondary mb-1">Porez %</label>
+                <input id="tax_percent" type="number" step="0.01" class="pgs-input w-full" bind:value={formData.porez} />
+              </div>
+              <div>
+                <label for="discount" class="block text-sm font-medium text-secondary mb-1">Porezna grupa</label>
+                <input id="discount" type="number" class="pgs-input w-full" bind:value={formData.poreznaGrupa} />
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Full-width underline -->
-      <div class="h-px bg-neutral w-full"></div>
-
-      <!-- Other Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-        <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">Ostalo</h3>
-          <p class="text-secondary text-sm mt-2">
-            Ostale informacije i napomena
-          </p>
-        </div>
-        <div class="lg:col-span-2">
-          <div class="rounded-lg">
-            <div class="grid grid-cols-1 md:grid-cols-1 gap-12">
-              <div class="w-full">
-                <label
-                  for="comment"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Napomena</label
-                >
-                <textarea
-                  id="comment"
-                  class="pgs-input resize-vertical"
-                  bind:value={formData.napomena}
-                  rows="4"
-                ></textarea>
-              </div>
+        <div class="bg-base-200 p-6 rounded-xl shadow-sm border border-neutral/20">
+          <h3 class="text-xl font-semibold text-primary mb-4">Skladište</h3>
+          <div class="space-y-4">
+            <div>
+              <label for="stock_quantity" class="block text-sm font-medium text-secondary mb-2">Stok količina</label>
+              <input id="stock_quantity" type="number" class="pgs-input w-full" bind:value={formData.stok} />
             </div>
+           
           </div>
         </div>
+
+      
+
       </div>
-
-      <!-- Full-width underline -->
-      <div class="h-px bg-neutral w-full"></div>
-
-      <div class="grid grid-cols-1">     
-        <div class="flex justify-end gap-3 pt-4">
-          <button
-            type="button"
-            on:click={cancelEditing}
-            class="btn btn-outline btn- m-3"
-          >
-            Zatvori
-          </button>
-          <button type="submit" class="btn btn-primary m-3"> Spremi </button>
+        <div class="p-4 text-[14px] text-secondary flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 lg:gap-10
+                    w-max">
+          <div class="flex items-center gap-2">
+            <i class="fas fa-calendar-plus text-gray-400"></i> 
+            <span>Upisano: <span class="font-mono">{formatDateTime(formData.created)}</span></span>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <i class="fas fa-edit text-gray-400"></i> 
+            <span>Izmijenjeno: <span class="font-mono">{formatDateTime(formData.updated)}</span></span>
+          </div>
         </div>
-      </div>
-    </form>
+    </div>
+  </form>
   {/if}
 </div>
 

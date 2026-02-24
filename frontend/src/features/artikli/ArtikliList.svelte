@@ -9,6 +9,9 @@
   import Login from "../../core/auth/Login.svelte";
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
+  import api from "../../core/services/client";
+  import { showErrorModalWithTitle } from "../../utils/modal";
+
 
   document.title = "Artikli | Pegasus";
 
@@ -54,6 +57,10 @@
   $: price4Header = sortKey === 'price4'
     ? sortAsc ? 'Nabavna<br>cijena 3 ▼' : 'Nabavna<br>cijena 3 ▲'
     : 'Nabavna<br>cijena 3&nbsp;&nbsp;';
+
+  $: stokHeader = sortKey === 'stok'
+    ? sortAsc ? 'Stok ▼' : 'Stok ▲'
+    : 'Stok&nbsp;&nbsp;';
 
   $: createdHeader = sortKey === 'created'
     ? sortAsc ? 'DATUM<br>UPISA ▼' : 'DATUM<br>UPISA ▲'
@@ -189,9 +196,9 @@
       totalProducts = data.totalCount;
       totalPages = data.totalPages;
 
-      // Reset sorta pri svakom novom searchu
-      sortKey = '';
-      sortAsc = true;
+      // Reset sorta pri svakom novom searchu, za sad netreba
+      /* sortKey = '';
+      sortAsc = true; */
 
     } catch (err: any) {
       console.error(error);
@@ -227,6 +234,16 @@
     }
   }
 
+  function getArtikalLabel(kategorija: string | undefined): string 
+  {
+    if (kategorija == undefined) return " ";
+    switch (kategorija.toLowerCase()) 
+    {      
+      case "bezalkoholna pića": return "bezalk. pića";
+      default: return kategorija.toUpperCase();
+    }
+  }
+
   function isMax(artikal: PGSArtikal, price: number)
   {
     if(price == null || price==0) 
@@ -255,17 +272,46 @@
   {
     if( isMin(artikal,price) )
     {
-      return "success";
+      return "success font-bold";
     }
     else if( isMax(artikal,price) )
     {
-      return "error";
+      return "error ";
     }
     else
     {
       return ""
     }
 
+  }
+
+  function deleteDialog(id: number)
+  {
+    if (confirm("Jeste li sigurni?") == true) 
+    {
+      deleteItem(id);      
+    } 
+  }
+
+  async function executeDelete(id: number) 
+  {
+    return api("/artikli/"+id, {
+      method: "DELETE",
+    });
+  }
+
+  async function deleteItem(id: number) 
+  {
+    try 
+    {
+      await executeDelete(id);
+      //We just assume its deleted if no error happens...
+      handleSearch();      
+    } 
+    catch (error) 
+    {
+      showErrorModalWithTitle("Greška prilikom brisanja artikla", error);
+    }
   }
 </script>
 
@@ -320,9 +366,9 @@
 
     <div class="w-full max-w-[1580px] overflow-x-auto rounded-lg align-middle mx-auto">
       <table class="table table-zebra min-w-[1200px] divide-y divide-accent">
-        <thead class="bg-primary/10">
-          <tr class="h-12">
-            <th class="pgs-th-l cursor-pointer"
+        <thead class="bg-primary/10 sticky top-0">
+          <tr class="h-12 sticky top-0 z-20 bg-base-100">
+            <th class="pgs-th-l cursor-pointer sticky top-0 z-20 bg-base-100"
               title="Klikni za sortiranje"
               class:pgs-gradient-text={isActiveHeader('name')}
               on:click={() => sortBy('name')}>
@@ -358,6 +404,12 @@
               on:click={() => sortBy('price4')}>
               {@html price4Header}
             </th>
+            <th class="pgs-th-l cursor-pointer"
+              title="Klikni za sortiranje"
+              class:pgs-gradient-text={isActiveHeader('stok')}
+              on:click={() => sortBy('stok')}>
+              {@html stokHeader}
+            </th>
             <th class="pgs-th-l"></th>
             <th class="pgs-th-l cursor-pointer"
               title="Klikni za sortiranje"
@@ -376,32 +428,33 @@
         </thead>
         <tbody>
           {#each artikli as artikal, i}
-            <tr class="bg-base-200/60 outline-1 outline-transparent hover:bg-primary/10">
+            <tr class="bg-base-200/60 tr-highlight">
               <td class="pgs-td whitespace-nowrap">
-                <a use:link href="/artikli/{artikal.id}" class="text-primary/80 pgs-hyperlink">{artikal.name}</a>
+                <a use:link href="/artikli/{artikal.id}" class=" pgs-hyperlink text-primary/70">{artikal.name}</a>
               </td>
               <td class="pgs-td">
-                <span class="badge badge-soft badge-{getArtikalColor(artikal.kategorija?.name)} font-mono badge-sm" style="text-transform: uppercase;">
-                  {artikal.kategorija?.name}
+                <span class="badge badge-soft badge-{getArtikalColor(artikal.kategorija?.name)} font-mono badge-md" style="text-transform: uppercase;">
+                  {getArtikalLabel(artikal.kategorija?.name)}
                 </span>
               </td>
               <td class="">{formatPrice(artikal.price1)}</td>
               <td class="text-{getClass(artikal,artikal.price2)}">{formatPrice(artikal.price2)}</td>
               <td class="text-{getClass(artikal,artikal.price3)}">{formatPrice(artikal.price3)}</td>
               <td class="text-{getClass(artikal,artikal.price4)}">{formatPrice(artikal.price4)}</td>
+              <td class="text-">{artikal.stok}</td>
               <td class="text-center">{@html formatCommentInfo(artikal.napomena)}</td>
               <td class="pgs-td font-mono whitespace-nowrap">{@html formatDate(artikal.created, "new", 15)}</td>
               <td class="pgs-td font-mono whitespace-nowrap">{@html formatDate(artikal.updated, "new", 15)}</td>
               <td class="px-2">
                 <div class="flex justify-center items-center gap-2" style="font-size: 14px;">
-                  <div class="tooltip tooltip-info" data-tip="Edit">
+                  <div class="tooltip tooltip-info group" data-tip="Edit">
                     <a class="px-4" aria-label="Edit" use:link href="/artikli/{artikal.id}">
-                      <i class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"></i>
+                      <i class="fas fa-pen text-gray-500 group-hover:text-sky-400 cursor-pointer"></i>
                     </a>
                   </div>
-                  <button class="px-4" aria-label="Delete" on:click={() => deleteDialog(artikal.id)}>
+                  <button class="px-4 group" aria-label="Delete" on:click={() => deleteDialog(artikal.id)}>
                     <div class="tooltip tooltip-info" data-tip="Delete">
-                      <i class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"></i>
+                      <i class="fas fa-times-circle text-gray-500 group-hover:text-red-400 cursor-pointer"></i>
                     </div>
                   </button>
                 </div>
@@ -419,4 +472,8 @@
   .pgs-th {
     color: white;
   }
+  .badge-warning{
+    color: rgb(155, 104, 10); /*mora fix jer se nevidi dobro*/
+  }
+ 
 </style>

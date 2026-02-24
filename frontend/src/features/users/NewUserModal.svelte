@@ -4,6 +4,7 @@
   import type { FPGSUser } from "./FPGSUser";
   import { toast } from "@zerodevx/svelte-toast";
   import api from "../../core/services/client";
+  import { showErrorModal } from "../../utils/modal";
 
   export let isOpen = false;
 
@@ -64,8 +65,11 @@
       //We just assume its created if no error happened
       toast.push('✅ User created');
       dispatch('close');//Ovo dispacuje event pa parent da zna da pokrene search
-    } catch (error) {
+    } 
+    catch (error: any)
+    {
       console.error("Error creating user:", error);
+      showErrorModal(error.message)
     }
   }
 
@@ -92,10 +96,10 @@
       transition:fade={{ duration: 200 }}
     >
       <div
-        class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700"
+        class="flex justify-between items-center p-4 border-b border-primary/10"
       >
-        <h2 class="text-xl font-semibold text-gray-800 dark:text-white">
-          New User
+        <h2 class="text-xl font-semibold text-primary">
+          Novi korisnik
         </h2>
         <button
           class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
@@ -108,7 +112,7 @@
 
       <form on:submit|preventDefault={submitForm} class="p-0">
         <fieldset
-          class="fieldset bg-base-100 rounded-box w-full p-4"
+          class="fieldset bg-base-200 rounded-box w-full p-4"
         >
           <label class="label" for="username">Username</label>
           <input

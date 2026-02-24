@@ -137,7 +137,7 @@
   async function addItemsWithDelay(
     sourceItems: Item[],
     addFn: (item: Item) => void,
-    delay = 60
+    delay = 0 //za sad bez ovoga
   ) {
     for (const item of sourceItems) {
       addFn(item);
@@ -156,8 +156,8 @@
 </script>
       
 <div
-  class="max-w-9xl mx-auto px-6 py-10 sm:pt-0
-  grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-1 scale-up-center-normal menu-container"
+  class="max-w-9xl mx-auto px-6 sm:pt-0
+  grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-1 menu-container"
 >
   {#each displayedItems as item}
 

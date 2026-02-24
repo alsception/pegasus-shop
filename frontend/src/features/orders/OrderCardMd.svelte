@@ -7,7 +7,7 @@
   import { formatCode, formatTime, formatCommentInfo, isNew, formatTime2, formatPrice } from "../../utils/formatting";
   import { showSuccessToast, showErrorToast } from '../../core/utils/toaster';
   import axios from 'axios';
-  import { showInfoModal } from "../../utils/modal";
+  import { showErrorModal } from "../../utils/modal";
   import StatusMenu from "./StatusMenu.svelte";
   import OrderDetails from "./OrderDetails.svelte";
   import OrderButtonReady from "./OrderButtonReady.svelte";
@@ -124,7 +124,7 @@
     } 
     catch (error: any) 
     {
-        console.error('Error during search:', error);
+        console.error('Error during orders search:', error);
 
 
         /**
@@ -132,7 +132,7 @@
          * ??????? štaće ovo ovde???
          */
 
-        showInfoModal("Greška prilikom učitavanja narudžbi: "+error.message);
+        showErrorModal("Greška prilikom učitavanja narudžbi: "+error.message);
         
         // Handle 401 Unauthorized specifically
         if (error.message.includes('401')) {

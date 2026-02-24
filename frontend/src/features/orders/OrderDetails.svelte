@@ -223,12 +223,23 @@
 </script>
 
 <div class="relative w-full scale-up-center-normal">
+
   {#if !$auth.isAuthenticated}
+
     <Login />
+
   {:else if error}
-    <ErrorDiv {error} />
+
+  <div class="wrapper">
+    <div class="max-w-[520px] wrap-anywhere">
+      <ErrorDiv {error} />
+    </div>  
+  </div>
+
   {:else}
+
     {#if loading}
+
       <div class="fixed inset-0 z-10 flex items-center justify-center">
         <div
           class="rounded-2xl max-w-5xl w-full mx-auto flex flex-col items-center"
@@ -487,3 +498,17 @@
     </div>
   </div>
 </dialog>
+
+<style>
+  .wrapper {
+    display: flex;
+/*     flex-direction: column;
+ */    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    text-align: center;
+    padding: 2rem;
+    background-color: transparent;
+}
+</style>
+

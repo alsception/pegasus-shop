@@ -1,5 +1,5 @@
 export interface PGSArtikal {
-  id?: number;
+  id: number;
   name: string;
   barcode?: string;
 
@@ -28,6 +28,11 @@ export interface PGSArtikal {
   price4: number;
   price5?: number;
   price6?: number;
+
+  dobavljac1?: string;
+  dobavljac2?: string;
+  dobavljac3?: string;
+  dobavljac4?: string;
 
   // Dodajemo i active polje jer smo ga pomenuli zbog soft-delete-a
   active?: boolean;

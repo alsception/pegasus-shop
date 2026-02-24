@@ -85,6 +85,24 @@ public class PGSArtikal {
     @Column(precision = 19, scale = 2, nullable = true)
     private BigDecimal price6; 
     
+    @Column(nullable = true)
+    private String dobavljac1;
+    
+    @Column(nullable = true)
+    private String dobavljac2;
+    
+    @Column(nullable = true)
+    private String dobavljac3;
+    
+    @Column(nullable = true)
+    private String dobavljac4;
+    
+    @Column(nullable = true)
+    private String dobavljac5;
+    
+    @Column(nullable = true)
+    private String dobavljac6;
+    
     @PrePersist
     protected void onCreate() {
         created = LocalDateTime.now();

@@ -12,7 +12,7 @@
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from '../../core/navigation/error/ErrorDiv.svelte';
   import NewUserModal from "./NewUserModal.svelte";
-  import { showInfoModal } from "../../utils/modal";
+  import { showErrorModalWithTitle } from "../../utils/modal";
 
   let isAuthenticated = false;  
   let loading: boolean = false;
@@ -186,7 +186,7 @@
 
   function deleteDialog(id: number)
   {
-    if (confirm("Are you sure? This action cannot be undone.") == true) 
+    if (confirm("Jeste li sigurni?") == true) 
     {
       deleteUser(id);      
     } 
@@ -204,11 +204,11 @@
     try 
     {
       await executeDelete(id);
-      //We just assume its created if no error happens...
+      //We just assume its deleted if no error happens...
       handleSearch(false);      
     } catch (error) {
       //TODO: process this err msg to show network error failed to fetch, and json msg error from server
-      showInfoModal("Error deleting user: " + error);
+      showErrorModalWithTitle("Error deleting user", error);
     }
   }
 
@@ -355,7 +355,7 @@
       <tbody class="">
 
         {#each users as user, i}     
-          <tr class="bg-base-200/60 outline-1 outline-transparent /*hover:outline-blue-500*/ hover:bg-base-300/70">            
+          <tr class="bg-base-200/60 tr-highlight">            
               <td class="justify-center pgs-td-center px-4 ">
                 <input type="checkbox" class="checkbox checkbox-accent checkbox-xs" 	on:change={(event) => handleCheckboxChange(event, i)} />
               </td>
@@ -381,14 +381,14 @@
               <td class="pgs-td font-mono"> {formatActive(user.active)}</td>      
               <td class="px-2">
                 <div class="flex justify-center items-center gap-2" style="font-size: 14px;">
-                  <div class="tooltip tooltip-info" data-tip="Edit">
+                  <div class="tooltip tooltip-info group" data-tip="Edit">
                     <a class="px-2" aria-label="Edit" use:link href="#/users/{user.id}">
-                      <i class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"></i>
+                      <i class="fas fa-pen text-gray-500 group-hover:text-sky-400 cursor-pointer"></i>
                     </a>
                   </div>
-                  <div class="tooltip tooltip-info" data-tip="Delete">
+                  <div class="tooltip tooltip-info group" data-tip="Delete">
                     <button class="px-2" aria-label="Delete" on:click={() => deleteDialog(user.id)}>
-                      <i class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"></i>
+                      <i class="fas fa-times-circle text-gray-500 group-hover:text-red-400 cursor-pointer"></i>
                     </button>
                   </div>
                 </div>

@@ -4,8 +4,7 @@
   import InfoBlocks from "./InfoBlocks.svelte";
   import Charts from "./Charts.svelte";
   import api from "../../core/services/client";
-  import InfoModal from "../utils/InfoModal.svelte";
-  import { showInfoModal } from "../../utils/modal";
+  import { showErrorModal } from "../../utils/modal";
   import LoadingOverlay from "../utils/LoadingOverlay.svelte";
 
 
@@ -185,7 +184,7 @@
     } finally {
      isLoading = false;
 
-      showInfoModal(syncMessage['message']);
+      showErrorModal(syncMessage['message']);
     }
   }
 </script>

@@ -5,7 +5,6 @@
   import { auth, getCurrentRole, isAdmin } from "../../core/services/SessionStore";
   import { formatPrice } from "../../utils/formatting";
   import type { Product } from "./Product";
-  import Modal from "./ProductModal.svelte";
   import Login from "../../core/auth/Login.svelte";
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";

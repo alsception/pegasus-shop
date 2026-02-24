@@ -11,7 +11,7 @@
   import Header from "./core/navigation/Header.svelte";
   import { generateRoutes } from "./core/navigation/routing/routes";
   import { SvelteToast } from "@zerodevx/svelte-toast";
-  import InfoModal from "./core/utils/InfoModal.svelte";
+  import InfoModal from "./core/utils/ErrorModal.svelte";
 
   document.title = 'Pegasus'
 

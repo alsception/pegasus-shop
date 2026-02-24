@@ -10,7 +10,7 @@
   import axios from 'axios';
   import Login from "../../core/auth/Login.svelte";
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
-  import { showInfoModal } from "../../utils/modal";
+  import { showErrorModal } from "../../utils/modal";
   import { fade, fly, slide } from 'svelte/transition';
 
 
@@ -165,7 +165,7 @@ i LITE APP!!, I MOZDA i WS.....
          * ako je failed to fetch, server je nedostupan.
          */
 
-        showInfoModal("Greška prilikom učitavanja narudžbi: "+error.message);
+        showErrorModal("Greška prilikom učitavanja narudžbi: "+error.message);
         
         // Handle 401 Unauthorized specifically
         if (error.message.includes('401')) {
@@ -395,7 +395,7 @@ i LITE APP!!, I MOZDA i WS.....
       </thead>
       <tbody>
         {#each orders as order, i}
-          <tr class="bg-base-200/60  outline-1 outline-transparent hover:outline-blue-500 hover:bg-blue-600/15">
+          <tr class="bg-base-200/60 tr-highlight">
             <td class="pgs-td">
               <a use:link href="/orders/{order.id}" class="pgs-hyperlink">{formatCode(order.code)}</a>
             </td>
@@ -420,10 +420,15 @@ i LITE APP!!, I MOZDA i WS.....
               {@html formatTime2(order.spremnoAt)}
             </td>
             <td class=" justify-center">
-              <div class="tooltip tooltip-info" data-tip="Edit"><a class="px-4" aria-label="Edit" use:link href="/orders/mngmt/{order.id}"><i class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"></i></a></div>
-              <button class="px-4" aria-label="Delete" on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
+              <div class="tooltip tooltip-info group" 
+                data-tip="Edit">
+                <a class="px-4" aria-label="Edit" use:link href="/orders/mngmt/{order.id}">
+                  <i class="fas fa-pen text-gray-500 group-hover:text-sky-400 cursor-pointer"></i></a>
+                </div>
+              <button class="px-4 group" aria-label="Delete" 
+              on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
                 <div class="tooltip tooltip-info" data-tip="Delete">
-                  <i class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"></i>
+                  <i class="fas fa-times-circle text-gray-500 group-hover:text-red-400 cursor-pointer"></i>
                 </div>
               </button>
             </td>      
@@ -432,11 +437,13 @@ i LITE APP!!, I MOZDA i WS.....
       </tbody>
       </table>
     <div class="nb-table-footer text-left bg-secondary" style="background-color: var(--color-base-100);">
+       
+      Promet: <span class="font-bold font-mono text-2xl text-success">{formatPrice(totalAmount)}</span>
+    <br>
+    <br>
       Ukupno narudžbi:
       <span class="font-bold"> {orders.length}</span>
-    <br>
-    <br>
-      Promet: <span class="font-bold font-mono text-2xl text-success">{formatPrice(totalAmount)}</span>
+    
     </div>
     </div>
   </div>
