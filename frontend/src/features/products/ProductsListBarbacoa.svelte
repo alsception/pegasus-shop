@@ -3,9 +3,7 @@
   import { link } from "svelte-spa-router";
   import { get } from "svelte/store";
   import { auth, getCurrentRole, isAdmin } from "../../core/services/SessionStore";
-  import { formatDate } from "../../utils/formatting";
-  import { formatActive } from "../../utils/formatting";
-  import { formatCommentInfo } from "../../utils/formatting";
+  import { formatPrice } from "../../utils/formatting";
   import type { Product } from "./Product";
   import Modal from "./ProductModal.svelte";
   import Login from "../../core/auth/Login.svelte";
@@ -266,35 +264,15 @@
    <div class="w-full max-w-[382px] mx-auto p-0">
   <div class="w-full overflow-x-auto">
     <table class="table table-zebra w-full min-w-[382px] ">
-
-     
-
-         <!--  <thead class="bg-[#10273c]">
-            <tr class="h-12">
-              <th class="pgs-th-l">Proizvod</th>
-              <th class="pgs-th-l">Kategorija</th>
-              <th class="pgs-th-r">Cijena</th>
-              <th class="pgs-th-l"></th>
-              <th class="pgs-th-l"></th>
-              <th class="pgs-th"></th>
-            </tr>
-          </thead> -->
           <tbody class="">
             {#each products as product, i}
               <tr class="bg-base-200/80 outline-1 outline-transparent /*hover:outline-blue-500*/ hover:bg-base-300/70 border-b border-b-base-300">            
                 <td class="pgs-td whitespace-nowrap p-0">
-                 <!--  <a
-                    use:link
-                    href="/products/{product.id}"
-                    class="text-primary pgs-hyperlink">{product.title}</a
-                  > -->
-                  <div class="">
+                     <div class="">
                      <h3 class="font-semibold text-lg max-w-[382px;] truncate text-primary" title={product.name}>
       <a use:link href="/products/{product.id}" class="pgs-hyperlink">{product.name}</a>
     </h3>
     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-       <!--  <i class="fas fa-tag text-gray-400"></i>
-        <span class="text-primary"> {product.category} </span>    -->     
     </p>   
     <p
       class="text-sm text-primary/50 mt-1 line-clamp-3 max-w-[80%;]"
@@ -306,7 +284,7 @@
     <table class="w-full">
       <tbody>
         <tr>
-         <td class="pgs-td text-left text-4xl "><h3 class="font-semibold text-lg truncate text-primary/50" >€ {product.basePrice}</h3></td>
+         <td class="pgs-td text-left text-4xl "><h3 class="font-semibold text-lg truncate text-primary/50" >€ {formatPrice(product.basePrice)}</h3></td>
                
                 <td class="p-0">
                   <div
@@ -332,7 +310,6 @@
             <tr class="bg-base-200">
               <td colspan="18" class="pgs-td font-mono h-[64px]">
                 Showing <b>{products.length}</b> product(s) on this page.<br />
-                <b>{totalPages}</b>
               </td>
             </tr>
           </tbody>

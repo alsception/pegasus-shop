@@ -1,6 +1,7 @@
 package org.alsception.pegasus.features.order;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -39,9 +40,6 @@ public class PGSOrder
     private PGSUser user;
     
     private String code;
-    private String email;
-    private String name;
-    private String address;
     private String paymentMethod;
     private String currency;
     private String status;
@@ -73,6 +71,14 @@ public class PGSOrder
 
     // Ključno polje za sinkronizaciju
     private boolean synced = false;
+    
+    @Column(precision = 19, scale = 4)
+    private BigDecimal totalAmount;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "session_id", nullable = false)
+    private PGSDailySession session;
     
     /*//One day, if you have time and will to play with various error messages, we can include this field.
     @Version

@@ -12,7 +12,7 @@
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from '../../core/navigation/error/ErrorDiv.svelte';
   import NewUserModal from "./NewUserModal.svelte";
-  import { showErrorToastLongDuration, showErrorToastNoExp } from "../../core/utils/toaster";
+  import { showInfoModal } from "../../utils/modal";
 
   let isAuthenticated = false;  
   let loading: boolean = false;
@@ -208,7 +208,7 @@
       handleSearch(false);      
     } catch (error) {
       //TODO: process this err msg to show network error failed to fetch, and json msg error from server
-      showErrorToastLongDuration("Error deleting user: " + error);
+      showInfoModal("Error deleting user: " + error);
     }
   }
 

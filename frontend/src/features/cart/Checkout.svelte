@@ -35,7 +35,8 @@
   //Authenticacion
   $: isAuthenticated = $auth.isAuthenticated;
 
-  async function submitForm() {
+  async function submitForm() 
+  {
     const url = API_BASE_URL + "/cart/checkout";
     const payload = {
       stol: $brojStola,//ovde mora dollar sign kad ga koristimo...
@@ -43,7 +44,8 @@
       comment
     };
 
-    try {
+    try 
+    {
       loading = true;
       const response = await axios.post(url, payload, {
         headers: {
@@ -55,9 +57,24 @@
       //todo: show success message -> go to order details page. we dont have order details page yet.
       showSuccessToast("Narudžba uspješno poslata!");
       push('/orders');
-    } catch (err) {
-      error = (err as Error).message;
-    } finally {
+    } catch (err: any) {
+      console.error("kect", err);
+      
+      // Proveravamo da li server uopšte vratio odgovor (response)
+      if (err.response && err.response.data) 
+      {
+        // Ovde hvatamo tvoj "message" iz JSON-a koji je poslao Java backend
+        error = "ERROR: "+err.response.data.message;
+        
+        // Možeš dodati i specifičan toast za ovu poruku
+        //showErrorToast(error); 
+      } else {
+        // Ako je greška mreže ili nešto drugo (npr. timeout)
+        error = (err as Error).message;
+      }
+    } 
+    finally
+    {
       loading = false;
     }
   }

@@ -32,7 +32,8 @@ public class PGSTableService
     public List<PGSTable> getAllTablesWithOccupation() 
     {
         List<PGSTable> tables = tableRepository.findAll();
-        List<PGSOrder> orders = orderRepository.findAllWithItems();
+        //TODO: ovde trebaju orders, ali samo koji nisu vec placeni.
+        List<PGSOrder> orders = orderRepository.findAllInActiveSessionWithItems();
     
         // 1. Izvuci sve unikatne brojeve stolova koji su zauzeti u jedan Set (munjevito brzo za pretragu)
         Set<String> occupiedTableNumbers = orderRepository.findAllWithItems().stream()

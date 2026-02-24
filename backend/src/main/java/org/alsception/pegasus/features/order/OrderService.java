@@ -151,7 +151,7 @@ public class OrderService
     {
         logger.debug("Updating order "+id);
 
-        //PGSOrder existing = getById(id);
+        // PGSOrder existing = getById(id);
         // Load existing order IN THIS TRANSACTION (not the read-only one)
         List<PGSOrder> orders = orderRepository.findByIdWithItems(id);
         if(orders.isEmpty()) throw new BadRequestException("Not found");
@@ -161,7 +161,6 @@ public class OrderService
         existing.setStatus(received.getStatus());
         existing.setComment(received.getComment());
         existing.setPaymentMethod(received.getPaymentMethod());
-        existing.setAddress(received.getAddress());
         existing.setPrice(received.getPrice());
         existing.setCode(received.getCode());
         existing.setItems(received.getItems());
@@ -186,7 +185,8 @@ public class OrderService
 
         PGSOrder order = orderRepository.getReferenceById(id);
         
-        if (rowsAffected == 0) {
+        if (rowsAffected == 0) 
+        {
             throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, 
                 "Order with id " + id + " not found"

@@ -108,7 +108,16 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
          LEFT JOIN FETCH o.items
          ORDER BY o.created DESC
          """)
-   List<PGSOrder> findAllWithItems();
+    List<PGSOrder> findAllWithItems();
+    
+    @Query("""
+      SELECT DISTINCT o FROM PGSOrder o 
+      LEFT JOIN FETCH o.items 
+      WHERE o.session.status = 'OPEN'
+      ORDER BY o.created DESC
+      """)
+    List<PGSOrder> findAllInActiveSessionWithItems();
+   
 
    @Modifying
    @Transactional

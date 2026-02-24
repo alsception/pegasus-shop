@@ -33,8 +33,6 @@ public final class OrderMapper {
         dto.setId(order.getId());
         dto.setCode(order.getCode());
         dto.setStol(order.getStol());
-        dto.setName(order.getName());
-        dto.setAddress(order.getAddress());
         dto.setPaymentMethod(order.getPaymentMethod());
         dto.setCurrency(order.getCurrency());
         dto.setStatus(order.getStatus());
@@ -103,7 +101,7 @@ public final class OrderMapper {
     public static PGSOrder toEntity(
             OrderDTO dto
     ) {
-        logger.debug("Mapping to entity");
+        logger.trace("Mapping to entity");
         if (dto == null) {
             return null;
         }
@@ -112,8 +110,6 @@ public final class OrderMapper {
         order.setId(dto.getId());
         order.setCode(dto.getCode());
         order.setStol(dto.getStol());
-        order.setName(dto.getName());
-        order.setAddress(dto.getAddress());
         order.setPaymentMethod(dto.getPaymentMethod());
         order.setCurrency(dto.getCurrency());
         order.setStatus(dto.getStatus());
@@ -139,7 +135,7 @@ public final class OrderMapper {
             OrderItemDTO dto,
             PGSOrder order) 
     {
-        logger.debug("Mapping to item entity");
+        logger.trace("Mapping to item entity");
         PGSOrderItem item = new PGSOrderItem();
         item.setId(dto.getId());
         item.setQuantity(dto.getQuantity());

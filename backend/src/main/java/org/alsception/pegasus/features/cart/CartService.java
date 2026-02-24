@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.alsception.pegasus.features.order.OrderRepository;
 import org.alsception.pegasus.features.order.PGSCheckoutRequestDTO;
+import org.alsception.pegasus.features.order.PGSDailySession;
+import org.alsception.pegasus.features.order.PGSDailySessionRepository;
+import org.alsception.pegasus.features.order.PGSDailySessionService;
 import org.alsception.pegasus.features.order.PGSOrderItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,19 +30,23 @@ public class CartService
     private final CartRepository cartRepository;
     private final OrderRepository orderRepository;
     private final NotificationService notificationService;
+    private final PGSDailySessionService pgsSessionService;
+    
     private static final Logger log = LoggerFactory.getLogger(CartService.class);
 
     public CartService(UserRepository userRepository,
                        ProductRepository productRepository,
                        CartRepository cartRepository,
                        OrderRepository orderRepository,
-                       NotificationService notificationService) 
+                       NotificationService notificationService,
+                       PGSDailySessionService pgsSessionService)
     {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
         this.orderRepository = orderRepository;
         this.notificationService = notificationService;        
+        this.pgsSessionService = pgsSessionService;
     }       
     
     @Transactional
@@ -233,11 +240,19 @@ public class CartService
     @Transactional
     public void checkout(PGSCheckoutRequestDTO prc, String username)
     {
+        //Pre svega proveravamo dali je otvoren fiskalni dan
+        PGSDailySession dailySession = this.pgsSessionService.getActiveSession();
+        //Ako nije dobro ovaj ce da baci exception ILI otvori novi dan
+        
         //1. Create order
         log.trace("Creating order");
         PGSOrder order = new PGSOrder();
         
-        //assign id
+        //assign daily session
+        order.setSession(dailySession);
+               
+        
+        //assign id: TODO: ovo proveriti dali je dobro
         long id = CodeGenerator.generateNanoId();
         order.setId(id);
 
