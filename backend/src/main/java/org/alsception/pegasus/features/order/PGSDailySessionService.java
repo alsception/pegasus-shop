@@ -25,7 +25,7 @@ public class PGSDailySessionService
                 .orElseGet(() -> {
                     // Logika za automatsko otvaranje
                     // Sledeci korak je da korisnik rucno potvrdi i unese pocetni kesh
-                    logger.info("Otvoren nov dan.");
+                    logger.warn("Otvoren novi daily session dan.");
                     return openDay(BigDecimal.ZERO); 
                 });
     }

@@ -12,6 +12,7 @@
   import OrderDetails from "./OrderDetails.svelte";
   import OrderButtonReady from "./OrderButtonReady.svelte";
   import OrderButtonInPreparation from "./OrderButtonInPreparation.svelte";
+  import OrderButtonServed from "./OrderButtonServed.svelte";
 
   export let order: Order;
   export let liteView = false;
@@ -371,9 +372,11 @@
     
     -->
 
- <div class="rounded-xl shadow p-4 flex flex-col gap-2 h-fit w-fit shadow border border-primary/12 {liteView ? 'w-full' : 'w-fit min-w-[21rem]'} {getBgClass(order.status)}" 
-    class:card-new={isNew(order.created,10) && order.status == 'WAITING'}
-   
+ <div 
+  class="rounded-xl p-4 flex flex-col gap-2 h-fit w-fit shadow border border-primary/12 hover:border-blue-500 hover:outline-2 hover:outline-blue-500
+  {liteView ? 'w-full' : 'w-fit min-w-[21rem]'} 
+  {getBgClass(order.status)}" 
+    class:card-new={isNew(order.created,10) && order.status == 'WAITING'}   
     >
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-2 w-full" style="justify-content: space-between;">
@@ -456,11 +459,14 @@
                 </z>
               
             </button>
+            {#if order.status == 'WAITING'}
+              <OrderButtonInPreparation {order} on:orderUpdateCompleted/>           
+            {/if}  
             {#if order.status == 'IN_PREPARATION'}
               <OrderButtonReady {order} on:orderUpdateCompleted/>
             {/if}  
-            {#if order.status == 'WAITING'}
-              <OrderButtonInPreparation {order} on:orderUpdateCompleted/>           
+            {#if order.status == 'READY'}
+              <OrderButtonServed {order} on:orderUpdateCompleted/>           
             {/if}  
           </div>
           

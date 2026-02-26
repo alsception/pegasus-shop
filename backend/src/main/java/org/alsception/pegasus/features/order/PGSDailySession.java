@@ -1,5 +1,5 @@
 /**
- * Ovaj objekata predstavlja radni dan. 
+ * Ovaj objekat predstavlja radni dan. 
  * Ako je radno vreme od 10:00 AM do 01:00 AM sledec dana posle ponoci
  * svi orderi ce imati isti DailySession
  * 
@@ -37,7 +37,7 @@ public class PGSDailySession
     private BigDecimal endingCash;   // Stvarno stanje u kasi na kraju
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "session_status") // Govori Hibernate-u da koristi Postgres tip
+    @Column(nullable = false)
     private PGSSessionStatus status;
 
     @OneToMany(mappedBy = "session")

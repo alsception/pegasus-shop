@@ -12,10 +12,8 @@
 
   document.title = "Checkout | Pegasus";
 
-  let isAuthenticated = false;
   let loading: boolean = false;
   let error: string | null = null;
-  let stol = "";
   let user = getCurrentUsername();
   let comment = "";
 
@@ -31,9 +29,6 @@
     "121",    
     "129",
   ];
-
-  //Authenticacion
-  $: isAuthenticated = $auth.isAuthenticated;
 
   async function submitForm() 
   {

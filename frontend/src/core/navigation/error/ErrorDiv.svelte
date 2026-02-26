@@ -10,7 +10,7 @@
 </script>
 
 <div
-  class="flex flex-col justify-center items-center h-full text-2xl mt-4 text-center"
+  class="flex flex-col justify-center items-center h-full text-2xl mt-4 text-center wrap-anywhere"
 >
   {#if isErr500}
   

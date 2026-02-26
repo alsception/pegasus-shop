@@ -77,8 +77,9 @@ public class PGSOrder
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "session_id", nullable = false)
+    @JoinColumn(name = "session_id", nullable = true)
     private PGSDailySession session;
+    
     
     /*//One day, if you have time and will to play with various error messages, we can include this field.
     @Version
@@ -93,6 +94,18 @@ public class PGSOrder
     @PreUpdate
     protected void onUpdate() {
         modified = LocalDateTime.now();
+    }
+    
+    @Override
+    public String toString() {
+        return "PGSOrder{" +
+                "id=" + id +
+                ", code='" + code + "'" +
+                ", status='" + status + "'" +
+                ", session=" + (session != null ? session.getId() : "N/A") +
+                ", items=" + (items != null ? items.size() : 0) +
+                ", created=" + created +
+                "}";
     }
     
 }

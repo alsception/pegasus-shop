@@ -34,14 +34,22 @@ public class PGSTableService
         List<PGSTable> tables = tableRepository.findAll();
         //TODO: ovde trebaju orders, ali samo koji nisu vec placeni.
         List<PGSOrder> orders = orderRepository.findAllInActiveSessionWithItems();
+        
+        logger.trace("Found orders: "+orders.size());
+        
+        orders.forEach(o -> logger.trace(o.toString()));
     
         // 1. Izvuci sve unikatne brojeve stolova koji su zauzeti u jedan Set (munjevito brzo za pretragu)
-        Set<String> occupiedTableNumbers = orderRepository.findAllWithItems().stream()
+        Set<String> occupiedTableNumbers = orders.stream()
             .map(PGSOrder::getStol)
             .collect(Collectors.toSet());
 
         // 2. Samo označi stolove
-        tables.forEach(table -> table.setOccupied(occupiedTableNumbers.contains(table.getNumber())));
+        tables.forEach( table -> 
+            {
+                table.setOccupied(occupiedTableNumbers.contains(table.getNumber()));
+            } 
+        );
     
         return tables;
     }

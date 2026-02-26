@@ -114,6 +114,7 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
       SELECT DISTINCT o FROM PGSOrder o 
       LEFT JOIN FETCH o.items 
       WHERE o.session.status = 'OPEN'
+           AND o.status != 'SERVED'
       ORDER BY o.created DESC
       """)
     List<PGSOrder> findAllInActiveSessionWithItems();
