@@ -31,5 +31,6 @@ export interface OrderItem {
   price?: number;
   productName?: string;
   product?: Product;
+  productId: number;
   // ... other fields from your PGSOrderItem entity
 }

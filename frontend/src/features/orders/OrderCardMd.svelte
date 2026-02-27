@@ -13,6 +13,7 @@
   import OrderButtonReady from "./OrderButtonReady.svelte";
   import OrderButtonInPreparation from "./OrderButtonInPreparation.svelte";
   import OrderButtonServed from "./OrderButtonServed.svelte";
+  import ProductPage from "../products/ProductPage.svelte";
 
   export let order: Order;
   export let liteView = false;
@@ -32,6 +33,7 @@
   let totalAmount = 0;
   let isBlockView = true;
   let isModalOpen = false;
+  let productId = 0; //Product koji cemo prikazati na modalu kada se klikne
 
   function openDetailsModal() 
   {
@@ -355,6 +357,29 @@
     }
   }
 
+  /* treci modal */
+  let showModal3 = false;
+  
+  function openModal3() {
+    showModal3 = true;
+  }
+  
+  function closeModal3() {
+    showModal3 = false;
+  }
+
+  function handleKeydown3(event: { key: string; }) {
+    if (event.key === 'Escape') {
+      closeModal3();
+    }
+  }
+
+  function handleProductClick(id: number | undefined)
+  {
+    if (id != undefined) productId = id;
+    openModal3();
+  }
+
 </script>
 
  <!-- class:bg-inprep={order.status == 'IN_PREPARATION'}
@@ -431,9 +456,9 @@
           <div class="mt-2 " class:hidden={liteView}>
             <ul class="flex flex-col gap-0 bg-base-300/40">
               {#each order.items as item}
-                <li class="flex items-center gap-0 p-2 border-0">
-                  <span class="text-primary text-md font-semibold font">{item.quantity} x </span>&nbsp;
-                  <span class="text-primary text-md font-semibold font"> {item.product?.name}</span>
+                <li class="flex items-center gap-0 px-2 py-1 border-0 font-mono">
+                  <span class="text-primary text-md ">{item.quantity}&nbsp;x&nbsp;</span>
+                  <span class="text-primary text-md pgs-hyperlink" on:click={()=>handleProductClick(item.productId)}> {item.product?.name}</span>
                   {#if item.price}
                     <span class="text-xs text-gray-500 ml-auto font-mono">{formatPrice(item.price)}</span>
                   {/if}
@@ -477,34 +502,67 @@
  <!-- ovde cemo staviti order details modal -->
 {#if showModal2}
   <div class="modal modal-open  pt-10" style="backdrop-filter: blur(10px);">
-  <div class="modal-box max-h-[90vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-200">
-    
-    <!-- Fixed Header -->
-    <div class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300">
-      <h3 class="font-bold text-lg">Detalji narudžbe</h3>
-    </div>
-    
-    <!-- Scrollable Content -->
-    <div class="overflow-y-auto flex-1 px-6 py-4">
-      <OrderDetails ID={order.id}></OrderDetails>
-    </div>
-    
-    <!-- Fixed Footer -->
-    <div class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300">
-      <div class="flex justify-end gap-2">
-        <button class="btn" on:click={closeModal2}>Zatvori</button>
+    <div class="modal-box max-h-[90vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-200">
+      
+      <!-- Fixed Header -->
+      <div class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300">
+        <h3 class="font-bold text-lg">Detalji narudžbe</h3>
       </div>
+      
+      <!-- Scrollable Content -->
+      <div class="overflow-y-auto flex-1 px-6 py-4">
+        <OrderDetails ID={order.id}></OrderDetails>
+      </div>
+      
+      <!-- Fixed Footer -->
+      <div class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300">
+        <div class="flex justify-end gap-2">
+          <button class="btn" on:click={closeModal2}>Zatvori</button>
+        </div>
+      </div>
+      
     </div>
-    
-  </div>
   
-  <!-- Glass Backdrop -->
-  <!-- svelte-ignore a11y_click_events_have_key_events -->
-  <!-- svelte-ignore a11y_no_static_element_interactions -->
-  <div class="modal-backdrop"
-    on:click={closeModal2}
-  ></div>
-</div>
+    <!-- Glass Backdrop -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="modal-backdrop"
+      on:click={closeModal2}>
+    </div>
+  </div>
+{/if}
+
+ <!-- ovde cemo staviti order details modal -->
+{#if showModal3}
+  <div class="modal modal-open  pt-0" style="backdrop-filter: blur(10px);">
+    <div class="modal-box max-h-[90vh] w-8/12 max-w-5xl p-0 flex flex-col bg-base-200">
+      
+      <!-- Fixed Header -->
+      <div class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300">
+        <h3 class="font-bold text-lg">Detalji proizvoda</h3>
+      </div>
+      
+      <!-- Scrollable Content -->
+      <div class="overflow-y-auto flex-1 ">
+        <ProductPage productId={productId} liteView={true}></ProductPage>
+      </div>
+      
+      <!-- Fixed Footer -->
+      <div class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300">
+        <div class="flex justify-end gap-2">
+          <button class="btn" on:click={closeModal3}>Zatvori</button>
+        </div>
+      </div>
+      
+    </div>
+  
+    <!-- Glass Backdrop -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="modal-backdrop"
+      on:click={closeModal3}>
+    </div>
+  </div>
 {/if}
 
 <style>

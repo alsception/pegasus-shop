@@ -54,7 +54,7 @@
 
 "
   style="min-width: 280px;
-        position:fixed; top: 64px; left:1px;
+        position:fixed; top: 48px; left:1px;
         backdrop-filter: blur(12px) !important; 
         -webkit-backdrop-filter: blur(16px) !important;
      

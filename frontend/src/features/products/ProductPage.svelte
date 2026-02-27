@@ -11,7 +11,8 @@
   document.title = "Product details | Pegasus";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-  let productId: number;
+  export let productId: number;
+  export let liteView = false;
   let product: Product | null = null;
   let loading = true;
   let error: string | null = null;
@@ -69,15 +70,15 @@
     <h3>Product not found.</h3>
   </div>
 {:else}
-  <div class="product-card dark:product-card-dark">
+  <div class="product-card dark:product-card-dark" class:border-2={!liteView} class:border-zinc-600={!liteView}>
     <div
-      class="w-full /*h-48*/ bg-base-100 flex items-center justify-center overflow-hidden rounded-md mb-4"
+      class="w-full flex items-center justify-center overflow-hidden rounded-md mb-4"
     >
       {#if product.imageUrl}
         <img
           src={product.imageUrl}
           alt={product.name}
-          class="object-cover w-full h-full"
+          class="object-contain w-full h-max-[600px]"
         />
       {:else}
         <span class="text-gray-400 dark:text-gray-500">No image available</span>
@@ -85,7 +86,7 @@
     </div>
     <h1 class="text-primary text-2xl">
       {product.name}
-      {#if true}
+      {#if !liteView}
         <a
           class="text-gray-400 hover:text-blue-300 text-md"
           use:link
@@ -100,22 +101,23 @@
     <div class="flex gap-2"></div>
     
     {#if product.description}
-    <p>{product.description}</p>
-     {/if}
+      <p>{product.description}</p>
+    {/if}
+
     <h3 class="product-detail"
       style="font-size: x-large;">{formatPrice( product.basePrice   )}</h3>
     <p></p>
    
-    <div class="w-full flex mr-0 mt-6">
-      <button type="button" on:click={close} class=" btn btn-ghost mr-5">
-      <!-- <i class="fa fa-close"></i> -->
-      Zatvori
-      </button>
-      <div class="ml-auto">
-        <AddToCartButton {product} width="75px" />
+    {#if !liteView && isAdminView}
+      <div class="w-full flex mr-0 mt-6 mb-6">
+        <button type="button" on:click={close} class=" btn btn-ghost mr-5">
+        Zatvori
+        </button>
+        <div class="ml-auto">
+          <AddToCartButton {product} width="75px" />
+        </div>
       </div>
-
-    </div>
+    {/if}
   </div>
 {/if}
 
@@ -125,9 +127,13 @@
     color: var(--color-base-content);
   }
   .product-card {
-    max-width: 768px; /*not too wide for now*/
+    max-width: 650px; /*not too wide for now*/
     margin: 2rem auto;
+    margin-top: 0;
+    margin-bottom: 0;
     padding: 2rem;
+    padding-top: 0;
+    padding-bottom: 0;
     border-radius: 12px;
     background-color: var(--color-base-200);
   }
@@ -144,5 +150,10 @@
     color: var(--color-base-content);
     margin-top: 16px;
     margin-bottom: 0px;
+  }
+
+  img{
+    object-fit: contain;
+    max-height: 350px !important; /**trenutno je ovoliko velicina slike*/
   }
 </style>

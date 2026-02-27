@@ -17,3 +17,10 @@
   <div class="navbar-end">      
   </div>
 </div>
+
+<style>
+  .navbar{
+    height: 3rem;
+    min-height: 3rem;
+  }
+</style>

@@ -480,8 +480,8 @@ i LITE APP!!, I MOZDA i WS.....
         
         <span class="badge  badge-lg badge-green bg-yellow-500 ml-1" 
         style="background: var(--color-yellow-500);color: black;">
-          <i class="fas fa-clock"></i> NA ČEKANJU</span>
-        <span class="text-md">({orders.filter(o => o.status === 'WAITING').length})</span>
+          <i class="fas fa-hourglass"></i> NA ČEKANJU</span>
+        <span class="text-md text-black">({orders.filter(o => o.status === 'WAITING').length})</span>
       </h2>
     </div>    
     <!-- ovde su u dve kolone male slicice -->

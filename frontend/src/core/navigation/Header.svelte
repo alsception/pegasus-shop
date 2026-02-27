@@ -100,7 +100,7 @@
       style="    
             z-index: 9999;
             position: fixed;
-            top: 12px;
+            top: 3px;
             left: 8px;"
 >
   <div
@@ -112,3 +112,10 @@
   </div>
   <PrimaryMenu />
 </div>
+
+<style>
+  .navbar{
+    height: 3rem;
+    min-height: 3rem;
+  }
+</style>

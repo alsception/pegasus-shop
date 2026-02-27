@@ -19,9 +19,6 @@
     // Postavljaš vrijednost u store (ovo automatski sprema u localStorage)
     brojStola.set(table.number);
 
-    // Navigacija na drugu stranicu
-    //push('/products');
-    console.log('handling click');
     openModal2();
   }
 
@@ -81,7 +78,7 @@
   </button>
     {#if showModal2}
     <div class="modal modal-open  pt-10" style="backdrop-filter: blur(10px);" >
-    <div class="modal-box max-h-[95vh] w-11/12 max-w-7xl p-0 flex flex-col bg-base-200">
+    <div class="modal-box max-h-[92vh] w-12/12 max-w-7xl mt-5 p-0 flex flex-col bg-base-100">
       
       <!-- Fixed Header -->
      <!--  <div class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300">
@@ -94,13 +91,17 @@
       </div>
       
       <!-- Fixed Footer -->
-      <div class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300">
-        <div class="flex justify-start gap-2">
-          <button class="btn" on:click={closeModal2}>Zatvori</button>
-          <a use:link href="/cart" class="pgs-hyperlink">Dalje</a>
-        </div>
-        
+    <div class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300">
+      <div class="flex justify-between items-center">
+        <button class="btn btn-secondary" on:click={closeModal2}>
+          Zatvori
+        </button>
+
+        <a use:link href="/cart" class="btn btn-primary">
+          Dalje
+        </a>
       </div>
+    </div>
       
     </div>
     
