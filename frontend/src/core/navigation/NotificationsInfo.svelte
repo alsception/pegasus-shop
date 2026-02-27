@@ -19,15 +19,14 @@
     let interval: any;
 
     onMount(() => 
-    {
-        console.log('Component mounted');
+    {        
         // 1. Prvo učitavanje odmah
         fetchNotifications(true);
 
-        // 2. Fetchuj na svakih 5 sekundi
+        // 2. Fetchuj na svakih 2 sekundi
         interval = setInterval(() => {
             fetchNotifications(false);
-        }, 5000);
+        }, 2000);
     });
 
     onDestroy(() => 

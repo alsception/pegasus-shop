@@ -56,6 +56,8 @@ i LITE APP!!, I MOZDA i WS.....
   const autoRefresh = true;
   let showReady = false; // Varijabla koja kontrolira vidljivost gotovih orders
 
+  let mojParametar = null;
+
   function toggleView() {
     isBlockView = !isBlockView;
   }
@@ -83,6 +85,15 @@ i LITE APP!!, I MOZDA i WS.....
       }
       else 
       {
+
+        // 1. Dobavi query string iz trenutnog URL-a
+        const params = new URLSearchParams(window.location.search);
+        
+        // 2. Izvuci specifičnu vrednost (npr. ?id=123)
+        mojParametar = params.get('table');
+        
+        console.log('Vrednost parametra je:', mojParametar);
+
         // Prvo učitavanje
         await handleSearch(true);
     
@@ -504,11 +515,11 @@ i LITE APP!!, I MOZDA i WS.....
     <h2 class="text-xl rounded-lg font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2 bg-green-500 text-black">
       <span class="badge badge-soft badge-lg badge-green bg-green-500" style="background: var(--color-green-500); color: black;">
         <i class="fas fa-check"></i> SPREMNO</span>
-      <span class="text-md">({orders.filter(o => (o.status === 'READY' || o.status === 'DELIVERED' )).length})</span>
+      <span class="text-md">({orders.filter(o => (o.status === 'READY' || o.status === 'SERVED' )).length})</span>
     </h2>
   </div>  
   <div class="grid grid-cols-1 gap-4">
-    {#each orders.filter(o => (o.status === 'READY' || o.status === 'DELIVERED' )) as order}
+    {#each orders.filter(o => (o.status === 'READY' || o.status === 'SERVED' )) as order}
       <OrderCardMd {order} liteView={true} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
     {/each}
   </div>
@@ -517,15 +528,24 @@ i LITE APP!!, I MOZDA i WS.....
 <style>
 
  .pgs-orders-ready-cntr{
-  background-color: var(--color-base-200);
-  }
+/*   background-color: var(--color-base-200);
+ */  
+
+/*   border: 2px solid gray;
+ */}
 
  .pgs-orders-wait-cntr{
-  background-color: var(--color-base-200);
- }
+/*   background-color: var(--color-base-200);
+ */  /* border: 1px solid rgba(255, 255, 0, 0.185); */
+  min-height: 100vh;
+/*   border: 2px solid gray;
+ */ }
 
  .pgs-orders-inprep-cntr{
-    background-color: var(--color-base-200);
- }
+/*     background-color: var(--color-base-100);
+ *//*     border: 1px solid rgba(0, 0, 255, 0.185);
+ */    min-height: 100vh;
+/*  border: 2px solid gray;
+ */ }
 
 </style>

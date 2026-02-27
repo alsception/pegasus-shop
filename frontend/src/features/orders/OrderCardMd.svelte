@@ -285,10 +285,8 @@
     switch (status?.toUpperCase()) 
     {
 
-      default:
-        return "bg-base-300/60 dark:bg-base-200 ";
-
-     /* case "WAITING":
+ 
+      case "WAITING":
         return "bg-[#FEBB0036]"//"bg-yellow-700/30";//"bg-[#525214]";
 
       case "IN_PREPARATION":
@@ -297,15 +295,18 @@
 
       case "READY":
       case "DELIVERED":
-        return "bg-emerald-800/30";
+      case "SERVED":
+        return "bg-emerald-500/20";
 
       case "CANCELLED":
       case "REFUNDED":
         return "warning";
 
       case "RETURNED":
-        return "error";*/
+        return "error";
 
+      default:
+        return "bg-base-300/60 dark:bg-base-200 ";
       
     }
   }
@@ -428,7 +429,7 @@
           {/if}
 
           <div class="mt-2 " class:hidden={liteView}>
-            <ul class="flex flex-col gap-0 bg-base-300">
+            <ul class="flex flex-col gap-0 bg-base-300/40">
               {#each order.items as item}
                 <li class="flex items-center gap-0 p-2 border-0">
                   <span class="text-primary text-md font-semibold font">{item.quantity} x </span>&nbsp;
@@ -440,7 +441,7 @@
               {/each}
             </ul>
               <div style="align-items: end;display:grid;align-content: end; text-align: right; "
-                    class=" bg-base-300">
+                    class=" bg-base-300/40">
                 <span class="text-lg font-bold text-primary p-2 font-mono">{formatPrice(order.price)}</span>
               </div>
           </div>

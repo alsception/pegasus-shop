@@ -11,6 +11,7 @@
   import ProductCard from "./ProductCard.svelte";
   import ProductCategories from "./ProductCategories.svelte";
   import AddToCartButton from "./AddToCartButton.svelte";
+  import { slide } from "svelte/transition";
 
   document.title = "Products | Pegasus";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -29,6 +30,8 @@
   let totalProducts = 0; // If backend returns total count
   let totalPages = 0; // Total pages from backend
   let selectedCategory: any;
+
+  const kategorije = ['🧀 Predjela','🍔 Glavna jela','🍟 Prilozi','🍨 Desert','Piće 🍷']
 
   // AUTHENTICATION
   $: auth.subscribe((value) => {
@@ -188,11 +191,16 @@
     <ErrorDiv {error} />
   {:else}
       
-    <div class="w-full flex justify-center px-4">
-      <div class="w-full max-w-4xl p-4 bg-base-200 rounded-lg">
+    <div class="w-full flex justify-center p-0 fixed z-3 bg-transparent"
+      style="
+        position: fixed;
+       /*  top: -16px;
+        left: -23px; */
+    ">
+      <div class="w-full max-w-4xl p-4 bg-base-200/90 rounded-lg border-2 border-primary/20 backdrop-blur-lg m-6 mb-8">
         <form
           on:submit|preventDefault={handleFormSubmit}
-          class="flex flex-col gap-3"
+          class="flex flex-col gap-3 "
         >
           <!-- Gornji red: Input i Traži dugme -->
           <div class="flex gap-2">
@@ -200,7 +208,7 @@
               type="text"
               bind:value={searchTerm}
               placeholder="Traži proizvod..."
-              class="input input-primary dark:input-info border-2 flex-1"
+              class="input /*input-primary dark:*/  input-info border-2 flex-1"
             />
             <button type="submit" class="btn btn-dash">
               <i class="fas fa-search"></i>
@@ -224,36 +232,32 @@
               <i class="fas fa-plus"></i>
               Dodaj novi
             </button>
-      <!--       <a
-  href="/novi"
-  class="btn btn-dash flex-1 lg:flex-none whitespace-nowrap"
->
-  <i class="fas fa-plus"></i>
-  Dodaj novi
-</a> -->
             {/if}
             
             <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
-<!--               Strana <b>{page + 1}</b> od <b>{totalPages}</b>
- -->              <span class="md:inline"> | Ukupno: <b>{products.length}</b></span>
+               <span class="md:inline"> | Nadjeno: <b>{products.length} </b> |</span>
+
+                {#each kategorije as k}
+                  <span class="badge badge-neutral font-mono badge-lg cursor-pointer
+                            hover:bg-zinc-400/40 hover:outline-1 hover:outline-blue-600
+                            m-2" 
+                        style="text-transform: uppercase;">
+                      {k}
+                  </span>
+                {/each}
+
             </div>
             
             <button type="button" on:click={toggleView} class="btn btn-dash whitespace-nowrap">
               <i class="fas fa-th-list"></i>
-              <span class="sm:inline ml-1">
-                {#if isListView}
-                  Prikaz: Lista
-                {:else}
-                  Prikaz: Grid
-                {/if}
-              </span>
+           .
             </button>
           </div>
         </form>
       </div>
     </div>
 
-    <div id="results" class="w-full max-w-4xl mx-auto mt-16"></div>
+    <div id="results" class="w-full max-w-4xl mx-auto mt-16 pt-20"></div>
 
     {#if loading}
       <LoadingOverlay />
@@ -262,10 +266,10 @@
     {#if isListView && isAdminView}
    <div class="w-full max-w-[382px] mx-auto p-0">
   <div class="w-full overflow-x-auto">
-    <table class="table table-zebra w-full min-w-[382px] ">
+    <table class="table  w-full min-w-[382px] ">
           <tbody class="">
             {#each products as product, i}
-              <tr class="bg-base-200/80 outline-1 outline-transparent /*hover:outline-blue-500*/ hover:bg-base-300/70 border-b border-b-base-300">            
+              <tr class="bg-base-200 outline-1 outline-transparent /*hover:outline-blue-500*/ hover:bg-base-300/70 border-b border-b-base-300">            
                 <td class="pgs-td whitespace-nowrap p-0">
                      <div class="">
                      <h3 class="font-semibold text-lg max-w-[382px;] truncate text-primary" title={product.name}>
@@ -318,9 +322,12 @@
     {:else if !products && !loading}
       no products found :/
     {:else}
+    <!-- 
+    todo: ako je standalone onda neka bude 4 cols, ako je u modal dialogu onda mozda 3
+      -->
       <div
-        class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-4 4xl:grid-cols-5 gap-8 p-4"
-        style="justify-items: center;"
+        class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 4xl:grid-cols-5 gap-8 p-4"
+        style="justify-items: center;"        
       >
         {#each products as product, i}
           <ProductCard {product} />

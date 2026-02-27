@@ -5,7 +5,9 @@ import AddToCartButton from "./AddToCartButton.svelte";
   export let product;
 </script>
 
-<div class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden flex flex-col max-w-[384px] min-w-84 shadow hover:shadow-lg transition-shadow">
+<div 
+  class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden flex flex-col max-w-[384px] min-w-84 shadow hover:shadow-lg transition-shadow
+  border-1 border-primary/20 z-2">
   <div class="w-full h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
     {#if product.imageUrl}
       <img
@@ -33,14 +35,14 @@ import AddToCartButton from "./AddToCartButton.svelte";
       {product.description}
     </p>
     <div class="flex items-center justify-between mt-4">
-      <span class="text-2xl font-bold text-primary">
+      <span class="text-xl font-bold text-primary">
         { formatPrice( product.basePrice )}
       </span>   
       
       {#if product.discount }
 
       <span class="text-xl font-bold text-error">
-        € {product.discount}
+        { formatPrice( product.discount )}
       </span>   
 
       {/if}

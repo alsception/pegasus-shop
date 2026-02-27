@@ -1,7 +1,9 @@
 <script lang="ts">
   import type { PGSTable } from "./PGSTable";
   import { brojStola } from './../../core/services/CheckoutStore';
-  import { push } from 'svelte-spa-router';
+  import { link, push } from 'svelte-spa-router';
+  import ProductsListBarbacoa from "../products/ProductsListBarbacoa.svelte";
+  import { fade, slide } from "svelte/transition";
 
   /**
    * //TODO: ovde treba videti dali se sto vec koristi prvo pre otvaranja
@@ -18,8 +20,30 @@
     brojStola.set(table.number);
 
     // Navigacija na drugu stranicu
-    push('/products');
+    //push('/products');
+    console.log('handling click');
+    openModal2();
   }
+
+  let showModal2 = false;
+  
+  function openModal2() {
+    showModal2 = true;
+  }
+  
+  function closeModal2() {
+    showModal2 = false;
+  }
+
+  //todo: neradi
+  function handleKeydown(event: { key: string; }) 
+  {
+
+    if (event.key === 'Escape') {
+      closeModal2();
+    }
+  }
+
 </script>
 
 {#if !isAvailable}
@@ -31,6 +55,7 @@
   >
     <span class="">Not available</span>
   </button>
+
 
 
 <!-- {:else if $addToCartLoading === product.id}
@@ -48,9 +73,43 @@
     class="btn btn-primary"
     style="width: {width};"
     on:click={handleClick}    
+    
   >
-    <span data-text="Otvori" class="font-mono">       
-       <i class="fa fa-plus" aria-hidden="true"></i> Otvori</span>
+    <span data-text="Dodaj" class="font-mono">       
+       <i class="fa fa-plus" aria-hidden="true"></i> Dodaj</span>
     <div class="scan-line"></div>
   </button>
+    {#if showModal2}
+    <div class="modal modal-open  pt-10" style="backdrop-filter: blur(10px);" >
+    <div class="modal-box max-h-[95vh] w-11/12 max-w-7xl p-0 flex flex-col bg-base-200">
+      
+      <!-- Fixed Header -->
+     <!--  <div class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300">
+        <h3 class="font-bold text-lg">Odaberi proizvod</h3>
+      </div> -->
+      
+      <!-- Scrollable Content -->
+      <div class="overflow-y-auto flex-1 px-1 py-1">
+        <ProductsListBarbacoa></ProductsListBarbacoa>
+      </div>
+      
+      <!-- Fixed Footer -->
+      <div class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300">
+        <div class="flex justify-start gap-2">
+          <button class="btn" on:click={closeModal2}>Zatvori</button>
+          <a use:link href="/cart" class="pgs-hyperlink">Dalje</a>
+        </div>
+        
+      </div>
+      
+    </div>
+    
+    <!-- Glass Backdrop -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="modal-backdrop"
+      on:click={closeModal2}
+    ></div>
+  </div>
+  {/if}
 {/if}
