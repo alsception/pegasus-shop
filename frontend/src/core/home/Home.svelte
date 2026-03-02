@@ -1,8 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getCurrentRole } from "../services/SessionStore";
+  import { auth, getCurrentRole } from "../services/SessionStore";
   import InfoBlocks from "./InfoBlocks.svelte";
   import Charts from "./Charts.svelte";
+  import Login from "../auth/Login.svelte";
 
   document.title = "Pegasus";
 
@@ -155,6 +156,11 @@
 
 </script>
       
+{#if !$auth.isAuthenticated}
+
+  <Login />
+
+{:else}
 <div
   class="max-w-9xl mx-auto px-6 sm:pt-0
   grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-1 menu-container"
@@ -176,6 +182,8 @@
 
   {/each}
 </div>
+
+{/if}
 
 <style>
   @keyframes wave {

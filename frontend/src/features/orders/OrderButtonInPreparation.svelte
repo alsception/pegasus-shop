@@ -42,7 +42,7 @@
         }
       });
       (await response);
-      showInfoToast("Sačuvano",3);
+      //showInfoToast("Sačuvano",3);
       dispatch('orderUpdateCompleted', { id, status }); // Šalje event
     } 
     catch (err) 
@@ -64,7 +64,7 @@
 {/if}
  
 <button 
-class="btn btn-sm btn-primary text-primary-content ml-auto"
+class="btn btn-sm btn-info text-primary-content ml-auto"
     on:click={(e) => {
           e.preventDefault();
           updateOrderState(order.id, 'IN_PREPARATION');

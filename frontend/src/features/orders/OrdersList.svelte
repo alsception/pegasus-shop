@@ -361,21 +361,21 @@ i LITE APP!!, I MOZDA i WS.....
 
 <!-- Show each item in the order card (Block view) -->
 {#if isBlockView}
-<div class="flex flex-wrap md:flex-nowrap gap-4 md:gap-8 p-2">
+<div class="flex flex-wrap md:flex-nowrap gap-2 md:gap-3 p-1">
 
-  <div class="w-full md:w-80 shadow p-4 pgs-orders-wait-cntr shrink-0">
+  <div class="w-full md:w-50 shadow p-2 pgs-orders-wait-cntr shrink-0">
     {@render ordersWait()}
   </div>
 
-  <div class="flex-1 shadow p-4 pgs-orders-inprep-cntr">
-    <div class="flex flex-wrap gap-4">
+  <div class="flex-1 shadow p-2 pgs-orders-inprep-cntr">
+    <div class="flex flex-wrap gap-2">
        {@render ordersInprep()}
     </div>
   </div>
 
   {#if showReady}
     <div 
-      class="w-full md:w-80 shadow p-4 pgs-orders-ready-cntr overflow-hidden"
+      class="w-full md:w-50 shadow p-2 pgs-orders-ready-cntr overflow-hidden"
       in:fly={{ y: 200, duration: 400 }} 
       out:fade={{ duration: 200 }}
     >
@@ -476,16 +476,16 @@ i LITE APP!!, I MOZDA i WS.....
 
 {#snippet ordersWait()}     
   <div class="mb-4 ">
-      <h2 class="text-xl rounded-lg font-bold  flex items-center gap-2 bg-yellow-500 text-primary-content">
+      <h2 class="text-md rounded-lg font-bold flex items-center gap-1 bg-yellow-500 text-primary-content">
         
-        <span class="badge  badge-lg badge-green bg-yellow-500 ml-1" 
+        <span class="badge badge-md badge-green bg-yellow-500 ml-1" 
         style="background: var(--color-yellow-500);color: black;">
           <i class="fas fa-hourglass"></i> NA ČEKANJU</span>
         <span class="text-md text-black">({orders.filter(o => o.status === 'WAITING').length})</span>
       </h2>
     </div>    
     <!-- ovde su u dve kolone male slicice -->
-    <div class="grid grid-cols-1 gap-4">
+    <div class="grid grid-cols-1 gap-2">
       {#each orders.filter(o => o.status === 'WAITING') as order}
          <OrderCardMd {order} liteView={true} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
       {/each}
@@ -493,17 +493,17 @@ i LITE APP!!, I MOZDA i WS.....
 {/snippet}
 
 {#snippet ordersInprep()}     
-    <div class="mb-4 w-full">
-    <h2 class="text-xl rounded-lg font-bold   flex items-center gap-2 bg-blue-500 text-white">
-        <span class="badge badge-lg bg-blue-500 text-white flex gap-2 items-center p-3 ml-1">
-          <i class="fas fa-fire-alt"></i> U PRIPREMI
+    <div class="mb-1 w-full">
+    <h2 class="text-md rounded-md font-bold flex items-center gap-1 bg-blue-500 text-white">
+        <span class="badge badge-md bg-blue-500 text-white flex gap-1 items-center p-2 ml-1">
+          <i class="fas fa-fire-alt"></i>    &nbsp;U PRIPREMI
         </span>
         <span class="text-md text-white font-bold">({orders.filter(o => o.status === 'IN_PREPARATION').length})</span>
       </h2>
     </div>    
-    <div class="flex flex-wrap gap-8">
+    <div class="flex flex-wrap gap-4">
       {#each orders.filter(o => o.status === 'IN_PREPARATION') as order}
-        <div class="flex-grow min-w-[300px] max-w-[400px]">
+        <div class="flex-grow min-w-[200px] max-w-[300px] mt-2 mx-4">
           <OrderCardMd {order} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
         </div>
       {/each}
@@ -512,8 +512,8 @@ i LITE APP!!, I MOZDA i WS.....
 
 {#snippet ordersReady()}     
   <div class="mb-4">
-    <h2 class="text-xl rounded-lg font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2 bg-green-500 text-black">
-      <span class="badge badge-soft badge-lg badge-green bg-green-500" style="background: var(--color-green-500); color: black;">
+    <h2 class="text-md rounded-lg font-bold text-gray-700 dark:text-gray-300 flex items-center gap-1 bg-green-500 text-black">
+      <span class="badge badge-soft badge-md badge-green bg-green-500" style="background: var(--color-green-500); color: black;">
         <i class="fas fa-check"></i> SPREMNO</span>
       <span class="text-md">({orders.filter(o => (o.status === 'READY' || o.status === 'SERVED' )).length})</span>
     </h2>

@@ -59,7 +59,7 @@
         }
       });
       (await response);
-      showInfoToast("Sačuvano",3);
+      //showInfoToast("Sačuvano",3);
       closeDropdown();
       dispatch('orderUpdateCompleted', { id, status }); // Šalje event
 
@@ -79,6 +79,58 @@
   function closeDropdown() {
     dropdownOpen = false;
   }
+
+
+  function processSuccess(response: any)
+  {
+    // Display success message
+    if (response.data && response.data.message) 
+    {
+        console.log(response);
+        showSuccessToast(response.data.message);
+    }
+  }
+
+  function deleteDialog(orderId: number, confirmMsg: string)
+  {
+    if (confirm(confirmMsg)) 
+    {
+      axiosInstance.delete(`/orders/${orderId}`)
+        .then(response => {
+          processSuccess(response);
+          // e sad . ovde bi treblo refresh content na ekranu... todo
+        })
+        .catch(error => {
+          processError(error);
+        });
+    }
+  };
+
+  function processError(error: any) 
+  {
+    // Extract message from error response
+    let errorMessage = 'Error: ';
+
+    if (error.response && error.response.data) 
+    {
+        // error.response.data.message should contain message
+        if (error.response.data.message) 
+        {
+            errorMessage += error.response.data.message;
+        } 
+        else if (typeof error.response.data === 'string') 
+        {
+            errorMessage += error.response.data;
+        }
+    } 
+    else if (error.message) 
+    {
+        errorMessage = error.message;
+    }
+    
+    showErrorToast(errorMessage);
+  }
+
   
 </script>
 {#if loading}
@@ -100,26 +152,35 @@
     style="min-width: 205px;left: -170px"
   >
     {#each statusItems as item}
-    {#if order.status != item.status}
-      <li class="w-full p-2 border-t border-b border-gray-500/40">
-        <button
-        on:click={(e) => {
-          e.preventDefault();
-          updateOrderState(order.id, item.status);
-        }}
+      {#if order.status != item.status}
+        <li class="w-full p-2 border-t border-b border-gray-500/40">
+          <button
+          on:click={(e) => {
+            e.preventDefault();
+            updateOrderState(order.id, item.status);
+          }}
 
 
-class="flex items-center px-3 py-2 rounded-md cursor-pointer
-                  font-semibold font-stretch-150% badge"
-          style="font-size: small;"
-        >
-           <span class="badge badge-{getOrderStatusColor(item.status)} font-mono badge-lg ml-auto" style="text-transform: uppercase;">
-                {item.label /*+/* getOrderStatusLabel(item.status)*/}
-              </span>
-        
-      </button>
-      </li>
-      {/if}
+  class="flex items-center px-3 py-2 rounded-md cursor-pointer
+                    font-semibold font-stretch-150% badge"
+            style="font-size: small;"
+          >
+            <span class="badge badge-{getOrderStatusColor(item.status)} font-mono badge-lg ml-auto" style="text-transform: uppercase;">
+                  {item.label /*+/* getOrderStatusLabel(item.status)*/}
+                </span>
+          
+        </button>
+        </li>
+        {/if}
     {/each}
+    <button class="btn btn-sm btn-ghost"  aria-label="Obriši" 
+              on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
+                <z
+                class=" tooltip tooltip-info tooltip-top"
+                data-tip="Obriši"
+              >
+                <i class="fas fa-trash text-error" aria-label="Obriši"></i>  
+                </z>              
+            </button>
   </ul>
 </details>

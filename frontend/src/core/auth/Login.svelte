@@ -51,7 +51,7 @@
       <input
         type="text"
         bind:value={username}
-        class="pgs-input mb-8"
+        class="pgs-input mb-8 outline outline-primary/30"
         disabled={loading}
       />
 
@@ -61,7 +61,7 @@
       <input
         type="password"
         bind:value={password}
-        class="pgs-input mb-8"
+        class="pgs-input mb-8 outline outline-primary/30"
         disabled={loading}
       />
 

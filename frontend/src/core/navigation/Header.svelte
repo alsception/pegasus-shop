@@ -86,7 +86,11 @@
         data-tip="Notifications"
         aria-label="Notifications"
       >
-        <i class="fas fa-bell text-sm md:text-lg"></i>
+        <i id="notifications-icon" class="fas fa-bell text-sm md:text-lg"></i>
+        <span class="text-sm"
+            style="position: relative;/*
+                   top:-2rem;
+                   left: -6rem;*/">12</span> 
       </div>
 
       <NotificationsInfo />

@@ -185,56 +185,7 @@
     return config;
   });
 
-  function processSuccess(response: any)
-  {
-    // Display success message
-    if (response.data && response.data.message) 
-    {
-        console.log(response);
-        showSuccessToast(response.data.message);
-    }
-  }
-
-  function deleteDialog(orderId: number, confirmMsg: string)
-  {
-    if (confirm(confirmMsg)) 
-    {
-      axiosInstance.delete(`/orders/${orderId}`)
-        .then(response => {
-          processSuccess(response);
-          // Remove the deleted order from the list
-          orders = orders.filter(order => order.id !== orderId);
-        })
-        .catch(error => {
-          processError(error);
-        });
-    }
-  };
-
-  function processError(error: any) 
-  {
-    // Extract message from error response
-    let errorMessage = 'Error: ';
-
-    if (error.response && error.response.data) 
-    {
-        // error.response.data.message should contain message
-        if (error.response.data.message) 
-        {
-            errorMessage += error.response.data.message;
-        } 
-        else if (typeof error.response.data === 'string') 
-        {
-            errorMessage += error.response.data;
-        }
-    } 
-    else if (error.message) 
-    {
-        errorMessage = error.message;
-    }
-    
-    showErrorToast(errorMessage);
-  }
+  
 
   function getOrderStatusColor(status: string | null | undefined): string {
     switch (status?.toUpperCase()) {
@@ -399,16 +350,16 @@
     -->
 
  <div 
-  class="rounded-xl p-4 flex flex-col gap-2 h-fit w-fit shadow border border-primary/12 hover:border-blue-500 hover:outline-2 hover:outline-blue-500
-  {liteView ? 'w-full' : 'w-fit min-w-[21rem]'} 
+  class="rounded-xl p-2 flex flex-col gap-1 h-fit w-fit shadow border border-primary/12 hover:border-blue-500 hover:outline-2 hover:outline-blue-500
+  {liteView ? 'w-full' : 'w-full min-w-[21rem]'} 
   {getBgClass(order.status)}" 
     class:card-new={isNew(order.created,10) && order.status == 'WAITING'}   
     >
           <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-2 w-full" style="justify-content: space-between;">
+            <div class="flex items-center gap-1 w-full" style="justify-content: space-between;">
       
               <a use:link href="/orders/{order.id}"
-              class="text-3xl font-extrabold text-primary pgs-hyperlink">{formatCode(order.code)}</a>
+              class="text-2xl font-extrabold text-primary pgs-hyperlink">{formatCode(order.code)}</a>
       
               <!-- <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-md ml-auto" style="text-transform: uppercase;">
                 {getOrderStatusLabel(order.status)}
@@ -427,12 +378,12 @@
             </div>
           </div>
 
-          <div class="flex items-center gap-2 text-sm text-primary mb-1 ">
-            <div class="flex items-center gap-2 text-sm text-primary/60 mr-4">
+          <div class="flex items-center gap-1 text-sm text-primary mb-1 ">
+            <div class="flex items-center gap-1 text-sm text-primary/60 mr-2">
               <i class="fas fa-user"></i>
               <span><strong>{order.user?.username}</strong></span>
             </div>        
-            <div class="flex items-center gap-2 text-sm text-primary/60 mr-4">
+            <div class="flex items-center gap-1 text-sm text-primary/60 mr-2">
               <i class="fas fa-chair"></i>              
               <span><strong>{order.stol ? order.stol : "-"}</strong></span>
             </div> 
@@ -447,44 +398,39 @@
                 Napomena
               </span>
               <br>
-              <div class=" bg-base-300/66 dark:bg-gray-800 border-1 border-primary/30 dark:border-gray-800 text-primary p-1 font-bold py-2 px-4 rounded-md">          
+              <div class=" bg-base-300/66 dark:bg-gray-800 border-1 border-primary/30 dark:border-gray-800 text-primary p-1 font-bold py-2 px-3 rounded-md">          
                 {order.comment}
               </div>
             </div>
           {/if}
 
           <div class="mt-2 " class:hidden={liteView}>
-            <ul class="flex flex-col gap-0 bg-base-300/40">
+            <ul class="flex flex-col gap-0 bg-base-300/40 rounded-t-2xl">
               {#each order.items as item}
-                <li class="flex items-center gap-0 px-2 py-1 border-0 font-mono">
-                  <span class="text-primary text-md ">{item.quantity}&nbsp;x&nbsp;</span>
-                  <span class="text-primary text-md pgs-hyperlink" on:click={()=>handleProductClick(item.productId)}> {item.product?.name}</span>
-                  {#if item.price}
-                    <span class="text-xs text-gray-500 ml-auto font-mono">{formatPrice(item.price)}</span>
-                  {/if}
+                <li class="flex items-center gap-0 px-1.5 py-0 border-0 font-mono /*border-1 border-primary/5*/" >
+                  <span class="text-primary text-md font-bold">{item.quantity}&nbsp;x&nbsp;</span>
+                  <span class="text-primary text-md pgs-hyperlink p-0" on:click={()=>handleProductClick(item.productId)}> {item.product?.name}</span>
+                  
+                  <!-- ovo nam ne treba za kuhinju -->
+                  <div class="hidden">
+                    {#if item.price}
+                      <span class="text-xs text-gray-500 ml-auto font-mono">{formatPrice(item.price)}</span>
+                    {/if}
+                  </div>
                 </li>
               {/each}
             </ul>
               <div style="align-items: end;display:grid;align-content: end; text-align: right; "
-                    class=" bg-base-300/40">
-                <span class="text-lg font-bold text-primary p-2 font-mono">{formatPrice(order.price)}</span>
+                    class=" bg-base-300/40 rounded-b-2xl">
+                <span class="text-lg font-bold text-primary p-1 font-mono">{formatPrice(order.price)}</span>
               </div>
           </div>
 
-          <div class="flex gap-2 mt-2">
+          <div class="flex gap-1 mt-1">
             <button class="btn btn-sm btn-ghost text-primary/80"
               on:click={openModal2}>Detalji</button>
 
-            <button class="btn btn-sm btn-ghost"  aria-label="Obriši" 
-              on:click={()=>deleteDialog(order.id, 'Are you sure you want to delete this order? This action cannot be undone!')}>
-                <z
-                class=" tooltip tooltip-info tooltip-top"
-                data-tip="Obriši"
-              >
-                <i class="fas fa-trash text-error" aria-label="Obriši"></i>  
-                </z>
-              
-            </button>
+            
             {#if order.status == 'WAITING'}
               <OrderButtonInPreparation {order} on:orderUpdateCompleted/>           
             {/if}  
@@ -510,7 +456,7 @@
       </div>
       
       <!-- Scrollable Content -->
-      <div class="overflow-y-auto flex-1 px-6 py-4">
+      <div class="overflow-y-auto flex-1 px-3 py-2">
         <OrderDetails ID={order.id}></OrderDetails>
       </div>
       

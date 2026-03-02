@@ -42,7 +42,7 @@
         }
       });
       (await response);
-      showInfoToast("Sačuvano",3);
+      //showInfoToast("Sačuvano",3);
       dispatch('orderUpdateCompleted', { id, status }); // Šalje event
     } 
     catch (err) 

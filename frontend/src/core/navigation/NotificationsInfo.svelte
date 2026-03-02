@@ -79,6 +79,7 @@
                 {
                     showInfoToast(notification.text || notification.title, notification.type)
                     playNotificationSound('info');
+                    document.getElementById('notifications-icon')?.classList.add('text-error');
                 };
             }
         });
