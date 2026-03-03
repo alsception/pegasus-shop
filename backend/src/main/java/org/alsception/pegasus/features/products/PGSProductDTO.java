@@ -21,7 +21,7 @@ public class PGSProductDTO
     private String name;    
     private String description;   
 
-    private PGSProductCategory categoryRaw;
+    //private PGSProductCategory categoryRaw;
     private String category;
     
     private String brand;   
@@ -76,8 +76,7 @@ public class PGSProductDTO
         this.created = p.getCreated();
         this.modified = p.getModified();
         this.active = p.isActive();
-        this.categoryRaw = p.getCategory();                
-        this.category = p.getCategory() == null ? "" : p.getCategory().getName();                
+        this.category = p.getCategory() == null ? "" : p.getCategory().toString();                
     }
     
     public String getTextField(String field)

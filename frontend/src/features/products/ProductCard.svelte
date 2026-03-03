@@ -1,12 +1,14 @@
 <script lang="ts">
   import { formatPrice } from "../../utils/formatting";
-import AddToCartButton from "./AddToCartButton.svelte";
+  import AddToCartButton from "./AddToCartButton.svelte";
   import { link } from "svelte-spa-router";
   export let product;
 </script>
 
 <div 
-  class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden flex flex-col max-w-[384px] min-w-84 shadow hover:shadow-lg transition-shadow
+  class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden flex flex-col 
+  w-full
+  shadow hover:shadow-lg transition-shadow
   border-1 border-primary/20 z-2">
   <div class="w-full h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
     {#if product.imageUrl}
@@ -35,17 +37,25 @@ import AddToCartButton from "./AddToCartButton.svelte";
       {product.description}
     </p>
     <div class="flex items-center justify-between mt-4">
-      <span class="text-xl font-bold text-primary">
-        { formatPrice( product.basePrice )}
-      </span>   
-      
+
       {#if product.discount }
 
-      <span class="text-xl font-bold text-error">
-        { formatPrice( product.discount )}
-      </span>   
+        <span class="text-xl font-bold text-primary line-through">
+          { formatPrice( product.basePrice )}
+        </span>   
+        
+        <span class="text-2xl font-bold text-success">
+          { formatPrice( product.discount )}
+        </span>   
+
+      {:else}
+        
+        <span class="text-xl font-bold text-primary">
+          { formatPrice( product.basePrice )}
+        </span>   
 
       {/if}
+
 
       <AddToCartButton {product} width="60px" />
     </div>    

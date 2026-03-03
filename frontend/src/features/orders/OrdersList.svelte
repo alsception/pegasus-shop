@@ -481,7 +481,7 @@ i LITE APP!!, I MOZDA i WS.....
       </h2>
     </div>    
     <!-- ovde su u dve kolone male slicice -->
-    <div class="grid grid-cols-1 gap-2">
+    <div class="grid grid-cols-2 lg:grid-cols-1 gap-2">
       {#each orders.filter(o => o.status === 'WAITING') as order}
          <OrderCardMd {order} liteView={true} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
       {/each}
@@ -498,12 +498,21 @@ i LITE APP!!, I MOZDA i WS.....
       </h2>
     </div>    
     <div class="flex flex-wrap gap-4">
-      {#each orders.filter(o => o.status === 'IN_PREPARATION') as order}
-        <div class="flex-grow min-w-[200px] max-w-[300px] mt-2 mx-4">
-          <OrderCardMd {order} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
-        </div>
-      {/each}
+  {#each orders.filter(o => o.status === 'IN_PREPARATION') as order}
+    <div class="
+      w-full
+      lg:flex-grow
+      lg:min-w-[200px]
+      lg:max-w-[300px]
+      mt-2
+    ">
+      <OrderCardMd
+        {order}
+        on:orderUpdateCompleted={handleOrderUpdateCompleted}
+      />
     </div>
+  {/each}
+</div>
 {/snippet}
 
 {#snippet ordersReady()}     
@@ -514,9 +523,17 @@ i LITE APP!!, I MOZDA i WS.....
       <span class="text-md">({orders.filter(o => (o.status === 'READY' || o.status === 'SERVED' )).length})</span>
     </h2>
   </div>  
-  <div class="grid grid-cols-1 gap-4">
+  <div class="grid grid-cols-2 lg:grid-cols-1 gap-2 w-fit">
     {#each orders.filter(o => (o.status === 'READY' || o.status === 'SERVED' )) as order}
+    <div class="
+      w-full
+      lg:flex-grow
+      lg:min-w-[200px]
+      lg:max-w-[300px]
+      mt-2
+    ">
       <OrderCardMd {order} liteView={true} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
+    </div>
     {/each}
   </div>
 {/snippet}

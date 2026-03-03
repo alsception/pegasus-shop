@@ -98,11 +98,9 @@ public class PGSProduct {
     
 //    @Version
 //    private Integer version; // Optimistic locking to prevent concurrent modification issues    
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id", nullable = true)
-    @JsonIgnore //DALI NAM OVO UOPSTE TREBA SAD SAMO KOMPLIKUJE????
-    private PGSProductCategory category;
+    
+    @Column(name = "category") 
+    private Integer category;
 
     @JsonIgnore
     @ElementCollection

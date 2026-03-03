@@ -16,7 +16,7 @@ export interface Product
     basePrice: number;
     imageUrl: string;
 
-    category: string;
+    category: number;
     brand: string;
     baseCurrency: string;
     taxPercent: number;

@@ -241,41 +241,59 @@
       class="max-w-7xl mx-auto bg-base-100 rounded-lg p-2 w-full space-y-8"
     >
       <!-- Order Information Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10 items-start">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10 items-start">
 
-  <div>
-    <h4 class="font-mono text-2xl">{formData.code}</h4>
-  </div>
+        <div>
+          <h4 class="font-mono text-2xl">#{formData.code}</h4>
+        </div>
 
-  
+        <div class="flex gap-6">
+          <h6 class="font-mono text-xl">
+            <i class="fas fa-user text-primary/40">&nbsp;</i>
+            {formData.user?.username}
+          </h6>
+          <h6 class="font-mono text-xl">
+            <i class="fas fa-chair text-primary/40">&nbsp;</i>
+            {formData.stol}
+          </h6>
+        </div>
 
-  <div class="lg:text-right">
+         <div class="absolute top-0 right-0">
     {#if formData.status}
       <span
         class="badge badge-soft badge-{getOrderStatusColor(formData.status)} font-mono badge-lg uppercase"
       >
-      {getOrderStatusLabel(formData.status)}
+        {getOrderStatusLabel(formData.status)}
       </span>
     {/if}
   </div>
 
-</div>
-<div>
-    <h6 class="font-mono text-xl"><i class="fas fa-user text-primary/40">&nbsp;</i>{formData.user?.username}</h6>
-  </div>
+      </div>
 
       <div class="w-full">
         <div class="rounded-lg p-">
           <ul class="steps steps-vertical lg:steps-horizontal w-full">
-            <li class="step step-secondary">Primljeno: <br>{formattedTime(formData.created)}</li>
-            <li class="step" class:step-secondary={formData.upripremiAt != null}>U pripremi: <br>{formattedTime(formData.upripremiAt)}</li>
-            <li class="step" class:step-secondary={formData.spremnoAt != null}>Spremno: <br>{formattedTime(formData.spremnoAt)}</li>
-            <li class="step" class:step-secondary={formData.deliveredAt != null}>Servirano: <br>{formattedTime(formData.deliveredAt)}</li>
+            <li class="step step-secondary">
+              Primljeno: <br />{formattedTime(formData.created)}
+            </li>
+            <li
+              class="step"
+              class:step-secondary={formData.upripremiAt != null}
+            >
+              U pripremi: <br />{formattedTime(formData.upripremiAt)}
+            </li>
+            <li class="step" class:step-secondary={formData.spremnoAt != null}>
+              Spremno: <br />{formattedTime(formData.spremnoAt)}
+            </li>
+            <li
+              class="step"
+              class:step-secondary={formData.deliveredAt != null}
+            >
+              Servirano: <br />{formattedTime(formData.deliveredAt)}
+            </li>
           </ul>
-          
+
           <div class="flex hidden">
-
-
             <div
               class="flex flex-col sm:flex-row flex-wrap gap-x-10 gap-y-2 text-md text-secondary"
             >
@@ -312,30 +330,31 @@
           </div>
         </div>
       </div>
-      <div class="h-px bg-neutral w-full"></div>
+      <div class="h-px bg-neutral/20 w-full"></div>
 
       <!-- Order Items Section -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-4">
         <div class="lg:col-span-2">
           <div class="space-y-4">
             {#if formData.items && formData.items.length > 0}
-              <div class="divide-y divide-gray-200 dark:divide-slate-700">
+              <div class="divide-y divide-gray-200 dark:divide-slate-900">
                 {#each formData.items as item, index (item.id || index)}
                   <div
                     class="py-1 grid grid-cols-1 sm:grid-cols-3 gap-0 items-center"
                   >
                     <div class="sm:col-span-2 flex flex-col gap-0.5">
                       <div class="flex items-center gap-1">
-                        <div
-                          class="flex items-center rounded-md overflow-hidden border border-primary/10 shrink-0 h-6"
-                        ></div>
+                        <!--     <div
+                          class="flex items-center rounded-md overflow-hidden border border-primary/10 dark:border-primary/5 shrink-0 h-6"
+                        ></div> -->
 
                         <p
                           class="text-sm sm:text-base font-medium text-primary px-1"
                         >
-                          {item.quantity} x {item.product.name} ({formatPrice(
-                            item.product.basePrice
-                          )})
+                          {item.quantity} x {item.product.name}
+                          {#if item.quantity > 1}
+                            ({formatPrice(item.product.basePrice)})
+                          {/if}
                         </p>
                       </div>
                     </div>
@@ -411,7 +430,6 @@
     </form>
   {/if}
 </div>
-
 
 <!-- Error Modal -->
 <dialog id="modal" class="modal modal-bottom sm:modal-middle w-full">

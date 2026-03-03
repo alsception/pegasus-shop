@@ -29,7 +29,9 @@ public interface ProductRepository extends JpaRepository<PGSProduct, Long>
                 LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%'))
                 OR 
                 LOWER(p.description) LIKE LOWER(CONCAT('%', :search, '%'))
-            )""")
+            )
+            ORDER BY p.category ASC, p.id ASC, p.name ASC
+           """)
     List<PGSProduct> searchActiveProducts(@Param("search") String search);
     
 //    @Query(nativeQuery = true, value = """

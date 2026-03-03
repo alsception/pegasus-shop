@@ -169,6 +169,7 @@ export function getOrderStatusColor(status: string | null | undefined): string
     switch (status?.toUpperCase()) {
       case "READY":
       case "DELIVERED":
+      case "SERVED":
         return "success";
       case "CANCELLED":
       case "REFUNDED":
@@ -184,7 +185,7 @@ export function getOrderStatusColor(status: string | null | undefined): string
     }
   }
 
-export function getOrderStatusLabel(status: string | null | undefined): string 
+export function getOrderStatusLabel(status: string ): string 
 {
     switch (status?.toUpperCase()) 
     {
@@ -202,7 +203,7 @@ export function getOrderStatusLabel(status: string | null | undefined): string
       case "WAITING":
         return "NA ČEKANJU";
       default:
-        return "-";
+        return status;
     }
 }
 

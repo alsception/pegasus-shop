@@ -28,7 +28,7 @@ export interface OrderItem {
   id: number;
   // order?: PGSOrder; // Not included due to @JsonBackReference
   // Add other PGSOrderItem properties here
-  quantity?: number;
+  quantity: number;
   price?: number;
   productName?: string;
   product: Product;

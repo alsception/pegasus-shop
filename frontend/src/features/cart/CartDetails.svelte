@@ -210,7 +210,7 @@
                     <div class="tooltip tooltip-info" data-tip="Delete">
                       <button
                         type="button"
-                        class="btn btn-ghost btn-sm text-error h-2"
+                        class="btn btn-ghost btn-sm text-error h-2 m-4"
                         aria-label="Delete"
                         on:click={() => deleteCartItem(item.product.id)}
                       >
@@ -231,11 +231,11 @@
             {/each}
           </div>
 
-          <div class="space-y-4 mt-4 divide-y divide-primary/20">
+          <div class="space-y-4 mt-4 divide-y divide-primary/20 justify-end">
             <div class="divide-y divide-gray-200 dark:divide-slate-700"></div>
 
-            <div class="pt-4 px-20 flex justify-between items-center">
-              <p class="text-lg sm:text-xl font-semibold text-primary">Ukupno:</p>
+            <div class="pt-4 px-2 flex justify-end items-end">
+              <p class="text-lg sm:text-xl font-semibold text-primary mr-6">Ukupno:</p>
               <p class="text-xl sm:text-2xl font-bold text-primary">{formatPrice(cart.totalPrice || 0)}</p>
             </div>
           </div>

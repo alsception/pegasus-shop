@@ -43,7 +43,7 @@ public class ProductService
     
     public List<PGSProductDTO> findProducts(String search, String code, String name) 
     {
-        logger.debug("findProducts: search=["+search+"] code=["+code+"], name=["+name+"]");
+        logger.debug("findProducts: search=["+search+"] code=["+code+"], name=["+name+"]. /46");
         if(search != null)
         { 
             try

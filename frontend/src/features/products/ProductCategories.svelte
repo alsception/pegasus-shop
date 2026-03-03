@@ -5,8 +5,8 @@ import { auth } from "../../core/services/SessionStore";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export let selectedCategory: string = "";
-export let onSelect: (category: string) => void = () => {};
+export let selectedCategory: number;
+export let onSelect: (category: number) => void = () => {};
 
 interface Category {
   id: number;
@@ -25,6 +25,7 @@ interface FlatCategory {
 const categories = writable<FlatCategory[]>([]);
 const loading = writable(true);
 
+//koristimo li ovo????
 // Function to flatten hierarchical categories
 function flattenCategories(categoryList: Category[], level: number = 0): FlatCategory[] {
   const result: FlatCategory[] = [];
@@ -51,6 +52,10 @@ function flattenCategories(categoryList: Category[], level: number = 0): FlatCat
   return result;
 }
 
+/**
+ * TODO: ovde treba sve ovo ukloniti i ostaviti samo jednostavne kategorije, number,
+ * bez ucitavanja sa servera, jer nekoristimo
+*/
 onMount(async () => 
 {
 
@@ -84,14 +89,14 @@ onMount(async () =>
     loading.set(false);
   }
 });
-
+/* 
 function handleChange(event: Event) 
 {
   const value = (event.target as HTMLSelectElement).value;
   selectedCategory = value;
   onSelect(value);
 }
-
+ */
 function clickChange(value: any) 
 {
   selectedCategory = value;
@@ -102,18 +107,18 @@ function clickChange(value: any)
 <div class="form-control w-full max-w-xs">
   
   {#if $loading}
-    <div tabindex="0" role="button" class="btn btn-dash w-[200px]">
+    <div tabindex="0" role="button" class="btn btn-dash ">
         <i class="fas fa-search"></i>
         Loading<span class="loading loading-dots loading-xs"></span>
       </div>
   {:else}  
 
     <div class="dropdown z-49">
-      <div tabindex="0" role="button" class="btn btn-dash w-[200px]">
+      <div tabindex="0" role="button" class="btn btn-dash ">
         <i class="fas fa-tag"></i>
-        Traži po kategoriji
+        Kategorije
       </div>
-      <ul tabindex="-1" class="dropdown-content menu bg-base-300 rounded-box z-1 w-[266px] p-2 shadow-sm">
+      <ul tabindex="-1" class="dropdown-content menu bg-base-300 rounded-box z-1 w-[200px] p-2 shadow-sm">
         {#each $categories as category}
           <!-- svelte-ignore a11y_no_static_element_interactions -->
           <li>
