@@ -445,7 +445,7 @@ i LITE APP!!, I MOZDA i WS.....
       </table>
     <div class="nb-table-footer text-left bg-secondary" style="background-color: var(--color-base-100);">
        
-      Promet: <span class="font-bold font-mono text-2xl text-success">{formatPrice(totalAmount)}</span>
+      Promet: <span class="font-bold font-mono text-2xl text-primary">{formatPrice(totalAmount)}</span>
     <br>
     <br>
       Ukupno narudžbi:

@@ -350,7 +350,7 @@
     -->
 
  <div 
-  class="rounded-xl p-2 flex flex-col gap-1 h-fit w-fit shadow border-1 border-primary/4 hover:border-blue-500 hover:outline-2 hover:outline-blue-500
+  class="rounded-xl p-2 flex flex-col gap-1 h-fit w-fit shadow border-1 border-primary/4 hover:border-blue-500 hover:outline-1 hover:outline-blue-500
   {liteView ? 'w-full' : 'w-full min-w-[21rem]'} 
   {getBgClass(order.status)}" 
     class:card-new={isNew(order.created,10) && order.status == 'WAITING'}   
@@ -407,9 +407,9 @@
           <div class="mt-2 " class:hidden={liteView}>
             <ul class="flex flex-col gap-0 bg-base-300/40 rounded-t-2xl">
               {#each order.items as item}
-                <li class="flex items-center gap-0 px-1.5 py-0 border-0 font-mono border-1 border-primary/5">
+                <li class="flex items-center gap-0 px-1.5 py-0 border-0 font-mono border-b-1 border-primary/5">
                   <span class="text-primary text-md font-bold">{item.quantity}&nbsp;x&nbsp;</span>
-                  <span class="text-primary text-md pgs-hyperlink p-0" on:click={()=>handleProductClick(item.productId)}> {item.product?.name}</span>
+                  <span class="text-primary text-md pgs-hyperlink p-0 font-normal" on:click={()=>handleProductClick(item.productId)}> {item.product?.name}</span>
                   
                   <!-- ovo nam ne treba za kuhinju -->
                   <div class="hidden">

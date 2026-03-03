@@ -439,9 +439,9 @@
                 </span>
               </td>
               <td class="">{formatPrice(artikal.price1)}</td>
-              <td class="text-{getClass(artikal,artikal.price2)}">{formatPrice(artikal.price2)}</td>
-              <td class="text-{getClass(artikal,artikal.price3)}">{formatPrice(artikal.price3)}</td>
-              <td class="text-{getClass(artikal,artikal.price4)}">{formatPrice(artikal.price4)}</td>
+              <td class="text-{getClass(artikal,artikal.price2)} font-mono ">{formatPrice(artikal.price2)}</td>
+              <td class="text-{getClass(artikal,artikal.price3)} font-mono ">{formatPrice(artikal.price3)}</td>
+              <td class="text-{getClass(artikal,artikal.price4)} font-mono ">{formatPrice(artikal.price4)}</td>
               <td class="text-">{artikal.stok}</td>
               <td class="text-center">{@html formatCommentInfo(artikal.napomena)}</td>
               <td class="pgs-td font-mono whitespace-nowrap">{@html formatDate(artikal.created, "new", 15)}</td>

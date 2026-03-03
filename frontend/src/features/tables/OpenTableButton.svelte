@@ -97,7 +97,7 @@
           Zatvori
         </button>
 
-        <a use:link href="/cart" class="btn btn-primary">
+        <a use:link href="/cart" class="btn btn-success">
           Dalje
         </a>
       </div>

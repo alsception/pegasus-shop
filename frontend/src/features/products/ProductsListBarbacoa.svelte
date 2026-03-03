@@ -239,7 +239,7 @@
             </button>
             {/if}
             
-            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 /*whitespace-nowrap*/ ">
+            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 /*whitespace-nowrap*/ hidden">
                <span class="md:inline"> | Nadjeno: <b>{products.length} </b> |</span>
 
                 {#each kategorije as k}

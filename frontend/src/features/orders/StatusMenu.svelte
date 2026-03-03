@@ -148,8 +148,8 @@
     class="menu menu-sm dropdown-content mt-3 w-22 p-0 scale-in-ver-top
             bg-base-200
             rounded-md shadow
-            border border-gray-600"
-    style="min-width: 205px;left: -170px"
+            border border-gray-600 "
+    style="min-width: 205px;left: -170px; z-index: 9000;"
   >
     {#each statusItems as item}
       {#if order.status != item.status}
@@ -180,7 +180,7 @@
                 data-tip="Obriši"
               >
                 <i class="fas fa-trash text-error" aria-label="Obriši"></i>  
-                </z>              
+                </z>       Obriši       
             </button>
   </ul>
 </details>

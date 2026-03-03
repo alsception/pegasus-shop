@@ -7,7 +7,7 @@ import type { NavRoutesMap } from "./MenuTypes";
 export const navRoutes: NavRoutesMap = 
 {
     "/home": {
-      label: "Home",
+      label: "Početak",
       icon: "home",
       href: "#/home",
       component: "/home",
@@ -16,7 +16,7 @@ export const navRoutes: NavRoutesMap =
       default: true,
     },
     "/stats": {
-      label: "Stats",
+      label: "Statistike",
       icon: "bar-chart",
       href: "#/stats",
       component: "/stats",
@@ -25,7 +25,7 @@ export const navRoutes: NavRoutesMap =
       default: true,
     },
     "/users": {
-      label: "Users",
+      label: "Korisnici",
       icon: "users",
       href: "#/users",
       component: "/users",
@@ -34,7 +34,7 @@ export const navRoutes: NavRoutesMap =
       customer: false,
     },
     "/products": {
-      label: "Products",
+      label: "Proizvodi",
       icon: "box",
       href: "#/products",
       component: "/products",
@@ -43,7 +43,7 @@ export const navRoutes: NavRoutesMap =
       customer: true,
     },
     "/products/mngmt/:id": {
-      label: "Products administration",
+      label: "Upravljanje proizvodima",
       icon: "box",
       href: "#/products?listView=true",
       component: null,
@@ -52,7 +52,7 @@ export const navRoutes: NavRoutesMap =
       customer: false,
     },
     "/orders": {
-      label: "Orders",
+      label: "Narudžbe",
       icon: "truck",
       href: "#/orders",
       component: null,
@@ -61,7 +61,7 @@ export const navRoutes: NavRoutesMap =
       customer: true,
     },
     "/cart": {
-      label: "My cart (x)",//TODO: update number of items in cart
+      label: "Košarica",
       icon: "shopping-basket",
       href: "#/cart",
       component: null,
@@ -70,7 +70,7 @@ export const navRoutes: NavRoutesMap =
       customer: true,
     },
     "/tables": {
-      label: "Tables",
+      label: "Stolovi",
       icon: "table",
       href: "#/tables",
       component: null,
@@ -107,7 +107,7 @@ export const navRoutes: NavRoutesMap =
       customer: false,
     }, 
     "/pix": {
-      label: "Pictures",
+      label: "Galerija",
       icon: "image",
       href: "#/pix",
       component: null,
