@@ -20,6 +20,7 @@ export interface Order {
   modified?: string | null; // LocalDateTime as ISO string, nullable so optional
   upripremiAt?: string | null;
   spremnoAt?: string | null;
+  deliveredAt?: string | null;
   status?: string;
 }
 
@@ -30,7 +31,7 @@ export interface OrderItem {
   quantity?: number;
   price?: number;
   productName?: string;
-  product?: Product;
+  product: Product;
   productId: number;
   // ... other fields from your PGSOrderItem entity
 }

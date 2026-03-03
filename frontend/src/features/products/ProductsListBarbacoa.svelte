@@ -11,7 +11,6 @@
   import ProductCard from "./ProductCard.svelte";
   import ProductCategories from "./ProductCategories.svelte";
   import AddToCartButton from "./AddToCartButton.svelte";
-  import { slide } from "svelte/transition";
 
   document.title = "Products | Pegasus";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -30,6 +29,7 @@
   let totalProducts = 0; // If backend returns total count
   let totalPages = 0; // Total pages from backend
   let selectedCategory: any;
+  export let rows = 4;
 
   const kategorije = ['🍷Piće','🧀 Predjela','🍔 Glavna jela','🍟 Prilozi','🍨 Desert']
 
@@ -326,7 +326,7 @@
     todo: ako je standalone onda neka bude 4 cols, ako je u modal dialogu onda mozda 3
       -->
       <div
-        class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 4xl:grid-cols-5 gap-8 p-4"
+        class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-5 4xl:grid-cols-5 gap-8 p-4"
         style="justify-items: center;"        
       >
         {#each products as product, i}

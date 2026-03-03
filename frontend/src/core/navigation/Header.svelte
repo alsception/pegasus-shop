@@ -99,6 +99,11 @@
         <span id="notifications-indicator" class="text-sm text-white bg-error px-1 hidden"
             style="position: relative;top: -0.5rem;left: -0.5rem;">12</span> 
       </button>
+<!-- 
+      <div class="indicator">
+  <span class="indicator-item badge badge-secondary">12</span>
+  <button class="btn">inbox</button>
+</div> -->
 
       <NotificationsInfo />
     </div>

@@ -200,7 +200,10 @@
                       </button>
                     </div>
 
-                    <p class="text-sm sm:text-base font-medium text-primary px-1">{item.product.name} ({formatPrice(item.product.basePrice)})</p>
+                    <p class="text-sm sm:text-base font-medium text-primary px-1">{item.product.name}
+                      {#if item.quantity > 1}
+                        ({formatPrice(item.product.basePrice)})
+                      {/if} </p>
                   </div>
                       
                   <div class="flex items-center">

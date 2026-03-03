@@ -4,8 +4,7 @@
   import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";  
   import { get } from "svelte/store";
-  import { formatCode, formatTime, formatCommentInfo, isNew, formatTime2, formatPrice } from "../../utils/formatting";
-  import { showSuccessToast, showErrorToast } from '../../core/utils/toaster';
+  import { formatCode, isNew, formatTime2, formatPrice } from "../../utils/formatting";
   import axios from 'axios';
   import { showErrorModal } from "../../utils/modal";
   import StatusMenu from "./StatusMenu.svelte";
@@ -18,7 +17,7 @@
   export let order: Order;
   export let liteView = false;
 
-  document.title = 'Orders | Pegasus'
+  document.title = 'Narudžbe | Pegasus'
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -28,28 +27,15 @@
   let orders: Order[] = [];
   let loading: boolean = true;
   let error: string | null = null;
-  let isDark = false;
   let searchTerm = "";
   let totalAmount = 0;
-  let isBlockView = true;
   let isModalOpen = false;
   let productId = 0; //Product koji cemo prikazati na modalu kada se klikne
-
-  function openDetailsModal() 
-  {
-    isModalOpen = true;
-    modalOrder = order;
-  }
-
-  function toggleView() {
-    isBlockView = !isBlockView;
-  }
 
   // AUTHENTICATION
   $: auth.subscribe((value) => {
     isAuthenticated = value.isAuthenticated;
   });
-
 
   // Fetch the orders from the backend
   onMount(() => 
@@ -448,7 +434,7 @@
  <!-- ovde cemo staviti order details modal -->
 {#if showModal2}
   <div class="modal modal-open  pt-10" style="backdrop-filter: blur(10px);">
-    <div class="modal-box max-h-[90vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-200">
+    <div class="modal-box max-h-[90vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-100">
       
       <!-- Fixed Header -->
       <div class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300">
@@ -463,7 +449,7 @@
       <!-- Fixed Footer -->
       <div class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300">
         <div class="flex justify-end gap-2">
-          <button class="btn" on:click={closeModal2}>Zatvori</button>
+          <button class="btn btn-secondary" on:click={closeModal2}>Zatvori</button>
         </div>
       </div>
       
@@ -496,7 +482,7 @@
       <!-- Fixed Footer -->
       <div class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300">
         <div class="flex justify-end gap-2">
-          <button class="btn" on:click={closeModal3}>Zatvori</button>
+          <button class="btn btn-secondary" on:click={closeModal3}>Zatvori</button>
         </div>
       </div>
       
