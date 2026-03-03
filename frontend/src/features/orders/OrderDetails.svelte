@@ -337,7 +337,8 @@
         <div class="lg:col-span-2">
           <div class="space-y-4">
             {#if formData.items && formData.items.length > 0}
-              <div class="divide-y divide-gray-200 dark:divide-slate-900">
+              <div class="divide-y divide-primary/10">
+                
                 {#each formData.items as item, index (item.id || index)}
                   <div
                     class="py-1 grid grid-cols-1 sm:grid-cols-3 gap-0 items-center"
@@ -367,6 +368,7 @@
                       </span>
                     </div>
                   </div>
+
                 {/each}
               </div>
             {:else}

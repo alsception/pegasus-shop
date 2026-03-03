@@ -245,7 +245,7 @@
             <span class="hidden sm:inline ml-1">Traži</span>
           </button>
 
-          <div class="flex-1 p-0">
+          <div class=" p-0">
             <ProductCategories
               bind:selectedCategory
               onSelect={handleCategorySelect}

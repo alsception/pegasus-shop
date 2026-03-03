@@ -395,7 +395,7 @@
             <ul class="flex flex-col gap-0 bg-base-300/40 rounded-t-2xl">
               {#each order.items as item}
               {#if item.product.category != 5 /**Filter drinks out*/}
-                <li class="flex items-center gap-0 px-1.5 py-0 border-0 font-mono border-b-1 border-primary/5">
+                <li class="flex items-center gap-0 px-1.5 py-0 border-0 border-b-1 border-primary/5">
                   <span class="text-primary text-md font-bold">{item.quantity}&nbsp;x&nbsp;</span>
                   <span class="text-primary text-md pgs-hyperlink p-0 font-normal" on:click={()=>handleProductClick(item.productId)}> {item.product?.name}</span>
                   

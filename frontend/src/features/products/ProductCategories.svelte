@@ -118,13 +118,15 @@ function clickChange(value: any)
         <i class="fas fa-tag"></i>
         Kategorije
       </div>
-      <ul tabindex="-1" class="dropdown-content menu bg-base-300 rounded-box z-1 w-[200px] p-2 shadow-sm">
+      <ul tabindex="-1" class="dropdown-content menu rounded-box z-1 w-[240px] p-2 shadow-sm bg-base-200/90 dark:bg-zinc-900/92"
+      style="left: -70%;backdrop-filter: blur(12px) !important; 
+        -webkit-backdrop-filter: blur(16px) !important;">
         {#each $categories as category}
           <!-- svelte-ignore a11y_no_static_element_interactions -->
-          <li>
+          <li class="bg-transparent" class:selected-cat={category.id === selectedCategory}>
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <div 
-              style="font-weight: {category.hasChildren ? 'bold' : 'normal'}; "
+              style="font-weight: {category.id === selectedCategory} ? 'bold' : 'normal'}; "
               on:click={()=>clickChange(category.id)}
               >{category.name}</div>
           </li>
@@ -156,3 +158,15 @@ function clickChange(value: any)
         </option>
       {/each}
     </select> -->
+
+<style>
+  
+  .selected-cat{
+    color: cornflowerblue;
+    color: var(--color-warning);
+    background-color: black;
+    font-weight: bold !important;
+    font-style: bold;
+  }
+
+</style>
