@@ -49,8 +49,8 @@
   prefersdark: true;
   color-scheme: 'dark';
   /*NEKA BUDE TABLE TRANSPARENT NO COLOR*/
-  --color-base-100: var(--color-gray-950);
-  --color-base-200: #1b1b1e;/*#111113; /*radix colors, slate 1*/
+  --color-base-100: oklch(0.18 0 0);
+  --color-base-200: #0b0b0b;/*#111113; /*radix colors, slate 1*/
   --color-base-300: rgb(39 39 42);
   --color-base-content: rgb(183, 183, 183);
   --color-primary: rgb(229 231 233); /*blue 500*/
@@ -320,11 +320,11 @@ body {
  */
 @media (prefers-color-scheme: dark) {
   body {
-    @apply bg-[#121212] text-gray-200;
+    @apply bg-[#030303] text-gray-200;
   }
 }
 .dark body {
-  @apply bg-[#121212] text-gray-200;
+  @apply bg-[#030303] text-gray-200;
 }
 
 .search-bar {
@@ -358,7 +358,7 @@ body {
 
 .dark .pgs-input {
   border-color: var(--color-zinc-700);
-  background-color: var(--color-zinc-800);
+  background-color: var(--color-zinc-900);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -387,12 +387,12 @@ body {
 /*...but at night we like neon lines... */
 @media (prefers-color-scheme: dark) {
   .pgs-tr{
-  @apply hover:outline-blue-500 hover:bg-blue-600/15;
+  @apply /*hover:outline-blue-500*/ hover:bg-blue-600/15;
 }
 }
 /* ... and here also to be sure that it works */
 .dark .pgs-tr{
-  @apply hover:outline-blue-500 hover:bg-blue-600/15;
+  @apply /*hover:outline-blue-500*/ hover:bg-blue-600/15;
 }
 
 /** Following 2 rules are used for selected rows in tables on darkmode, but it doesnt work if its put in component 
@@ -434,12 +434,12 @@ body {
 /* We gonna apply some additional styling ONLY for Dark mode */
 @media (prefers-color-scheme: dark) {
   .tr-highlight {
-    @apply outline-1 outline-transparent hover:outline-blue-500 hover:bg-blue-600/15
+    @apply /*outline-1 outline-transparent hover:outline-blue-500*/ hover:bg-zinc-600/45
   }
 }
 
 [data-theme='dark'] {
   .tr-highlight {
-    @apply outline-1 outline-transparent hover:outline-blue-500 hover:bg-blue-600/15
+    @apply /*outline-1 outline-transparent hover:outline-blue-500*/ hover:bg-zinc-600/45
   }
 }

@@ -330,7 +330,7 @@
               type="text"
               bind:value={searchTerm}
               placeholder="Traži artikal..."
-              class="input input-primary dark:input-info border-2 flex-1"
+              class="input input-secondary border-2 flex-1"
             />
             <button type="submit" class="btn btn-dash">
               <i class="fas fa-search"></i>
@@ -358,7 +358,7 @@
       </div>
     </div>
 
-    <div id="results" class="w-full max-w-4xl mx-auto mt-16"></div>
+    <div id="results" class="w-full max-w-4xl mx-auto mt-4"></div>
 
     {#if loading}
       <LoadingOverlay />
@@ -368,9 +368,10 @@
       <table class="table table-zebra min-w-[1200px] divide-y divide-accent">
         <thead class="bg-primary/10 sticky top-0">
           <tr class="h-12 sticky top-0 z-20 bg-base-100">
-            <th class="pgs-th-l cursor-pointer sticky top-0 z-20 bg-base-100"
+            <th class="pgs-th-l cursor-pointer sticky top-0 z-20 bg-base-200"
               title="Klikni za sortiranje"
               class:pgs-gradient-text={isActiveHeader('name')}
+              class:dark\:bg-slate-700={isActiveHeader('name')} 
               on:click={() => sortBy('name')}>
               {@html nameHeader}
             </th>

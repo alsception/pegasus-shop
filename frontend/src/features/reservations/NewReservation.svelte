@@ -237,7 +237,7 @@
                 <h4 class="card-title text-base">💎 Premium Menu</h4>
                 <input 
                   type="number" 
-                  class="input input-bordered input-secondary w-full" 
+                  class="input input-bordered w-full" 
                   bind:value={reservation.menuPremium} 
                   min="0"
                   placeholder="0"

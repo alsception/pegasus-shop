@@ -31,7 +31,7 @@
   let totalPages = 0; // Total pages from backend
   let selectedCategory: any;
 
-  const kategorije = ['🧀 Predjela','🍔 Glavna jela','🍟 Prilozi','🍨 Desert','🍷Piće']
+  const kategorije = ['🍷Piće','🧀 Predjela','🍔 Glavna jela','🍟 Prilozi','🍨 Desert']
 
   // AUTHENTICATION
   $: auth.subscribe((value) => {
@@ -191,13 +191,14 @@
     <ErrorDiv {error} />
   {:else}
       
-    <div class="w-[95%] flex justify-center p-0 fixed z-3 bg-transparent"
+    <div class="w-[100%] flex justify-center p-0 fixed z-9003 bg-transparent"
+      >
+      <div class="w-full lg:max-w-4xl p-4 bg-base-200/80 rounded-lg border-1 border-primary/20 backdrop-blur-lg m-6 mb-4 mt-0.5"
       style="
-        position: fixed;
+        position: fixed;top:0;
        /*  top: -16px;
         left: -23px; */
     ">
-      <div class="w-full max-w-4xl p-4 bg-base-200/80 rounded-lg border-2 border-primary/20 backdrop-blur-lg m-6 mb-8 mt-0.5">
         <form
           on:submit|preventDefault={handleFormSubmit}
           class="flex flex-col gap-3"
@@ -209,11 +210,14 @@
               type="text"
               bind:value={searchTerm}
               placeholder="Traži proizvod..."
-              class="input /*input-primary dark:*/  input-info border-2 flex-1"
+              class="input border-2 flex-1"
             />
             <button type="submit" class="btn btn-dash">
               <i class="fas fa-search"></i>
               <span class="hidden sm:inline ml-1">Traži</span>
+            </button>
+            <button type="button" on:click={toggleView} class="btn btn-dash whitespace-nowrap">
+              <i class="fas fa-th-list"></i>Prikaz
             </button>
           </div>
 
@@ -235,11 +239,11 @@
             </button>
             {/if}
             
-            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 /*whitespace-nowrap*/">
+            <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 /*whitespace-nowrap*/ ">
                <span class="md:inline"> | Nadjeno: <b>{products.length} </b> |</span>
 
                 {#each kategorije as k}
-                  <span class="badge badge-neutral text-primary dark:badge-neutral font-mono badge-md cursor-pointer
+                  <span class="badge badge-neutral text-primary dark:badge-neutral bg-base-300 font-mono badge-md cursor-pointer
                             hover:bg-zinc-400/40 hover:outline-1 hover:outline-blue-600
                             m-2" 
                         style="text-transform: uppercase;">
@@ -247,16 +251,13 @@
                   </span>
                 {/each}
             
-            <button type="button" on:click={toggleView} class="btn btn-dash whitespace-nowrap">
-              <i class="fas fa-th-list"></i>
-           .
-            </button>
+            
           </div>
         </form>
       </div>
     </div>
 
-    <div id="results" class="w-full max-w-4xl mx-auto mt-16 pt-20"></div>
+    <div id="results" class="w-full max-w-4xl mx-auto mt-6 pt-2"></div>
 
     {#if loading}
       <LoadingOverlay />

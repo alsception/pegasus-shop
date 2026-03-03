@@ -7,7 +7,7 @@
     const themeCheckbox = document.querySelector("input.theme-controller");
 
     const updateTheme = () => {
-      const newTheme = themeCheckbox.checked ? "dark" : "light";
+      const newTheme = themeCheckbox?.checked ? "dark" : "light";
       document.documentElement.setAttribute("data-theme", newTheme);
       document.documentElement.classList.toggle("dark", newTheme === "dark");
       console.log("Theme switched to:", newTheme);
@@ -21,6 +21,14 @@
       themeCheckbox.addEventListener("change", updateTheme);
     }
   });
+
+  function resetNotificationsInfo()
+  {
+    console.log('reseting..')
+   /*  document.getElementById('notifications-icon')?.classList.remove('text-error');
+    document.getElementById('notifications-indicator')?.classList.add('hidden');
+    document.getElementById('notifications-indicator').textContent = ''; */
+  }
 </script>
 
 <!-- 
@@ -79,19 +87,18 @@
     </div>
     
     <div class="dropdown">
-      <div
+      <button
         tabindex="0"
         role="button"
         class="btn btn-ghost btn-circle hover:bg-neutral-900 text-gray-500 text-xl tooltip tooltip-info tooltip-left"
         data-tip="Notifications"
         aria-label="Notifications"
+        on:click={() => resetNotificationsInfo()}
       >
         <i id="notifications-icon" class="fas fa-bell text-sm md:text-lg"></i>
-        <span class="text-sm"
-            style="position: relative;/*
-                   top:-2rem;
-                   left: -6rem;*/">12</span> 
-      </div>
+        <span id="notifications-indicator" class="text-sm text-white bg-error px-1 hidden"
+            style="position: relative;top: -0.5rem;left: -0.5rem;">12</span> 
+      </button>
 
       <NotificationsInfo />
     </div>

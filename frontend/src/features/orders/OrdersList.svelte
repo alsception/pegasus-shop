@@ -309,7 +309,7 @@ i LITE APP!!, I MOZDA i WS.....
 {:else}
 
 <div class="w-full flex justify-center px-1">
-  <div class="w-full /*max-w-4xl*/ p-4 bg-base-200 rounded-lg mb-14">
+  <div class="w-full /*max-w-4xl*/ p-4 bg-base-200 rounded-lg mb-1">
     <form
       on:submit|preventDefault={handleFormSubmit}
       class="flex flex-col md:flex-row items-center gap-3"
@@ -318,7 +318,7 @@ i LITE APP!!, I MOZDA i WS.....
         type="text"
         bind:value={searchTerm}
         placeholder="Upiši broj narudžbe ili stola"
-        class="input input-primary dark:input-info border-2 w-full md:flex-1 max-w-md"
+        class="input border-2 w-full md:flex-1 max-w-md"
       />
       
       <div class="flex flex-row gap-3 w-full md:w-auto">
@@ -336,11 +336,7 @@ i LITE APP!!, I MOZDA i WS.....
           on:click={toggleView}
         >
           <i class="fas fa-th-large"></i>
-          {#if isBlockView}
-            Tabelarni prikaz
-          {:else}
-            Kartični prikaz
-          {/if}
+          Prikaz
         </button>
 
         <button 

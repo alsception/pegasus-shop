@@ -103,7 +103,7 @@
     <div class="text-primary mx-auto bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl" style="transform: none">
     <!-- Header Section -->
      <div class="p-0 bg-accent text-primary/80 rounded-t">
-        <h2 class="text-lg sm:text-2xl font-bold p-1 text-center">Checkout</h2>
+        <h2 class="text-lg sm:text-2xl font-bold p-1 text-center">Checkout 2/2</h2>
       </div>
       
 
@@ -189,7 +189,9 @@
           Confirm your order or go back to continue shopping
         </p>
       </div> -->
-      <div class="flex justify-end gap-3 pt-4">
+<!--       <div class="flex flex-row gap-2 p-8 justify-between bg-base-300/25">
+ -->
+      <div class="flex justify-between gap-3 pt-4">
         <button type="button" on:click={cancel} class="btn btn-neutral text-primary/80 mr-12">
              <i class="fa fa-arrow-left text-md cursor-pointer"> </i>Nazad
         </button>

@@ -199,7 +199,7 @@
               type="text"
               bind:value={searchTerm}
               placeholder="Traži proizvod..."
-              class="input input-primary dark:input-info border-2 flex-1"
+              class="input input-secondary border-2 flex-1"
             />
             <button type="submit" class="btn btn-dash">
               <i class="fas fa-search"></i>

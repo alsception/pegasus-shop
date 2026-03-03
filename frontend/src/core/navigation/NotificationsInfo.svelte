@@ -5,6 +5,7 @@
     import { auth } from "../services/SessionStore";
     import { showInfoToast, showPlusToast, showSuccessToast } from "../utils/toaster";
   import { playNotificationSound } from "../../utils/sound";
+  import { formatDateTime } from "../../utils/formatting";
 
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -12,7 +13,8 @@
     {
         icon: '',
         title: '',
-        text: ''
+        text: '',
+        created: ''
     }];
  
     let notificationsMap = new Map();
@@ -80,6 +82,8 @@
                     showInfoToast(notification.text || notification.title, notification.type)
                     playNotificationSound('info');
                     document.getElementById('notifications-icon')?.classList.add('text-error');
+                    document.getElementById('notifications-indicator')?.classList.remove('hidden');
+                    document.getElementById('notifications-indicator').textContent = '1';
                 };
             }
         });
@@ -116,6 +120,7 @@
                 <p class="text-xs dark:text-gray-500 ">
                     {@html item.text}
                 </p>
+                <p class="text-xs dark:text-gray-600 ">{ formatDateTime(item.created)}</p>
                 </div>
             </div>
         </li>

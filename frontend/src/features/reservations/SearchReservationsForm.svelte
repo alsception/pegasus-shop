@@ -289,11 +289,7 @@
         class="btn btn-dash" on:click={toggleView}>
         
         <i class="fas fa-th-large"></i>
-        {#if isBlockView}
-          Tabelarni prikaz
-        {:else}
-          Kartični prikaz
-        {/if}
+        Prikaz
       </button>
 
     </form>

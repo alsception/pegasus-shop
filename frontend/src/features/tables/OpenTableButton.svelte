@@ -78,7 +78,7 @@
   </button>
     {#if showModal2}
     <div class="modal modal-open  pt-10" style="backdrop-filter: blur(10px);" >
-    <div class="modal-box max-h-[92vh] w-12/12 max-w-7xl mt-5 p-0 flex flex-col bg-base-100">
+    <div class="modal-box max-h-[95vh] w-12/12 max-w-7xl mt-5 p-0 flex flex-col bg-base-100">
       
       <!-- Fixed Header -->
      <!--  <div class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300">

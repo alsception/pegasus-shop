@@ -10,11 +10,11 @@
 
     if(table.occupied === true)
     {
-      return "bg-orange-700/80"
+      return "bg-orange-700/80 dark:bg-orange-900/80 "
     }
     else
     {
-      return "bg-green-700/80";
+      return "bg-green-700/80 dark:bg-green-700/80";
     }    
 
   }
@@ -54,7 +54,8 @@
    <div class="flex flex-col justify-between items-center h-full min-h-[150px] p-2">
       <div class="w-full flex justify-center">
          {#if table.reserved}
-         <span class="badge badge-error badge-lg bg-yellow-300 text-black font-bold ">
+         <span class="badge badge-error badge-lg bg-yellow-300 text-black font-bold "
+               style="position: relative; top:-2rem;">
          REZERVIRANO
          </span>
          {/if}
