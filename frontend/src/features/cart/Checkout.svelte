@@ -7,6 +7,7 @@
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import { push } from "svelte-spa-router";
   import { brojStola } from './../../core/services/CheckoutStore';
+  import { resetCartItems } from "../products/ProductService";
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -49,8 +50,8 @@
         },
       });
 
-      //todo: show success message -> go to order details page. we dont have order details page yet.
       showSuccessToast("Narudžba uspješno poslata!");
+      resetCartItems();//Mora da resetujemo cart items da neprikazuje kao dodate proizvode
       push('/orders');
     } catch (err: any) {
       console.error("kect", err);

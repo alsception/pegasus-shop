@@ -5,7 +5,8 @@ import { writable } from "svelte/store";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // workaround to make this reactivee to show loading spinner
-export let addToCartLoading = writable(0); // or null
+export const addedItems = writable(new Set());
+export const loadingItems = writable(new Set());
 
 /**
  * Need to set axios and interceptor below to ensure that request is authorized with Bearer token
@@ -28,9 +29,15 @@ axiosInstance.interceptors.request.use((config) => {
 
 export async function addToCart(productId: number): Promise<void> 
 {
-  addToCartLoading.set(productId);
+
+  //add product id to set of ids
+  loadingItems.update(prevSet => {
+      prevSet.add(productId);
+      return prevSet; 
+    });
+
   try {
-    const response = await axiosInstance.post<{ message: string }>(
+    await axiosInstance.post<{ message: string }>(
       "/cart/add",
       null,
       {
@@ -39,28 +46,43 @@ export async function addToCart(productId: number): Promise<void>
         },
       }
     );
-    //We assume success if no error happened
-    showAddSuccessToastWithLink();
-  } catch (error: any) {
+    // We assume success if no error happened
+    // No more toasts. we will show lottie animation in button
+    loadingItems.update(prevSet => {
+      prevSet.delete(productId);
+      return prevSet; 
+    });
+
+    addedItems.update(prevSet => {
+        prevSet.add(productId);
+        return prevSet; 
+    });
+  }
+  catch (error: any) 
+  {
     processError(error);
-  } finally {
-    addToCartLoading.set(0);
+  } 
+  finally 
+  {
+    loadingItems.update(prevSet => {
+      prevSet.delete(productId);
+      return prevSet; 
+    });
   }
 }
-/*
-export function processSuccess(response: any) {
-  // Display success message
-  if (response.data && response.data.message) {
-    showAddSuccessToastWithLink();
-  }
-}*/
 
-export function processError(error: any) {
+export function resetCartItems() 
+{
+  addedItems.set(new Set());
+  loadingItems.set(new Set());
+}
+
+export function processError(error: any) 
+{
   // Extract message from error response
   let errorMessage = "Error adding product to cart: ";
 
   if (error.response && error.response.data) {
-    // error.response.data.message should contain message
     if (error.response.data.message) {
       errorMessage += error.response.data.message;
     } else if (typeof error.response.data === "string") {

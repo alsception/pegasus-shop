@@ -57,7 +57,7 @@
       {/if}
 
 
-      <AddToCartButton {product} width="60px" />
+      <AddToCartButton {product} width="50px" />
     </div>    
   </div>
 </div>

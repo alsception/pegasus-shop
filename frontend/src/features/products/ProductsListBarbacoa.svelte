@@ -211,22 +211,6 @@
         left: -23px; */
     "
     >
-
-
-<!-- <div
-  class="
-    fixed top-0 left-0 right-0
-    w-full
-    lg:left-1/2 lg:-translate-x-1/2
-    lg:max-w-4xl
-    p-4
-    bg-base-200/80
-    rounded-none lg:rounded-lg
-    border border-primary/20
-    backdrop-blur-lg
-    z-50
-  "
--->
       <form
         on:submit|preventDefault={handleFormSubmit}
         class="flex flex-col gap-3"

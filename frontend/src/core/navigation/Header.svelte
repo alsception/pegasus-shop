@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import PrimaryMenu from "./menu/PrimaryMenu.svelte";
   import NotificationsInfo from "./NotificationsInfo.svelte";
+  import CartDetails from "../../features/cart/CartDetails.svelte";
 
   onMount(() => {
     const themeCheckbox = document.querySelector("input.theme-controller");
@@ -22,10 +23,9 @@
     }
   });
 
-  function resetNotificationsInfo()
-  {
-    console.log('reseting..')
-   /*  document.getElementById('notifications-icon')?.classList.remove('text-error');
+  function resetNotificationsInfo() {
+    console.log("reseting..");
+    /*  document.getElementById('notifications-icon')?.classList.remove('text-error');
     document.getElementById('notifications-indicator')?.classList.add('hidden');
     document.getElementById('notifications-indicator').textContent = ''; */
   }
@@ -50,70 +50,95 @@
       </a>
     </div>
   </div>
-  <div class="navbar-center">
-    
-  </div>
-<div class="navbar-end">
-  <div class="flex items-center gap-4">
-    <div class="p-2">
-      <label
-        class="swap swap-rotate tooltip tooltip-info tooltip-left text-gray-500 cursor-pointer"
-        data-tip="Dark Mode"
-      >
-        <input
-          id="theme-controller"
-          type="checkbox"
-          class="theme-controller"
-          value="dark"
-        />
-        <span class="swap-off text-xl">
-          <i class="fas fa-sun text-sm md:text-lg"></i>
-        </span>
-        <span class="swap-on text-xl">
-          <i class="fas fa-moon text-sm md:text-lg"></i>
-        </span>
-      </label>
-    </div>
-    
-    <div class="">
-      <div
-        class="tooltip tooltip-info tooltip-left text-gray-500 cursor-pointer"
-        data-tip="Poruke"
-      >
-        <span class="text-xl">
-          <i class="fas fa-envelope text-sm md:text-lg"></i>
-        </span>
+  <div class="navbar-center"></div>
+  <div class="navbar-end">
+    <div class="flex items-center gap-4">
+      <div class="p-2">
+        <label
+          class="swap swap-rotate tooltip tooltip-info tooltip-left text-gray-500 cursor-pointer"
+          data-tip="Dark Mode"
+        >
+          <input
+            id="theme-controller"
+            type="checkbox"
+            class="theme-controller"
+            value="dark"
+          />
+          <span class="swap-off text-xl">
+            <i class="fas fa-sun text-sm md:text-lg"></i>
+          </span>
+          <span class="swap-on text-xl">
+            <i class="fas fa-moon text-sm md:text-lg"></i>
+          </span>
+        </label>
+      </div>
+
+      <div class="">
+        <div
+          class="tooltip tooltip-info tooltip-left text-gray-500 cursor-pointer"
+          data-tip="Poruke"
+        >
+          <span class="text-xl">
+            <i class="fas fa-envelope text-sm md:text-lg"></i>
+          </span>
+        </div>
+      </div>
+
+      <div class="dropdown">
+        <button
+          tabindex="0"
+          class="btn btn-ghost btn-circle hover:bg-neutral-900 text-gray-500 text-xl tooltip tooltip-info tooltip-left"
+          data-tip="Cart"
+          aria-label="Cart"
+        >
+          <i class="fas fa-shopping-basket text-sm md:text-lg"></i>
+        </button>
+
+        <ul
+          class="menu menu-sm dropdown-content w-152 p-2 scale-in-ver-top
+          bg-base-100 dark:bg-zinc-900
+          rounded shadow
+          max-h-180 overflow-x-auto block"
+          style="min-width: 300px; left: -565px; top: 44px"
+        >
+<!--           <li class="flex px-3 py-2 rounded-md">
+ -->            <div class="inline-flex gap-1">
+              <CartDetails></CartDetails>
+            </div>
+<!--           </li>
+ -->        </ul>
+      </div>
+
+      <div class="dropdown">
+        <button
+          tabindex="0"
+          class="btn btn-ghost btn-circle hover:bg-neutral-900 text-gray-500 text-xl tooltip tooltip-info tooltip-left"
+          data-tip="Notifications"
+          aria-label="Notifications"
+          on:click={() => resetNotificationsInfo()}
+        >
+          <i id="notifications-icon" class="fas fa-bell text-sm md:text-lg"></i>
+          <span
+            id="notifications-indicator"
+            class="text-sm text-white bg-error px-1 hidden"
+            style="position: relative;top: -0.5rem;left: -0.5rem;">12</span
+          >
+        </button>
+        <!-- 
+              <div class="indicator">
+          <span class="indicator-item badge badge-secondary">12</span>
+          <button class="btn">inbox</button>
+        </div> -->
+
+        <NotificationsInfo />
       </div>
     </div>
-    
-    <div class="dropdown">
-      <button
-        tabindex="0"
-        role="button"
-        class="btn btn-ghost btn-circle hover:bg-neutral-900 text-gray-500 text-xl tooltip tooltip-info tooltip-left"
-        data-tip="Notifications"
-        aria-label="Notifications"
-        on:click={() => resetNotificationsInfo()}
-      >
-        <i id="notifications-icon" class="fas fa-bell text-sm md:text-lg"></i>
-        <span id="notifications-indicator" class="text-sm text-white bg-error px-1 hidden"
-            style="position: relative;top: -0.5rem;left: -0.5rem;">12</span> 
-      </button>
-<!-- 
-      <div class="indicator">
-  <span class="indicator-item badge badge-secondary">12</span>
-  <button class="btn">inbox</button>
-</div> -->
-
-      <NotificationsInfo />
-    </div>
   </div>
 </div>
 
-</div>
-
-<div class="dropdown"
-      style="    
+<div
+  class="dropdown"
+  style="    
             z-index: 9999;
             position: fixed;
             top: 3px;
@@ -130,7 +155,7 @@
 </div>
 
 <style>
-  .navbar{
+  .navbar {
     height: 3rem;
     min-height: 3rem;
   }

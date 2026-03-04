@@ -118,7 +118,7 @@ function clickChange(value: any)
         <i class="fas fa-tag"></i>
         Kategorije
       </div>
-      <ul tabindex="-1" class="dropdown-content menu rounded-box z-1 w-[240px] p-2 shadow-sm bg-base-200/90 dark:bg-zinc-900/92"
+      <ul tabindex="-1" class="dropdown-content menu rounded-box z-9991 w-[240px] p-2 shadow-sm bg-base-200/90 dark:bg-zinc-900/92 pointer-events-auto"
       style="left: -70%;backdrop-filter: blur(12px) !important; 
         -webkit-backdrop-filter: blur(16px) !important;">
         {#each $categories as category}

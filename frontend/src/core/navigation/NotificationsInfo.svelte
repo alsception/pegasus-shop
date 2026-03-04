@@ -95,7 +95,7 @@
          bg-base-100 dark:bg-zinc-900
          rounded shadow
          max-h-180 overflow-x-auto block"
-  style="min-width: 300px; left: -270px; top: 54px"
+  style="min-width: 300px; left: -270px; top: 44px"
 >
     {#if notifications.length == 0}
   <li class="flex  px-3 py-2 rounded-md">

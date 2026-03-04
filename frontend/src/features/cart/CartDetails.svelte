@@ -182,7 +182,7 @@
                         id="myNumber" 
                         value={item.quantity}
                         min="1"
-                        class="w-12 h-8 text-center text-primary bg-transparent border-0"
+                        class="w-12 h-8 text-center text-md text-primary bg-transparent border-0"
                         on:change={(e) => handleQuantityChange(e, item)}
                       />
                       <button 
@@ -200,7 +200,7 @@
                       </button>
                     </div>
 
-                    <p class="text-sm sm:text-base font-medium text-primary px-1">{item.product.name}
+                    <p class="text-md sm:text-base font-medium text-primary px-1">{item.product.name}
                       {#if item.quantity > 1}
                         ({formatPrice(item.product.basePrice)})
                       {/if} </p>
@@ -223,7 +223,7 @@
 
                 <div class="text-right sm:text-right pt-0 sm:pt-0 relative -top-6 h-0  sm:top-0"
                   >
-                  <span class="text-sm sm:text-base font-semibold text-primary">
+                  <span class="text-md sm:text-base font-semibold text-primary">
                     {formatPrice(item.quantity * item.product.basePrice)}
                   </span>
                 </div>

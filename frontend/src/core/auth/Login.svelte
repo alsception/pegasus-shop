@@ -45,7 +45,7 @@
         <LoadingOverlay />
       {/if}
 
-      <label for="username" class="block text-md font-medium text-secondary  mb-2">
+      <label for="username" class="block text-md font-medium text-warning  mb-2">
         <i class="fas fa-user text-sm text-primary-900/60  mx-2"></i>Username
       </label>
       <input
@@ -55,7 +55,7 @@
         disabled={loading}
       />
 
-      <label for="password" class="block text-md font-medium text-secondary  mb-2">
+      <label for="password" class="block text-md font-medium text-warning  mb-2">
         <i class="fas fa-lock text-sm text-primary-900 mx-2"></i>Password
       </label>
       <input
@@ -67,7 +67,7 @@
 
       <button
         type="submit"
-        class="btn  w-full mt-2 btn-secondary"
+        class="btn  w-full mt-2 btn-warning"
         disabled={loading}
       >
         Login
