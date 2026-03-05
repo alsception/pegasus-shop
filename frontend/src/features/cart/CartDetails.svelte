@@ -13,6 +13,7 @@
   import EmptyImg5 from "../../assets/img/empty-pana.svg"; 
   import { link } from "svelte-spa-router";
   import { formatPrice } from "../../utils/formatting";
+  import { fly } from "svelte/transition";
 
   const emptyImages = [EmptyImg1, EmptyImg2, EmptyImg3, EmptyImg4, EmptyImg5];
 
@@ -30,7 +31,10 @@
 
   /********************************************************************
    * TODO FIX 0 ERROR
-   * *
+   * 
+   * TODO: Resetovati added items kad se obrise iz carta product
+   *      I ne samo to, nego kad se refreshuje, onda nestane sve
+   *      ali zato kad se izadje i uloguje kao drugi korisnik onda ostane [IMPORTANT FIX TODO]
    * ************************************************************
   */
 
@@ -144,7 +148,7 @@
   
     {#if cart}
 
-    <div class="text-primary mx-auto bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl" style="transform: none">
+    <div class="text-primary mx-auto bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl" style="transform: none" transition:fly={{ y: -50, duration: 300 }}>
       <div class="p-0 bg-accent text-primary-content/80 dark:text-primary/80 rounded-t">
         <h2 class="text-lg sm:text-2xl font-bold p-1 text-center">Košarica 1/2</h2>
       </div>
@@ -158,7 +162,7 @@
             
             {#each cart.items as item (item.id)}
 
-              <div class="py-1 grid grid-cols-1 sm:grid-cols-3 gap-0 items-center">
+              <div class="py-1 grid grid-cols-1 sm:grid-cols-3 gap-0 items-center" >
                 
                 <div class="sm:col-span-2 flex flex-col gap-0.5">
                   
@@ -207,7 +211,7 @@
                   </div>
                       
                   <div class="flex items-center">
-                    <div class="tooltip tooltip-info" data-tip="Delete">
+                    <!-- <div class="tooltip tooltip-info" data-tip="Delete"> -->
                       <button
                         type="button"
                         class="btn btn-ghost btn-sm text-error h-2 m-4"
@@ -217,7 +221,7 @@
                         <i class="fa fa-remove text-md cursor-pointer"> </i>
                        <span class="pt-1"> Ukloni</span>
                       </button>
-                    </div>
+                   <!--  </div> -->
                   </div>
                 </div>
 

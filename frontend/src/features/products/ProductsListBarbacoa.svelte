@@ -204,12 +204,9 @@
 {:else}
   <div class="w-[100%] flex justify-center p-0 fixed z-9003 bg-transparent">
     <div
-      class="w-full lg:max-w-4xl p-4 bg-base-200/80 rounded-lg border-1 border-primary/20 backdrop-blur-lg m-6 mb-4 mt-0.5"
-      style="
-        position: fixed;top:0;
-       /*  top: -16px;
-        left: -23px; */
-    "
+      class="w-full lg:max-w-4xl lg:p-4 lg:m-6 lg:mb-4 lg:mt-0.5 bg-base-200/80 lg:rounded-lg border-1 border-primary/20 backdrop-blur-lg lg:pb-[5px]
+              max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:p-[10px] max-lg:pb-0 max-lg:pl-[60px]"
+      style="position: fixed;top:0;"
     >
       <form
         on:submit|preventDefault={handleFormSubmit}
@@ -241,7 +238,11 @@
             on:click={toggleView}
             class="btn btn-dash whitespace-nowrap"
           >
-            <i class="fas fa-th-list"></i>
+          {#if isListView}
+            <i class="fas fa-image"></i>
+          {:else}  
+            <i class="fas fa-list"></i>
+          {/if}
           </button>
         </div>
 
@@ -259,7 +260,7 @@
           {/if}
 
           <div
-            class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 /*whitespace-nowrap*/ hidden"
+            class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 /*whitespace-nowrap*/ hidden min-[800px]:block"
           >
             <span class="md:inline">
               | Nadjeno: <b>{products.length} </b> |</span
@@ -334,12 +335,12 @@
                               class="flex justify-end items-end gap-2"
                               style="font-size: 14px;"
                             >
-                              <div
+                              <!-- <div
                                 class="tooltip tooltip-info"
                                 data-tip="Dodaj"
-                              >
+                              > -->
                                 <AddToCartButton {product} width="40px" />
-                              </div>
+                              <!-- </div> -->
                             </div>
                           </td>
                         </tr>

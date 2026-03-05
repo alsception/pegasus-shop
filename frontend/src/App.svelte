@@ -12,6 +12,8 @@
   import { generateRoutes } from "./core/navigation/routing/routes";
   import { SvelteToast } from "@zerodevx/svelte-toast";
   import InfoModal from "./core/utils/ErrorModal.svelte";
+  import CartDetails from "./features/cart/CartDetails.svelte";
+  import { fly } from "svelte/transition";
 
   document.title = 'Pegasus'
 
@@ -45,12 +47,11 @@
 
 </script>
 
-
 {#if !$auth.isAuthenticated}
   <Router routes={unauthenticatedRoutes} />
 {:else}
 <Header/>
-  <main class="flex-1 overflow-auto main-content w-full mt-11 p-0 sm:p-6" style="padding-bottom: 64px !important;">
+  <main class="flex-1 overflow-auto main-content w-full mt-11 p-0 sm:p-6" style="/*padding-bottom: 64px !important;*/" transition:fly={{ y: 50, duration: 300 }}>
     <Router {routes} />
   </main>
 {/if}

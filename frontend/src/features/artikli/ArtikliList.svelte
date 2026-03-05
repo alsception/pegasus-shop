@@ -11,6 +11,7 @@
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import api from "../../core/services/client";
   import { showErrorModalWithTitle } from "../../utils/modal";
+  import { fly } from "svelte/transition";
 
 
   document.title = "Artikli | Pegasus";
@@ -429,7 +430,7 @@
         </thead>
         <tbody>
           {#each artikli as artikal, i}
-            <tr class="bg-base-200/60 tr-highlight">
+            <tr class="bg-base-200/60 tr-highlight" transition:fly={{ y: -50, duration: 300 }}>
               <td class="pgs-td whitespace-nowrap">
                 <a use:link href="/artikli/{artikal.id}" class=" pgs-hyperlink text-primary/70">{artikal.name}</a>
               </td>

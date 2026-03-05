@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { PGSTable } from "./PGSTable";
   import OpenTableButton from "./OpenTableButton.svelte";
+  import { fly } from "svelte/transition";
   export let table: PGSTable;
 
 
@@ -26,7 +27,8 @@
    rounded-xl shadow p-8
    grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6
  hover:outline-blue-500 hover:outline-2
-   ">
+   "
+   transition:fly={{ y: 50, duration: 300 }}>
 
    <div class=" flex flex-col gap-2 w-full items-center justify-center ">
       

@@ -4,6 +4,7 @@
   import InfoBlocks from "./InfoBlocks.svelte";
   import Charts from "./Charts.svelte";
   import Login from "../auth/Login.svelte";
+  import { fly } from "svelte/transition";
 
   document.title = "Pegasus";
 
@@ -162,16 +163,17 @@
 
 {:else}
 <div
-  class="max-w-9xl mx-auto px-6 sm:pt-0
-  grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-1 menu-container"
+  class="max-w-9xl mx-auto px-6 pt-8 sm:pt-0
+  grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-1 menu-container" 
 >
   {#each displayedItems as item}
 
     <a
       href="#{item.href}"
       class=""
+      transition:fly={{ y: -50, duration: 300 }}
     >
-   <div class="menu-card card-8 ">
+   <div class="menu-card card-8 " >
             <div class="card-content hover:bg-primary/20 flex flex-col items-center justify-center">
                 <span class="icon">{item.emoji}</span>
                  <h2 class="title text-primary/60 ">{item.title}</h2>

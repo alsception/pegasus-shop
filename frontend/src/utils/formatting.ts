@@ -3,7 +3,7 @@
  * Created: 10/6/25
  * Author: Alsception
  */
-const badgeInfo = 'new'
+const badgeInfo = 'novo'
 
 export function isNew(dateStr: string | number | Date | null | undefined, minDiff: number): boolean 
 {
@@ -83,7 +83,10 @@ export function formatTime2(dateStr: string | number | Date | null | undefined):
     return output;
 }
 
-export function formatDate(dateStr: string | number | Date | null | undefined, tooltip: string, minDiff: number): string 
+export function formatDate(
+  dateStr: string | number | Date | null | undefined, 
+  tooltip: string, 
+  minDiff: number): string 
 {
     if (dateStr == null) return '';
 
@@ -130,7 +133,7 @@ export const formattedTime = (value: string | number | Date | null | undefined):
 export function formatActive(active: boolean | null | undefined)
 {
     if(active === null || active === undefined) return '';
-    return active ? "🟢 Active" : "🔴 Disabled";
+    return active ? "🟢 Aktivan" : "🔴 Neaktivan";
 }
 
 export function formatCommentInfo(comment: string | number | Date | null | undefined): string 

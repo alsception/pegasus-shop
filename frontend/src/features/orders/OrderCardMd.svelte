@@ -13,6 +13,7 @@
   import OrderButtonInPreparation from "./OrderButtonInPreparation.svelte";
   import OrderButtonServed from "./OrderButtonServed.svelte";
   import ProductPage from "../products/ProductPage.svelte";
+  import { fly } from "svelte/transition";
 
   export let order: Order;
   export let liteView = false;
@@ -437,7 +438,7 @@
  <!-- ovde cemo staviti order details modal -->
 {#if showModal2}
   <div class="modal modal-open  pt-10" style="backdrop-filter: blur(10px);">
-    <div class="modal-box max-h-[90vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-100">
+    <div class="modal-box max-h-[95vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-100" transition:fly={{ y: 50, duration: 300 }}>
       
       <!-- Fixed Header -->
       <div class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300">
@@ -467,10 +468,10 @@
   </div>
 {/if}
 
- <!-- ovde cemo staviti order details modal -->
 {#if showModal3}
   <div class="modal modal-open  pt-0" style="backdrop-filter: blur(10px);">
-    <div class="modal-box max-h-[90vh] w-8/12 max-w-5xl p-0 flex flex-col bg-base-200">
+    <div class="modal-box max-h-[90vh] w-full sm:w-8/12 max-w-5xl p-0 flex flex-col bg-base-200"
+      transition:fly={{ y: 50, duration: 300 }}>
       
       <!-- Fixed Header -->
       <div class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300">

@@ -115,17 +115,18 @@ function clickChange(value: any)
 
     <div class="dropdown z-49">
       <div tabindex="0" role="button" class="btn btn-dash ">
-        <i class="fas fa-tag"></i>
-        Kategorije
+        <i class="fas fa-filter"></i>
       </div>
-      <ul tabindex="-1" class="dropdown-content menu rounded-box z-9991 w-[240px] p-2 shadow-sm bg-base-200/90 dark:bg-zinc-900/92 pointer-events-auto"
-      style="left: -70%;backdrop-filter: blur(12px) !important; 
+      <ul tabindex="-1" class="dropdown-content menu rounded-box z-9991 w-[240px] p-2 shadow-sm bg-base-200/90 dark:bg-zinc-950/92 rounded-lg
+      pointer-events-auto border border-primary/30"
+      style="left: -400%;backdrop-filter: blur(12px) !important; 
         -webkit-backdrop-filter: blur(16px) !important;">
         {#each $categories as category}
           <!-- svelte-ignore a11y_no_static_element_interactions -->
           <li class="bg-transparent" class:selected-cat={category.id === selectedCategory}>
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <div 
+              class="text-md"
               style="font-weight: {category.id === selectedCategory} ? 'bold' : 'normal'}; "
               on:click={()=>clickChange(category.id)}
               >{category.name}</div>
@@ -135,30 +136,6 @@ function clickChange(value: any)
     </div>
   {/if}
 </div>
-
-
-<!-- old, select instead of 
-{#if $loading}
-    <select class="select select-bordered w-full" disabled>
-      <option>Loading categories...</option>
-    </select>
-  {:else}
-    <select
-      class="select select-bordered w-full"
-      bind:value={selectedCategory}
-      on:change={handleChange}
-    >
-      <option value="">All categories</option>
-      {#each $categories as category}
-        <option 
-          value="{category.id} - {category.name}"
-          style="font-weight: {category.hasChildren ? 'bold' : 'normal'}; font-family: monospace;"
-        >
-          {category.fullName}
-        </option>
-      {/each}
-    </select> -->
-
 <style>
   
   .selected-cat{

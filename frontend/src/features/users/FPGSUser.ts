@@ -11,6 +11,7 @@ export interface FPGSUser
     created: string | Date | number | null;
     //svi posle ovoga mogu biti null ili da ne postoje
     modified?: string | Date | number | null;
+    zadnjiPutAktivan?: string | Date | number | null;
     dob: string | null;
     password?: string | null;
     email?: string | null;

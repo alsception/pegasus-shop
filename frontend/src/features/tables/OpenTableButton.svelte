@@ -85,7 +85,7 @@
       </div> -->
       
       <!-- Scrollable Content -->
-      <div class="overflow-y-auto flex-1 px-1 py-1">
+      <div class="overflow-y-auto flex-1 /*px-1 py-1*/">
         <ProductsListBarbacoa rows={3}></ProductsListBarbacoa>
       </div>
       

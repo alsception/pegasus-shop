@@ -1,7 +1,7 @@
 <script lang="ts">
   import { type FPGSUser } from "./FPGSUser";
   import { onMount } from "svelte";
-  import { params } from "svelte-spa-router";
+  import { params, push } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";
   import Login from "../../core/auth/Login.svelte";
   import api from "../../core/services/client";
@@ -160,7 +160,7 @@ async function handleSubmit()
         //Ce da baci exception api ako se desi greska
 
         showSuccessToast("Sačuvano");
-        fetch(ID);
+        push('/users');//TODO: AKO je my-account onda netreba ovo
 
     } 
     catch (err) 

@@ -1,8 +1,9 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
   import PrimaryMenu from "./menu/PrimaryMenu.svelte";
   import NotificationsInfo from "./NotificationsInfo.svelte";
   import CartDetails from "../../features/cart/CartDetails.svelte";
+  import { fly } from "svelte/transition";
 
   onMount(() => {
     const themeCheckbox = document.querySelector("input.theme-controller");
@@ -28,6 +29,26 @@
     /*  document.getElementById('notifications-icon')?.classList.remove('text-error');
     document.getElementById('notifications-indicator')?.classList.add('hidden');
     document.getElementById('notifications-indicator').textContent = ''; */
+  }
+
+  let showModal = false;
+
+  function handleModal(){
+    showModal = !showModal
+  }
+
+  function openModal() {
+    showModal = true;
+  }
+
+  function closeModal() {
+    showModal = false;
+  }
+
+  function handleKeydown(event: { key: string }) {
+    if (event.key === "Escape") {
+      closeModal();
+    }
   }
 </script>
 
@@ -84,16 +105,17 @@
         </div>
       </div>
 
-      <div class="dropdown">
-        <button
-          tabindex="0"
-          class="btn btn-ghost btn-circle hover:bg-neutral-900 text-gray-500 text-xl tooltip tooltip-info tooltip-left"
-          data-tip="Cart"
-          aria-label="Cart"
-        >
-          <i class="fas fa-shopping-basket text-sm md:text-lg"></i>
-        </button>
-
+      <!--  <div class="dropdown"> -->
+      <button
+        tabindex="0"
+        class="btn btn-ghost btn-circle hover:bg-neutral-900 text-gray-500 text-xl tooltip tooltip-info tooltip-left"
+        data-tip="Cart"
+        aria-label="Cart"
+        on:click={handleModal}
+      >
+        <i class="fas fa-shopping-basket text-sm md:text-lg"></i>
+      </button>
+      <!-- 
         <ul
           class="menu menu-sm dropdown-content w-152 p-2 scale-in-ver-top
           bg-base-100 dark:bg-zinc-900
@@ -101,13 +123,11 @@
           max-h-180 overflow-x-auto block"
           style="min-width: 300px; left: -565px; top: 44px"
         >
-<!--           <li class="flex px-3 py-2 rounded-md">
- -->            <div class="inline-flex gap-1">
+   <div class="inline-flex gap-1">
               <CartDetails></CartDetails>
             </div>
-<!--           </li>
- -->        </ul>
-      </div>
+        </ul>
+      </div> -->
 
       <div class="dropdown">
         <button
@@ -153,6 +173,43 @@
   </div>
   <PrimaryMenu />
 </div>
+
+{#if showModal}
+  <div class="modal modal-open pt-10" style="backdrop-filter: blur(10px);">
+    <div
+      class="modal-box max-h-[90vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-100"
+      transition:fly={{ y: 50, duration: 300 }}
+    >
+      <!-- Fixed Header -->
+      <div
+        class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300"
+      >
+        <h3 class="font-bold text-lg">Košarica</h3>
+      </div>
+
+      <!-- Scrollable Content -->
+      <div class="overflow-y-auto flex-1 px-3 py-2">
+        <CartDetails />
+      </div>
+
+      <!-- Fixed Footer -->
+      <div
+        class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300"
+      >
+        <div class="flex justify-end gap-2">
+          <button class="btn btn-secondary" on:click={closeModal}
+            >Zatvori</button
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Glass Backdrop -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="modal-backdrop" on:click={closeModal}></div>
+  </div>
+{/if}
 
 <style>
   .navbar {

@@ -50,16 +50,11 @@
 <ul
   class="menu menu-md dropdown-content  w-52 p-2 
          bg-base-200/70 dark:bg-zinc-950/84 border-2 border-zinc-500/50 dark:border-zinc-500/20 
-         rounded shadow  fixed z-[9999] pointer-events-auto
-
-"
+         rounded shadow  fixed z-[9999] pointer-events-auto"         
   style="min-width: 280px;
         position:fixed; top: 48px; left:1px;
         backdrop-filter: blur(12px) !important; 
-        -webkit-backdrop-filter: blur(16px) !important;
-     
-  
-"
+        -webkit-backdrop-filter: blur(16px) !important;"
 >
   <li class="flex  px-3 py-2 rounded-md">
     <div class="inline-flex gap-1">

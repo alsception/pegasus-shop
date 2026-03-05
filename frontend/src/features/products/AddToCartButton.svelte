@@ -58,8 +58,9 @@
 
   <button
     class="btn btn-secondary"
-    style="width: {width}; height: {width};transition-delay: 0.3s;"
+    style="width: {width}; height: {width};/*transition-delay: 0.3s;*/"
     aria-label="Dodaj"
+    title="Dodaj"
     on:click={() => addToCart(product.id)}
   >
     <i class="fa fa-plus text-warning text-xl" aria-hidden="true"></i>
