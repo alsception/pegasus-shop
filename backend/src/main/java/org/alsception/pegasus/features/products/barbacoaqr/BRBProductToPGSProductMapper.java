@@ -1,7 +1,6 @@
 package org.alsception.pegasus.features.products.barbacoaqr;
 
 import org.alsception.pegasus.features.products.PGSProduct;
-import org.alsception.pegasus.features.products.barbacoaqr.BRBProduct;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

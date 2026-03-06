@@ -124,7 +124,7 @@ public class UserService
     
     public List<UserDTO> find(String search) 
     {
-        return repository.findByUsernameContaining(search)
+        return repository.findByUsernameContainingIgnoreCaseOrderByCreatedDesc(search)
                          .stream()
                          .map(UserDTO::new)
                          .collect(Collectors.toList());
@@ -132,14 +132,14 @@ public class UserService
 
     public UserDTO findByUsernameDto(String username)
     {
-        return repository.findByUsername(username)
+        return repository.findByUsernameIgnoreCase(username)
                 .map(UserDTO::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
     private PGSUser findByUsername(String username)
     {
-        return repository.findByUsername(username)
+        return repository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 

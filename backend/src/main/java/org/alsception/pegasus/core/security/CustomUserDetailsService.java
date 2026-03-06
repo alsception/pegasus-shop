@@ -25,7 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     {        
         logger.trace("Trying to find user: " + username);
 
-        Optional<PGSUser> user = repository.findByUsername(username);
+        Optional<PGSUser> user = repository.findByUsernameIgnoreCase(username);
 
         if (user.isEmpty()) 
         {
@@ -53,7 +53,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     {
         logger.trace("Looking if username exists: " + username);
 
-        Optional<PGSUser> user = repository.findByUsername(username);
+        Optional<PGSUser> user = repository.findByUsernameIgnoreCase(username);
 
         if (user.isEmpty()) 
         {

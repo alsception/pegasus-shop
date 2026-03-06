@@ -89,7 +89,7 @@
       </div>
       
       <!-- Fixed Footer -->
-    <div class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300 bg-base-300">
+    <div class="sticky bottom-0 z-10 px-6 py-4 border-t border-base-300 bg-base-300">
       <div class="flex justify-between items-center">
         <button class="btn btn-secondary" on:click={closeModal2}>
           Zatvori

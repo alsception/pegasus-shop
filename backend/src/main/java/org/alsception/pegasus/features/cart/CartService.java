@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.alsception.pegasus.features.order.OrderRepository;
 import org.alsception.pegasus.features.order.PGSCheckoutRequestDTO;
 import org.alsception.pegasus.features.order.PGSDailySession;
-import org.alsception.pegasus.features.order.PGSDailySessionRepository;
 import org.alsception.pegasus.features.order.PGSDailySessionService;
 import org.alsception.pegasus.features.order.PGSOrderItem;
 import org.slf4j.Logger;
@@ -67,7 +66,7 @@ public class CartService
     @Transactional
     public void addProductToCart(String username, Long productId, Integer quantity) 
     {
-        PGSUser user = userRepository.findByUsername(username)
+        PGSUser user = userRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new RuntimeException("User not found: "+username));
         
         this.addProductToCart(user, productId, quantity);
@@ -76,7 +75,7 @@ public class CartService
     @Transactional
     public void addProductToCart(String username, Long productId) 
     {
-        PGSUser user = userRepository.findByUsername(username)
+        PGSUser user = userRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new RuntimeException("User not found: "+username));
         
         this.addProductToCart(user, productId, 1);
@@ -166,7 +165,7 @@ public class CartService
     @Transactional
     public PGSCart updateProductQuantity(String username, Long productId, Integer quantity) 
     {
-        PGSUser user = userRepository.findByUsername(username)
+        PGSUser user = userRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));
         PGSCart cart = cartRepository.findByUser(user)
                 .orElseThrow(() -> new RuntimeException("Cart not found for user: " + username));
@@ -187,7 +186,7 @@ public class CartService
     @Transactional
     public void deleteProductFromCart(String username, Long productId) 
     {
-        PGSUser user = userRepository.findByUsername(username)
+        PGSUser user = userRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));
         PGSCart cart = cartRepository.findByUser(user)
                 .orElseThrow(() -> new RuntimeException("Cart not found for user: " + username));
@@ -203,7 +202,7 @@ public class CartService
     {
         log.debug("Searching username: "+username);
         
-        PGSUser user = userRepository.findByUsername(username)
+        PGSUser user = userRepository.findByUsernameIgnoreCase(username)
             .orElseThrow(() -> new RuntimeException("User not found"));
         
         log.debug("Looking for cart...");
@@ -222,7 +221,7 @@ public class CartService
     
     public List<PGSCart> getAll(String search) 
     {
-        List<PGSUser> user = userRepository.findByUsernameContaining(search);
+        List<PGSUser> user = userRepository.findByUsernameContainingIgnoreCaseOrderByCreatedDesc(search);
 
         return cartRepository.findAll();              
     }
@@ -265,7 +264,7 @@ public class CartService
         
         //2. Assign user
         log.trace("Assigning user");
-        PGSUser u = userRepository.findByUsername(username)
+        PGSUser u = userRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new RuntimeException("User not found: "+username));
         
         order.setUser(u);

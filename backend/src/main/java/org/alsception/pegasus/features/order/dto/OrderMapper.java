@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.alsception.pegasus.features.order.PGSOrder;
 import org.alsception.pegasus.features.order.PGSOrderItem;
-import org.alsception.pegasus.features.order.dto.OrderDTO;
-import org.alsception.pegasus.features.order.dto.OrderItemDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

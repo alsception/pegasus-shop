@@ -321,7 +321,6 @@
     -->
 <div
   class="rounded-xl p-2 flex flex-col gap-1 h-fit
-         w-full lg:w-fit
          shadow border border-primary/4
         {getBgClass(order.status)}"
   class:card-new={isNew(order.created, 10) && order.status == "WAITING"}
@@ -380,7 +379,7 @@
   {#if order.status != "READY" && order.comment && order.comment.toString.length > -1}
     <div>
       <span
-        class="indicator-item badge badge-info text-primary bg-black text-yellow-200 rounded-md"
+        class="indicator-item badge badge-info bg-black text-yellow-200 rounded-md"
         style=""
       >
         Napomena

@@ -1,13 +1,10 @@
 package org.alsception.pegasus.features.artikli;
 
 import lombok.RequiredArgsConstructor;
-import org.alsception.pegasus.features.notifications.NotificationController;
-import org.alsception.pegasus.features.products.PGSProduct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController

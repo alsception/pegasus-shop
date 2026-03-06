@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<PGSUser, Long> 
 {
-    Optional<PGSUser> findByUsername(String username);
-    
-    List<PGSUser> findByUsernameContaining(String username);
+    Optional<PGSUser> findByUsernameIgnoreCase(String username);
+
+    List<PGSUser> findByUsernameContainingIgnoreCaseOrderByCreatedDesc(String username);
     
     //this one causes exception
     /*List<PGSUser> findByUsernameContainingOrFirstNameContainingOrLastNameContainingOrRoleContaining(String search);*/

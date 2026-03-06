@@ -69,4 +69,4 @@ class="btn btn-sm btn-primary text-primary-content ml-auto"
           e.preventDefault();
           updateOrderState(order.id, 'IN_PREPARATION');
         }}>
-    <i class="fa fa-fire text-md cursor-pointer"></i>PRIHVATI</button>
+    <!-- <i class="fa fa-fire text-md cursor-pointer"></i> -->PRIHVATI</button>

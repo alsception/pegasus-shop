@@ -517,15 +517,9 @@ i LITE APP!!, I MOZDA i WS.....
         <span class="text-md text-white font-bold">({orders.filter(o => o.status === 'IN_PREPARATION').length})</span>
       </h2>
     </div>     -->
-    <div class="flex flex-wrap gap-4">
+<div class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 2xl:columns-6 gap-8">
   {#each orders.filter(o => o.status === 'IN_PREPARATION') as order}
-    <div class="
-      w-full
-      lg:flex-grow
-      lg:min-w-[200px]
-      lg:max-w-[300px]
-      mt-2
-    ">
+    <div class="break-inside-avoid mb-8 w-full">
       <OrderCardMd
         {order}
         on:orderUpdateCompleted={handleOrderUpdateCompleted}
@@ -560,26 +554,15 @@ i LITE APP!!, I MOZDA i WS.....
 
 <style>
 
- .pgs-orders-ready-cntr{
-/*   background-color: var(--color-base-200);
- */  
-
-/*   border: 2px solid gray;
- */}
 
  .pgs-orders-wait-cntr{
-/*   background-color: var(--color-base-200);
- */  /* border: 1px solid rgba(255, 255, 0, 0.185); */
   min-height: 100vh;
-/*   border: 2px solid gray;
- */ }
+  }
 
  .pgs-orders-inprep-cntr{
-/*     background-color: var(--color-base-100);
- *//*     border: 1px solid rgba(0, 0, 255, 0.185);
- */    min-height: 100vh;
-/*  border: 2px solid gray;
- */ }
+  min-height: 100vh;
+  }
+  
  .tab{
   border-radius: 4px;
  }

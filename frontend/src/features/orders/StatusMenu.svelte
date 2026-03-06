@@ -128,6 +128,7 @@
   <summary
     class="btn btn-ghost btn-circle hover:bg-neutral-700/10 tooltip tooltip-info tooltip-top bg-transparent"
     data-tip="Uredi stanje"
+     on:blur={() => setTimeout(() => dropdownOpen = false, 100)}
   >
     ☰
   </summary>
@@ -148,13 +149,13 @@
               updateOrderState(order.id, item.status);
             }}
             class="flex items-center px-3 py-2 rounded-md cursor-pointer
-                    font-semibold font-stretch-150% badge"
+                    font-semibold font-stretch-150% badge w-full"
             style="font-size: small;"
           >
             <span
               class="badge badge-{getOrderStatusColor(
                 item.status
-              )} font-mono badge-lg ml-auto"
+              )} font-mono badge-lg ml-auto min-w-40"
               style="text-transform: uppercase;"
             >
               {item.label}
