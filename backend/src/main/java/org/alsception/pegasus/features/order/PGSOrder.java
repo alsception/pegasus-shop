@@ -1,6 +1,5 @@
 package org.alsception.pegasus.features.order;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
@@ -14,7 +13,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
-import jakarta.persistence.Version;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

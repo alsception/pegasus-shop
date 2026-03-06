@@ -92,8 +92,6 @@ i LITE APP!!, I MOZDA i WS.....
         // 2. Izvuci specifičnu vrednost (npr. ?id=123)
         mojParametar = params.get('table');
         
-        console.log('Vrednost parametra je:', mojParametar);
-
         // Prvo učitavanje
         await handleSearch(true);
     
@@ -308,8 +306,8 @@ i LITE APP!!, I MOZDA i WS.....
   <Login />
 {:else}
 
-<div class="w-full flex justify-center px-1">
-  <div class="w-full /*max-w-4xl*/ p-4 bg-base-200 rounded-lg mb-1">
+<div class="w-full flex justify-center ">
+  <div class="w-full /*max-w-4xl*/ p-4 bg-base-200 rounded-lg mb-1 pb-2">
     <form
       on:submit|preventDefault={handleFormSubmit}
       class="flex flex-col md:flex-row items-center gap-3"
@@ -339,13 +337,13 @@ i LITE APP!!, I MOZDA i WS.....
           Prikaz
         </button>
 
-        <button 
+        <!-- <button 
           type="button"
           on:click={() => showReady = !showReady}
           class="btn btn-dash flex-1 md:flex-none whitespace-nowrap" 
         >
           {showReady ? 'Sakrij Spremne' : 'Prikaži Spremne'}
-        </button>
+        </button> -->
       </div>
     </form>
   </div>
@@ -357,15 +355,37 @@ i LITE APP!!, I MOZDA i WS.....
 
 <!-- Show each item in the order card (Block view) -->
 {#if isBlockView}
+
+<!-- name of each tab group should be unique -->
+<div class="tabs tabs-box rounded-lg ">
+  
+  <input type="radio" name="my_tabs_6" class="tab font-bold text-primary" aria-label="NA ČEKANJU ({orders.filter(o => o.status === 'WAITING').length})" >
+  <div class="tab-content bg-base-300 border-base-300 p-6">
+    {@render ordersWait()}
+  </div>
+
+  <input type="radio" name="my_tabs_6" class="tab font-bold text-primary" aria-label="U PRIPREMI ({orders.filter(o => o.status === 'IN_PREPARATION').length})" checked='{true}' />
+  <div class="tab-content bg-base-300 border-base-300 p-6">
+    {@render ordersInprep()}
+  </div>
+
+  <input type="radio" name="my_tabs_6" class="tab font-bold text-primary" aria-label="SPREMNO ({orders.filter(o => o.status === 'READY').length})" />
+  <div class="tab-content bg-base-300 border-base-300 p-6">
+    {@render ordersReady()}
+  </div>
+</div>
+
+
+<!-- 
 <div class="flex flex-wrap md:flex-nowrap gap-2 md:gap-3 p-1">
 
   <div class="w-full md:w-50 shadow p-2 pgs-orders-wait-cntr shrink-0">
-    {@render ordersWait()}
+    
   </div>
 
   <div class="flex-1 shadow p-2 pgs-orders-inprep-cntr">
     <div class="flex flex-wrap gap-2">
-       {@render ordersInprep()}
+       
     </div>
   </div>
 
@@ -375,11 +395,11 @@ i LITE APP!!, I MOZDA i WS.....
       in:fly={{ y: 200, duration: 400 }} 
       out:fade={{ duration: 200 }}
     >
-      {@render ordersReady()}
+      
     </div>
   {/if}
 
-</div>
+</div> -->
 
 {:else}
   <!-- Table view (existing code) -->
@@ -443,13 +463,13 @@ i LITE APP!!, I MOZDA i WS.....
         {/each}           
       </tbody>
       </table>
-    <div class="nb-table-footer text-left bg-secondary" style="background-color: var(--color-base-100);">
+    <div class="nb-table-footer text-left bg-secondary" style="background-color: var(--color-base-200);">
        
-      Promet: <span class="font-bold font-mono text-2xl text-primary">{formatPrice(totalAmount)}</span>
+      Ukupan promet: <span class="ml-4 font-bold font-mono text-2xl text-primary">{formatPrice(totalAmount)}</span>
     <br>
     <br>
       Ukupno narudžbi:
-      <span class="font-bold"> {orders.length}</span>
+      <span class="font-bold text-xl text-primary"> {orders.length}</span>
     
     </div>
     </div>
@@ -471,7 +491,7 @@ i LITE APP!!, I MOZDA i WS.....
 </div>
 
 {#snippet ordersWait()}     
-  <div class="mb-4 ">
+ <!--  <div class="mb-4 ">
       <h2 class="text-md rounded-lg font-bold flex items-center gap-1 bg-yellow-500 text-primary-content">
         
         <span class="badge badge-md badge-green bg-yellow-500 ml-1" 
@@ -479,9 +499,9 @@ i LITE APP!!, I MOZDA i WS.....
           <i class="fas fa-hourglass"></i> NA ČEKANJU</span>
         <span class="text-md text-black">({orders.filter(o => o.status === 'WAITING').length})</span>
       </h2>
-    </div>    
+    </div>     -->
     <!-- ovde su u dve kolone male slicice -->
-    <div class="grid grid-cols-2 lg:grid-cols-1 gap-2">
+    <div class="grid grid-cols-2 lg:flex lg:flex-wrap gap-4">
       {#each orders.filter(o => o.status === 'WAITING') as order}
          <OrderCardMd {order} liteView={true} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
       {/each}
@@ -489,14 +509,14 @@ i LITE APP!!, I MOZDA i WS.....
 {/snippet}
 
 {#snippet ordersInprep()}     
-    <div class="mb-1 w-full">
+   <!--  <div class="mb-1 w-full">
     <h2 class="text-md rounded-md font-bold flex items-center gap-1 bg-blue-500 text-white">
         <span class="badge badge-md bg-blue-500 text-white flex gap-1 items-center p-2 ml-1">
           <i class="fas fa-fire-alt"></i>    &nbsp;U PRIPREMI
         </span>
         <span class="text-md text-white font-bold">({orders.filter(o => o.status === 'IN_PREPARATION').length})</span>
       </h2>
-    </div>    
+    </div>     -->
     <div class="flex flex-wrap gap-4">
   {#each orders.filter(o => o.status === 'IN_PREPARATION') as order}
     <div class="
@@ -516,14 +536,14 @@ i LITE APP!!, I MOZDA i WS.....
 {/snippet}
 
 {#snippet ordersReady()}     
-  <div class="mb-4">
+<!--   <div class="mb-4">
     <h2 class="text-md rounded-lg font-bold text-gray-700 dark:text-gray-300 flex items-center gap-1 bg-green-500 text-black">
       <span class="badge badge-soft badge-md badge-green bg-green-500" style="background: var(--color-green-500); color: black;">
         <i class="fas fa-check"></i> SPREMNO</span>
       <span class="text-md">({orders.filter(o => (o.status === 'READY' || o.status === 'SERVED' )).length})</span>
     </h2>
-  </div>  
-  <div class="grid grid-cols-2 lg:grid-cols-1 gap-2 w-fit">
+  </div>   -->
+  <div class="grid grid-cols-2 lg:flex lg:flex-wrap gap-4">
     {#each orders.filter(o => (o.status === 'READY' || o.status === 'SERVED' )) as order}
     <div class="
       w-full
@@ -560,5 +580,8 @@ i LITE APP!!, I MOZDA i WS.....
  */    min-height: 100vh;
 /*  border: 2px solid gray;
  */ }
+ .tab{
+  border-radius: 4px;
+ }
 
 </style>

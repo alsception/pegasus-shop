@@ -35,7 +35,7 @@ public class DataInitializer implements CommandLineRunner
         //TODO: create million products test.
 
         //productService.generateSampleProducts(10);
-        tableService.generateSampleTables();
+        //tableService.generateSampleTables();
     }
 
     private void createDefaultUser()
@@ -55,8 +55,8 @@ public class DataInitializer implements CommandLineRunner
         } 
         catch (Exception e) 
         {
-            logger.error("Error creating default user");
-            logger.error(e.getMessage());
+            logger.warn("Error creating default user");
+            logger.warn(e.getMessage());
         }
     }
 }

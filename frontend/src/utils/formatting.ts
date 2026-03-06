@@ -123,7 +123,8 @@ export function formatDate(
 }
 
 
-export const formattedTime = (value: string | number | Date | null | undefined): string => {
+export const formattedTime = (value: string | number | Date | null | undefined): string => 
+{
     if (!value) return "-";
     const date = new Date(value);
     if (isNaN(date.getTime())) return "-";
@@ -169,20 +170,26 @@ export const formatDateTime = (value: string | number | Date | null | undefined)
 
 export function getOrderStatusColor(status: string | null | undefined): string 
 {
-    switch (status?.toUpperCase()) {
+    switch (status?.toUpperCase()) 
+    {
       case "READY":
       case "DELIVERED":
       case "SERVED":
         return "success";
+
       case "CANCELLED":
       case "REFUNDED":
         return "warning";
+
       case "RETURNED":
         return "error";
+
       case "IN_PREPARATION":
         return "info";
+
       case "WAITING":
         return "warning";
+        
       default:
         return "secondary";
     }

@@ -63,7 +63,7 @@
     title="Dodaj"
     on:click={() => addToCart(product.id)}
   >
-    <i class="fa fa-plus text-warning text-xl" aria-hidden="true"></i>
+    <i class="fa fa-plus text-gray-300 text-xl" aria-hidden="true"></i>
   </button>
 {/if}
 

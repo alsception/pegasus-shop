@@ -8,6 +8,7 @@
 **/
 
 
+import { resetCartItems } from '../../features/products/ProductService';
 import { showSuccessToast } from '../utils/toaster';
 import { authenticate, clearToken, getToken } from './SessionStore';
 
@@ -15,7 +16,6 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export async function login(username: string, password: string) 
 {
-  console.log(`${API_BASE_URL}/auth/login`);
   const response = await fetch(`${API_BASE_URL}/auth/login`, {
     method: 'POST',
     headers: {
@@ -36,9 +36,11 @@ export async function login(username: string, password: string)
   authenticate(data.token);
 }
 
-export function logout() {
+export function logout() 
+{
   clearToken();
   // Optionally: call backend logout endpoint if you have one, i dont
+  resetCartItems();
 }
 
 export async function register(username: string, password: string) 

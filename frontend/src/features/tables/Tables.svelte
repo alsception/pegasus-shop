@@ -93,7 +93,7 @@
     </div>
   </div>
 
-  <div id="results" class="w-full max-w-4xl mx-auto mt-6"></div>
+  <div id="results" class="w-full max-w-4xl mx-auto mt-2"></div>
 
   {#if loading}
     <LoadingOverlay />
@@ -102,7 +102,7 @@
   {#if tables.length === 0 && !loading}
     No tables found :/
   {:else}
-    <div class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 lg:grid-cols-5 gap-6">
+    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-8 lg:grid-cols-6 gap-6">
     
       {#each tables as table, i}
         <TableCard {table} />

@@ -36,13 +36,14 @@
   let totalPages = 0; // Total pages from backend
   let selectedCategory: number;
   export let rows = 4;
-
+  
+  
   const kategorije = [
-    "🧀 Predjela",
-    "🍔 Glavna jela",
-    "🍟 Prilozi",
-    "🍨 Desert",
-    "🍷Piće",
+    { id: 1, ime: "Predjela" },
+    { id: 2, ime: "Glavna jela" },
+    { id: 3, ime: "Prilozi" },
+    { id: 4, ime: "Desert" },
+    { id: 5, ime: "Piće" }
   ];
 
   // AUTHENTICATION
@@ -195,6 +196,24 @@
   {
     filteredProducts = products.filter((p) => p.category == category);
   }
+
+  function clickChange(id: any): any 
+  {
+    if(selectedCategory != id)
+    {
+      selectedCategory = id;
+      filteredProducts = products.filter((p) => p.category == id);
+    }
+    else
+    {
+      selectedCategory = 0;
+      filteredProducts = products;
+    }
+
+    //reset croll position
+    document.getElementById('products-container')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    document.getElementById('products-list-container')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 </script>
 
 {#if !$auth.isAuthenticated}
@@ -205,12 +224,12 @@
   <div class="w-[100%] flex justify-center p-0 fixed z-9003 bg-transparent">
     <div
       class="w-full lg:max-w-4xl lg:p-4 lg:m-6 lg:mb-4 lg:mt-0.5 bg-base-200/80 lg:rounded-lg border-1 border-primary/20 backdrop-blur-lg lg:pb-[5px]
-              max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:p-[10px] max-lg:pb-0 max-lg:pl-[60px]"
-      style="position: fixed;top:0;"
+              max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:p-[10px] max-lg:pb-0 /*max-lg:pl-[60px]*/"
+      style="position: fixed;top:0.45rem;"
     >
       <form
         on:submit|preventDefault={handleFormSubmit}
-        class="flex flex-col gap-3"
+        class="flex flex-col gap-1"
         id="brb-prod-l-f"
       >
         <!-- Gornji red: Input i Traži dugme -->
@@ -260,21 +279,20 @@
           {/if}
 
           <div
-            class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 /*whitespace-nowrap*/ hidden min-[800px]:block"
-          >
-            <span class="md:inline">
-              | Nadjeno: <b>{products.length} </b> |</span
-            >
-
+            class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 /*whitespace-nowrap*/ w-full"
+          >    
             {#each kategorije as k}
-              <span
-                class="badge badge-neutral text-primary dark:badge-neutral bg-base-300 font-mono badge-md cursor-pointer
-                            hover:bg-zinc-400/40 hover:outline-1 hover:outline-blue-600
-                            m-2"
-                style="text-transform: uppercase;"
+              <button
+              type="button" 
+                class="badge badge-neutral dark:badge-neutral bg-base-300 m-2
+                font-mono font-bold text-primary/80 badge-xs lg:badge-md cursor-pointer
+              hover:bg-zinc-400/40 hover:outline-1 hover:outline-blue-600 btn"
+              class:active={selectedCategory===k.id}
+                style="text-transform: uppercase; border-radius: 999px;"
+                on:click={()=>clickChange(k.id)}
               >
-                {k}
-              </span>
+                {k.ime}
+              </button>
             {/each}
           </div>
         </div>
@@ -282,14 +300,14 @@
     </div>
   </div>
 
-  <div id="results" class="w-full max-w-4xl mx-auto mt-6 pt-2"></div>
+  <div id="results" class="w-full max-w-4xl mx-auto mt-22 pt-2"></div>
 
   {#if loading}
     <LoadingOverlay />
   {/if}
 
   {#if isListView && isAdminView}
-    <div class="w-full max-w-[382px] mx-auto p-0">
+    <div id="products-list-container" class="w-full max-w-[382px] mx-auto p-0">
       <div class="w-full overflow-x-auto">
         <table class="table w-full min-w-[382px]">
           <tbody class="">
@@ -366,6 +384,7 @@
     todo: ako je standalone onda neka bude 4 cols, ako je u modal dialogu onda mozda 3
       -->
     <div
+      id="products-container"
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 4xl:grid-cols-5 gap-8 p-4"
       style="justify-items: center;"
     >
@@ -375,3 +394,9 @@
     </div>
   {/if}
 {/if}
+
+<style>
+  .active{
+    background-color: color-mix(in srgb, var(--color-info) 40%, transparent);
+  }
+</style>

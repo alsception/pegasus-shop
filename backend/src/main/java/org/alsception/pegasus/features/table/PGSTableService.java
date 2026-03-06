@@ -1,6 +1,8 @@
 package org.alsception.pegasus.features.table;
 
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -64,38 +66,38 @@ public class PGSTableService
     
     public void generateSampleTables() 
     {
-        if (tableRepository.count() == 0) 
-        { 
-            int errors = 0;
-            {
-                try{
-                    logger.info("Creating sample tables");
-                    PGSTable table1 = new PGSTable("100", 6, "", "levo", "terasa");
-                    PGSTable table2 = new PGSTable("101", 5, "", "desno", "terasa");
-                    PGSTable table3 = new PGSTable("120", 6, "", "levo", "terasa");
-                    PGSTable table4 = new PGSTable("129", 6, "", "desno", "terasa");
-                    PGSTable table5 = new PGSTable("001", 12, "", "desno", "unutra");
-                    
-                    tableRepository.save(table1);
-                    tableRepository.save(table2);
-                    tableRepository.save(table3);
-                    tableRepository.save(table4);
-                    tableRepository.save(table5);                    
-                }
-                catch(Exception e)
-                {
-                    logger.error("Error generating table");
-                    logger.error(e.getMessage());
-                    errors++;
-                }
+        int errors = 0;
+        try
+        {
+            logger.info("Creating sample tables");
+
+            List<PGSTable> tables = new ArrayList<>();
+
+            // 001 do 040
+            for (int i = 1; i <= 40; i++) {
+                String id = String.format("%03d", i);
+                tables.add(new PGSTable(id, 0, "", "", ""));
+            }
+
+            // 100 do 140
+            for (int i = 100; i <= 140; i++) {
+                tables.add(new PGSTable(String.valueOf(i), 0, "", "", ""));
+            }
+
+            // 900 do 920
+            for (int i = 900; i <= 920; i++) {
+                tables.add(new PGSTable(String.valueOf(i), 0, "", "", ""));
             }
             
-            logger.info("✅ Sample tables initialized: ");
-            logger.info("Errors: "+errors);
+            tableRepository.saveAll(tables);
+
+            logger.info("Tables created: "+tables.size());
         }
-        else
+        catch(Exception e)
         {
-            logger.warn("Sample tables not created. Repository already contains some tables or illegal count requested.");
+            logger.error("Error generating table");
+            logger.error(e.getMessage());
+            errors++;
         }
     }
-}
+}       

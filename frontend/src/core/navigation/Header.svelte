@@ -58,7 +58,7 @@
  We'll leave it, for now...
   -->
 
-<div class="navbar shadow-sm fixed bg-zinc-950/84 backdrop-blur-lg z-9000">
+<div class="navbar shadow-sm fixed bg-base-100/94 /*dark:bg-zinc-950/84*/ backdrop-blur-lg z-9000">
   <div class="navbar-start">
     <div class="pl-16">
       <a href="/#/home">
@@ -72,88 +72,68 @@
     </div>
   </div>
   <div class="navbar-center"></div>
-  <div class="navbar-end">
-    <div class="flex items-center gap-4">
-      <div class="p-2">
-        <label
-          class="swap swap-rotate tooltip tooltip-info tooltip-left text-gray-500 cursor-pointer"
-          data-tip="Dark Mode"
-        >
-          <input
-            id="theme-controller"
-            type="checkbox"
-            class="theme-controller"
-            value="dark"
-          />
-          <span class="swap-off text-xl">
-            <i class="fas fa-sun text-sm md:text-lg"></i>
-          </span>
-          <span class="swap-on text-xl">
-            <i class="fas fa-moon text-sm md:text-lg"></i>
-          </span>
-        </label>
-      </div>
+<div class="navbar-end">
+  <div class="flex items-center gap-6">
 
-      <div class="">
-        <div
-          class="tooltip tooltip-info tooltip-left text-gray-500 cursor-pointer"
-          data-tip="Poruke"
-        >
-          <span class="text-xl">
-            <i class="fas fa-envelope text-sm md:text-lg"></i>
-          </span>
-        </div>
-      </div>
+    <label
+      class="swap swap-rotate text-gray-500 cursor-pointer"
+      data-tip="Dark Mode"
+    >
+      <input
+        id="theme-controller"
+        type="checkbox"
+        class="theme-controller"
+        value="dark"
+      />
+      <span class="swap-off text-xl">
+        <i class="fas fa-sun text-sm md:text-lg"></i>
+      </span>
+      <span class="swap-on text-xl">
+        <i class="fas fa-moon text-sm md:text-lg"></i>
+      </span>
+    </label>
 
-      <!--  <div class="dropdown"> -->
+    <div
+      class="text-gray-500 cursor-pointer"
+      data-tip="Poruke"
+    >
+      <span class="text-xl">
+        <i class="fas fa-envelope text-sm md:text-lg"></i>
+      </span>
+    </div>
+
+    <button
+      tabindex="0"
+      class="btn btn-ghost p-0 hover:bg-primary/10 text-gray-500 text-xl"
+
+      data-tip="Cart"
+      aria-label="Cart"
+      on:click={handleModal}
+    >
+      <i class="fas fa-shopping-basket text-sm md:text-lg"></i>
+    </button>
+
+    <div class="dropdown">
       <button
         tabindex="0"
-        class="btn btn-ghost btn-circle hover:bg-neutral-900 text-gray-500 text-xl tooltip tooltip-info tooltip-left"
-        data-tip="Cart"
-        aria-label="Cart"
-        on:click={handleModal}
+        class="btn btn-ghost p-0 hover:bg-primary/10 text-gray-500 text-xl"
+        data-tip="Notifications"
+        aria-label="Notifications"
+        on:click={() => resetNotificationsInfo()}
       >
-        <i class="fas fa-shopping-basket text-sm md:text-lg"></i>
+        <i id="notifications-icon" class="fas fa-bell text-sm md:text-lg"></i>
+        <span
+          id="notifications-indicator"
+          class="text-sm text-white bg-error px-1 hidden"
+          style="position: relative;top: -0.5rem;left: -0.5rem;">12</span
+        >
       </button>
-      <!-- 
-        <ul
-          class="menu menu-sm dropdown-content w-152 p-2 scale-in-ver-top
-          bg-base-100 dark:bg-zinc-900
-          rounded shadow
-          max-h-180 overflow-x-auto block"
-          style="min-width: 300px; left: -565px; top: 44px"
-        >
-   <div class="inline-flex gap-1">
-              <CartDetails></CartDetails>
-            </div>
-        </ul>
-      </div> -->
 
-      <div class="dropdown">
-        <button
-          tabindex="0"
-          class="btn btn-ghost btn-circle hover:bg-neutral-900 text-gray-500 text-xl tooltip tooltip-info tooltip-left"
-          data-tip="Notifications"
-          aria-label="Notifications"
-          on:click={() => resetNotificationsInfo()}
-        >
-          <i id="notifications-icon" class="fas fa-bell text-sm md:text-lg"></i>
-          <span
-            id="notifications-indicator"
-            class="text-sm text-white bg-error px-1 hidden"
-            style="position: relative;top: -0.5rem;left: -0.5rem;">12</span
-          >
-        </button>
-        <!-- 
-              <div class="indicator">
-          <span class="indicator-item badge badge-secondary">12</span>
-          <button class="btn">inbox</button>
-        </div> -->
-
-        <NotificationsInfo />
-      </div>
+      <NotificationsInfo />
     </div>
+
   </div>
+</div>
 </div>
 
 <div
@@ -167,7 +147,7 @@
   <div
     tabindex="0"
     role="button"
-    class="btn btn-ghost btn-circle text-gray-500 hover:bg-neutral-900"
+    class="btn btn-ghost btn-circle text-gray-500 hover:bg-primary/10"
   >
     <i class="fas fa-bars text-xl"></i>
   </div>

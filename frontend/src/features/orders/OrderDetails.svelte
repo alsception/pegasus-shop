@@ -67,7 +67,7 @@
     billingAddress: "",
     trackingNumber: "",
     notes: "",
-    created: new Date().toISOString(),
+    created: null,
     modified: null,
     shippedDate: null,
     deliveredDate: null,
@@ -78,35 +78,22 @@
   async function fetch(id: string | number) {
     startLoadingAnimation();
 
-    try {
+    try 
+    {
       let data = await api<Order>("/orders/" + id, {
         method: "GET",
       });
 
       formData = data;
-      document.title = `Order ${formData.code} | Pegasus`;
+      document.title = `Narudžba ${formData.code} | Pegasus`;
       error = null;
-
-      // Convert dates to datetime-local format for form inputs
-      if (data.created) {
-        const date = new Date(data.created);
-        formData.created = date.toISOString().slice(0, 16);
-      }
-      if (data.modified) {
-        const date = new Date(data.modified);
-        formData.modified = date.toISOString().slice(0, 16);
-      }
-      /* if (data.shippedDate) {
-        const date = new Date(data.shippedDate);
-        formData.shippedDate = date.toISOString().slice(0, 16);
-      }
-      if (data.deliveredDate) {
-        const date = new Date(data.deliveredDate);
-        formData.deliveredDate = date.toISOString().slice(0, 16);
-      } */
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       processError(err);
-    } finally {
+    } 
+    finally 
+    {
       removeLoadingAnimation();
     }
   }

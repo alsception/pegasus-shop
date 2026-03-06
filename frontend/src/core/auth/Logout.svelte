@@ -9,5 +9,3 @@
     push("/");
   });
 </script>
-
-Logging out...

@@ -1,4 +1,4 @@
-<div class="navbar shadow-sm fixed bg-zinc-950 z-50">
+<div class="navbar shadow-sm fixed bg-zinc-950/84 z-50 backdrop-blur-lg">
   <div class="navbar-start ">
     <div class="ml-16">
       <a href="/#/home">

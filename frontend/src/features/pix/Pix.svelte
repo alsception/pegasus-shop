@@ -21,9 +21,8 @@
   //TODO: try /me
 
   function searchBackgrounds(query: string) {
-    try {
-      /* todo: this should not be in code
-      alternative &client_id=2-W_8P7fziKPjfsP5s7XbdniZNSMViqv_zj6mG_-N-c */
+    try 
+    {
       const start = performance.now();
       isLoading = true;
       fetch(

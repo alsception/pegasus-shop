@@ -16,7 +16,7 @@ export interface Order {
   currency: string;
   price?: number; // BigDecimal maps to number in TS, nullable so optional
   items: OrderItem[];
-  created?: string; // LocalDateTime as ISO string
+  created?: string  | null; // LocalDateTime as ISO string
   modified?: string | null; // LocalDateTime as ISO string, nullable so optional
   upripremiAt?: string | null;
   spremnoAt?: string | null;

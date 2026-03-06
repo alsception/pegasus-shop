@@ -82,7 +82,8 @@ export function processError(error: any)
   // Extract message from error response
   let errorMessage = "Error adding product to cart: ";
 
-  if (error.response && error.response.data) {
+  if (error.response && error.response.data) 
+  {
     if (error.response.data.message) {
       errorMessage += error.response.data.message;
     } else if (typeof error.response.data === "string") {

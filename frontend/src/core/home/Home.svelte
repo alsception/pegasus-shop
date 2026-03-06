@@ -174,7 +174,7 @@
       transition:fly={{ y: -50, duration: 300 }}
     >
    <div class="menu-card card-8 " >
-            <div class="card-content hover:bg-primary/20 flex flex-col items-center justify-center">
+            <div class="card-content hover:bg-info/20 flex flex-col items-center justify-center">
                 <span class="icon">{item.emoji}</span>
                  <h2 class="title text-primary/60 ">{item.title}</h2>
             </div>

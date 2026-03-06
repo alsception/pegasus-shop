@@ -25,8 +25,8 @@
   --color-accent-content: oklch(97% 0.013 236.62);
   --color-success: oklch(62% 0.194 149.214);
   --color-success-content: oklch(100% 0 0);
-  --color-warning: oklch(87.9% 0.169 91.605);
-  --color-warning-content: oklch(27% 0.041 260.031);
+  --color-warning: oklch(0.72 0.17 86.54);
+  --color-warning-content: oklch(100% 0 0);
   --color-error: oklch(63% 0.237 25.331);
   --color-error-content: #ffc5c875;
   --color-wait: var(--color-yellow-200);
@@ -428,7 +428,7 @@ body {
 }
 
 .tr-highlight{
-  @apply outline-1 outline-transparent hover:bg-blue-600/15
+  @apply outline-1 outline-transparent hover:bg-blue-400/10
 }
 
 /* We gonna apply some additional styling ONLY for Dark mode */

@@ -11,7 +11,7 @@
   export let isAvailable = true;
   export let table: PGSTable;
 
-  let width = "116px;"
+  let width = "60px;"
   
   function handleClick() 
   {
@@ -65,16 +65,15 @@
     <span class="loading loading-dots loading-xs"></span>
   </button> -->
 {:else}
-  <button
-    class="btn btn-primary"
-    style="width: {width};"
-    on:click={handleClick}    
-    
-  >
-    <span data-text="Dodaj" class="font-mono">       
-       <i class="fa fa-plus" aria-hidden="true"></i> Dodaj</span>
-    <div class="scan-line"></div>
-  </button>
+<button
+  class="btn btn-circle btn-ghost bg-base-100 flex items-center justify-center"
+  on:click={handleClick}
+>
+  <span data-text="Dodaj" class="font-mono flex items-center justify-center ml-1.5">
+    <i class="fa fa-plus" aria-hidden="true"></i>
+  </span>
+  <div class="scan-line"></div>
+</button>
     {#if showModal2}
     <div class="modal modal-open pt-10 backdrop-blur-sm">
     <div class="modal-box w-full max-w-none h-[96vh] p-0 flex flex-col rounded-none">

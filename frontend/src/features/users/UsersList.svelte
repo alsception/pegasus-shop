@@ -173,22 +173,27 @@
     showCreateModal = true;
   }
 
-  function getUserColor(userRole: string): string {
-    switch (userRole.toUpperCase()) {
+  function getUserColor(userRole: string): string 
+  {
+    switch (userRole.toUpperCase()) 
+    {
       case "ADMIN":
         return "error ";
-      case "WAITER":
-        return "info ";
+
       case "WAITER":
         return "accent ";
-      //Most should be covered by these 3
-      case "TESTER":
-        return "primary ";
+
       case "KITCHEN":
         return "warning ";
+
       case "OTHER":
+      
+      case "TESTER":
+        return "primary ";
+      
       case "CUSTOMER":
         return "secondary ";
+        
       default:
         return "primary "; // ili neka podrazumevana boja
     }
@@ -385,7 +390,7 @@
               <a
                 use:link
                 href="#/users/{user.id}"
-                class="pgs-hyperlink font-bold block max-w-[200px] truncate"
+                class="pgs-hyperlink text-primary/80 font-bold block max-w-[200px] truncate"
                 >{user.username}</a
               >
             </td>
@@ -422,15 +427,17 @@
                 15
               )}
             </td>
-            <td class="pgs-td font-mono"> <!-- 
+            <td class="pgs-td font-mono"> 
+              {formatActive(user.active)} 
+              <!-- 
               TODO: ovo bi trebalo napraviti da zapravo radi
-              {//formatActive(user.active)} -->
              <div class="flex items-center space-x-3 pt-2">
                   <input
+                    id="u-checkbox-{user.id}"
                     type="checkbox"
                     bind:checked={user.active}
-                    class="toggle ring-2 ring-primary/40 bg-base-200 text-red-600 checked:text-green-600"
-                    style="background-color: black;"
+                    class="toggle ring-2 ring-primary/20 /*bg-base-200*/ text-red-600 checked:text-green-600 bg-transparent"
+                    style="background-color: transparent;"
                   />
                   <p class="font-mono font-bold text-primary/80">
                     {#if user.active}
@@ -439,7 +446,7 @@
                       NEAKTIVAN 
                     {/if}
                   </p>
-                </div>
+                </div>-->
             </td>
             <td class="px-2">
               <div

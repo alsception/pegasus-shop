@@ -1,9 +1,9 @@
 <script lang="ts">
   import { login } from "../services/client";
   import LoadingOverlay from "../utils/LoadingOverlay.svelte";
-  import { scale } from "svelte/transition";
   import { push } from "svelte-spa-router";
   import HeaderLite from "../navigation/HeaderLite.svelte";
+  import { type UnsplashPhoto } from "../../features/pix/UnsplashPhoto";
 
   document.title = "Log in | Pegasus";
 
@@ -11,6 +11,18 @@
   let password = "";
   let error = "";
   let loading = false;
+  let photo: UnsplashPhoto = {
+    urls: {
+      regular: "https://...",
+      // ostala polja...
+    },
+  } as UnsplashPhoto;
+
+  //TODO: ovde cemo staviti razne slike da se ucitavaju i menjaju
+  photo.urls.regular =
+    //"https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQzNzd8MHwxfHNlYXJjaHw0fHxiYXJiYWN1ZXxlbnwwfHx8fDE3NzI3MTUwMTh8MA&ixlib=rb-4.1.0&q=85"
+  //  "https://images.unsplash.com/photo-1606131731446-5568d87113aa?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQzNzd8MHwxfHNlYXJjaHwyfHxidXJnZXJzfGVufDB8fHx8MTc3MjcxNDA0NHww&ixlib=rb-4.1.0&q=85";
+  "https://images.unsplash.com/photo-1607013251379-e6eecfffe234?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQzNzd8MHwxfHNlYXJjaHw1fHxidXJnZXJzfGVufDB8fHx8MTc3MjcxNDA0NHww&ixlib=rb-4.1.0&q=85"
 
   async function handleLogin() 
   {
@@ -22,31 +34,39 @@
     } 
     catch (err: any) 
     {
-      error = 'ERROR: ' + err.message;
-    } 
-    finally 
+      error = "ERROR: " + err.message;
+    } finally 
     {
       loading = false;
     }
   }
 </script>
 
-<HeaderLite/>
+<HeaderLite />
 
-<div class="flex items-center justify-center min-h-screen relative" >
-  <div class=" rounded-lg /*animate-pulse*/ relative z-10 border-0 bg-opacity-100 " style="box-shadow: none;"  transition:scale={{ duration: 700, start: 0 }}>
-
+<div class="flex items-center justify-center min-h-screen relative">
+  <div
+    class=" rounded-lg /*animate-pulse*/ relative z-10 border-0 bg-opacity-100"
+    style="box-shadow: none;"
+  >
+    <div class="">
+      <img
+        class="w-full object-cover bg"
+        src={photo.urls.regular}
+        alt={photo.alt_description}
+      />
+    </div>
 
     <form
-      on:submit|preventDefault={handleLogin}      
-      class="w-full max-w-md relative p-6 px-10 m-[5px] rounded-2xl bg-base-200 border-[#2A2A2A]"     
+      on:submit|preventDefault={handleLogin}
+      class="w-full max-w-md relative p-6 px-10 m-[5px] rounded-2xl bg-base-200 border-[#2A2A2A] bg-zinc-50/24 backdrop-blur-lg border border-primary/14"
     >
       {#if loading}
         <LoadingOverlay />
       {/if}
 
-      <label for="username" class="block text-md font-medium text-warning  mb-2">
-        <i class="fas fa-user text-sm text-primary-900/60  mx-2"></i>Username
+      <label for="username" class="block text-md font-semibold mb-2 text-primary">
+        <i class="fas fa-user text-sm mx-2"></i>Username
       </label>
       <input
         type="text"
@@ -55,8 +75,8 @@
         disabled={loading}
       />
 
-      <label for="password" class="block text-md font-medium text-warning  mb-2">
-        <i class="fas fa-lock text-sm text-primary-900 mx-2"></i>Password
+      <label for="password" class="block text-md font-semibold mb-2 text-primary">
+        <i class="fas fa-lock text-sm  mx-2"></i>Password
       </label>
       <input
         type="password"
@@ -67,7 +87,7 @@
 
       <button
         type="submit"
-        class="btn  w-full mt-2 btn-warning"
+        class="btn w-full mt-2 btn-secondary font-semibold text-lg"
         disabled={loading}
       >
         Login
@@ -87,5 +107,15 @@
       </div>
     </form>
   </div>
-  
 </div>
+
+<style>
+  .bg {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+</style>
