@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Order } from "./Order";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";
   import { get } from "svelte/store";
@@ -325,7 +325,7 @@
         {getBgClass(order.status)}"
   class:card-new={isNew(order.created, 10) && order.status == "WAITING"}
 >
-  <div class="flex items-center justify-between mb-1">
+  <div class="flex items-center justify-between mb-1 ml-1">
     <div
       class="flex items-center gap-1 w-full"
       style="justify-content: space-between;"
@@ -359,7 +359,7 @@
     </div>
   </div>
 
-  <div class="flex items-center gap-1 text-sm text-primary mb-1">
+  <div class="flex items-center gap-1 text-sm text-primary mb-1 ml-1">
     <div class="flex items-center gap-1 text-sm text-primary/60 mr-2">
       <i class="fas fa-user"></i>
       <span><strong>{order.user?.username}</strong></span>

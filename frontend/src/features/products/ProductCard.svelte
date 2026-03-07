@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { fly } from "svelte/transition";
   import { formatPrice } from "../../utils/formatting";
   import AddToCartButton from "./AddToCartButton.svelte";
   import { link } from "svelte-spa-router";
@@ -22,7 +21,7 @@
     {/if}
   </div>
 <div class="p-6 flex flex-col flex-1">
-    <h3 class="font-semibold text-lg truncate text-primary" title={product.name}>
+    <h3 class="font-semibold text-lg break-words text-primary" title={product.name}>
       <a use:link href="/products/{product.id}" class="pgs-hyperlink">{product.name}</a>
     </h3>
 

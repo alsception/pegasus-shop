@@ -109,6 +109,7 @@
         <i class="fas fa-user text-sm mx-2"></i>Username
       </label>
       <input
+        id="username"
         type="text"
         bind:value={username}
         class="pgs-input mb-8 outline outline-primary/30"
@@ -122,6 +123,7 @@
         <i class="fas fa-lock text-sm mx-2"></i>Password
       </label>
       <input
+        id="passowrd"
         type="password"
         bind:value={password}
         class="pgs-input mb-8 outline outline-primary/30"

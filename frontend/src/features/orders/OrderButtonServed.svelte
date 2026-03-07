@@ -64,7 +64,7 @@
 {/if}
  
 <button 
-class="btn btn-sm btn-secondary text-primary-content ml-auto"
+class="btn btn-sm btn-success text-primary-content ml-auto"
     on:click={(e) => {
           e.preventDefault();
           updateOrderState(order.id, 'SERVED');

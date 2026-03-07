@@ -359,18 +359,21 @@ i LITE APP!!, I MOZDA i WS.....
 <!-- name of each tab group should be unique -->
 <div class="tabs tabs-box rounded-lg ">
   
+  <!-- vidi ovde te boje da rade i na lajt i na dark, neznam vise...
+   i kad je error za ucitavanje da nepokusava ko sivonja -->
+
   <input type="radio" name="my_tabs_6" class="tab font-bold text-primary" aria-label="NA ČEKANJU ({orders.filter(o => o.status === 'WAITING').length})" >
-  <div class="tab-content bg-base-300 border-base-300 p-6">
+  <div class="tab-content bg-base-300/5 border-base-300 p-6">
     {@render ordersWait()}
   </div>
 
   <input type="radio" name="my_tabs_6" class="tab font-bold text-primary" aria-label="U PRIPREMI ({orders.filter(o => o.status === 'IN_PREPARATION').length})" checked='{true}' />
-  <div class="tab-content bg-base-300 border-base-300 p-6">
+  <div class="tab-content  bg-base-300 dark:bg-base-100/5 border-base-300 p-6">
     {@render ordersInprep()}
   </div>
 
   <input type="radio" name="my_tabs_6" class="tab font-bold text-primary" aria-label="SPREMNO ({orders.filter(o => o.status === 'READY').length})" />
-  <div class="tab-content bg-base-300 border-base-300 p-6">
+  <div class="tab-content bg-base-300/5 border-base-300 p-6">
     {@render ordersReady()}
   </div>
 </div>
@@ -463,10 +466,9 @@ i LITE APP!!, I MOZDA i WS.....
         {/each}           
       </tbody>
       </table>
-    <div class="nb-table-footer text-left bg-secondary" style="background-color: var(--color-base-200);">
+    <div class="nb-table-footer text-left bg-secondary w-full" style="background-color: var(--color-base-200);">
        
       Ukupan promet: <span class="ml-4 font-bold font-mono text-2xl text-primary">{formatPrice(totalAmount)}</span>
-    <br>
     <br>
       Ukupno narudžbi:
       <span class="font-bold text-xl text-primary"> {orders.length}</span>
@@ -502,7 +504,7 @@ i LITE APP!!, I MOZDA i WS.....
     </div>     -->
     <!-- ovde su u dve kolone male slicice -->
     <div class="grid grid-cols-2 lg:flex lg:flex-wrap gap-4">
-      {#each orders.filter(o => o.status === 'WAITING') as order}
+      {#each orders.filter(o => o.status === 'WAITING') as order (order.id)}
          <OrderCardMd {order} liteView={true} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
       {/each}
     </div>
@@ -518,7 +520,7 @@ i LITE APP!!, I MOZDA i WS.....
       </h2>
     </div>     -->
 <div class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 2xl:columns-6 gap-8">
-  {#each orders.filter(o => o.status === 'IN_PREPARATION') as order}
+  {#each orders.filter(o => o.status === 'IN_PREPARATION') as order (order.id)}
     <div class="break-inside-avoid mb-8 w-full">
       <OrderCardMd
         {order}
@@ -538,7 +540,7 @@ i LITE APP!!, I MOZDA i WS.....
     </h2>
   </div>   -->
   <div class="grid grid-cols-2 lg:flex lg:flex-wrap gap-4">
-    {#each orders.filter(o => (o.status === 'READY' || o.status === 'SERVED' )) as order}
+    {#each orders.filter(o => (o.status === 'READY' || o.status === 'SERVED' )) as order (order.id)}
     <div class="
       w-full
       lg:flex-grow

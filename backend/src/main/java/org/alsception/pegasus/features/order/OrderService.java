@@ -107,6 +107,7 @@ public class OrderService
     {
         List<PGSOrder> orders = orderRepository.findByIdWithItems(id);
         if(orders.isEmpty()) throw new BadRequestException("Not found");
+        orders = this.processPrice(orders);
         return orders.get(0);
     }
     

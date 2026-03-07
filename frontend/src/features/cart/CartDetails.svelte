@@ -13,7 +13,6 @@
   import EmptyImg5 from "../../assets/img/empty-pana.svg";
   import { link } from "svelte-spa-router";
   import { formatPrice } from "../../utils/formatting";
-  import { fly } from "svelte/transition";
 
   const emptyImages = [EmptyImg1, EmptyImg2, EmptyImg3, EmptyImg4, EmptyImg5];
 
@@ -138,24 +137,24 @@
 
     {#if cart}
       <div
-        class="text-primary mx-auto bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl"
+        class="text-primary mx-auto bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl border-2 border-secondary/20 rounded-t-md"
         style="transform: none"
       >
         <div
-          class="p-0 bg-accent text-primary-content/80 dark:text-primary/80 rounded-t hidden"
+          class="p-0 bg-base-100/94 text-primary-content/80 dark:text-primary/80 rounded-t border-b border-base-300"
         >
-          <h2 class="text-lg sm:text-2xl font-bold p-1 text-center">
-            Košarica 1/2
+          <h2 class="text-primary text-lg sm:text-2xl font-bold p-1 text-center h-14 pt-3">
+            Košarica
           </h2>
         </div>
 
-        <div class="font-mono pt-4">
+        <div class="pt-4 lg:px-4">
           {#if cart.items && cart.items.length > 0}
             <div class="p-2 sm:p-2">
               <div class="divide-y divide-primary/10">
                 {#each cart.items as item (item.id)}
                   <div
-                    class="py-1 grid grid-cols-1 sm:grid-cols-3 gap-0 items-center"
+                    class="py-1 grid grid-cols-1 sm:grid-cols-3 gap-0 items-center pt-4"
                   >
                     <div class="sm:col-span-2 flex flex-col gap-0.5">
                       <div class="flex items-center gap-1">
@@ -197,28 +196,26 @@
                           </button>
                         </div>
 
-                        <p
+                        <div
                           class="text-md sm:text-base font-semibold text-primary px-1"
                         >
                           {item.product.name}
                           {#if item.quantity > 1}
                             ({formatPrice(item.product.basePrice)})
                           {/if}
-                        </p>
+                      </div>
                       </div>
 
-                      <div class="flex items-center">
-                        <!-- <div class="tooltip tooltip-info" data-tip="Delete"> -->
+                      <div class="flex items-center w-fit">
                         <button
                           type="button"
-                          class="btn btn-ghost btn-sm text-error h-4 m-4 /*bg-error-content*/"
+                          class="btn btn-ghost btn-sm text-error h-3 mx-4 mb-2 mt-2"
                           aria-label="Delete"
                           on:click={() => deleteCartItem(item.product.id)}
                         >
                           <i class="fa fa-remove text-md cursor-pointer"> </i>
                           <span class="pt-1"> Ukloni</span>
                         </button>
-                        <!--  </div> -->
                       </div>
                     </div>
 
@@ -226,12 +223,13 @@
                       class="text-right sm:text-right pt-0 sm:pt-0 relative -top-6 h-0 sm:top-0"
                     >
                       <span
-                        class="text-md sm:text-base font-semibold text-primary"
+                        class="text-md sm:text-base font-bold font-mono text-primary"
                       >
                         {formatPrice(item.quantity * item.product.basePrice)}
                       </span>
                     </div>
                   </div>
+                  
                 {/each}
               </div>
 
@@ -242,30 +240,34 @@
                   class="divide-y divide-gray-200 dark:divide-slate-700"
                 ></div>
 
-                <div class="pt-4 px-2 flex justify-end items-end">
-                  <p class="text-lg sm:text-xl font-semibold text-primary mr-6">
+                <div class="pt-4 px-0 flex justify-end items-end">
+                  <div class="text-lg sm:text-xl text-primary/70 mr-6 mb-0.5">
                     Ukupno:
-                  </p>
-                  <p class="text-xl sm:text-2xl font-bold text-primary">
+                  </div>
+                  <div class="text-xl sm:text-2xl font-bold font-mono text-primary mb-0">
                     {formatPrice(cart.totalPrice || 0)}
-                  </p>
+                  </div>
                 </div>
               </div>
               <br />
-            </div>
+            </div>           
 
-            <div class="flex flex-row gap-2 p-8 justify-between bg-base-300/25">
-              <button
+            <div class="sticky bottom-0 z-10 px-2 lg:p-6 lg:px-0 py-4 border-t border-base-300 ">
+              <div class="flex justify-between items-center">
+                <button
                 type="button"
                 on:click={cancel}
                 class="btn btn-neutral text-primary/80 mr-12"
               >
-                <i class="fa fa-arrow-left text-md cursor-pointer"> </i>Zatvori
+                Zatvori
               </button>
-              <a href="#/checkout" class="btn btn-primary bg-success">
-                <i class="fa fa-check text-md cursor-pointer"> </i>Potvrdi</a
+
+                <a href="#/checkout" class="btn btn-primary bg-primary">
+                Potvrdi</a
               >
+              </div>
             </div>
+
           {:else}
             <p class="text-center text-gray-500 py-8 px-4">
               Košarica je prazna. <a
@@ -279,7 +281,7 @@
             </div>
           {/if}
         </div>
-      </div>
+      </div>      
     {/if}
   {/if}
 </div>

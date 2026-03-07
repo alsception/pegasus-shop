@@ -93,14 +93,14 @@
       >
         <!-- Header Section -->
         <div
-          class="p-0 bg-accent text-primary-content/80 dark:text-primary/80 rounded-t"
+          class="p-0 bg-base-100 text-primary-content/80 dark:text-primary/80 rounded-t border-2 border-secondary/20 rounded-t-md"
         >
-          <h2 class="text-lg sm:text-2xl font-bold p-1 text-center">
-            Checkout 2/2
+          <h2 class="text-primary text-lg sm:text-2xl font-bold p-1 text-center h-14 pt-3">
+            Checkout
           </h2>
         </div>
 
-        <form class="p-12 w-full" on:submit|preventDefault={submitForm}>
+        <form class="p-12 w-full border-2 border-secondary/20 " on:submit|preventDefault={submitForm}>
           <div class="grid grid-cols-1 mb-16 w-full">
             <div class="lg:col-span-2">
               <div class="">
@@ -186,7 +186,7 @@
               >
                 <i class="fa fa-arrow-left text-md cursor-pointer"> </i>Nazad
               </button>
-              <button type="submit" class="btn btn-primary bg-success">
+              <button type="submit" class="btn btn-primary bg-primary">
                 <i class="fa fa-check text-md cursor-pointer"> </i>Potvrdi
               </button>
             </div>

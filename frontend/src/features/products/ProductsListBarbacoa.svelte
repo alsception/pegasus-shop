@@ -15,7 +15,6 @@
   import ProductCard from "./ProductCard.svelte";
   import ProductCategories from "./ProductCategories.svelte";
   import AddToCartButton from "./AddToCartButton.svelte";
-  import ProductAdministration from "./ProductAdministration.svelte";
 
   document.title = "Products | Pegasus";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -39,11 +38,12 @@
   
   
   const kategorije = [
-    { id: 1, ime: "Predjela" },
-    { id: 2, ime: "Glavna jela" },
-    { id: 3, ime: "Prilozi" },
-    { id: 4, ime: "Desert" },
-    { id: 5, ime: "Piće" }
+    { id: 1, ime: "🧀 Predjela" },
+    { id: 2, ime: "🥩 Glavna jela" },
+    { id: 3, ime: "🍟🥗 Prilozi" },
+    { id: 4, ime: "🍰 Desert" },
+    { id: 5, ime: "🍺 Piće" },
+    { id: 6, ime: "❤️ Omiljeno" }
   ];
 
   // AUTHENTICATION
@@ -152,13 +152,13 @@
 
       const data = await res.json();
 
-      console.log(data);
-
       // Use the paginated response structure
       products = data;
       filteredProducts = data;
       totalProducts = products.length;
-    } catch (err: any) {
+    } 
+    catch (err: any) 
+    {
       console.error(error);
       if (err.message.includes("401")) {
         $auth.token = null;
@@ -238,7 +238,7 @@
             type="text"
             bind:value={searchTerm}
             placeholder="Traži proizvod..."
-            class="input border-2 flex-1 w-max"
+            class="input border-2 flex-1 w-max ml-10"
           />
           <button type="submit" class="btn btn-dash">
             <i class="fas fa-search"></i>
@@ -376,6 +376,7 @@
           </tbody>
         </table>
       </div>
+      {@render btnNext()}
     </div>
   {:else if !products && !loading}
     no products found :/
@@ -385,15 +386,23 @@
       -->
     <div
       id="products-container"
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 4xl:grid-cols-5 gap-8 p-4"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 4xl:grid-cols-5 gap-8 p-4"
       style="justify-items: center;"
     >
       {#each filteredProducts as product, i}
         <ProductCard {product} />
       {/each}
     </div>
+    {@render btnNext()}
   {/if}
 {/if}
+
+{#snippet btnNext()}
+<div class="fixed top-[90%] left-[72%] md:left-[80%] lg:left-[92%] z-[9000]">
+  <a class="btn btn-lg btn-primary border border-primary-content/40"
+    use:link href="/cart">Dalje<i class="fas fa-arrow-right text-primary-content/60"></i></a>
+</div>
+{/snippet}
 
 <style>
   .active{

@@ -65,6 +65,7 @@ public class SecurityConfig {
                     "/index.html", 
                     "/static/**", 
                     "/assets/**", 
+                    "/lottie/**", //animations
                     "/favicon.ico", 
                     "/manifest.json", // za PWA
                     "/sw.js",         // za PWA

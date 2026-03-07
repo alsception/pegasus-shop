@@ -134,21 +134,21 @@
   </summary>
 
   <ul
-    class="menu menu-sm dropdown-content mt-3 w-22 p-0 scale-in-ver-top
+    class="menu menu-sm dropdown-content mt-3 w-2 p-0 scale-in-ver-top
             bg-base-200
             rounded-md shadow
             border border-gray-600"
-    style="min-width: 205px;left: -170px; z-index: 9000;"
+    style="min-width: 175px;left: -143px;top:18px; z-index: 9990;"
   >
     {#each statusItems as item}
       {#if order.status != item.status}
-        <li class="w-full p-2 border-t border-b border-gray-500/40">
+        <li class="w-full p-3 px-6 border-t border-b border-gray-500/40">
           <button
             on:click={(e) => {
               e.preventDefault();
               updateOrderState(order.id, item.status);
             }}
-            class="flex items-center px-3 py-2 rounded-md cursor-pointer
+            class="flex items-center px-6 py-2 rounded-md cursor-pointer
                     font-semibold font-stretch-150% badge w-full"
             style="font-size: small;"
           >

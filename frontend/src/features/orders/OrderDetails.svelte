@@ -248,7 +248,7 @@
          <div class="absolute top-0 right-0">
     {#if formData.status}
       <span
-        class="badge badge-soft badge-{getOrderStatusColor(formData.status)} font-mono badge-lg uppercase"
+        class="badge badge-soft badge-{getOrderStatusColor(formData.status)} font-mono badge-lg uppercase font-bold"
       >
         {getOrderStatusLabel(formData.status)}
       </span>
@@ -337,7 +337,7 @@
                         ></div> -->
 
                         <p
-                          class="text-sm sm:text-base font-medium text-primary px-1"
+                          class="text-sm sm:text-base font-medium text-primary/80 px-1"
                         >
                           {item.quantity} x {item.product.name}
                           {#if item.quantity > 1}
@@ -348,16 +348,25 @@
                     </div>
 
                     <div
-                      class="text-right sm:text-right pt-0 sm:pt-0 relative -top-6 h-0 sm:top-0"
+                      class="text-right sm:text-right pt-0 sm:pt-0 relative -top-6 h-0 sm:top-0  mt-[-1rem]"
                     >
-                      <span class="text-sm sm:text-base text-primary font-mono">
+                      <span class="text-sm sm:text-base text-primary/80 font-mono">
                         {formatPrice(item.quantity * item.product.basePrice)}
                       </span>
                     </div>
                   </div>
 
                 {/each}
+                <div
+                style="align-items: end;display:grid;align-content: end; text-align: right; "
+                class="p-0 mr-0"
+              >
+                <span class="text-2xl font-bold text-primary p0 pt-2 font-mono"
+                  >{formatPrice(formData.price)}</span
+                >
               </div>
+              </div>
+              
             {:else}
               <div class="text-center py-8 text-gray-500">
                 <i class="fas fa-box-open text-4xl mb-4"></i>

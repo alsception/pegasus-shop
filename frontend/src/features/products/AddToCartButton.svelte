@@ -15,6 +15,10 @@
 
   const lottieAnimationUrl = '/lottie/check2.lottie';//or check2.lottie or success3
 
+  //TODO:
+  //index-DM9PQ1bj.js:42 Failed to load animation data from URL: /lottie/check2.lottie. Error: Failed to fetch animation data from URL: /lottie/check2.lottie. 403: 
+
+
 </script>
 
 {#if product.active === false || product.stock === 0}
