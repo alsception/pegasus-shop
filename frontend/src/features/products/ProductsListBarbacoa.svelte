@@ -34,8 +34,7 @@
   let totalProducts = 0; // If backend returns total count
   let totalPages = 0; // Total pages from backend
   let selectedCategory: number;
-  export let rows = 4;
-  
+  export let rows = 4;  
   
   const kategorije = [
     { id: 1, ime: "🧀 Predjela" },
@@ -92,7 +91,8 @@
   }
 
   // Fetch the products from the backend
-  onMount(async () => {
+  onMount(async () => 
+  {
     checkDarkmode();
     checkListViewParam();
 
@@ -202,7 +202,16 @@
     if(selectedCategory != id)
     {
       selectedCategory = id;
-      filteredProducts = products.filter((p) => p.category == id);
+
+      if(selectedCategory === 6){
+        //favourites, which are not in product.category but product.favourite
+        filteredProducts = products.filter((p) => p.favourite === true);
+      }
+      else
+      {
+        filteredProducts = products.filter((p) => p.category == id);
+      }
+      
     }
     else
     {
@@ -279,13 +288,13 @@
           {/if}
 
           <div
-            class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 /*whitespace-nowrap*/ w-full"
+            class="text-xs sm:text-md text-gray-600 dark:text-gray-400 /*whitespace-nowrap*/ w-full m-0 my-2"
           >    
             {#each kategorije as k}
               <button
               type="button" 
-                class="badge badge-neutral dark:badge-neutral bg-base-300 m-2
-                font-mono font-bold text-primary/80 badge-xs lg:badge-md cursor-pointer
+                class="badge badge-neutral dark:badge-neutral bg-base-300 m-1
+                font-mono font-bold text-primary/80 badge-md lg:badge-md cursor-pointer
               hover:bg-zinc-400/40 hover:outline-1 hover:outline-blue-600 btn"
               class:active={selectedCategory===k.id}
                 style="text-transform: uppercase; border-radius: 999px;"
@@ -398,7 +407,7 @@
 {/if}
 
 {#snippet btnNext()}
-<div class="fixed top-[90%] left-[72%] md:left-[80%] lg:left-[92%] z-[9000]">
+<div class="fixed top-[90%] left-[72%] md:left-[80%] lg:left-[88%] z-[9000]">
   <a class="btn btn-lg btn-primary border border-primary-content/40"
     use:link href="/cart">Dalje<i class="fas fa-arrow-right text-primary-content/60"></i></a>
 </div>

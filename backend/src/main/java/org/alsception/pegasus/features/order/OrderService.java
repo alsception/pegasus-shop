@@ -212,6 +212,12 @@ public class OrderService
             type = "2";
             order.setUPripremiAt(LocalDateTime.now());
         }
+        else if(status.equals("SERVED"))
+        {
+            msg = notificationService.createOrderServedText(order);
+            type = "3";
+            order.setServedAt(LocalDateTime.now());
+        }
         else 
         {
             msg = notificationService.createOrderStatusText(order);

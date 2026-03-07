@@ -5,7 +5,7 @@ public enum PGSOrderStatus
     WAITING,
     IN_PREPARATION,
     READY,
-    DELIVERED,
+    DELIVERED,//or served
     //---------
     CANCELLED,
     RETURNED

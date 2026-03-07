@@ -20,8 +20,10 @@ export interface Order {
   modified?: string | null; // LocalDateTime as ISO string, nullable so optional
   upripremiAt?: string | null;
   spremnoAt?: string | null;
-  deliveredAt?: string | null;
+  servedAt?: string | null;
   status?: string;
+  taxPercent?: number | string;
+  discount?: number | string;
 }
 
 export interface OrderItem {

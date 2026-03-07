@@ -93,6 +93,9 @@ public class PGSProduct {
     @Column
     private Boolean marked = false;   
     
+    @Column(nullable = true)
+    private Boolean favourite = false;   
+    
 //    @Version
 //    private Integer version; // Optimistic locking to prevent concurrent modification issues    
     

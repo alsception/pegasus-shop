@@ -532,20 +532,16 @@ i LITE APP!!, I MOZDA i WS.....
 {/snippet}
 
 {#snippet ordersReady()}     
-<!--   <div class="mb-4">
-    <h2 class="text-md rounded-lg font-bold text-gray-700 dark:text-gray-300 flex items-center gap-1 bg-green-500 text-black">
-      <span class="badge badge-soft badge-md badge-green bg-green-500" style="background: var(--color-green-500); color: black;">
-        <i class="fas fa-check"></i> SPREMNO</span>
-      <span class="text-md">({orders.filter(o => (o.status === 'READY' || o.status === 'SERVED' )).length})</span>
-    </h2>
-  </div>   -->
+
+<!-- TODO: ovde mora fix na mali ekran nevidi se dobro -->
+
   <div class="grid grid-cols-2 lg:flex lg:flex-wrap gap-4">
     {#each orders.filter(o => (o.status === 'READY' || o.status === 'SERVED' )) as order (order.id)}
     <div class="
       w-full
       lg:flex-grow
       lg:min-w-[200px]
-      lg:max-w-[300px]
+      lg:max-w-[280px]
       mt-2
     ">
       <OrderCardMd {order} liteView={true} on:orderUpdateCompleted={handleOrderUpdateCompleted}></OrderCardMd>
@@ -555,7 +551,6 @@ i LITE APP!!, I MOZDA i WS.....
 {/snippet}
 
 <style>
-
 
  .pgs-orders-wait-cntr{
   min-height: 100vh;

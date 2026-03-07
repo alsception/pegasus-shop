@@ -33,6 +33,7 @@ export interface Product
 
     other: string;
     marked?: boolean;
+    favourite?: boolean;
 
     created?: Date | EpochTimeStamp | string;
     modified?: Date | EpochTimeStamp | string;

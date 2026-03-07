@@ -134,6 +134,14 @@ public class NotificationService {
         return text;
     }
 
+    public String createOrderServedText(PGSOrder order)
+    {
+        String text = "Narudžba <b>"+order.getCode()+"</b> je poslužena" + 
+        ( order.getStol().isBlank() ? "" : 
+            (". Stol <b>"+order.getStol()+"</b>"));;
+        return text;
+    }
+    
     public String createOrderStatusText(PGSOrder order)
     {
         String text = "Narudžba <b>"+order.getCode()+"</b> je: <b>"+order.getStatus()+"</b>" + 

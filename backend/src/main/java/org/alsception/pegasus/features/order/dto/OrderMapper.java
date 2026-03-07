@@ -40,6 +40,7 @@ public final class OrderMapper {
         dto.setModified(order.getModified());
         dto.setUPripremiAt(order.getUPripremiAt());
         dto.setSpremnoAt(order.getSpremnoAt());
+        dto.setServedAt(order.getServedAt());
 
         if (order.getUser() != null) {
             dto.setUserId(order.getUser().getId());

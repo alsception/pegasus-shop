@@ -56,26 +56,18 @@
     status: "",
     paymentMethod: "",
     taxPercent: 0,
-    shippingCost: 0,
     discount: 0,
-    totalAmount: 0,
     currency: "",
-    customerName: "",
-    customerEmail: "",
-    customerPhone: "",
-    shippingAddress: "",
-    billingAddress: "",
-    trackingNumber: "",
-    notes: "",
+    comment: "",
     created: null,
     modified: null,
-    shippedDate: null,
-    deliveredDate: null,
+    servedAt: null,
     upripremiAt: null,
     spremnoAt: null,
   };
 
-  async function fetch(id: string | number) {
+  async function fetch(id: string | number) 
+  {
     startLoadingAnimation();
 
     try 
@@ -98,17 +90,19 @@
     }
   }
 
-  function processError(err: any) {
+  function processError(err: any) 
+  {
     formData = {};
     error =
       (err as Error)?.message ||
       "Order not found or an unknown error occurred. ERR_90";
   }
 
-  async function handleSubmit() {
-    try {
+  async function handleSubmit() 
+  {
+    try 
+    {
       loading = true;
-      console.log("sending data", formData);
       const response = await api<Order>(`/orders/${ID}`, {
         method: "PUT",
         body: JSON.stringify(formData),
@@ -116,10 +110,14 @@
 
       showSuccessToast("Order saved");
       fetch(ID);
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       console.log(err);
       showErrorInModal({ message: (err as Error).message });
-    } finally {
+    } 
+    finally 
+    {
       loading = false;
     }
   }
@@ -228,96 +226,91 @@
       class="max-w-7xl mx-auto bg-base-100 rounded-lg p-2 w-full space-y-8"
     >
       <!-- Order Information Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10 items-start">
-
+      <div
+        class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-4 pb-4 items-start border-b-2 border-secondary/10"
+      >
         <div>
           <h4 class="font-mono text-2xl">#{formData.code}</h4>
         </div>
 
         <div class="flex gap-6">
-          <h6 class="font-mono text-xl">
-            <i class="fas fa-user text-primary/40">&nbsp;</i>
+          <h6 class="font-mono text-md font-semibold">
+            <i class="fas fa-user text-primary/60">&nbsp;</i>
             {formData.user?.username}
           </h6>
-          <h6 class="font-mono text-xl">
-            <i class="fas fa-chair text-primary/40">&nbsp;</i>
+          <h6 class="font-mono text-md font-semibold">
+            <i class="fas fa-chair text-primary/60">&nbsp;</i>
             {formData.stol}
           </h6>
         </div>
 
-         <div class="absolute top-0 right-0">
-    {#if formData.status}
-      <span
-        class="badge badge-soft badge-{getOrderStatusColor(formData.status)} font-mono badge-lg uppercase font-bold"
-      >
-        {getOrderStatusLabel(formData.status)}
-      </span>
-    {/if}
-  </div>
-
+        <div class="absolute top-0 right-0">
+          {#if formData.status}
+            <span
+              class="badge badge-soft badge-{getOrderStatusColor(
+                formData.status
+              )} font-mono badge-lg uppercase font-bold"
+            >
+              {getOrderStatusLabel(formData.status)}
+            </span>
+          {/if}
+        </div>
       </div>
 
-      <div class="w-full">
+      <div class="w-full p-0 m-0 pb-4 mb-4 border-b-2 border-secondary/10">
         <div class="rounded-lg p-">
-          <ul class="steps steps-vertical lg:steps-horizontal w-full">
+          <ul
+            class="steps steps-vertical lg:steps-horizontal w-full text-primary/80"
+          >
             <li class="step step-secondary">
-              Primljeno: <br />{formattedTime(formData.created)}
+              <span class="flex flex-row lg:flex-col gap-1 items-center">
+                <span class="m-0 badge min-w-[110px]"
+                  ><i class="fas fa-edit"></i>Primljeno</span
+                >
+                <span class="font-mono font-bold badge-md badge badge-ghost"
+                  >{formattedTime(formData.created)}</span
+                >
+              </span>
             </li>
             <li
               class="step"
               class:step-secondary={formData.upripremiAt != null}
             >
-              U pripremi: <br />{formattedTime(formData.upripremiAt)}
+              <span class="flex flex-row lg:flex-col gap-1 items-center">
+                <span class="m-0 badge min-w-[110px]"
+                  ><i class="fas fa-fire"></i>U pripremi</span
+                >
+                <span class="font-mono font-bold badge-md badge badge-ghost"
+                  >{formattedTime(formData.upripremiAt)}</span
+                >
+              </span>
             </li>
             <li class="step" class:step-secondary={formData.spremnoAt != null}>
-              Spremno: <br />{formattedTime(formData.spremnoAt)}
+              <span class="flex flex-row lg:flex-col gap-1 items-center">
+                <span class="m-0 badge min-w-[110px]"
+                  ><i class="fas fa-check"></i>Spremno</span
+                >
+                <span class="font-mono font-bold badge-md badge badge-ghost"
+                  >{formattedTime(formData.spremnoAt)}</span
+                >
+              </span>
             </li>
             <li
               class="step"
-              class:step-secondary={formData.deliveredAt != null}
+              class:step-secondary={formData.servedAt != null}
             >
-              Servirano: <br />{formattedTime(formData.deliveredAt)}
-            </li>
-          </ul>
-
-          <div class="flex hidden">
-            <div
-              class="flex flex-col sm:flex-row flex-wrap gap-x-10 gap-y-2 text-md text-secondary"
-            >
-              <span
-                class="flex items-center gap-2 min-w-[100px] text-md badge badge-warning badge-lg"
-              >
-                <i class="fas fa-edit"></i>
-                <span class="font-mono font-bold"
-                  >{formattedTime(formData.created)}</span
+              <span class="flex flex-row lg:flex-col gap-1 items-center">
+                <span class="m-0 badge min-w-[110px]"
+                  ><i class="fas fa-check-double"></i>Servirano</span
+                >
+                <span class="font-mono font-bold badge-md badge badge-ghost"
+                  >{formattedTime(formData.servedAt)}</span
                 >
               </span>
-              {#if formData.upripremiAt != null}
-                <span
-                  class="flex items-center gap-2 min-w-[100px] text-md badge badge-info badge-lg"
-                >
-                  <i class="fas fa-fire"></i>
-                  <span class="font-mono font-bold"
-                    >{formattedTime(formData.upripremiAt)}</span
-                  >
-                </span>
-              {/if}
-
-              {#if formData.spremnoAt != null}
-                <span
-                  class="flex items-center gap-2 min-w-[100px] text-md badge badge-success badge-lg"
-                >
-                  <i class="fas fa-check"></i>
-                  <span class="font-mono font-bold"
-                    >{formattedTime(formData.spremnoAt)}</span
-                  >
-                </span>
-              {/if}
-            </div>
-          </div>
+            </li>
+          </ul>
         </div>
       </div>
-      <div class="h-px bg-neutral/20 w-full"></div>
 
       <!-- Order Items Section -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-4">
@@ -325,17 +318,12 @@
           <div class="space-y-4">
             {#if formData.items && formData.items.length > 0}
               <div class="divide-y divide-primary/10">
-                
                 {#each formData.items as item, index (item.id || index)}
                   <div
                     class="py-1 grid grid-cols-1 sm:grid-cols-3 gap-0 items-center"
                   >
                     <div class="sm:col-span-2 flex flex-col gap-0.5">
                       <div class="flex items-center gap-1">
-                        <!--     <div
-                          class="flex items-center rounded-md overflow-hidden border border-primary/10 dark:border-primary/5 shrink-0 h-6"
-                        ></div> -->
-
                         <p
                           class="text-sm sm:text-base font-medium text-primary/80 px-1"
                         >
@@ -347,26 +335,25 @@
                       </div>
                     </div>
 
-                    <div
-                      class="text-right sm:text-right pt-0 sm:pt-0 relative -top-6 h-0 sm:top-0  mt-[-1rem]"
-                    >
-                      <span class="text-sm sm:text-base text-primary/80 font-mono">
+                    <div class="text-right pt-0 sm:pt-0 relative mt-[0.14rem]">
+                      <span
+                        class="text-sm sm:text-base text-primary/80 font-mono"
+                      >
                         {formatPrice(item.quantity * item.product.basePrice)}
                       </span>
                     </div>
                   </div>
-
                 {/each}
                 <div
-                style="align-items: end;display:grid;align-content: end; text-align: right; "
-                class="p-0 mr-0"
-              >
-                <span class="text-2xl font-bold text-primary p0 pt-2 font-mono"
-                  >{formatPrice(formData.price)}</span
+                  style="align-items: end;display:grid;align-content: end; text-align: right; "
+                  class="p-0 mr-0"
                 >
+                  <span
+                    class="text-2xl font-bold text-primary p0 pt-2 font-mono"
+                    >{formatPrice(formData.price)}</span
+                  >
+                </div>
               </div>
-              </div>
-              
             {:else}
               <div class="text-center py-8 text-gray-500">
                 <i class="fas fa-box-open text-4xl mb-4"></i>
@@ -377,18 +364,8 @@
         </div>
       </div>
 
-      <!-- Full-width underline -->
-      <!--       <div class="h-px bg-neutral w-full"></div>
- -->
       <!-- Notes Section -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-1 mb-1">
-        <!--  <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">Notes</h3>
-          <p class="text-secondary text-sm mt-2">
-            Additional order notes and comments
-          </p>
-        </div> -->
-
         <div class="lg:col-span-2">
           <div class="w-full">
             <label
@@ -397,19 +374,17 @@
             >
               Napomena</label
             >
+            <!-- TODO: staviti ovde da bude veci rows ako ima comment -->
             <textarea
               id="notes"
               class="pgs-input resize-vertical rounded-md"
               style="background-color: var(--color-base-200);"
               bind:value={formData.comment}
-              rows="4"
+              rows="2"
             ></textarea>
           </div>
         </div>
       </div>
-
-      <!-- Full-width underline -->
-      <!-- <div class="h-px bg-neutral w-full hidden"></div> -->
 
       <div class="grid grid-cols-1 hidden">
         <div class="flex justify-end gap-3 pt-4">
@@ -447,8 +422,6 @@
 <style>
   .wrapper {
     display: flex;
-    /*     flex-direction: column;
- */
     align-items: center;
     justify-content: center;
     min-height: 70vh;

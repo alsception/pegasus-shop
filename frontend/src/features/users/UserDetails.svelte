@@ -94,7 +94,8 @@
     comment: "",
   };
 
-  async function fetch(id: string | number) {
+  async function fetch(id: string | number) 
+  {
     startLoadingAnimation();
 
     try {
@@ -199,13 +200,8 @@
     "#userForm input, #userForm select, #userForm textarea";
 
   //Instead of loading spinner, we will show skeletons
-  function startLoadingAnimation(): void {
-    // Remove display:none from #loadingMessage element
-    const loadingMessage = document.getElementById("loadingMessage");
-    if (loadingMessage) {
-      loadingMessage.style.display = "";
-    }
-
+  function startLoadingAnimation(): void 
+  { 
     const inputs = document.querySelectorAll<HTMLInputElement>(inputSkeletons);
     inputs.forEach((input) => {
       input.classList.add("skeleton");
@@ -213,13 +209,8 @@
     });
   }
 
-  function removeLoadingAnimation(): void {
-    // Add display:none to #loadingMessage element
-    const loadingMessage = document.getElementById("loadingMessage");
-    if (loadingMessage) {
-      loadingMessage.style.display = "none";
-    }
-
+  function removeLoadingAnimation(): void 
+  {
     const inputs = document.querySelectorAll<HTMLInputElement>(inputSkeletons);
     inputs.forEach((input) => {
       input.classList.remove("skeleton");
@@ -302,7 +293,7 @@
         class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
       >
         <div>
-          <h3 class="text-3xl font-semibold text-primary">Korisnik</h3>
+          <h3 class="text-3xl font-semibold text-primary">Korisnik</h3>&nbsp;
           <div id="loadingMessage" style="display: none;" class="mt-2">
             <span class="loading loading-dots loading-xs"></span>
           </div>

@@ -66,6 +66,9 @@ public class PGSOrder
 
     @Column(nullable = true)
     private LocalDateTime spremnoAt;
+    
+    @Column(nullable = true)
+    private LocalDateTime servedAt;
 
     // Ključno polje za sinkronizaciju
     private boolean synced = false;

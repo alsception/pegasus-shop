@@ -29,4 +29,5 @@ public class OrderDTO {
     private LocalDateTime modified;
     private LocalDateTime uPripremiAt;
     private LocalDateTime spremnoAt;
+    private LocalDateTime servedAt;
 }

@@ -170,7 +170,6 @@
                                 updateCart(item);
                               }
                             }}
-                            aria-label="Ukloni"
                           >
                             -
                           </button>
@@ -190,7 +189,6 @@
                                 updateCart(item);
                               }
                             }}
-                            aria-label="Dodaj"
                           >
                             +
                           </button>
@@ -209,12 +207,12 @@
                       <div class="flex items-center w-fit">
                         <button
                           type="button"
-                          class="btn btn-ghost btn-sm text-error h-3 mx-4 mb-2 mt-2"
+                          class="btn btn-ghost btn-sm text-pink-600 h-3 mx-4 mb-2 mt-2 pt-1"
                           aria-label="Delete"
                           on:click={() => deleteCartItem(item.product.id)}
                         >
                           <i class="fa fa-remove text-md cursor-pointer"> </i>
-                          <span class="pt-1"> Ukloni</span>
+                          <span> Ukloni</span>
                         </button>
                       </div>
                     </div>

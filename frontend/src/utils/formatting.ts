@@ -128,7 +128,7 @@ export const formattedTime = (value: string | number | Date | null | undefined):
     if (!value) return "-";
     const date = new Date(value);
     if (isNaN(date.getTime())) return "-";
-    return date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false });
+    return date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", second:"2-digit", hour12: false });
 };
 
 export function formatActive(active: boolean | null | undefined)
@@ -217,6 +217,11 @@ export function getOrderStatusLabel(status: string ): string
     }
 }
 
+/**
+ * 
+ * @param price
+ * @returns  Cena sa euro znakom i formatirano sa zarezom za decimalu i tackom za hiljade kako treba
+ */
 export function formatPrice(price: number | undefined): string 
 {
   if (price === undefined || price === null) 
@@ -227,5 +232,17 @@ export function formatPrice(price: number | undefined): string
   return new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(
     price,
   )
+
+}  
+
+/**Cena, bez euro znaka */
+export function formatPriceRaw(price: number | undefined): string 
+{
+  if (price === undefined || price === null) 
+  {
+    return "0,00";
+  }
+  
+  return new Intl.NumberFormat("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(price);
 
 }  

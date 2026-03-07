@@ -9,6 +9,7 @@
     isNew,
     formatTime2,
     formatPrice,
+    formatPriceRaw,
   } from "../../utils/formatting";
   import axios from "axios";
   import { showErrorModal } from "../../utils/modal";
@@ -321,7 +322,7 @@
     -->
 <div
   class="rounded-xl p-2 flex flex-col gap-1 h-fit
-         shadow border border-primary/4
+         shadow border border-primary/4 hover:outline-blue-500 hover:outline-2
         {getBgClass(order.status)}"
   class:card-new={isNew(order.created, 10) && order.status == "WAITING"}
 >
@@ -336,10 +337,12 @@
         class="text-2xl font-extrabold text-primary pgs-hyperlink"
         >{formatCode(order.code)}</a
       >
-
-      <!-- <span class="badge badge-soft badge-{getOrderStatusColor(order.status)} font-mono badge-md ml-auto" style="text-transform: uppercase;">
-                {getOrderStatusLabel(order.status)}
-              </span> -->
+      <!-- TODO: Ovde isto prikazati bolje -->
+      <div
+      class="text-sm hidden md:flex items-center text-primary/60 gap-2"
+    >
+      <i class="fas fa-clock"></i>{@html formatTime2(order.created)}
+    </div>
 
       {#if isNew(order.created, 10)}
         <div>
@@ -374,6 +377,12 @@
     >
       <i class="fas fa-clock"></i>{@html formatTime2(order.created)}
     </div>
+    {#if order.status == "READY" || order.status == "SERVED"}    
+    <div class="flex items-center gap-1 text-sm text-primary/60 mr-2 hidden md:flex">
+      <i class="fas fa-euro"></i>
+      <span><strong>{ formatPriceRaw(order.price)}</strong></span>
+    </div>
+    {/if}
   </div>
 
   {#if order.status != "READY" && order.comment && order.comment.toString.length > -1}
@@ -454,7 +463,7 @@
   <div class="modal modal-open pt-10" style="backdrop-filter: blur(10px);">
     <div
       class="modal-box max-h-[95vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-100"
-      transition:fly={{ y: 50, duration: 300 }}
+      transition:fly={{ y: 50, duration: 250 }}
     >
       <!-- Fixed Header -->
       <div
