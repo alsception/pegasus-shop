@@ -5,14 +5,14 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<PGSNotification, Long> {
     
     // Find all notifications for a specific user
-    List<PGSNotification> findByToOrderByCreatedDesc(String to);
+    List<PGSNotification> findByToAndCreatedGreaterThanEqualOrderByCreatedDesc(String to, LocalDateTime created);
     
     // Find unread notifications for a user
     List<PGSNotification> findByToAndReadFalseOrderByCreatedDesc(String to);

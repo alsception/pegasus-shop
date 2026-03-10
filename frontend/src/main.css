@@ -443,3 +443,8 @@ body {
     @apply /*outline-1 outline-transparent hover:outline-blue-500*/ hover:bg-zinc-600/45
   }
 }
+
+.gg{
+  background: linear-gradient(135deg, #a8edca, #00b894);
+    background: linear-gradient(135deg, #39ff14, #008000);
+}

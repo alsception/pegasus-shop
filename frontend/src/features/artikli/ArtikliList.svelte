@@ -13,7 +13,6 @@
   import { showErrorModalWithTitle } from "../../utils/modal";
   import { fly } from "svelte/transition";
 
-
   document.title = "Artikli | Pegasus";
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;

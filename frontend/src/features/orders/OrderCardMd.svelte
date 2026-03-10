@@ -10,6 +10,7 @@
     formatTime2,
     formatPrice,
     formatPriceRaw,
+    getOrderCardBgClass,
   } from "../../utils/formatting";
   import axios from "axios";
   import { showErrorModal } from "../../utils/modal";
@@ -168,102 +169,7 @@
     }
     return config;
   });
-
-  function getOrderStatusColor(status: string | null | undefined): string {
-    switch (status?.toUpperCase()) {
-      case "READY":
-      case "DELIVERED":
-        return "success";
-      case "CANCELLED":
-      case "REFUNDED":
-        return "warning";
-      case "RETURNED":
-        return "error";
-      case "IN_PREPARATION":
-        return "info";
-      case "WAITING":
-        return "warning";
-      default:
-        return "secondary";
-    }
-  }
-
-  function getOrderStatusLabel(status: string | null | undefined): string {
-    switch (status?.toUpperCase()) {
-      case "READY":
-        return "SPREMNO";
-      case "DELIVERED":
-        return "SERVIRANO";
-      case "CANCELLED":
-      case "REFUNDED":
-        return "warning";
-      case "RETURNED":
-        return "error";
-      case "IN_PREPARATION":
-        return "U PRIPREMI";
-      case "WAITING":
-        return "NA ČEKANJU";
-      default:
-        return "-";
-    }
-  }
-
-  function getBgClass(status: string | null | undefined): string {
-    /**
-     * Tip narudžbe	Boja pozadine (Dark Mode)	Boja teksta/border-a	Opis
-    Žuta (Na čekanju)	bg-yellow-900/20	text-yellow-500/80	Boja ćilibara, suptilna i topla.
-    Plava (U obradi)	bg-blue-900/20	text-blue-500/80	Tamna teget-plava, smirena.
-    Zelena (Završeno)	bg-emerald-900/20	text-emerald-500/80	Duboka šumska zelena, odmara oči.
-    */
-
-    switch (status?.toUpperCase()) {
-      case "WAITING":
-        return "bg-[#FEBB0036]"; //"bg-yellow-700/30";//"bg-[#525214]";
-
-      case "IN_PREPARATION":
-        //return "bg-[#0077FF3A]"/* blue-900/30"/;
-        return "bg-base-200 dark:bg-base-100";
-
-      case "READY":
-      case "DELIVERED":
-      case "SERVED":
-        return "bg-emerald-500/20";
-
-      case "CANCELLED":
-      case "REFUNDED":
-        return "warning";
-
-      case "RETURNED":
-        return "error";
-
-      default:
-        return "bg-base-300/60 dark:bg-base-200 ";
-    }
-  }
-
-  function getBgStyle(status: string | null | undefined): string {
-    /**
-     * Tip narudžbe	Boja pozadine (Dark Mode)	Boja teksta/border-a	Opis
-    Žuta (Na čekanju)	bg-yellow-900/20	text-yellow-500/80	Boja ćilibara, suptilna i topla.
-    Plava (U obradi)	bg-blue-900/20	text-blue-500/80	Tamna teget-plava, smirena.
-    Zelena (Završeno)	bg-emerald-900/20	text-emerald-500/80	Duboka šumska zelena, odmara oči.
-    */
-
-    switch (status?.toUpperCase()) {
-      case "WAITING":
-        return "";
-
-      case "IN_PREPARATION":
-        return "";
-
-      case "READY":
-      case "DELIVERED":
-        return "";
-
-      default:
-        return "secondary";
-    }
-  }
+  
 
   /* drugi modal */
   let showModal2 = false;
@@ -323,8 +229,8 @@
 <div
   class="rounded-xl p-2 flex flex-col gap-1 h-fit
          shadow border border-primary/4 hover:outline-blue-500 hover:outline-2
-        {getBgClass(order.status)}"
-  class:card-new={isNew(order.created, 10) && order.status == "WAITING"}
+        {getOrderCardBgClass(order.status)}"
+        class:card-new={isNew(order.created, 10) && order.status == "WAITING"}      
 >
   <div class="flex items-center justify-between mb-1 ml-1">
     <div
@@ -338,12 +244,13 @@
         >{formatCode(order.code)}</a
       >
       <!-- TODO: Ovde isto prikazati bolje -->
-      <div
-      class="text-sm hidden md:flex items-center text-primary/60 gap-2"
-    >
-      <i class="fas fa-clock"></i>{@html formatTime2(order.created)}
-    </div>
-
+        {#if order.status != 'IN_PREPARATION'}
+          <div
+          class="text-sm hidden md:flex items-center text-primary/60 gap-2"
+        >    
+          <i class="fas fa-clock"></i>{@html formatTime2(order.created)}
+        </div>
+      {/if}
       {#if isNew(order.created, 10)}
         <div>
           <div
@@ -378,28 +285,40 @@
       <i class="fas fa-clock"></i>{@html formatTime2(order.created)}
     </div>
     {#if order.status == "READY" || order.status == "SERVED"}    
-    <div class="flex items-center gap-1 text-sm text-primary/60 mr-2 hidden md:flex">
+    <div class="items-center gap-1 text-sm text-primary/60 mr-2 hidden md:flex">
       <i class="fas fa-euro"></i>
       <span><strong>{ formatPriceRaw(order.price)}</strong></span>
     </div>
     {/if}
   </div>
+  <div class="h-px bg-neutral/40 w-full mb-1"></div>
 
-  {#if order.status != "READY" && order.comment && order.comment.toString.length > -1}
-    <div>
+  {#if order.comment && order.comment.toString.length > -1 && (order.status != 'READY' && order.status != 'SERVED')}
+
+  <div>
       <span
-        class="indicator-item badge badge-info bg-black text-yellow-200 rounded-md"
+        class="indicator-item badge badge-ghost text-primary font-bold rounded-md mt-3"
         style=""
       >
-        Napomena
+        Napomena:
       </span>
       <br />
       <div
-        class=" bg-base-300/66 dark:bg-gray-800 border-1 border-primary/30 dark:border-gray-800 text-primary p-1 font-bold py-2 px-3 rounded-md"
+        class=" 
+          border-0 border-info bg-base-100 text-primary p-1  py-2 px-3 rounded-lg break-words mb-4"
+          class:truncate={ order.status != 'IN_PREPARATION'}
+          class:max-w-xs={ order.status != 'IN_PREPARATION'}          
+          title="{order?.comment}"
       >
-        {order.comment}
+      <div class="chat chat-start">
+        <div class="chat-bubble chat-bubble-neutral text-primary">
+          {order.comment}
+        </div>
       </div>
     </div>
+  </div>
+  <div class="h-px bg-neutral/40 w-full mb-2"></div>
+
   {/if}
 
   <div class="mt-2" class:hidden={liteView}>
@@ -412,6 +331,8 @@
             <span class="text-primary text-md font-bold"
               >{item.quantity}&nbsp;x&nbsp;</span
             >
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
             <span
               class="text-primary text-md pgs-hyperlink p-0 font-normal"
               on:click={() => handleProductClick(item.productId)}

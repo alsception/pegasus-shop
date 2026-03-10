@@ -137,7 +137,7 @@ public class UserService
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
-    private PGSUser findByUsername(String username)
+    public PGSUser findByUsername(String username)
     {
         return repository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));

@@ -4,11 +4,15 @@
   import { fly } from "svelte/transition";
   export let table: PGSTable;
 
-  function getBgClass(table: PGSTable): string {
-    if (table.occupied === true) {
-      return "bg-red-400/80 dark:bg-red-900/80 ";
-    } else {
-      return "bg-green-400/80 dark:bg-green-900/70";
+  function getBgClass(table: PGSTable): string 
+  {
+    if (table.occupied === true) 
+    {
+      return "bg-gradient-to-r from-pink-300/60 to-red-400/60 dark:from-pink-800/80 dark:to-red-800/60 "
+    } 
+    else 
+    {
+      return "bg-gradient-to-r from-emerald-400/60 to-teal-600/60 dark:from-emerald-700/60 dark:to-teal-800/60"
     }
   }
 </script>

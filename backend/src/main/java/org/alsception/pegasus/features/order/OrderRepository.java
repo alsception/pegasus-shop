@@ -26,6 +26,11 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
    List<PGSOrder> findOrdersByUsernameAndStatus(@Param("username") String username, @Param("status") String status);
 
    // ========== LAZY LOADING: Orders bellow will be loaded WITH items (eager loading with JOIN FETCH) ==========
+   
+   /**
+    *   TODO: ovde moramo filtrirati po daily session a ne po o.created >= CURRENT_DATE
+    *
+    */
 
    /**
        * We use this one in production
@@ -43,6 +48,18 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
             ORDER BY o.created ASC
          """)
    List<PGSOrder> findByUsernameWithItems(@Param("username") String username);
+   
+   @Query("""
+            SELECT DISTINCT o FROM PGSOrder o
+            LEFT JOIN FETCH o.items
+            LEFT JOIN FETCH o.user u
+            WHERE 
+            (
+                  o.created >= CURRENT_DATE
+            )
+            ORDER BY o.created ASC
+         """)
+   List<PGSOrder> findWithItems();
 
    @Query("""
          SELECT DISTINCT o FROM PGSOrder o
@@ -77,6 +94,23 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
          """)
          
    List<PGSOrder> findByUsernameAndCodeOrTableWithItems(@Param("username") String username, @Param("search") String search);
+   
+   @Query("""
+         SELECT DISTINCT o FROM PGSOrder o
+         LEFT JOIN FETCH o.items
+         LEFT JOIN FETCH o.user u
+         WHERE 
+         (
+            o.code LIKE :search OR o.stol LIKE :search            
+         )
+         AND
+         (
+            o.created >= CURRENT_DATE
+         )   
+         ORDER BY o.created ASC
+         """)
+         
+   List<PGSOrder> findByCodeOrTableWithItems(@Param("search") String search);
 
    @Query("""
          SELECT DISTINCT o FROM PGSOrder o

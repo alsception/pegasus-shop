@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 import org.alsception.pegasus.core.exception.BadRequestException;
 import org.alsception.pegasus.features.order.dto.OrderDTO;
 import org.alsception.pegasus.features.order.dto.OrderMapper;
+import org.alsception.pegasus.features.users.PGSUser;
+import org.alsception.pegasus.features.users.PGSUserRole;
+import org.alsception.pegasus.features.users.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +21,13 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     private final OrderService orderService;
+    private final UserService userService;
     
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService,UserService userService) {
         this.orderService = orderService;
+        this.userService = userService;
     }
 
     /* =========================
@@ -59,18 +64,31 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<List<OrderDTO>> find(
             Principal principal,
-            @RequestParam(required = false) String search) {
-
+            @RequestParam(required = false) String search) 
+    {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-
+        PGSUser requestor = userService.findByUsername(username);
         logger.debug("Getting orders for: {}, search: [{}]", username, search);
-
-        List<OrderDTO> result = orderService
-                .getByUsername(username, search)
+        List<OrderDTO> result;
+        
+        //Moze da vidi sve
+        if( requestor.getRole().equals(PGSUserRole.ADMIN) || requestor.getRole().equals(PGSUserRole.KITCHEN) )
+        {
+            result = orderService
+                .get( search )
                 .stream()
-                .map(OrderMapper::toDto)
+                .map( OrderMapper::toDto )
                 .collect(Collectors.toList());
+        }
+        else //moze da vidi samo svoje
+        {
+            result = orderService
+                .getByUsername( username, search )
+                .stream()
+                .map( OrderMapper::toDto )
+                .collect(Collectors.toList());
+        }      
 
         return ResponseEntity.ok(result);
     }

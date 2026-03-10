@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   /**
    * We will pass parameters to this button:
    * 1. product: The product to be added to the cart.
@@ -18,6 +19,10 @@
   //TODO:
   //index-DM9PQ1bj.js:42 Failed to load animation data from URL: /lottie/check2.lottie. Error: Failed to fetch animation data from URL: /lottie/check2.lottie. 403: 
 
+  if ($addedItems.has(product.id)){
+    console.log('has '+product.id)
+  }
+  
 
 </script>
 

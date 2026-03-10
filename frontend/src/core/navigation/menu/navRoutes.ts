@@ -21,8 +21,8 @@ export const navRoutes: NavRoutesMap =
       href: "#/stats",
       component: "/stats",
       admin: true,
-      customer: true,
-      default: true,
+      customer: false,
+      default: false,
     },
     "/users": {
       label: "Korisnici",
@@ -34,13 +34,14 @@ export const navRoutes: NavRoutesMap =
       customer: false,
     },
     "/products": {
-      label: "Proizvodi",
-      icon: "box",
+      label: "Jelovnik",
+      icon: "book",
       href: "#/products",
       component: "/products",
       componentDetails: "/products/:id",
       admin: true,
       customer: true,
+      default: true,
     },
     "/products/mngmt/:id": {
       label: "Upravljanje proizvodima",

@@ -34,7 +34,7 @@
   let totalProducts = 0; // If backend returns total count
   let totalPages = 0; // Total pages from backend
   let selectedCategory: number;
-  export let rows = 4;  
+  export let hideButtonDalje = false;
   
   const kategorije = [
     { id: 1, ime: "🧀 Predjela" },
@@ -402,7 +402,9 @@
         <ProductCard {product} />
       {/each}
     </div>
-    {@render btnNext()}
+    {#if !hideButtonDalje}
+      {@render btnNext()}  
+    {/if}    
   {/if}
 {/if}
 

@@ -124,7 +124,7 @@
         <i id="notifications-icon" class="fas fa-bell text-sm md:text-lg"></i>
         <span
           id="notifications-indicator"
-          class="text-sm text-white bg-error px-1 hidden"
+          class="text-sm text-zinc-50 bg-error px-1 hidden"
           style="position: relative;top: -0.5rem;left: -0.5rem;">12</span
         >
       </button>

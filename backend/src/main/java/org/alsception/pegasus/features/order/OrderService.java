@@ -68,6 +68,26 @@ public class OrderService
         return processPrice(orders);
     }
     
+    @Transactional(readOnly = true)
+    public List<PGSOrder> get(String search) 
+    {    
+        List<PGSOrder> orders;
+       
+        if(search == null || "".equals(search)) 
+        {
+            orders = orderRepository.findWithItems();
+        }
+        else
+        {
+            orders = orderRepository.findByCodeOrTableWithItems("%"+search.replace("-", "").toUpperCase()+"%");   //Need to remove dashes from code. And also make it case sens
+        }
+
+        //NEXT: MAKE SEARCH CASE INSENSITIVE
+
+        return processPrice(orders);
+    }
+    
+    
     /**
      *  Price should be calculated at the moment of order creation (checkout).
      *  This is just the temporary use for old orders missing

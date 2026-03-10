@@ -19,6 +19,7 @@
   let loading: boolean = false;
   let error: string | null = null;
   export let ID: number | string;
+  let rows = 2;
 
   //Authenticacion
   $: isAuthenticated = $auth.isAuthenticated;
@@ -79,6 +80,8 @@
       formData = data;
       document.title = `Narudžba ${formData.code} | Pegasus`;
       error = null;
+      if(formData.comment && formData.comment.toString.length > -1 )
+        rows = 5;
     } 
     catch (err) 
     {
@@ -329,7 +332,7 @@
                         >
                           {item.quantity} x {item.product.name}
                           {#if item.quantity > 1}
-                            ({formatPrice(item.product.basePrice)})
+                            <span class="text-xs text-primary/40"> ({formatPrice(item.product.basePrice)}) </span>
                           {/if}
                         </p>
                       </div>
@@ -380,7 +383,7 @@
               class="pgs-input resize-vertical rounded-md"
               style="background-color: var(--color-base-200);"
               bind:value={formData.comment}
-              rows="2"
+              rows="{rows}"
             ></textarea>
           </div>
         </div>

@@ -75,7 +75,7 @@
     </div>
   {:else}
     <button
-      class="btn btn-sm btn-info text-info-content w-full"
+      class="btn btn-sm btn-success text-info-content w-full"
       on:click={(e) => {
         e.preventDefault();
         updateOrderState(order.id, "READY");

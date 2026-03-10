@@ -96,7 +96,9 @@
 
     <form
       on:submit|preventDefault={handleLogin}
-      class="w-full max-w-md relative p-6 px-10 pb-10 m-[5px] rounded-2xl bg-zinc-950/84 backdrop-blur-lg border border-primary/14"
+      class="w-full max-w-md relative p-6 px-10 pb-10 m-[5px] rounded-2xl bg-zinc-950/84 bg-gradient-to-br 
+                from-gray-50/80 via-base-200/80 to-zinc-100/80 
+                dark:from-gray-900/40 dark:via-base-200/40 dark:to-zinc-800/40 border border-2 border-base-200  backdrop-blur-lg /*border border-primary/14*/"
     >
       {#if loading}
         <LoadingOverlay />
@@ -104,7 +106,7 @@
 
       <label
         for="username"
-        class="block text-md font-semibold mb-2 text-zinc-300"
+        class="block text-md font-semibold mb-2 text-zinc-700 dark:text-zinc-300"
       >
         <i class="fas fa-user text-sm mx-2"></i>Username
       </label>
@@ -118,7 +120,7 @@
 
       <label
         for="password"
-        class="block text-md font-semibold mb-2 text-zinc-300"
+        class="block text-md font-semibold mb-2 text-zinc-700 dark:text-zinc-300"
       >
         <i class="fas fa-lock text-sm mx-2"></i>Password
       </label>

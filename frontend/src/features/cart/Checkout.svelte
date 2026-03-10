@@ -132,10 +132,18 @@
                         <i class="fas fa-chair text-md text-primary/60 mr-2"
                         ></i>Stol
                       </label>
+                      <input
+                        id="stol"
+                        class="pgs-input font-mono input-ghost font-bold"
+                        style="border: none;"
+                        placeholder=""
+                        disabled
+                        bind:value={$brojStola}
+                      />
                       <select
                         id="stol"
                         bind:value={$brojStola}
-                        class="pgs-input font-mono font-bold"
+                        class="pgs-input font-mono font-bold hidden"
                         style="border: none;"
                       >
                         {#each stolovi as sto}

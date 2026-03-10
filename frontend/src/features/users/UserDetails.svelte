@@ -140,7 +140,7 @@
       //Ce da baci exception api ako se desi greska
 
       showSuccessToast("Sačuvano");
-      push("/users"); //TODO: AKO je my-account onda netreba ovo
+      push("/home"); //TODO: AKO je my-account onda netreba ovo
     } catch (err) {
       // fallback if fetch itself fails (e.g. network error)
       showErrorInModal({ message: (err as Error).message });

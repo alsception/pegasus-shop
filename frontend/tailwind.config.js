@@ -45,5 +45,10 @@ module.exports = {
     'color-stone-800',
     'color-stone-900',
     'color-stone-950',
+    'color-red-500',
+    'color-blue-500',
+    'color-orange-500',
+    'color-green-500',
+    'color-yellow-500'
   ],
 };

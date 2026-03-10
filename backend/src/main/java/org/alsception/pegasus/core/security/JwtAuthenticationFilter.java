@@ -120,9 +120,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             && 
             (
                 request.getRequestURI().equals("/")             || 
-                request.getRequestURI().startsWith("/assets/") ||
-                request.getRequestURI().endsWith(".js")         ||
-                request.getRequestURI().endsWith(".css")         ||
+                request.getRequestURI().startsWith("/assets/")    ||
+                request.getRequestURI().startsWith("/sound/")     ||
+                request.getRequestURI().endsWith(".js")           ||
+                request.getRequestURI().endsWith(".css")          ||
                 request.getRequestURI().equals("/pegasus-icon.png")
             )))
         {

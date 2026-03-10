@@ -65,6 +65,7 @@
     <span class="loading loading-dots loading-xs"></span>
   </button> -->
 {:else}
+<!-- svelte-ignore a11y_consider_explicit_label -->
 <button
   class="btn btn-circle btn-ghost bg-base-100 flex items-center justify-center"
   on:click={handleClick}
@@ -85,7 +86,7 @@
       
       <!-- Scrollable Content -->
       <div class="overflow-y-auto flex-1 /*px-1 py-1*/">
-        <ProductsListBarbacoa rows={3}></ProductsListBarbacoa>
+        <ProductsListBarbacoa hideButtonDalje={true}></ProductsListBarbacoa>
       </div>
       
       <!-- Fixed Footer -->

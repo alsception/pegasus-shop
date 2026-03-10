@@ -102,8 +102,7 @@
   {#if tables.length === 0 && !loading}
     No tables found :/
   {:else}
-    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-8 lg:grid-cols-6 gap-6">
-    
+    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-8 gap-0">    
       {#each tables as table, i}
         <TableCard {table} />
       {/each}

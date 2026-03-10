@@ -62,7 +62,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/", 
-                    "/index.html", 
+                    "/index.html",                      
                     "/static/**", 
                     "/assets/**", 
                     "/lottie/**", //animations
@@ -72,7 +72,9 @@ public class SecurityConfig {
                     "/*.png", 
                     "/*.js", 
                     "/*.css",
-                    "/*.webmanifest"  // za PWA
+                    "/*.webmanifest",  // za PWA
+                    "/kik",             //kik frontend
+                    "/kik/index.html"  
                 ).permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/test/**").permitAll()

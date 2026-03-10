@@ -73,6 +73,7 @@ export async function addToCart(productId: number): Promise<void>
 
 export function resetCartItems() 
 {
+  //console.log('reseting cart items');//TODO: CUDNO PONASANJE, ako nema ovog console.loga izlgeda kao da neresetuje
   addedItems.set(new Set());
   loadingItems.set(new Set());
 }

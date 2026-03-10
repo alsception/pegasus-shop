@@ -55,10 +55,11 @@ export function formatTime(dateStr: string | number | Date | null | undefined, t
     if (diffInMinutes < minDiff) 
     {
         output = `<div>
+                    <span class="indicator-item badge badge-info dark:text-black dark:bg-violet-800 dark:text-primary">🔥 `+badgeInfo+`</span><br>
                     <div class=" tooltip tooltip-info cursor-pointer" data-tip="`+tooltip+` - Stiglo prije manje od `+minDiff+` minuta ">
                         <span class="text-primary font-bold"> ${formattedDateTime} </span>
                     </div>
-                    <span class="indicator-item badge badge-info dark:text-black dark:bg-amber-300">🔥 `+badgeInfo+`</span>
+                    
                   </div>`;
     }
     else
@@ -201,21 +202,66 @@ export function getOrderStatusLabel(status: string ): string
     {
       case "READY":      
         return "SPREMNO";
+
       case "DELIVERED":
+      case "SERVED":
         return "SERVIRANO"
+
       case "CANCELLED":
       case "REFUNDED":
         return "warning";
+
       case "RETURNED":
         return "error";
+
       case "IN_PREPARATION":
         return "U PRIPREMI";
+
       case "WAITING":
         return "NA ČEKANJU";
+        
       default:
         return status;
     }
 }
+
+export function getOrderCardBgClass(status: string | null | undefined): string 
+{
+    /**
+     * Tip narudžbe	Boja pozadine (Dark Mode)	Boja teksta/border-a	Opis
+    Žuta (Na čekanju)	bg-yellow-900/20	text-yellow-500/80	Boja ćilibara, suptilna i topla.
+    Plava (U obradi)	bg-blue-900/20	text-blue-500/80	Tamna teget-plava, smirena.
+    Zelena (Završeno)	bg-emerald-900/20	text-emerald-500/80	Duboka šumska zelena, odmara oči.
+    */
+
+    switch (status?.toUpperCase()) {
+      case "WAITING":
+        return  "bg-gradient-to-br "
+              + "from-zinc-100 via-amber-100 to-yellow-100 "
+              + "dark:from-zinc-950 dark:via-amber-950 dark:to-yellow-900 ";
+
+      case "IN_PREPARATION":
+        return  "bg-base-200 dark:bg-zinc-900 border border-2 border-base-200 "
+                + " dark:bg-gradient-to-r dark:from-zinc-900 dark:to-zinc-900";
+
+      case "READY":
+      case "DELIVERED":
+      case "SERVED":
+        return "bg-gradient-to-br "+
+                "from-slate-100 dark:from-slate-900 via-green-100 dark:via-green-950  to-emerald-100 "+
+                "dark:to-emerald-900 "
+
+      case "CANCELLED":
+      case "REFUNDED":
+        return "warning";
+
+      case "RETURNED":
+        return "error";
+
+      default:
+        return "bg-base-300/60 dark:bg-base-200 ";
+    }
+  }
 
 /**
  * 

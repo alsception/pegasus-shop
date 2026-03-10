@@ -113,6 +113,7 @@
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="form-control md:col-span-2">
+              <!-- svelte-ignore a11y_label_has_associated_control -->
               <label class="label">
                 <span class="label-text font-semibold">👤 Ime</span>
                 <span class="label-text-alt text-error">*obavezno</span>
@@ -125,6 +126,7 @@
               />
             </div>
             <div class="form-control">
+              <!-- svelte-ignore a11y_label_has_associated_control -->
               <label class="label">
                 <span class="label-text font-semibold">📅 Datum</span>
                 <span class="label-text-alt text-error">*obavezno</span>
@@ -138,6 +140,7 @@
             </div>
 
             <div class="form-control">
+              <!-- svelte-ignore a11y_label_has_associated_control -->
               <label class="label">
                 <span class="label-text font-semibold">🕐 Vreme</span>
               </label>
@@ -157,6 +160,7 @@
             
 
             <div class="form-control">
+              <!-- svelte-ignore a11y_label_has_associated_control -->
               <label class="label">
                 <span class="label-text font-semibold">📧 Email</span>
               </label>
@@ -168,6 +172,7 @@
             </div>
 
             <div class="form-control">
+              <!-- svelte-ignore a11y_label_has_associated_control -->
               <label class="label">
                 <span class="label-text font-semibold">📞 Telefon</span>
               </label>
@@ -179,6 +184,7 @@
             </div>
 
             <div class="form-control md:col-span-2">
+              <!-- svelte-ignore a11y_label_has_associated_control -->
               <label class="label">
                 <span class="label-text font-semibold">👥 Broj Gostiju</span>
                 <span class="label-text-alt text-error">*obavezno</span>
@@ -279,6 +285,7 @@
 
           <!-- Status Options -->
           <div>
+            <!-- svelte-ignore a11y_label_has_associated_control -->
             <label class="label">
               <span class="label-text font-semibold">Status</span>
             </label>

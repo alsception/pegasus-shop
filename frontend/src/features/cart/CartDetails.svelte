@@ -199,7 +199,7 @@
                         >
                           {item.product.name}
                           {#if item.quantity > 1}
-                            ({formatPrice(item.product.basePrice)})
+                            <span class="text-sm text-primary/50"> ({formatPrice(item.product.basePrice)}) </span>
                           {/if}
                       </div>
                       </div>

@@ -4,10 +4,12 @@
     import { link } from "svelte-spa-router";
     import { auth } from "../services/SessionStore";
     import { showInfoToast, showPlusToast, showSuccessToast } from "../utils/toaster";
-  import { playNotificationSound } from "../../utils/sound";
-  import { formatDateTime } from "../../utils/formatting";
+    import { playNotificationSound } from "../../utils/sound";
+    import { formatDateTime } from "../../utils/formatting";
 
     const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+    const REFRESH_INTERVAL = 5000; // 5 sekundi
 
     let notifications = [
     {
@@ -19,16 +21,17 @@
  
     let notificationsMap = new Map();
     let interval: any;
+    let ntfCounter = 0;
 
     onMount(() => 
     {        
         // 1. Prvo učitavanje odmah
         fetchNotifications(true);
 
-        // 2. Fetchuj na svakih 2 sekundi
+        // 2. Fetchuj na svakih 5 sekundi
         interval = setInterval(() => {
             fetchNotifications(false);
-        }, 2000);
+        }, REFRESH_INTERVAL);
     });
 
     onDestroy(() => 
@@ -65,8 +68,8 @@
     function processNotifications(data: any[], skipit: boolean) 
     {
         notifications = data; // Update-ujemo listu za UI
-
-        data.forEach((notification: any) => {
+        let shouldPlaySound = false;
+        data.forEach((notification: any,index) => {
             // 3. Ako se pojavi nova koja nije u mapi
             if (!notificationsMap.has(notification.id)) 
             {
@@ -79,14 +82,21 @@
                 // možeš dodati proveru: if (notificationsMap.size > data.length)
                 if(!skipit)
                 {
-                    showInfoToast(notification.text || notification.title, notification.type)
-                    playNotificationSound('info');
+                    shouldPlaySound = true;
+                    ntfCounter++;
+
+                    setTimeout(() => {
+                        showInfoToast(notification.text || notification.title, notification.type);
+                    }, index * 400);
+
+                    
                     document.getElementById('notifications-icon')?.classList.add('text-error');
                     document.getElementById('notifications-indicator')?.classList.remove('hidden');
-                    document.getElementById('notifications-indicator').textContent = '1';
+                    document.getElementById('notifications-indicator').textContent = ntfCounter;
                 };
             }
         });
+        if(shouldPlaySound) playNotificationSound('info');//pUSTICEMO SAMO JEDAN ZVUK JER VISE ODJEDNOM JE LOS EFEKAT
     }
 </script>
 
