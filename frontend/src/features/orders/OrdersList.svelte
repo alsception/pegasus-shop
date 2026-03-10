@@ -405,9 +405,8 @@ i LITE APP!!, I MOZDA i WS.....
 
 
   {:else}
-    <!-- Table view:
-    TODO: Ovde mora najnovija da ide na vrh, obrnuto od cards ordering     
-    -->
+    <!-- Table view: -->
+    {#if orders.length > 0}
     <div
       class="max-w-[2048px] w-full overflow-x-auto rounded-lg align-middle text-center mx-auto"
     >
@@ -518,6 +517,10 @@ i LITE APP!!, I MOZDA i WS.....
         {/if}
       </div>
     </div>
+    {:else}
+    Nema narudžbi
+    {/if}
+
   {/if}
 {/if}
 
