@@ -121,10 +121,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             (
                 request.getRequestURI().equals("/")             || 
                 request.getRequestURI().startsWith("/assets/")    ||
+                request.getRequestURI().startsWith("/lottie/")    ||
                 request.getRequestURI().startsWith("/sound/")     ||
                 request.getRequestURI().endsWith(".js")           ||
                 request.getRequestURI().endsWith(".css")          ||
                 request.getRequestURI().equals("/pegasus-icon.png")
+
+                //Todo: lottie, /assets, i /sound izlaze ovde a trebalo bi da su permitall
             )))
         {
             return false;

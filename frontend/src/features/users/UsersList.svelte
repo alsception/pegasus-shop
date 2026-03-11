@@ -181,7 +181,7 @@
         return "error ";
 
       case "WAITER":
-        return "accent ";
+        return "info ";
 
       case "KITCHEN":
         return "warning ";

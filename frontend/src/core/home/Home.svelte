@@ -170,11 +170,10 @@
         class="m-2 sm:m-1"        
       >
         <div
-          class="menu-card card-8 shadow-sm hover:shadow-xl border border-base-300 flex flex-col
-          hover:outline-2 hover:outline-sky-500"
+          class="menu-card card-8 shadow-sm hover:shadow-xl  flex-col"
         >
           <div
-            class="card-content hover:bg-info/20 flex flex-col items-center justify-center text-primary/70"
+            class="card-content hover:bg-info/20 dark:hover:bg-primary/10 flex flex-col items-center justify-center text-primary/70"
           >
             <span class="icon"
               >{item.emoji}</span

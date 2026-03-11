@@ -55,7 +55,10 @@ i LITE APP!!, I MOZDA i WS.....
   const REFRESH_INTERVAL = 5000; // 5 sekundi
   const autoRefresh = true;
   export let liteView = false;
-  
+
+  let isCheckedWait = false;
+  let isCheckedInPrep = true;
+  let isCheckedReady = false;
 
   function toggleView() 
   {
@@ -87,11 +90,47 @@ i LITE APP!!, I MOZDA i WS.....
       } 
       else 
       {
-        // 1. Dobavi query string iz trenutnog URL-a
-        const params = new URLSearchParams(window.location.search);
 
-        // 2. Izvuci specifičnu vrednost (npr. ?id=123)
-        mojParametar = params.get("table");
+        // Support hash-based routing: extract query params from hash if present
+        // drugacije nemoze
+        let search = window.location.search;
+        if (!search && window.location.hash.includes("?")) 
+        {
+          search = window.location.hash.substring(
+            window.location.hash.indexOf("?")
+          );
+        }
+        const params = new URLSearchParams(search);
+
+        //stolovi: todo: moramo smisliti nesto da razlikujemo stolove od broja narudzbe
+        let tableParam = params.get("t");
+
+        if (tableParam !== null) 
+        {
+          searchTerm = /*'T:'+*/tableParam;
+        }
+
+        //Views: na cekanju, u pripremi, spremno
+        let viewParam = params.get("v");
+
+        if (viewParam !== null) 
+        {
+          
+          if(viewParam == '1')
+          {
+            isCheckedWait = true;
+          }
+          else if(viewParam == '2')
+          {
+            isCheckedInPrep = true;
+          }
+          else if(viewParam == '3')
+          {
+            isCheckedReady = true;
+          }
+        }
+
+        
 
         // Prvo učitavanje
         await handleSearch(true);
@@ -355,7 +394,7 @@ i LITE APP!!, I MOZDA i WS.....
       </div>
     </div>
   {:else}
-    <h3 class="font-bold font-mono text-2xl mt-14 text-primary/80">Zadnje narudžbe</h3>
+    <h3 class="font-bold font-mono text-2xl mt-14 mb-6 text-primary/80">Zadnje narudžbe</h3>
   {/if}
 
   {#if loading}
@@ -374,8 +413,10 @@ i LITE APP!!, I MOZDA i WS.....
         name="my_tabs_6"
         class="tab font-bold text-primary"
         aria-label="NA ČEKANJU ({ ordersNaCekanju.length })"
+        checked={isCheckedWait}
       />
-      <div class="tab-content bg-base-300/5 border-base-300 p-6">
+      <div class="tab-content bg-base-300 dark:bg-[#0a0a0a] border-base-300 p-6 h-full"
+        >
         {@render ordersWait()}
       </div>
 
@@ -384,10 +425,10 @@ i LITE APP!!, I MOZDA i WS.....
         name="my_tabs_6"
         class="tab font-bold text-primary"
         aria-label="U PRIPREMI ({ ordersUpripremi.length })"
-        checked={true}
+        checked={isCheckedInPrep}
       />
       <div
-        class="tab-content bg-base-300 dark:bg-base-100/5 border-base-300 p-6"
+        class="tab-content bg-base-300 dark:bg-[#0a0a0a] border-base-300 p-6 h-full"
       >
         {@render ordersInprep()}
       </div>
@@ -397,8 +438,11 @@ i LITE APP!!, I MOZDA i WS.....
         name="my_tabs_6"
         class="tab font-bold text-primary"
         aria-label="SPREMNO ({ ordersSpremni.length })"
+        checked={isCheckedReady}
       />
-      <div class="tab-content bg-base-300/5 border-base-300 p-6">
+      <div     
+        class="tab-content bg-base-300 dark:bg-[#0a0a0a] border-base-300 p-6 h-full"
+      >
         {@render ordersReady()}
       </div>
     </div>
@@ -415,14 +459,15 @@ i LITE APP!!, I MOZDA i WS.....
           <thead class="bg-base-300">
             <tr class="h-12">
               <th class="pgs-th">Broj</th>
-              <th class="pgs-th-r">Iznos</th>
-              <th class="pgs-th">Status</th>
               <th class="pgs-th">Korisnik</th>
-              <th class="pgs-th-r">Ukupno<br>stavki</th>
+              <th class="pgs-th">Stol</th>
+              <th class="pgs-th">Status</th>
               <th class="pgs-th"></th>
               <th class="pgs-th">Primljeno</th>
               <th class="pgs-th">U pripremi</th>
               <th class="pgs-th">Spremno</th>
+              <th class="pgs-th-r">Ukupno<br>stavki</th>
+              <th class="pgs-th-r">Iznos</th>
               {#if !liteView}
                 <th class="pgs-th"></th>
               {/if}
@@ -435,10 +480,9 @@ i LITE APP!!, I MOZDA i WS.....
                   <a use:link href="/orders/{order.id}" class="pgs-hyperlink"
                     >{formatCode(order.code)}</a
                   >
-                </td>
-                <td class="pgs-td-num font-mono font-bold text-right"
-                  >{formatPrice(order.price)}</td
-                >
+                </td>                
+                <td class="pgs-td font-mono font-bold">{order.user?.username}</td>
+                <td class="pgs-td-num font-mono">{order.stol}</td>
                 <td class="text-center">
                   {#if order.status}
                     <span
@@ -451,8 +495,6 @@ i LITE APP!!, I MOZDA i WS.....
                     </span>
                   {/if}
                 </td>
-                <td class="pgs-td font-mono font-bold">{order.user?.username}</td>
-                <td class="pgs-td-num font-mono">{order.items.length}</td>
                 <td class="text-center"
                   >{@html formatCommentInfo(order.comment)}</td
                 >
@@ -466,6 +508,10 @@ i LITE APP!!, I MOZDA i WS.....
                 <td class="pgs-td font-mono">
                   {@html formatTime2(order.spremnoAt)}
                 </td>
+                <td class="pgs-td-num font-mono">{order.items.length}</td>
+                <td class="pgs-td-num font-mono font-bold text-right"
+                  >{formatPrice(order.price)}</td
+                >
                 {#if !liteView}
                   <td class=" justify-center">
                     <div class="tooltip tooltip-info group" data-tip="Edit">
@@ -537,15 +583,18 @@ i LITE APP!!, I MOZDA i WS.....
 
 {#snippet ordersWait()}
 
-  <div class="grid grid-cols-2 lg:flex lg:flex-wrap gap-4">
+  <div
+    class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 2xl:columns-5 gap-6"
+  >
     {#each ordersNaCekanju as order (order.id)}
     <div 
+      class="break-inside-avoid mb-8 w-full"
       animate:flip={{ duration: 400 }}
       transition:fade
       >
       <OrderCardMd
         {order}
-        liteView={true}
+        liteView={false}
         on:orderUpdateCompleted={handleOrderUpdateCompleted}
       ></OrderCardMd>
       </div>
@@ -556,7 +605,7 @@ i LITE APP!!, I MOZDA i WS.....
 {#snippet ordersInprep()}
 
   <div
-    class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 2xl:columns-6 gap-8"
+    class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 2xl:columns-5 gap-6"
   >
     {#each ordersUpripremi as order (order.id)}
       <div
@@ -605,4 +654,5 @@ i LITE APP!!, I MOZDA i WS.....
   .tab {
     border-radius: 4px;
   }
+  
 </style>

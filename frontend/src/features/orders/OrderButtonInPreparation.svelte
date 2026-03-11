@@ -63,10 +63,14 @@
 
 {/if}
  
+<div
+  class="ml-auto w-24 mr-2 overflow-hidden relative h-12 flex items-center justify-center"
+>
 <button 
 class="btn btn-sm btn-primary text-primary-content ml-auto"
     on:click={(e) => {
           e.preventDefault();
           updateOrderState(order.id, 'IN_PREPARATION');
         }}>
-    <!-- <i class="fa fa-fire text-md cursor-pointer"></i> -->PRIHVATI</button>
+    PRIHVATI</button>
+</div>

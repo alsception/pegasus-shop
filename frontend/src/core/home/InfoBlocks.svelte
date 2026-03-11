@@ -1,6 +1,16 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { getCurrentRole } from "../services/SessionStore";
+  import { auth, getCurrentRole } from "../services/SessionStore";
+  import type { Order } from "../../features/orders/Order";
+
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const token = $auth.token;
+
+  let orders: Order[] = [];
+  let ordersNaCekanju: Order[] = [];
+  let ordersUpripremi: Order[] = [];
+  let ordersSpremni: Order[] = [];
+  let totalAmount = 0;
 
   type Item = {
     title: string;
@@ -25,7 +35,7 @@
     },    
     {
       title: "Narudžbe u pripremi",
-      color: "orange",
+      color: "blue",
       description: "Narudžbe koje se trenutno pripremaju",
       amount: 23
     },    
@@ -45,6 +55,100 @@
 
   const role = getCurrentRole();
 
+
+  onMount(() => {
+    loadOrders();
+  });
+
+
+  async function loadOrders() 
+  {
+    const token = $auth.token;
+
+    try 
+    {
+      const res = await fetch(API_BASE_URL + `/orders`, 
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      // Check response status and handle specific cases
+      if (!res.ok) 
+      {
+        if (res.status === 401) 
+        {
+          console.log("Authentication failed - token may be expired");
+          // Clear invalid token
+          localStorage.removeItem("token");
+          auth.set({ token: null, isAuthenticated: false });
+          // Redirect to login or show login modal
+          // window.location.href = '/login';
+          // OR: showLoginModal = true;
+          // OR: goto('/login');
+          throw new Error("Authentication failed");
+        }
+        throw new Error(`Fetch error: ${res.status} - ${res.statusText}`);
+      }
+
+      // Parse JSON directly - no need for JSON.parse since res.json() already does this
+      const data = await res.json();
+
+      // Update orders with the received data
+      orders = data;
+
+      orders = data.reverse();
+
+
+      ordersNaCekanju = orders.filter((o) => o.status === 'WAITING');
+      ordersUpripremi = orders.filter((o) => o.status === 'IN_PREPARATION');
+      ordersSpremni = orders.filter((o) => o.status === "READY" || o.status === "SERVED");
+      totalAmount = calculateTotal(orders);
+
+      items[0].amount = ordersNaCekanju.length;
+      items[1].amount = ordersUpripremi.length;
+      items[2].amount = ordersSpremni.length;
+      items[3].amount = totalAmount;
+
+    } 
+    catch (error: any) 
+    {
+      console.error("Error loading orders:", error);
+
+      /**
+       * TODO: see if this works. should display error message.
+       * ako je failed to fetch, server je nedostupan.
+       */
+
+      // Handle 401 Unauthorized specifically
+      if (error.message.includes("401")) 
+      {
+        console.log("Authentication failed - token may be expired");
+        // Clear invalid token
+        $auth.token = null;
+        // Redirect to login or show login modal
+        // window.location.href = '/login';
+        // OR: showLoginModal = true;
+        // OR: goto('/login');
+      }
+
+      // Handle other errors appropriately (show user message, etc.)
+    } 
+    
+  }
+
+
+  function calculateTotal(orders: Order[]): number 
+  {
+    return orders.reduce((sum, order) => 
+    {
+      return sum + (order.price ?? 0);
+    }, 0);
+  }
+
 </script>
 
 <div class="stats-container">
@@ -54,9 +158,9 @@
       <div class="card-top">
         <div class="icon-wrapper {item.color}">
           {#if item.color === 'blue'}
-            📊
-          {:else if item.color === 'orange'}
             🔥
+<!--           {:else if item.color === 'orange'}
+ -->            
           {:else if item.color === 'yellow'}
             ⏳
           {:else if item.color === 'green'}
@@ -70,8 +174,7 @@
       
       <div class="card-amount">
         {#if item.title.includes("prihod")}
-          <span class="value">{item.amount.toFixed(2)}</span>
-          <span class="currency">€</span>
+          <span class="value">€ {item.amount.toFixed(2)}</span>
         {:else}
           <span class="value">{item.amount}</span>
         {/if}
@@ -126,7 +229,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
-    padding: 2rem 1rem;
+    padding: 3rem 1rem;
 /*     max-width: 1400px;
  */    margin: 0 auto;
     margin-top: -3rem;
@@ -136,13 +239,13 @@
     background: var(--color-base-200);
     color: var(--color-primary);
     backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 2rem;
+/*     border-radius: 20px;
+ */    padding: 2rem;
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    animation: slideIn 0.5s ease-out var(--delay) both;
+    /* border: 1px solid rgba(255, 255, 255, 0.1); */
+/*     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+ */    /* animation: slideIn 0.5s ease-out var(--delay) both; */
   }
 
   @keyframes slideIn {
@@ -157,8 +260,8 @@
   }
 
   .stat-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    border-color: rgba(255, 255, 255, 0.2);
+    /* transform: translateY(-8px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.2); */
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
   }
 

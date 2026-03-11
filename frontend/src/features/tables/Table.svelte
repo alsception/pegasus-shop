@@ -2,6 +2,7 @@
   import type { PGSTable } from "./PGSTable";
   import OpenTableButton from "./OpenTableButton.svelte";
   import { fly } from "svelte/transition";
+  import { link } from "svelte-spa-router";
   export let table: PGSTable;
 
   function getBgClass(table: PGSTable): string 
@@ -27,7 +28,8 @@
 >
   <div class=" flex flex-col gap-2 w-full items-center justify-center">
     <div class="font-bold text-6xl text-primary mr-auto">
-      {table.number}
+     <a use:link href="/orders?t={table.number}" class="pgs-hyperlink">{table.number}</a>
+      
     </div>
   </div>
 

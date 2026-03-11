@@ -61,3 +61,4 @@ frontend-kik/nbproject/private/
 # === Other ===
 backend/src/main/resources/keystore.p12
 backend/src/main/resources/application-prod.properties
+keystore.p12

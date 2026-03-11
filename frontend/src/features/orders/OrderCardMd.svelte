@@ -228,7 +228,7 @@
     -->
 <div
   class="rounded-xl p-2 flex flex-col gap-1 h-fit
-         shadow border border-primary/4 hover:outline-blue-500 hover:outline-2
+         shadow border border-primary/4 hover:outline-primary/15 hover:outline-2
         {getOrderCardBgClass(order.status)}"
         class:card-new={isNew(order.created, 10) && order.status == "WAITING"}      
 >
@@ -244,7 +244,7 @@
         >{formatCode(order.code)}</a
       >
       <!-- TODO: Ovde isto prikazati bolje -->
-        {#if order.status != 'IN_PREPARATION'}
+        {#if order.status === 'READY' || order.status === 'SERVED'}
           <div
           class="text-sm hidden md:flex items-center text-primary/60 gap-2"
         >    
@@ -305,13 +305,14 @@
       <br />
       <div
         class=" 
-          border-0 border-info bg-base-100 text-primary p-1  py-2 px-3 rounded-lg break-words mb-4"
+          border-0 border-info bg-base-100 text-primary p-1  py-2 px-0 rounded-lg break-words mb-4"
           class:truncate={ order.status != 'IN_PREPARATION'}
           class:max-w-xs={ order.status != 'IN_PREPARATION'}          
           title="{order?.comment}"
       >
       <div class="chat chat-start">
-        <div class="chat-bubble chat-bubble-neutral text-primary">
+        <div class="chat-bubble chat-bubble-neutral text-primary whitespace-pre-wrap break-words"
+            style="max-width: 100%;">
           {order.comment}
         </div>
       </div>
@@ -326,7 +327,7 @@
       {#each order.items as item}
         {#if item.product.category != 5}
           <li
-            class="flex items-center gap-0 px-1.5 py-0 border-0 border-b-1 border-primary/5"
+            class="flex items-center gap-0 px-1.5 py-0.5 border-0 border-b-1 border-primary/5"
           >
             <span class="text-primary text-md font-bold"
               >{item.quantity}&nbsp;x&nbsp;</span
@@ -334,7 +335,7 @@
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
             <span
-              class="text-primary text-md pgs-hyperlink p-0 font-normal"
+              class="text-primary text-md pgs-hyperlink p-0 font-normal whitespace-nowrap"
               on:click={() => handleProductClick(item.productId)}
             >
               {item.product?.name}</span

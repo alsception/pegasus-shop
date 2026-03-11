@@ -91,8 +91,7 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
             o.created >= CURRENT_DATE
          )   
          ORDER BY o.created ASC
-         """)
-         
+         """)         
    List<PGSOrder> findByUsernameAndCodeOrTableWithItems(@Param("username") String username, @Param("search") String search);
    
    @Query("""
@@ -108,8 +107,7 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
             o.created >= CURRENT_DATE
          )   
          ORDER BY o.created ASC
-         """)
-         
+         """)         
    List<PGSOrder> findByCodeOrTableWithItems(@Param("search") String search);
 
    @Query("""
@@ -126,8 +124,10 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
          WHERE o.user.username = :username AND o.status = :status
          ORDER BY o.created DESC
          """)
-   List<PGSOrder> findOrdersByUsernameAndStatusWithItems(@Param("username") String username,
-         @Param("status") String status);
+   List<PGSOrder> findOrdersByUsernameAndStatusWithItems(
+      @Param("username") String username,
+      @Param("status") String status
+      );
 
    @Query("""
          SELECT DISTINCT o FROM PGSOrder o
@@ -153,7 +153,6 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
       """)
     List<PGSOrder> findAllInActiveSessionWithItems();
    
-
    @Modifying
    @Transactional
    @Query("""
@@ -170,5 +169,4 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
       WHERE o.synced = false
       """)
    List<PGSOrder> findBySyncedFalseWithItems();
-
 }

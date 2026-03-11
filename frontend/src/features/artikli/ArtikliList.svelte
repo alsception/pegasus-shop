@@ -364,7 +364,7 @@
       <LoadingOverlay />
     {/if}
 
-    <div class="w-full max-w-[1580px] overflow-x-auto rounded-lg align-middle mx-auto">
+    <div class="w-full max-w-10xl overflow-x-auto rounded-lg align-middle mx-auto">
       <table class="table table-zebra min-w-[1200px] divide-y divide-accent">
         <thead class="bg-primary/10 sticky top-0">
           <tr class="h-12 sticky top-0 z-20 bg-base-100">
@@ -429,7 +429,7 @@
         </thead>
         <tbody>
           {#each artikli as artikal, i}
-            <tr class="bg-base-200/60 tr-highlight" transition:fly={{ y: -50, duration: 300 }}>
+            <tr class="bg-base-200/60 tr-highlight">
               <td class="pgs-td whitespace-nowrap">
                 <a use:link href="/artikli/{artikal.id}" class=" pgs-hyperlink text-primary/70">{artikal.name}</a>
               </td>

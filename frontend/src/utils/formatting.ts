@@ -236,18 +236,17 @@ export function getOrderCardBgClass(status: string | null | undefined): string
 
     switch (status?.toUpperCase()) {
       case "WAITING":
-        return  "bg-gradient-to-br "
-              + "from-zinc-100 via-amber-100 to-yellow-100 "
-              + "dark:from-zinc-950 dark:via-amber-950 dark:to-yellow-900 ";
+        return  "bg-base-200 border-2 border-zinc-200  dark:border-zinc-800 "
+                + " dark:bg-[#111113]";
 
       case "IN_PREPARATION":
-        return  "bg-base-200 dark:bg-zinc-900 border border-2 border-base-200 "
-                + " dark:bg-gradient-to-r dark:from-zinc-900 dark:to-zinc-900";
+        return  "bg-base-200 border-2 border-zinc-200  dark:border-zinc-800 "
+                + " dark:bg-[#111113]";// //#18191B
 
       case "READY":
       case "DELIVERED":
       case "SERVED":
-        return "bg-gradient-to-br "+
+        return "bg-gradient-to-br border-2 border-zinc-200  dark:border-zinc-800 "+
                 "from-slate-100 dark:from-slate-900 via-green-100 dark:via-green-950  to-emerald-100 "+
                 "dark:to-emerald-900 "
 
@@ -259,7 +258,8 @@ export function getOrderCardBgClass(status: string | null | undefined): string
         return "error";
 
       default:
-        return "bg-base-300/60 dark:bg-base-200 ";
+        return "bg-base-200 border-2 border-zinc-200  dark:border-zinc-800 "
+                + " dark:bg-[#111113]";
     }
   }
 

@@ -309,8 +309,8 @@ public class CartService
         
         order.setItems(orderItems);
         
-        // 6. ... dont forget the price
-        order.setPrice(totalPrice);
+        // 6. ... dont forget the price        
+        calculatePrice(order);
         order.setCurrency("EUR");
         
         //7. Set initial status
@@ -334,6 +334,18 @@ public class CartService
             "*",//order.getUser().getUsername()+",kitchen,admin", 
             "1"
             );
+    }
+
+    void calculatePrice(PGSOrder order)
+    {
+        BigDecimal total = order.getItems().stream()
+            .map(item -> 
+            {
+                BigDecimal price = item.getPrice() != null ? item.getPrice() : BigDecimal.ZERO;
+                return price.multiply(BigDecimal.valueOf(item.getQuantity()));
+            }).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        order.setPrice(total);
     }
 
     

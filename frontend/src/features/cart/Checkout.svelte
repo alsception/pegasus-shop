@@ -51,7 +51,7 @@
 
       showSuccessToast("Narudžba uspješno poslata!");
       resetCartItems(); //Mora da resetujemo cart items da neprikazuje kao dodate proizvode
-      push("/orders");
+      push("/orders?v=1");//orders page otvorimo na narudzbe na cekanju
     } catch (err: any) {
       console.error("kect", err);
 
@@ -143,7 +143,7 @@
                       <select
                         id="stol"
                         bind:value={$brojStola}
-                        class="pgs-input font-mono font-bold hidden"
+                        class="pgs-input font-mono font-bold"
                         style="border: none;"
                       >
                         {#each stolovi as sto}
@@ -174,6 +174,7 @@
                       bind:value={comment}
                       rows="4"
                       style="border: none;"
+                      maxlength="255"
                     ></textarea>
                   </div>
                 </div>

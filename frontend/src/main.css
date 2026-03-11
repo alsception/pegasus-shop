@@ -50,7 +50,7 @@
   color-scheme: 'dark';
   /*NEKA BUDE TABLE TRANSPARENT NO COLOR*/
   --color-base-100: oklch(0.18 0 0);
-  --color-base-200: #0b0b0b;/*#111113; /*radix colors, slate 1*/
+  --color-base-200: #111111;/*#111113; /*radix colors, slate 1*/
   --color-base-300: rgb(39 39 42);
   --color-base-content: rgb(183, 183, 183);
   --color-primary: rgb(229 231 233); /*blue 500*/
@@ -320,11 +320,11 @@ body {
  */
 @media (prefers-color-scheme: dark) {
   body {
-    @apply bg-[#030303] text-gray-200;
+    @apply bg-neutral-950 text-gray-200;
   }
 }
 .dark body {
-  @apply bg-[#030303] text-gray-200;
+  @apply bg-neutral-950 text-gray-200;
 }
 
 .search-bar {

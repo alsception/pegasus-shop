@@ -385,7 +385,11 @@
           </tbody>
         </table>
       </div>
-      {@render btnNext()}
+    
+      {#if !hideButtonDalje}
+        {@render btnNext()}
+      {/if}    
+
     </div>
   {:else if !products && !loading}
     no products found :/

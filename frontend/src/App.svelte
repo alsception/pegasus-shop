@@ -51,7 +51,7 @@
   <Router routes={unauthenticatedRoutes} />
 {:else}
 <Header/>
-  <main class="flex-1 overflow-auto main-content w-full mt-11 p-0 sm:p-6" style="/*padding-bottom: 64px !important;*/" transition:fly={{ y: 50, duration: 300 }}>
+  <main class="flex-1 overflow-auto main-content w-full mt-11 p-0 sm:p-6">
     <Router {routes} />
   </main>
 {/if}

@@ -84,13 +84,15 @@ public class OrderService
 
         //NEXT: MAKE SEARCH CASE INSENSITIVE
 
-        return processPrice(orders);
+        return orders;
     }
     
     
     /**
      *  Price should be calculated at the moment of order creation (checkout).
      *  This is just the temporary use for old orders missing
+     * 
+     * Mislim da vise netreba 11/03/26
      */
     public List<PGSOrder> processPrice(List<PGSOrder> orders)
     {
