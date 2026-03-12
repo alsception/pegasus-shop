@@ -236,17 +236,17 @@ export function getOrderCardBgClass(status: string | null | undefined): string
 
     switch (status?.toUpperCase()) {
       case "WAITING":
-        return  "bg-base-200 border-2 border-zinc-200  dark:border-zinc-800 "
+        return  "bg-base-200 dark:bg-black lg:dark:dark:bg-[#111113] border border-zinc-200  dark:border-zinc-700 "
                 + " dark:bg-[#111113]";
 
       case "IN_PREPARATION":
-        return  "bg-base-200 border-2 border-zinc-200  dark:border-zinc-800 "
-                + " dark:bg-[#111113]";// //#18191B
+        return  "bg-base-200 dark:bg-black lg:dark:dark:bg-[#111113] border border-zinc-200  dark:border-zinc-700 "
+                + " ";// //#18191B
 
       case "READY":
       case "DELIVERED":
       case "SERVED":
-        return "bg-gradient-to-br border-2 border-zinc-200  dark:border-zinc-800 "+
+        return "bg-gradient-to-br border border-zinc-200  dark:border-zinc-800 "+
                 "from-slate-100 dark:from-slate-900 via-green-100 dark:via-green-950  to-emerald-100 "+
                 "dark:to-emerald-900 "
 

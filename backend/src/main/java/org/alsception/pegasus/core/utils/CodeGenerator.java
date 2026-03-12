@@ -3,7 +3,13 @@ package org.alsception.pegasus.core.utils;
 import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
+
+@Component
 public class CodeGenerator 
 {
     private static final AtomicLong counter = new AtomicLong();    
@@ -11,6 +17,14 @@ public class CodeGenerator
     static final String BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String BASE36 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final AtomicLong threeDigitCounter = new AtomicLong(0);
+    
+    private static EntityManager entityManager;
+
+    // hack: Autowire na NE-STATIČKI setter u STATIČKO polje
+    @PersistenceContext
+    public void setEntityManager(EntityManager em) {
+        CodeGenerator.entityManager = em;
+    }
     
     /**
     Uses a thread-safe counter (AtomicLong) that starts from 0.
@@ -50,11 +64,22 @@ public class CodeGenerator
      * Rolls over to "000" after "999".
      * Prefix meaning: R - restoran, T - take away, D - delivery
      */
-    public static String generateOrderCode(String sufix) {
-        long value = 1 + threeDigitCounter.getAndIncrement() % 1000;
+    public static String generateOrderCode(String sufix) 
+    {
+        // Izvlači sledeći broj iz baze
+        Query query = entityManager.createNativeQuery("SELECT nextval('order_code_seq')");
+        Number nextVal = (Number) query.getSingleResult();
+        
+        long value = nextVal.longValue();
         String code = String.format("%03d", value)+sufix;
+    
         log.trace("Generated 3-digit code: " + code);
         return code;
+    }
+
+    // Metod za reset, treba ga testirati i pozvati prilikom reset DailySessiona.TODO
+    public static void resetSequence() {
+        entityManager.createNativeQuery("ALTER SEQUENCE order_code_seq RESTART WITH 1").executeUpdate();
     }
 
     /**

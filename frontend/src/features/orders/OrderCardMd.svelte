@@ -228,7 +228,7 @@
     -->
 <div
   class="rounded-xl p-2 flex flex-col gap-1 h-fit
-         shadow border border-primary/4 hover:outline-primary/15 hover:outline-2
+         shadow border border-primary/20 hover:outline-primary/20 hover:outline-1
         {getOrderCardBgClass(order.status)}"
         class:card-new={isNew(order.created, 10) && order.status == "WAITING"}      
 >

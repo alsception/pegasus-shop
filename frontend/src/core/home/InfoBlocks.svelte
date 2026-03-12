@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { auth, getCurrentRole } from "../services/SessionStore";
   import type { Order } from "../../features/orders/Order";
+  import { link } from "svelte-spa-router";
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const token = $auth.token;
@@ -20,55 +21,50 @@
   };
 
   const items: Item[] = [
-   /*  {
+    /*  {
       title: "Ukupno narudžbi danas",
       description: "Zbroj primljenih narudžbi + narudžbe u pripremi + spremljene narudžbe",
       color: "blue",
       amount: 127
     },     */
-    
+
     {
       title: "Narudžbe na čekanju",
       description: "Narudžbe koje čekaju pripremu",
       color: "yellow",
-      amount: 8
-    },    
+      amount: 0,
+    },
     {
       title: "Narudžbe u pripremi",
       color: "blue",
       description: "Narudžbe koje se trenutno pripremaju",
-      amount: 23
-    },    
+      amount: 0,
+    },
     {
       title: "Pripremljeno narudžbi",
       description: "Narudžbe spremne za preuzimanje",
       color: "green",
-      amount: 96
-    },    
+      amount: 0,
+    },
     {
-      title: "Ukupan prihod danas",
+      title: "Ukupan promet danas",
       description: "Trenutno naplaćeno",
       color: "purple",
-      amount: 3847.50
-    },    
+      amount: 0,
+    },
   ];
 
   const role = getCurrentRole();
-
 
   onMount(() => {
     loadOrders();
   });
 
-
-  async function loadOrders() 
-  {
+  async function loadOrders() {
     const token = $auth.token;
 
-    try 
-    {
-      const res = await fetch(API_BASE_URL + `/orders`, 
-      {
+    try {
+      const res = await fetch(API_BASE_URL + `/orders`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -77,10 +73,8 @@
       });
 
       // Check response status and handle specific cases
-      if (!res.ok) 
-      {
-        if (res.status === 401) 
-        {
+      if (!res.ok) {
+        if (res.status === 401) {
           console.log("Authentication failed - token may be expired");
           // Clear invalid token
           localStorage.removeItem("token");
@@ -102,20 +96,18 @@
 
       orders = data.reverse();
 
-
-      ordersNaCekanju = orders.filter((o) => o.status === 'WAITING');
-      ordersUpripremi = orders.filter((o) => o.status === 'IN_PREPARATION');
-      ordersSpremni = orders.filter((o) => o.status === "READY" || o.status === "SERVED");
+      ordersNaCekanju = orders.filter((o) => o.status === "WAITING");
+      ordersUpripremi = orders.filter((o) => o.status === "IN_PREPARATION");
+      ordersSpremni = orders.filter(
+        (o) => o.status === "READY" || o.status === "SERVED"
+      );
       totalAmount = calculateTotal(orders);
 
       items[0].amount = ordersNaCekanju.length;
       items[1].amount = ordersUpripremi.length;
       items[2].amount = ordersSpremni.length;
       items[3].amount = totalAmount;
-
-    } 
-    catch (error: any) 
-    {
+    } catch (error: any) {
       console.error("Error loading orders:", error);
 
       /**
@@ -124,8 +116,7 @@
        */
 
       // Handle 401 Unauthorized specifically
-      if (error.message.includes("401")) 
-      {
+      if (error.message.includes("401")) {
         console.log("Authentication failed - token may be expired");
         // Clear invalid token
         $auth.token = null;
@@ -136,63 +127,49 @@
       }
 
       // Handle other errors appropriately (show user message, etc.)
-    } 
-    
+    }
   }
 
-
-  function calculateTotal(orders: Order[]): number 
-  {
-    return orders.reduce((sum, order) => 
-    {
+  function calculateTotal(orders: Order[]): number {
+    return orders.reduce((sum, order) => {
       return sum + (order.price ?? 0);
     }, 0);
   }
-
 </script>
 
-<div class="stats-container">
+<div class="stats-container hidden sm:grid">
   {#each items as item, index}
-  <!-- style="--delay: {index * 0.1}s" -->
-    <div class="stat-card {item.color}">
+    <!-- style="--delay: {index * 0.1}s" -->
+     <a use:link href="/stats" class="cursor-pointer">
+    <div class="stat-card rounded-xl p-2 flex flex-col gap-1 h-fit
+         shadow border border-primary/20 hover:outline-primary/20 hover:outline-1
+        bg-gradient-to-br border border-zinc-200  dark:border-0 from-slate-100 dark:from-slate-900 via-green-100 dark:via-green-950  to-emerald-100 dark:to-emerald-900  s-FD2xrYezMqqb">
       <div class="card-top">
-        <div class="icon-wrapper {item.color}">
-          {#if item.color === 'blue'}
-            🔥
-<!--           {:else if item.color === 'orange'}
- -->            
-          {:else if item.color === 'yellow'}
-            ⏳
-          {:else if item.color === 'green'}
-            ✅
-          {:else if item.color === 'purple'}
-            💰
-          {/if}
-        </div>
-        <h3 class="card-title">{item.title}</h3>
+        <h3 class="card-title text-primary/70">{item.title}</h3>
       </div>
-      
-      <div class="card-amount">
-        {#if item.title.includes("prihod")}
+
+      <div class="card-amount text-primary/70 mb-1">
+        {#if item.title.includes("promet")}
           <span class="value">€ {item.amount.toFixed(2)}</span>
         {:else}
           <span class="value">{item.amount}</span>
         {/if}
       </div>
-      
+
       {#if item.description}
-      <!--   <div class="card-footer">
+        <!--   <div class="card-footer">
           <p>{item.description}</p>
         </div> -->
       {/if}
-      
+
       <div class="card-glow {item.color}"></div>
     </div>
+    </a>
   {/each}
 </div>
 
 <style>
-.chart-container {
+  .chart-container {
     display: flex;
     align-items: center;
     font-family: sans-serif;
@@ -205,10 +182,10 @@
     border-radius: 50%;
     /* Postotke podešavaš ovdje: */
     background: conic-gradient(
-      #4CAF50 0% 80%,      /* Restoran - 30% */
-      #2196F3 30% 55%,     /* Dostava - 25% */
-      #FFC107 55% 80%,     /* Wolt - 25% */
-      #FF5722 80% 100%     /* Takeaway - 20% */
+      #4caf50 0% 80%,
+      /* Restoran - 30% */ #2196f3 30% 55%,
+      /* Dostava - 25% */ #ffc107 55% 80%,
+      /* Wolt - 25% */ #ff5722 80% 100% /* Takeaway - 20% */
     );
   }
 
@@ -216,7 +193,6 @@
     list-style: none;
     padding: 0;
   }
-
 
   .dot {
     width: 12px;
@@ -226,26 +202,27 @@
   }
 
   .stats-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(214px, 1fr));
     gap: 1.5rem;
-    padding: 3rem 1rem;
-/*     max-width: 1400px;
- */    margin: 0 auto;
+    padding: 3rem 0.1rem;
+
+    margin: 0 auto;
     margin-top: -3rem;
+    /*  */
   }
 
   .stat-card {
     background: var(--color-base-200);
     color: var(--color-primary);
     backdrop-filter: blur(10px);
-/*     border-radius: 20px;
- */    padding: 2rem;
+    /*     border-radius: 20px;
+ */
+    padding: 2rem;
     position: relative;
     overflow: hidden;
     /* border: 1px solid rgba(255, 255, 255, 0.1); */
-/*     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
- */    /* animation: slideIn 0.5s ease-out var(--delay) both; */
+    /*     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+ */ /* animation: slideIn 0.5s ease-out var(--delay) both; */
   }
 
   @keyframes slideIn {
@@ -262,7 +239,7 @@
   .stat-card:hover {
     /* transform: translateY(-8px) scale(1.02);
     border-color: rgba(255, 255, 255, 0.2); */
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+   /*  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); */
   }
 
   .card-glow {
@@ -277,34 +254,62 @@
   }
 
   .card-glow.blue {
-    background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(59, 130, 246, 0.15) 0%,
+      transparent 70%
+    );
   }
 
   .card-glow.orange {
-    background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(249, 115, 22, 0.15) 0%,
+      transparent 70%
+    );
   }
 
   .card-glow.yellow {
-    background: radial-gradient(circle, rgba(234, 179, 8, 0.15) 0%, transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(234, 179, 8, 0.15) 0%,
+      transparent 70%
+    );
   }
 
   .card-glow.green {
-    background: radial-gradient(circle, rgba(34, 197, 94, 0.15) 0%, transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(34, 197, 94, 0.15) 0%,
+      transparent 70%
+    );
   }
 
   .card-glow.purple {
-    background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(168, 85, 247, 0.15) 0%,
+      transparent 70%
+    );
   }
 
-  .stat-card:hover .card-glow {
+  .stat-card .card-glow {
     opacity: 1;
   }
-
+  .custom-pattern-1 {
+    background:
+        32px 32px/calc(2*32px) calc(2*32px) conic-gradient(at calc(500%/6) 50%,#E4E4ED 25%,#0000 0),0 0/calc(2*32px) calc(2*32px) conic-gradient(at calc(500%/6) 50%,#E4E4ED 25%,#0000 0),
+        32px 32px/calc(2*32px) calc(2*32px) conic-gradient(at calc(200%/3) 50%,#1AE5D6 25%,#0000 0),0 0/calc(2*32px) calc(2*32px) conic-gradient(at calc(200%/3) 50%,#1AE5D6 25%,#0000 0),
+        repeating-conic-gradient(#1A8FE5 0 25%,#0000 0 50%) 0 0/calc(2*32px) calc(2*32px),
+        linear-gradient(#1A8FE5 calc(100%/3),#1AE5D6 0 calc(200%/3),#E4E4ED 0)
+        0 0/32px 32px;
+  }
   .card-top {
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 1.5rem;
+    /*     margin-bottom: 1.5rem;
+ */
   }
 
   .icon-wrapper {
@@ -319,23 +324,43 @@
   }
 
   .icon-wrapper.blue {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+    background: linear-gradient(
+      135deg,
+      rgba(59, 130, 246, 0.2),
+      rgba(59, 130, 246, 0.1)
+    );
   }
 
   .icon-wrapper.orange {
-    background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(249, 115, 22, 0.1));
+    background: linear-gradient(
+      135deg,
+      rgba(249, 115, 22, 0.2),
+      rgba(249, 115, 22, 0.1)
+    );
   }
 
   .icon-wrapper.yellow {
-    background: linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(234, 179, 8, 0.1));
+    background: linear-gradient(
+      135deg,
+      rgba(234, 179, 8, 0.2),
+      rgba(234, 179, 8, 0.1)
+    );
   }
 
   .icon-wrapper.green {
-    background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+    background: linear-gradient(
+      135deg,
+      rgba(34, 197, 94, 0.2),
+      rgba(34, 197, 94, 0.1)
+    );
   }
 
   .icon-wrapper.purple {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(168, 85, 247, 0.1));
+    background: linear-gradient(
+      135deg,
+      rgba(168, 85, 247, 0.2),
+      rgba(168, 85, 247, 0.1)
+    );
   }
 
   .stat-card:hover .icon-wrapper {
@@ -345,22 +370,19 @@
   .card-title {
     margin: 0;
     font-size: 1rem;
-    font-weight: 600;
-    color: var(--color-primary);
+    font-weight: 500;
     flex: 1;
   }
 
   .card-amount {
-    margin: 1.5rem 0;
     display: flex;
     gap: 0.5rem;
     justify-content: flex-end; /* ← dodaj ovo */
   }
 
   .card-amount .value {
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: 800;
-    color: #fff;
     line-height: 1;
     letter-spacing: -1px;
   }
@@ -419,6 +441,7 @@
     .stats-container {
       grid-template-columns: 1fr;
       padding: 1rem;
+      margin-top: 0;
     }
 
     .card-amount .value {

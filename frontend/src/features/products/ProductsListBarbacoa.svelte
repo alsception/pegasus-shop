@@ -27,6 +27,7 @@
   let loading: boolean = false;
   let error: string | null = null;
   let isListView = false;
+  let isLiteListView = false;
   let isAdminView = true;
   let isDark = true;
   let page = 0;
@@ -35,14 +36,14 @@
   let totalPages = 0; // Total pages from backend
   let selectedCategory: number;
   export let hideButtonDalje = false;
-  
+
   const kategorije = [
-    { id: 1, ime: "🧀 Predjela" },
-    { id: 2, ime: "🥩 Glavna jela" },
-    { id: 3, ime: "🍟🥗 Prilozi" },
-    { id: 4, ime: "🍰 Desert" },
-    { id: 5, ime: "🍺 Piće" },
-    { id: 6, ime: "❤️ Omiljeno" }
+    { id: 1, ime: "🧀", title: "Predjela" },
+    { id: 2, ime: "🥩", title: "Glavna jela" },
+    { id: 3, ime: "🥗", title: "Prilozi" },
+    { id: 4, ime: "🍰", title: "Desert" },
+    { id: 5, ime: "🍺", title: "Piće" },
+    { id: 6, ime: "❤️", title: "Omiljeno" },
   ];
 
   // AUTHENTICATION
@@ -91,8 +92,7 @@
   }
 
   // Fetch the products from the backend
-  onMount(async () => 
-  {
+  onMount(async () => {
     checkDarkmode();
     checkListViewParam();
 
@@ -156,9 +156,7 @@
       products = data;
       filteredProducts = data;
       totalProducts = products.length;
-    } 
-    catch (err: any) 
-    {
+    } catch (err: any) {
       console.error(error);
       if (err.message.includes("401")) {
         $auth.token = null;
@@ -170,58 +168,58 @@
     }
   }
 
-  function nextPage() {
-    if ((page + 1) * size < totalProducts) {
-      page += 1;
-      handleSearch();
-    }
-  }
-
-  function prevPage() {
-    if (page > 0) {
-      page -= 1;
-      handleSearch();
-    }
-  }
-
-  function closeModal(): void {
-    modalProduct = null;
-  }
-
-  function toggleView() {
-    isListView = !isListView;
-  }
-
-  function handleCategorySelect(category: number): void 
+  /**
+   * TODO: ova podesavanja za listview i description bi se mogla sacuvati za svakog korisnika default
+   */
+  function toggleView() 
   {
-    filteredProducts = products.filter((p) => p.category == category);
-  }
-
-  function clickChange(id: any): any 
-  {
-    if(selectedCategory != id)
+    //isListView = !isListView;
+    
+    //slicice -> lista -> lite lista bez description
+    if(isListView)
     {
-      selectedCategory = id;
-
-      if(selectedCategory === 6){
-        //favourites, which are not in product.category but product.favourite
-        filteredProducts = products.filter((p) => p.favourite === true);
+      if(!isLiteListView)
+      {
+        isLiteListView = true;
       }
       else
       {
-        filteredProducts = products.filter((p) => p.category == id);
+        isListView = false;
+        isLiteListView = false;
       }
-      
     }
     else
     {
+      isListView = true;
+    }
+  }
+
+  function handleCategorySelect(category: number): void {
+    filteredProducts = products.filter((p) => p.category == category);
+  }
+
+  function clickChange(id: any): any {
+    if (selectedCategory != id) {
+      selectedCategory = id;
+
+      if (selectedCategory === 6) {
+        //favourites, which are not in product.category but product.favourite
+        filteredProducts = products.filter((p) => p.favourite === true);
+      } else {
+        filteredProducts = products.filter((p) => p.category == id);
+      }
+    } else {
       selectedCategory = 0;
       filteredProducts = products;
     }
 
     //reset croll position
-    document.getElementById('products-container')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    document.getElementById('products-list-container')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    document
+      .getElementById("products-container")
+      ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    document
+      .getElementById("products-list-container")
+      ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 </script>
 
@@ -230,11 +228,13 @@
 {:else if error}
   <ErrorDiv {error} />
 {:else}
-  <div class="w-[100%] flex justify-center p-0 fixed z-9003 bg-transparent">
+  <div
+    class="w-[100%] flex justify-center p-0 fixed z-9003 bg-transparent top-[-0.1rem]"
+    style="justify-self: center;"
+  >
     <div
       class="w-full lg:max-w-4xl lg:p-4 lg:m-6 lg:mb-4 lg:mt-0.5 bg-base-200/80 lg:rounded-lg border-1 border-primary/20 backdrop-blur-lg lg:pb-[5px]
-              max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:p-[10px] max-lg:pb-0 /*max-lg:pl-[60px]*/"
-      style="position: fixed;top:0.45rem;"
+              max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:p-[10px] max-lg:pb-0 /*max-lg:pl-[60px]*/ fixed top-[-16.5] lg:-top-16.5 left-0.5 [width:-webkit-fill-available] lg:static lg:w-auto md:min-w-[680px]"
     >
       <form
         on:submit|preventDefault={handleFormSubmit}
@@ -244,6 +244,7 @@
         <!-- Gornji red: Input i Traži dugme -->
         <div class="flex gap-1">
           <input
+            id="i-search"
             type="text"
             bind:value={searchTerm}
             placeholder="Traži proizvod..."
@@ -266,11 +267,11 @@
             on:click={toggleView}
             class="btn btn-dash whitespace-nowrap"
           >
-          {#if isListView}
-            <i class="fas fa-image"></i>
-          {:else}  
-            <i class="fas fa-list"></i>
-          {/if}
+            {#if !isListView}
+              <i class="fas fa-image"></i>
+            {:else}
+              <i class="fas fa-list"></i>
+            {/if}
           </button>
         </div>
 
@@ -288,20 +289,27 @@
           {/if}
 
           <div
-            class="text-xs sm:text-md text-gray-600 dark:text-gray-400 /*whitespace-nowrap*/ w-full m-0 my-2"
-          >    
+            class="text-xs sm:text-md text-gray-600 dark:text-gray-400 w-full m-0 my-2 flex flex-wrap justify-stretch items-stretch
+"
+          >
             {#each kategorije as k}
-              <button
-              type="button" 
-                class="badge badge-neutral dark:badge-neutral bg-base-300 m-1
+              <div
+                class="flex-1 min-w-fit items-center flex justify-center"
+              >
+                <z class="tooltip tooltip-info tooltip-top" data-tip={k.title}>
+                  <button
+                    type="button"
+                    class=" badge badge-neutral dark:badge-neutral bg-base-300 m-1
                 font-mono font-bold text-primary/80 badge-md lg:badge-md cursor-pointer
               hover:bg-zinc-400/40 hover:outline-1 hover:outline-blue-600 btn"
-              class:active={selectedCategory===k.id}
-                style="text-transform: uppercase; border-radius: 999px;"
-                on:click={()=>clickChange(k.id)}
-              >
-                {k.ime}
-              </button>
+                    class:active={selectedCategory === k.id}
+                    style="text-transform: uppercase; border-radius: 999px;"
+                    on:click={() => clickChange(k.id)}
+                  >
+                    {k.ime}
+                  </button>
+                </z>
+              </div>
             {/each}
           </div>
         </div>
@@ -315,7 +323,7 @@
     <LoadingOverlay />
   {/if}
 
-  {#if isListView && isAdminView}
+  {#if isListView}
     <div id="products-list-container" class="w-full max-w-[382px] mx-auto p-0">
       <div class="w-full overflow-x-auto">
         <table class="table w-full min-w-[382px]">
@@ -339,13 +347,19 @@
                     <p
                       class="text-sm text-gray-500 dark:text-gray-400 mt-1"
                     ></p>
-                    <p
-                      class="text-sm text-primary/50 mt-1 line-clamp-3 max-w-[80%;]"
-                      title={product.description}
-                      style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; white-space: normal;"
-                    >
-                      {product.description}
-                    </p>
+
+                    {#if isLiteListView}
+                    
+                      <p
+                        class="text-sm text-primary/50 mt-1 line-clamp-3 max-w-[80%;]"
+                        title={product.description}
+                        style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; white-space: normal;"
+                      >
+                        {product.description}
+                      </p>  
+
+                    {/if}
+                    
                     <table class="w-full">
                       <tbody>
                         <tr>
@@ -366,7 +380,7 @@
                                 class="tooltip tooltip-info"
                                 data-tip="Dodaj"
                               > -->
-                                <AddToCartButton {product} width="40px" />
+                              <AddToCartButton {product} width="40px" />
                               <!-- </div> -->
                             </div>
                           </td>
@@ -385,11 +399,10 @@
           </tbody>
         </table>
       </div>
-    
+
       {#if !hideButtonDalje}
         {@render btnNext()}
-      {/if}    
-
+      {/if}
     </div>
   {:else if !products && !loading}
     no products found :/
@@ -407,20 +420,24 @@
       {/each}
     </div>
     {#if !hideButtonDalje}
-      {@render btnNext()}  
-    {/if}    
+      {@render btnNext()}
+    {/if}
   {/if}
 {/if}
 
 {#snippet btnNext()}
-<div class="fixed top-[90%] left-[72%] md:left-[80%] lg:left-[88%] z-[9000]">
-  <a class="btn btn-lg btn-primary border border-primary-content/40"
-    use:link href="/cart">Dalje<i class="fas fa-arrow-right text-primary-content/60"></i></a>
-</div>
+  <div class="fixed top-[90%] left-[72%] md:left-[80%] lg:left-[88%] z-[9000]">
+    <a
+      class="btn btn-lg btn-primary border border-primary-content/40"
+      use:link
+      href="/cart"
+      >Dalje<i class="fas fa-arrow-right text-primary-content/60"></i></a
+    >
+  </div>
 {/snippet}
 
 <style>
-  .active{
+  .active {
     background-color: color-mix(in srgb, var(--color-info) 40%, transparent);
   }
 </style>

@@ -12,7 +12,7 @@
 
   let isLoading = false;
 
-  const syncUrl = '/barbacoa/sync';
+  const syncUrl = '/barbacoa/process-orders';
 
   /**
    * TODO ovde verovatno treba obrisati 90% koda lol
@@ -181,10 +181,12 @@
     } catch (error) {
       console.log(error);
       syncMessage = 'Greška pri sinhronizaciji';
+       showErrorModal(error);
     } finally {
      isLoading = false;
 
-      showErrorModal(syncMessage['message']);
+     
+      
     }
   }
 </script>
@@ -203,6 +205,7 @@
   class="max-w-9xl mx-auto px-6 py-10
   grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 scale-up-center-normal menu-container"
 >
+<!-- TODO: ovo dugme mora da ide negde drugde u posebnu componentu Settings -->
 <div class="flex flex-row gap-3 w-full md:w-auto">
         <button
           type="submit" 

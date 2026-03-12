@@ -169,4 +169,7 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
       WHERE o.synced = false
       """)
    List<PGSOrder> findBySyncedFalseWithItems();
+
+   @Query(value = "SELECT nextval('order_code_seq')", nativeQuery = true)
+    Long getNextOrderSequenceValue();
 }

@@ -6,10 +6,10 @@
 </script>
 
 <div 
-  class="bg-white dark:bg-neutral-950  overflow-hidden
+  class="bg-white dark:bg-black overflow-hidden
   w-full shadow hover:shadow-lg transition-shadow border-1 border-primary/20 z-2
   flex flex-col h-ful rounded">
-  <div class="w-full h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
+  <div class="w-full h-48 bg-gray-100 dark:bg-black flex items-center justify-center overflow-hidden">
     {#if product.imageUrl}
       <img
         class="w-full h-full object-cover"

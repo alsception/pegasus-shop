@@ -394,7 +394,7 @@ i LITE APP!!, I MOZDA i WS.....
       </div>
     </div>
   {:else}
-    <h3 class="font-bold font-mono text-2xl mt-14 mb-6 text-primary/80">Zadnje narudžbe</h3>
+    <a use:link href="/orders"><h3 class="font-bold font-mono text-2xl mt-14 mb-6 text-primary/80">Zadnje narudžbe</h3></a>
   {/if}
 
   {#if loading}

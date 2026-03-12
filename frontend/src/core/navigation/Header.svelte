@@ -157,14 +157,14 @@
 {#if showModal}
   <div class="modal modal-open pt-10" style="backdrop-filter: blur(10px);">
     <div
-      class="modal-box max-h-[90vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-100"
+      class="modal-box max-h-[90vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-100 bg-transparent"
       transition:fly={{ y: 50, duration: 300 }}
     >
       <!-- Fixed Header -->
       <div
-        class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300"
+        class="sticky top-0 z-10 px-6 py-4 border-b border-base-300"
       >
-        <h3 class="font-bold text-lg">Košarica</h3>
+        <!-- <h3 class="font-bold text-lg">Košarica</h3> -->
       </div>
 
       <!-- Scrollable Content -->
@@ -174,7 +174,7 @@
 
       <!-- Fixed Footer -->
       <div
-        class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300"
+        class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300 hidden"
       >
         <div class="flex justify-end gap-2">
           <button class="btn btn-secondary" on:click={closeModal}

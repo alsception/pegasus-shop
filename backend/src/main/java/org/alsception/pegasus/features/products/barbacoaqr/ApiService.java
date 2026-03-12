@@ -2,6 +2,10 @@ package org.alsception.pegasus.features.products.barbacoaqr;
 
 import java.util.Arrays;
 import java.util.List;
+
+import org.alsception.pegasus.features.order.OrderRepository;
+import org.alsception.pegasus.features.order.OrderService;
+import org.alsception.pegasus.features.order.PGSOrder;
 import org.alsception.pegasus.features.products.PGSProduct;
 import org.alsception.pegasus.features.products.ProductRepository;
 import org.slf4j.Logger;
@@ -15,6 +19,8 @@ public class ApiService {
     private final RestTemplate restTemplate;
     private final BRBProductRepository brbpRepository;    
     private final ProductRepository pgspRepository;
+    private final OrderRepository orderRepository;
+    private final OrderService orderService;
     private final BRBProductToPGSProductMapper mapper;
     
     private final String[] urls =
@@ -56,12 +62,20 @@ public class ApiService {
     
     private static final Logger logger = LoggerFactory.getLogger(ApiService.class);
     
-    public ApiService(RestTemplate restTemplate, BRBProductRepository brbpRepository, BRBProductToPGSProductMapper mapper,
-            ProductRepository pgspRepository) {
+    public ApiService(
+        RestTemplate restTemplate, 
+        BRBProductRepository brbpRepository, 
+        BRBProductToPGSProductMapper mapper,
+        ProductRepository pgspRepository,
+        OrderRepository orderRepository,
+        OrderService ordersService) 
+    {
         this.brbpRepository = brbpRepository;
         this.restTemplate = restTemplate;
         this.mapper = mapper;
         this.pgspRepository = pgspRepository;
+        this.orderRepository = orderRepository;
+        this.orderService = ordersService;
     }
     
     public int fetchAndSaveProducts() 
@@ -125,6 +139,29 @@ public class ApiService {
         pgspRepository.saveAll(pgsProducts);
         
         logger.warn("masterqr sync done");
+        
+        return totalSaved;        
+    }
+
+    public int processOrders()
+    {
+        //1. Get all qr master products
+        //2. for each qr product map to pgs product
+        //3. save
+        
+        logger.warn("========================================");
+        logger.warn("Initializing orders price processing");
+        logger.warn("========================================");
+        
+        int totalSaved = 0;   
+        
+        List<PGSOrder> l = orderRepository.findAllWithItems();
+        
+        l = orderService.processPrice(l);
+        
+        orderRepository.saveAll(l);
+        
+        logger.warn("Order price calc done. Processed orders: "+l.size());
         
         return totalSaved;        
     }

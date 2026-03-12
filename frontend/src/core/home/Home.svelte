@@ -108,6 +108,18 @@
       customer: true,
     },
     {
+      id: 6,
+      emoji: "📈",
+      title: "Statistike",
+      description: "",
+      icon: "",
+      href: "/stats",
+      color: "",
+      default: false,
+      admin: true,
+      customer: true,
+    },
+    {
       id: 7,
       emoji: "🖼️",
       title: "Galerija",
@@ -160,9 +172,11 @@
 {#if !$auth.isAuthenticated}
   <Login />
 {:else}
+<InfoBlocks/>
+
   <div
     class="pt-8 sm:pt-0 mx-0 px-0 sm:gap-0
-    grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 menu-container "
+    grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8 menu-container "
   >
     {#each displayedItems as item}
       <a

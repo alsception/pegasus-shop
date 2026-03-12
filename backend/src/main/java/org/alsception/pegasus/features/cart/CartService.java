@@ -31,7 +31,7 @@ public class CartService
     private final NotificationService notificationService;
     private final PGSDailySessionService pgsSessionService;
     
-    private static final Logger log = LoggerFactory.getLogger(CartService.class);
+    private static final Logger logger = LoggerFactory.getLogger(CartService.class);
 
     public CartService(UserRepository userRepository,
                        ProductRepository productRepository,
@@ -200,12 +200,12 @@ public class CartService
      */    
     public PGSCart getCartByUsername(String username) 
     {
-        log.debug("Searching username: "+username);
+        logger.debug("Searching username: "+username);
         
         PGSUser user = userRepository.findByUsernameIgnoreCase(username)
             .orElseThrow(() -> new RuntimeException("User not found"));
         
-        log.debug("Looking for cart...");
+        logger.debug("Looking for cart...");
         
         return cartRepository.findByUser(user)
             .map(cart -> {
@@ -230,7 +230,7 @@ public class CartService
     public void deleteCartAsync(PGSCart cart) 
     {
         cartRepository.deleteById(cart.getId()); // avoid LazyInitializationException
-        log.trace("Cart cleared");
+        logger.trace("Cart cleared");
     }
     
     /*
@@ -244,7 +244,7 @@ public class CartService
         //Ako nije dobro ovaj ce da baci exception ILI otvori novi dan
         
         //1. Create order
-        log.trace("Creating order");
+        logger.trace("Creating order");
         PGSOrder order = new PGSOrder();
         
         //assign daily session
@@ -263,7 +263,7 @@ public class CartService
         order.setCode(CodeGenerator.generateOrderCode(suffix));        
         
         //2. Assign user
-        log.trace("Assigning user");
+        logger.trace("Assigning user");
         PGSUser u = userRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new RuntimeException("User not found: "+username));
         
@@ -276,19 +276,19 @@ public class CartService
                 
         
         // 4. Load cart from db
-        log.trace("Loading cart from db");
+        logger.trace("Loading cart from db");
         PGSCart cart = this.getCartByUsername(username);         
         
         // 5. Assign cart items to order and calculate total price      
         BigDecimal totalPrice = BigDecimal.ZERO;
-        log.trace("Setting cart items to order");
+        logger.trace("Setting cart items to order");
         
         List<PGSOrderItem> orderItems = cart.getItems().stream()
             .map(cartItem -> 
             {
                 PGSOrderItem orderItem = new PGSOrderItem();
-                log.trace("Adding product: "+cartItem.getProduct().getCode());
-                log.trace(cartItem.toString());
+                logger.trace("Adding product: "+cartItem.getProduct().getCode());
+                logger.trace(cartItem.toString());
                 
                 /*****************************************************************
                  *  TODO: OVDE CEMO MORATI DA VIDIMO PRVO PRE CHECKOUTA 
@@ -318,14 +318,16 @@ public class CartService
         
         
         //8. Finally, save
-        log.trace("Saving order to db");
+        logger.trace("Saving order to db");
         this.orderRepository.save(order);
         
         //9. And dont forget to clear cart.
         // we dont want to wait for this, it will run in background
         
-        log.trace("Order created, deleting cart...");
+        logger.trace("Order created, deleting cart...");
         deleteCartAsync(cart); 
+
+        logger.info("**New order {}, {}, stol {}, id[{}] ", order.getCode(), username, order.getStol(), id);
        
         //10. finally notification
         notificationService.createNotification(

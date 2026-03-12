@@ -109,7 +109,7 @@
   }
 
   function processGoogleChart2() {
-    google.charts.load("current", { packages: ["bar"] });
+    google.charts.load("current", { packages: ["line"] });
     google.charts.setOnLoadCallback(fetchAndDraw);
 
     async function fetchAndDraw() {
@@ -180,8 +180,8 @@
         legend: { position: "none" },
       };
 
-      var chart = new google.charts.Bar(document.getElementById("chart_div2"));
-      chart.draw(data, google.charts.Bar.convertOptions(options));
+      var chart = new google.charts.Line(document.getElementById("chart_div2"));
+      chart.draw(data, google.charts.Line.convertOptions(options));
     }
   }
 
@@ -339,45 +339,52 @@
         }
     }
 
-    function drawChart(formattedData) {
-        var data = google.visualization.arrayToDataTable(formattedData);
+   function drawChart(formattedData: string[][]) {
+    var data = google.visualization.arrayToDataTable(formattedData);
 
-        var options = {
-            title: 'Analiza vremena pripreme po narudžbini',
-            titleTextStyle: {
-                color: '#FFFFFF', // Boja naslova
-                fontSize: 20,
-                bold: true
-            },
-            height: 500,
-            isStacked: true, // Čekanje i priprema jedan na drugom
-            backgroundColor: 'transparent',
-            colors: ['#E67E22', '#27AE60'], // Narandžasta za čekanje, zelena za rad
-            chartArea: { width: '70%', height: '80%' , fill: "transparent",
-          backgroundColor: "transparent",},
-            hAxis: {
-                title: 'Minuti',
-                minValue: 0,
-                textStyle: { color: "oklch(0.67 0 0 / 0.41)" },
-                gridlines: { color: 'transparent' },                
-            },
-            vAxis: {
-                title: 'Kod narudžbine',
-                textStyle: { color: "oklch(0.67 0 0 / 0.41)", fontSize: 12 },
-                gridlines: { color: 'transparent' },
-            },
-            legend: { position: 'top' },
-            animation: {
-                duration: 1000,
-                easing: 'out',
-                startup: true
-            },
-            
-        };
+    var options = {
+        title: 'Analiza vremena pripreme po narudžbini',
+        titleTextStyle: {
+            color: '#FFFFFF',
+            fontSize: 20,
+            bold: true
+        },
+        height: 500,
+        isStacked: true, 
+        backgroundColor: 'transparent',
+        colors: ['#E67E22', 'rgb(62, 99, 221)'], 
+        chartArea: { 
+            width: '80%', // Povećano malo radi bolje preglednosti u vertikalnom položaju
+            height: '70%', 
+            fill: "transparent",
+            backgroundColor: "transparent",
+        },
+        hAxis: {
+            title: 'Kod narudžbine', // Sada je kod narudžbine dole
+            textStyle: { color: "oklch(0.67 0 0 / 0.41)", fontSize: 12 },
+            gridlines: { color: 'transparent' },
+        },
+        vAxis: {
+            title: 'Minuti', // Minuti su sada sa strane (vertikalno)
+            minValue: 0,
+            textStyle: { color: "oklch(0.67 0 0 / 0.41)" },
+            gridlines: { color: 'transparent' },                
+        },
+        legend: { 
+            position: 'top',
+            textStyle: { color: '#FFFFFF' } // Dodato da se legenda vidi na tamnoj pozadini
+        },
+        animation: {
+            duration: 1000,
+            easing: 'out',
+            startup: true
+        },
+    };
 
-        var chart = new google.visualization.BarChart(document.getElementById('chart_div3'));
-        chart.draw(data, options);
-    }
+    // KLJUČNA IZMJENA: ColumnChart umjesto BarChart
+    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div3'));
+    chart.draw(data, options);
+}
 }
 
 </script>
@@ -396,25 +403,20 @@
     </div>
 
   </div>
-    <div class="stats-container">
+   <div class="stats-container grid grid-cols-1 lg:grid-cols-3 gap-4">
 
-    <!-- Google Chart -->
-    <div class="chart-card">
+    <div class="chart-card lg:col-span-2">
       <div id="chart_div3"></div>
     </div>
 
     <div class="chart-card">
-      <div id="chart_div4"></div>
-    </div>
-
-    <!-- Pie Chart -->
-    <div class="chart-card ">
       <h2 class="text-primary/80">Tip narudžbi</h2>
       <div class="chart-container">
         <div id="piechart_div"></div>
       </div>
     </div>
-  </div>
+
+</div>
 </div>
 
 <style>

@@ -7,7 +7,6 @@ import org.alsception.pegasus.features.products.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.alsception.pegasus.core.exception.BadRequestException;
-import org.alsception.pegasus.core.utils.CodeGenerator;
 import org.alsception.pegasus.features.notifications.NotificationService;
 import org.alsception.pegasus.features.order.dto.OrderDTO;
 import org.alsception.pegasus.features.order.dto.OrderMapper;
@@ -100,11 +99,11 @@ public class OrderService
         {
             orders.forEach(order -> 
             {   
-                //fix code
-                if(order.getCode()==null || "".equals(order.getCode()))
+                //fix code. trenutno ne treba. mozda je trebalo nekad?
+                /*if(order.getCode()==null || "".equals(order.getCode()))
                 {
                     order.setCode(CodeGenerator.toAlpha(order.getId()));
-                }
+                }*/
                  
                 BigDecimal total = order.getItems().stream()
                     .map(item -> 
@@ -217,7 +216,7 @@ public class OrderService
         }
         
         //TODO: Izgleda da nestampa ovo kad je na info
-        logger.info("Order {}, id[{}] status updated to {}", order.getCode(), id, status);
+        logger.info("Order {} -> {} | id[{}] ", order.getCode(), status, id);
         
         String msg = "";
         String type = "0";

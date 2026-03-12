@@ -137,7 +137,7 @@
 
     {#if cart}
       <div
-        class="text-primary mx-auto bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl border-2 border-secondary/20 rounded-t-md"
+        class="text-primary mx-auto bg-base-200 dark:bg-black lg:dark:bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl border-2 border-secondary/20 rounded-t-md"
         style="transform: none"
       >
         <div

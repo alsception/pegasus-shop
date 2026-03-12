@@ -34,6 +34,19 @@ public class BarbacaoaController {
 
         return ResponseEntity.ok(response);
     }
+
+    // Sync proizvoda
+    @PostMapping("/process-orders")
+    public ResponseEntity<Map<String, Object>> calculateOrders() 
+    {
+        int result = apiService.processOrders();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Sync completed successfully! Processed orders: "+result);
+        response.put("timestamp", LocalDateTime.now());
+
+        return ResponseEntity.ok(response);
+    }
     
    // Dobavi sve proizvode sa opcionalnim pretraživanjem
     @GetMapping("/products")
