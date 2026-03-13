@@ -2,7 +2,6 @@ package org.alsception.pegasus.features.products;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -36,8 +35,6 @@ public class PGSProductDTO
     private BigDecimal discount;
     
     private String unit;    
-    
-    private List<PGSReview> reviews;   
     
     private Integer stockQuantity;
     private Integer department;

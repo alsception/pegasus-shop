@@ -319,9 +319,12 @@
 
             jsonData.forEach(item => {
                 // Uzimamo samo narudžbine koje imaju izračunata vremena
-                if (item.cekanje_minuti != null && item.priprema_minuti != null) {
+                if (item.cekanje_minuti != null && item.priprema_minuti != null 
+                    && item.cekanje_minuti < 60 
+                    && item.priprema_minuti < 60 
+                ) {
                     chartData.push([
-                        item.code,
+                        item.code_datum,
                         // Zaokružujemo na 2 decimale jer su ti podaci u JSON-u sirovi
                         parseFloat(item.cekanje_minuti.toFixed(2)),
                         parseFloat(item.priprema_minuti.toFixed(2))
@@ -427,44 +430,12 @@
     gap: 20px;
   }
 
-  .pie-chart {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    /* Postotke podešavaš ovdje: */
-    background: conic-gradient(
-      #4caf4f7c 0% 80%,
-      /* Restoran - 30% */ #2195f39c 30% 55%,
-      /* Dostava - 25% */ #ffc107 55% 80%,
-      /* Wolt - 25% */ #ff5722 80% 100% /* Takeaway - 20% */
-    );
-  }
-
-  .legend {
-    list-style: none;
-    padding: 0;
-  }
-
-  .legend li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-
-  .dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 2px;
-    margin-right: 8px;
-  }
 
   .stats-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
     padding: 2rem 1rem;
-    /*     max-width: 1400px;
- */
     margin: 0 auto;
     margin-top: -3rem;
   }
@@ -496,8 +467,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 20px;
-    /*     max-width: 1400px;
- */
     margin: 0 auto;
   }
 
@@ -521,40 +490,6 @@
     gap: 20px;
   }
 
-  .pie-chart {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background: conic-gradient(
-      #4caf50 0% 30%,
-      #2196f3 30% 55%,
-      #ffc107 55% 80%,
-      #ff5722 80% 100%
-    );
-  }
-
-  .legend {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-  }
-
-  .legend li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 0;
-    font-size: 0.95rem;
-  }
-
-  .dot {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    display: inline-block;
-  }
-
   /* Mobile optimization */
   @media (max-width: 768px) {
     .stats-wrapper {
@@ -574,20 +509,6 @@
       font-size: 1.25rem;
     }
 
-    .pie-chart {
-      width: 180px;
-      height: 180px;
-    }
   }
 
-  @media (max-width: 480px) {
-    .pie-chart {
-      width: 150px;
-      height: 150px;
-    }
-
-    .legend li {
-      font-size: 0.9rem;
-    }
-  }
 </style>

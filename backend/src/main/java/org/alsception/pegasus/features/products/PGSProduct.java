@@ -1,19 +1,15 @@
 package org.alsception.pegasus.features.products;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
-import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.JoinColumn;
@@ -66,13 +62,7 @@ public class PGSProduct {
     private LocalDateTime created;
     
     @Column(nullable = true)
-    private LocalDateTime modified;
-    
-    //TODO: USE DTO INSTEAD OF THIS
-    @JsonIgnore
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<PGSReview> reviews;
+    private LocalDateTime modified;  
     
     // SKU (Stock Keeping Unit)
     @Column(length = 50, nullable = true)

@@ -20,14 +20,8 @@
     amount: number;
   };
 
-  const items: Item[] = [
-    /*  {
-      title: "Ukupno narudžbi danas",
-      description: "Zbroj primljenih narudžbi + narudžbe u pripremi + spremljene narudžbe",
-      color: "blue",
-      amount: 127
-    },     */
-
+  const items: Item[] = 
+  [
     {
       title: "Narudžbe na čekanju",
       description: "Narudžbe koje čekaju pripremu",
@@ -236,12 +230,6 @@
     }
   }
 
-  .stat-card:hover {
-    /* transform: translateY(-8px) scale(1.02);
-    border-color: rgba(255, 255, 255, 0.2); */
-   /*  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); */
-  }
-
   .card-glow {
     position: absolute;
     top: -50%;
@@ -308,8 +296,6 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    /*     margin-bottom: 1.5rem;
- */
   }
 
   .icon-wrapper {
@@ -387,49 +373,8 @@
     letter-spacing: -1px;
   }
 
-  .card-amount .currency {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
-  }
-
   .stat-card {
     padding: 1rem 2rem 0rem 2rem;
-  }
-
-  .stat-card.blue .value {
-    background: linear-gradient(135deg, #3b82f6, #60a5fa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .stat-card.orange .value {
-    background: linear-gradient(135deg, #f97316, #fb923c);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .stat-card.yellow .value {
-    background: linear-gradient(135deg, #eab308, #fbbf24);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .stat-card.green .value {
-    background: linear-gradient(135deg, #22c55e, #4ade80);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .stat-card.purple .value {
-    background: linear-gradient(135deg, #a855f7, #c084fc);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
   }
 
   .card-footer {

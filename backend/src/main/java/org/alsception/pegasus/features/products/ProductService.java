@@ -3,7 +3,6 @@ package org.alsception.pegasus.features.products;
 import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -16,18 +15,14 @@ import org.springframework.data.domain.Page;
 
 @Service
 public class ProductService 
-{
-    private static final int MAX_RATING = 5;
-    
+{   
     private final ProductRepository productRepository;
-    private final ReviewRepository reviewRepository;
     private final Random random = new Random();
     
     private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
-    public ProductService(ProductRepository productRepository, ReviewRepository reviewRepository) {
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
-        this.reviewRepository = reviewRepository;
     }
     
     public List<PGSProduct> getAllProducts() {
@@ -119,15 +114,9 @@ public class ProductService
     public PGSProduct createProduct(PGSProduct product) 
     {       
         //1) save audit: saving product... 
-        
-        //This checks for code and other business logic constraints. Will thorw exception if product not valid  
-        ProductValidator.validate(product);
-        
-        //TODO: ovo mora da sklonimo
-        final List<PGSReview> reviews = product.getReviews();
-        
+                
         //New product with reviews (needs to be saved separately)
-        if(product.getId() == null && reviews!=null && !reviews.isEmpty())
+        if(product.getId() == null)
         {
             return createProductAndReviews(product);
         }
@@ -139,24 +128,9 @@ public class ProductService
     
     public PGSProduct updateProduct(Long id, PGSProduct updatedProduct) 
     {
-        ProductValidator.validate(updatedProduct);
         
-        /*calculateUsdPrice(updatedProduct);       */
-        
-        return productRepository.findById(id).map(existingProduct -> {
-
-            // Keep existing reviews if updatedProduct does not explicitly contain reviews
-            /*if (updatedProduct.getReviews() == null) {
-                updatedProduct.setReviews(existingProduct.getReviews());
-            }*/
-
-            // If updatedProduct has an empty list of reviews, remove all reviews
-            /*if (updatedProduct.getReviews() != null && updatedProduct.getReviews().isEmpty()) {
-                existingProduct.getReviews().clear();
-            }*/
-                       
-
-            // Update other fields
+        return productRepository.findById(id).map(existingProduct -> 
+        {
             existingProduct.setName(updatedProduct.getName());
             existingProduct.setCode(updatedProduct.getCode());
             existingProduct.setDescription(updatedProduct.getDescription());
@@ -182,20 +156,10 @@ public class ProductService
             throw new IllegalArgumentException("Product cannot be null");
         }
 
-        // Ensure reviews is never null to avoid NullPointerException
-        List<PGSReview> reviews = Optional.ofNullable(product.getReviews()).orElse(Collections.emptyList());
-        product.setReviews(null);
-
         // Save product first
         final PGSProduct savedProduct = productRepository.save(product);
 
-        // Associate reviews with saved product and batch save
-        reviews.forEach(r -> r.setProduct(savedProduct));
-        if (!reviews.isEmpty()) {
-            reviewRepository.saveAll(reviews);
-        }
-
-        // Reload product with reviews from DB
+        // Reload productfrom DB
         return productRepository.getReferenceById(savedProduct.getId());
     }
     
@@ -208,22 +172,7 @@ public class ProductService
     {
         return productRepository.existsById(id);
     } 
-    
-    //TODO: ovde cemo dodati most popular product kasnije
-//    public PopularProductsWrapper getPopularProducts() 
-//    {
-//        List<Object[]> pproducts = productRepository.getPopularProducts();
-//    
-//        List<PopularProduct> output = pproducts.stream()
-//        .map(obj -> new PopularProduct(
-//            (String) obj[1],    // Product Name
-//            (Double) obj[2]     // Average Rating
-//        ))
-//        .collect(Collectors.toList());
-//        
-//        return new PopularProductsWrapper(output);
-//    }
-    
+        
     public void generateSampleProducts(int count) 
     {
         if (productRepository.count() == 0 && count <= 1000) 
@@ -242,7 +191,6 @@ public class ProductService
                     product.setBrand("xxx");
                     product.setActive(Boolean.TRUE);
                     product.setStockQuantity(random.nextInt(1000) + 10);
-                    generateRandomReviews(product);
                     createProduct(product);
                 }
                 catch(Exception e)
@@ -295,24 +243,6 @@ public class ProductService
         logger.info("Errors: "+errors);
 
         return plist;
-    }
-
-    private void generateRandomReviews(PGSProduct product) 
-    {
-        int reviewCount = random.nextInt(4) + 2; // Generates a random number between 2 and 5
-        List<PGSReview> reviews = new ArrayList<>();
-
-        for (int i = 0; i < reviewCount; i++) 
-        {
-            PGSReview review = new PGSReview();
-            review.setReviewer("Reviewer " + (i + 1));
-            review.setText("This is a review " + (i + 1) + " for " + product.getName());
-            review.setRating(random.nextInt(MAX_RATING) + 1); // Random rating from 1 to 5
-            review.setProduct(product);
-            reviews.add(review);
-        }
-        
-        product.setReviews(reviews);
     }
 
     private String generateValidCode() {

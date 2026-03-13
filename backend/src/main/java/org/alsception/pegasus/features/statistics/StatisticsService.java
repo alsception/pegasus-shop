@@ -49,14 +49,14 @@ public class StatisticsService
     {
         String sql = """
             SELECT 
-                code,
+                code || ' - ' || TO_CHAR(created, 'YYYY-MM-DD') AS code_datum,
                 created,
                 EXTRACT(EPOCH FROM (u_pripremi_at - created)) / 60 AS cekanje_minuti,
                 EXTRACT(EPOCH FROM (spremno_at - u_pripremi_at)) / 60 AS priprema_minuti,
                 EXTRACT(EPOCH FROM (spremno_at - created)) / 60 AS ukupno_vreme
             FROM pgs_orders
             WHERE spremno_at IS NOT NULL AND u_pripremi_at IS NOT NULL
-            ORDER BY created DESC;
+            ORDER BY created ASC
             """;
         return jdbcTemplate.queryForList(sql);
     }

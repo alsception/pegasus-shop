@@ -12,8 +12,6 @@
   import { generateRoutes } from "./core/navigation/routing/routes";
   import { SvelteToast } from "@zerodevx/svelte-toast";
   import InfoModal from "./core/utils/ErrorModal.svelte";
-  import CartDetails from "./features/cart/CartDetails.svelte";
-  import { fly } from "svelte/transition";
 
   document.title = 'Pegasus'
 
