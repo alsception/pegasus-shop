@@ -97,7 +97,7 @@
   function cancelEditing(
     event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }
   ) {
-    window.location.href = "#/products"; // Putanja do početne stranice
+    window.location.href = "#/products-mngmt"; // Putanja do početne stranice
   }
 
   function toggleActive() {}
@@ -117,373 +117,195 @@ https://svelte.dev/e/a11y_no_noninteractive_element_interactionssvelte(a11y_no_n
 
     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
     <form
-      on:submit|preventDefault={handleSubmit}
-      on:keydown={handleKeydown}
-      id="productForm"
-      class="max-w-7xl mx-auto bg-base-200 rounded-lg p-8 w-full space-y-8"
-    >
-      <!-- Header Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-1">
-          <h3 class="text-3xl font-semibold text-primary">Product details</h3>
-
-          <div
-            id="loadingMessage"
-            style="display: none;"
-            class="text-2xl font-semibold text-gray-700 dark:text-gray-100 flex items-center gap-2 mt-4"
-          >
-            <span class="loading loading-dots loading-xs"></span>
-          </div>
-        </div>
+  on:submit|preventDefault={handleSubmit}
+  on:keydown={handleKeydown}
+  id="productForm"
+  class="max-w-[100rem] mx-auto bg-base-100 border border-primary/10 rounded-lg p-8 w-full space-y-8"
+>
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div>
+      <h3 class="text-3xl font-semibold text-primary">Proizvod</h3>
+      <div id="loadingMessage" style="display: none;" class="mt-2">
+        <span class="loading loading-dots loading-xs"></span>
       </div>
+    </div>
+    <div class="flex gap-3">
+      <button type="button" on:click={cancelEditing} class="btn btn-outline">
+        <i class="fas fa-arrow-left text-primary/60"></i> Nazad
+      </button>
+      <button type="button" on:click={() => deleteDialog()} class="btn btn-outline hover:text-error group">
+        <i class="fas fa-trash text-primary/60 group-hover:text-error text-xs"></i> Obriši
+      </button>
+      <button type="submit" class="btn btn-primary px-8">
+        <i class="far fa-save text-primary-content"></i> Spremi
+      </button>
+    </div>
+  </div>
 
-      <!-- Full-width underline -->
-      <div class="h-px bg-neutral w-full"></div>
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Left column -->
+    <div class="lg:col-span-7 space-y-8">
 
-      <!-- General Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-        <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">General</h3>
-          <p class="text-secondary text-sm mt-2">
-            Basic product information and details
-          </p>
+      <!-- Osnovno -->
+      <div class="bg-base-200 p-6 rounded-xl shadow-sm border border-neutral/20">
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold text-primary">Osnovno</h3>
+          <p class="text-secondary text-sm uppercase tracking-wider">Osnovne informacije o proizvodu</p>
         </div>
-        <div class="lg:col-span-2">
-          <div class="">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div class="w-full">
-                <label
-                  for="code"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Code</label
-                >
-                <input
-                  id="code"
-                  type="text"
-                  class="pgs-input"
-                  maxlength={codeLength}
-                  size={codeLength}
-                  bind:value={formData.code}
-                />
-              </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="code" class="block text-sm font-medium text-secondary mb-2">
+              <i class="fas fa-barcode text-xs text-gray-400 mr-1"></i> Šifra
+            </label>
+            <input id="code" type="text" class="pgs-input w-full" maxlength={codeLength} bind:value={formData.code} />
+          </div>
 
-              <div class="w-full">
-                <label
-                  for="productname"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Name</label
-                >
-                <input
-                  id="productname"
-                  class="pgs-input"
-                  bind:value={formData.name}
-                />
-              </div>
+          <div>
+            <label for="productname" class="block text-sm font-medium text-secondary mb-2">Naziv</label>
+            <input id="productname" class="pgs-input w-full" bind:value={formData.name} />
+          </div>
 
-              <div class="w-full md:col-span-2">
-                <label
-                  for="description"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Description</label
-                >
-                 <textarea
-                  id="description"
-                  class="pgs-input resize-vertical"
-                  bind:value={formData.description}
-                  rows="4"
-                ></textarea>               
-              </div>
+          <div class="md:col-span-2">
+            <label for="description" class="block text-sm font-medium text-secondary mb-2">Opis</label>
+            <textarea id="description" class="pgs-input w-full resize-vertical" bind:value={formData.description} rows="4"></textarea>
+          </div>
 
-              <div class="w-full">
-                <label
-                  for="active"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Status</label
-                >
-                <div class="flex items-center space-x-3 pt-2">
-                  <input
-                    type="checkbox"
-                    bind:checked={formData.active}
-                    class="toggle ring-2 ring-primary bg-black text-red-600 checked:text-green-600"
-                  />
-                  <p class="font-mono text-primary">
-                    {#if formData.active}
-                      ACTIVE <i
-                        class="fa fa-check text-green-600"
-                        aria-hidden="true"
-                      ></i>
-                    {:else}
-                      DISABLED <i
-                        class="fa fa-ban text-red-600"
-                        aria-hidden="true"
-                      ></i>
-                    {/if}
-                  </p>
-                </div>
-                <p class="text-secondary text-sm mt-2">
-                  Disabled products will not be possible to buy, but they will
-                  show in results
-                </p>
-              </div>
-              <div class="w-full">
-                <div class="lg:col-span-2">
-                  <div class="rounded-lg p-6">
-                    <div class="flex flex-col">
-                      <!-- Metadata -->
-                      <div
-                        class="flex flex-col sm:flex-row flex-wrap gap-x-10 gap-y-2 text-md text-secondary"
-                      >
-                        <span
-                          class="flex items-center gap-2 min-w-[200px] text-sm"
-                        >
-                          <i class="fas fa-calendar-plus text-gray-400"></i>
-                          Created:
-                          <span class="font-mono"
-                            >{formatDateTime(formData.created)}</span
-                          >
-                        </span>
-                        <span
-                          class="flex items-center gap-2 min-w-[200px] text-sm"
-                        >
-                          <i class="fas fa-edit text-gray-400"></i>
-                          Modified:
-                          <span class="font-mono"
-                            >{formatDateTime(formData.modified)}</span
-                          >
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <div>
+            <label for="active" class="block text-sm font-medium text-secondary mb-2">Status</label>
+            <div class="flex items-center space-x-3 pt-2">
+              <input
+                type="checkbox"
+                bind:checked={formData.active}
+                class="text-sm toggle ring-2 ring-primary bg-base-100 text-gray-600 checked:text-green-600"
+              />
+              <p class="font-mono font-bold text-primary/80">
+                {#if formData.active}
+                  <span class="text-green-600 text-lg">AKTIVAN</span>
+                {:else}
+                  <span class="text-gray-600 text-lg">NEAKTIVAN</span>
+                {/if}
+              </p>
             </div>
+            <p class="text-secondary text-xs mt-2">Neaktivni proizvodi neće biti dostupni za narudžbu</p>
           </div>
         </div>
       </div>
-      <!-- Full-width underline -->
-      <div class="h-px bg-neutral w-full"></div>
 
-      <!-- Metadata -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-        <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">Images</h3>
-          <p class="text-secondary text-sm mt-2">Product pictures links</p>
+      <!-- Cijene -->
+      <div class="bg-base-200 p-6 rounded-xl shadow-sm border border-neutral/20">
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold text-primary">Cijene</h3>
+          <p class="text-secondary text-sm uppercase tracking-wider">Cijena, porez i popust</p>
         </div>
-        <div class="w-full md:col-span-2">
-          <label
-            for="imglink"
-            class="block text-sm font-medium text-gray-700 mb-2"
-          >
-            <i class="fas fa-image text-xs text-gray-400 mr-2"></i>Image link
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="price" class="block text-sm font-medium text-secondary mb-2">Cijena</label>
+            <input id="price" type="number" class="pgs-input w-full" bind:value={formData.basePrice} />
+          </div>
+
+          <div>
+            <label for="currency" class="block text-sm font-medium text-secondary mb-2">Valuta</label>
+            <input id="currency" type="text" class="pgs-input w-full" bind:value={formData.baseCurrency} />
+          </div>
+
+          <div>
+            <label for="shipping_cost" class="block text-sm font-medium text-secondary mb-2">Troškovi dostave</label>
+            <input id="shipping_cost" type="number" class="pgs-input w-full" bind:value={formData.shippingCost} />
+          </div>
+
+          <div>
+            <label for="tax_percent" class="block text-sm font-medium text-secondary mb-2">PDV %</label>
+            <input id="tax_percent" type="number" class="pgs-input w-full" bind:value={formData.taxPercent} />
+          </div>
+
+          <div>
+            <label for="tax_amount" class="block text-sm font-medium text-secondary mb-2">Iznos PDV-a</label>
+            <input id="tax_amount" class="pgs-input w-full bg-base-300 opacity-60" disabled bind:value={formData.taxAmount} />
+          </div>
+
+          <div>
+            <label for="discount" class="block text-sm font-medium text-secondary mb-2">Popust</label>
+            <input id="discount" type="number" class="pgs-input w-full" bind:value={formData.discount} />
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right column -->
+    <div class="lg:col-span-5 space-y-8">
+
+      <!-- Slika -->
+      <div class="bg-base-200 p-6 rounded-xl shadow-sm border border-neutral/20">
+        <div class="mb-6 border-b border-neutral/10 pb-2">
+          <h3 class="text-xl font-semibold text-primary">Slika</h3>
+        </div>
+        <div>
+        <div class="w-full h-96  bg-gray-100 dark:bg-black flex items-center justify-center overflow-hidden">
+            {#if formData.imageUrl}
+              <img
+                class="w-full h-full object-cover"
+                src={formData.imageUrl}
+                alt={formData.name}
+              />
+            {:else}
+              <span class="text-gray-400 dark:text-gray-500">No image available</span>
+            {/if}
+          </div>
+          <label for="imglink" class="block text-sm font-medium text-secondary mb-2">
+            <i class="fas fa-image text-xs text-gray-400 mr-1"></i> Link slike
           </label>
-          <input
-            id="imglink"
-            class="pgs-input"
-            bind:value={formData.imageUrl}
-          />
+          <input id="imglink" class="pgs-input w-full" bind:value={formData.imageUrl} />
         </div>
       </div>
 
-      <!-- Full-width underline -->
-      <div class="h-px bg-neutral w-full"></div>
-
-      <!-- Pricing Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-        <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">Pricing</h3>
-          <p class="text-secondary text-sm mt-2">
-            Product pricing and cost information
-          </p>
+      <!-- Zalihe -->
+      <div class="bg-base-200 p-6 rounded-xl shadow-sm border border-neutral/20">
+        <div class="mb-6 border-b border-neutral/10 pb-2">
+          <h3 class="text-xl font-semibold text-primary">Zalihe</h3>
         </div>
-        <div class="lg:col-span-2">
-          <div class="rounded-lg">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div class="w-full">
-                <label
-                  for="price"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Price</label
-                >
-                <input
-                  id="price"
-                  type="number"
-                  class="pgs-input"
-                  bind:value={formData.basePrice}
-                />
-              </div>
-
-              <div class="w-full">
-                <label
-                  for="currency"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Currency</label
-                >
-                <input
-                  id="currency"
-                  type="text"
-                  class="pgs-input"
-                  bind:value={formData.baseCurrency}
-                />
-              </div>
-
-              <div class="w-full">
-                <label
-                  for="shipping_cost"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Shipping Cost</label
-                >
-                <input
-                  id="shipping_cost"
-                  type="number"
-                  class="pgs-input"
-                  bind:value={formData.shippingCost}
-                />
-              </div>
-
-              <div class="w-full">
-                <label
-                  for="tax_amount"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Tax Amount</label
-                >
-                <input
-                  id="tax_amount"
-                  class="pgs-input bg-gray-100"
-                  disabled
-                  step=".01"
-                  bind:value={formData.taxAmount}
-                />
-              </div>
-
-              <div class="w-full">
-                <label
-                  for="tax_percent"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Tax Percent</label
-                >
-                <input
-                  id="tax_percent"
-                  type="number"
-                  class="pgs-input"
-                  bind:value={formData.taxPercent}
-                />
-              </div>
-
-              <div class="w-full">
-                <label
-                  for="discount"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Discount</label
-                >
-                <input
-                  id="discount"
-                  type="number"
-                  class="pgs-input"
-                  bind:value={formData.discount}
-                />
-              </div>
-            </div>
+        <div class="space-y-4">
+          <div>
+            <label for="stock_quantity" class="block text-sm font-medium text-secondary mb-2">
+              <i class="fas fa-boxes text-xs text-gray-400 mr-1"></i> Količina na stanju
+            </label>
+            <input id="stock_quantity" type="number" class="pgs-input w-full" bind:value={formData.stockQuantity} />
+          </div>
+          <div class="mt-6">
+            <label for="department" class="block text-sm font-medium text-secondary mb-2">
+              <i class="fas fa-door-open text-xs text-gray-400 mr-1"></i> Odjel
+            </label>
+            <select id="department" class="pgs-input w-full font-mono" bind:value={formData.department}>
+              <option value={1}>Kuhinja</option>
+              <option value={2}>Bar</option>
+            </select>
           </div>
         </div>
       </div>
 
-      <!-- Full-width underline -->
-      <div class="h-px bg-neutral w-full"></div>
-        
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-        <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">Stock</h3>
-          <p class="text-secondary text-sm mt-2">
-            Inventory and availability information
-          </p>
-        </div>
-        <div class="lg:col-span-2">
-          <div class="rounded-lg">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-              
-              <div class="w-full">
-                <label
-                  for="stock_quantity"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Stock Quantity</label
-                >
-                <input
-                  id="stock_quantity"
-                  type="number"
-                  class="pgs-input"
-                  bind:value={formData.stockQuantity}
-                />
-              </div>
-
-              <div class="w-full">
-                <label
-                  for="department"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Odjel</label
-                >
-                <select
-                  id="department"
-                  class="pgs-input"
-                  bind:value={formData.department}
-                >
-                  <option value={1}>Kuhinja</option>
-                  <option value={2}>Bar</option>
-                </select>
-              </div>
-
-            </div>
-          </div>
-        </div>
+      <!-- Ostalo -->
+      <div class="bg-base-200 p-6 rounded-xl shadow-sm border border-neutral/20">
+        <h3 class="text-xl font-semibold text-primary mb-6">Ostalo</h3>
+        <label for="comment" class="block text-sm font-medium text-secondary mb-2">Napomena</label>
+        <textarea id="comment" class="pgs-input w-full resize-vertical" bind:value={formData.comment} rows="6"></textarea>
       </div>
 
-      <!-- Full-width underline -->
-      <div class="h-px bg-neutral w-full"></div>
+    </div>
 
-      <!-- Other Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-        <div class="lg:col-span-1">
-          <h3 class="text-2xl font-semibold text-primary">Other</h3>
-          <p class="text-secondary text-sm mt-2">
-            Additional information and comments
-          </p>
-        </div>
-        <div class="lg:col-span-2">
-          <div class="rounded-lg">
-            <div class="grid grid-cols-1 md:grid-cols-1 gap-12">
-              <div class="w-full">
-                <label
-                  for="comment"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                  >Comment</label
-                >
-                <textarea
-                  id="comment"
-                  class="pgs-input resize-vertical"
-                  bind:value={formData.comment}
-                  rows="4"
-                ></textarea>
-              </div>
-            </div>
-          </div>
-        </div>
+    <!-- Footer timestamps -->
+    <div class="p-4 text-[14px] text-secondary flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 lg:gap-10 w-max">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-calendar-plus text-gray-400"></i>
+        <span>Upisano: <span class="font-mono">{formatDateTime(formData.created)}</span></span>
       </div>
-
-      <!-- Full-width underline -->
-      <div class="h-px bg-neutral w-full"></div>
-
-      <div class="grid grid-cols-1">
-            <div class="flex justify-end gap-3 pt-4">
-          <button
-            type="button"
-            on:click={cancelEditing}
-            class="btn btn-outline btn- m-3"
-          >
-            Close
-          </button>
-          <button type="submit" class="btn btn-primary m-3"> Save </button>
-        </div>
+      <div class="flex items-center gap-2">
+        <i class="fas fa-edit text-gray-400"></i>
+        <span>Izmijenjeno: <span class="font-mono">{formatDateTime(formData.modified)}</span></span>
       </div>
-    </form>
+    </div>
+  </div>
+</form>
   {/if}
 </div>
 

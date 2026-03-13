@@ -7,15 +7,15 @@ import Users                        from "../../../features/users/UsersList.svel
 import UserDetails                  from "../../../features/users/UserDetails.svelte";
 import MyAccount                    from "../../../features/users/MyAccount.svelte";
 
-import Artikli                     from "../../../features/artikli/ArtikliList.svelte";
-import ArtikliAdministration                     from "../../../features/artikli/ArtikliAdministration.svelte";
+import Artikli                      from "../../../features/artikli/ArtikliList.svelte";
+import ArtikliAdministration        from "../../../features/artikli/ArtikliAdministration.svelte";
 import Products                     from "../../../features/products/ProductsListBarbacoa.svelte";
-//import Products                     from "../../../features/products/ProductsListBarbacoa.svelte";
 import ProductDetail                from "../../../features/products/ProductPage.svelte";
+import ProductsAdminList            from "../../../features/products/ProductsList.svelte";
 import ProductAdministration        from "../../../features/products/ProductAdministration.svelte";
 
-import Tables                     from "../../../features/tables/Tables.svelte";
-import Reservations                     from "../../../features/reservations/Reservations.svelte";
+import Tables                       from "../../../features/tables/Tables.svelte";
+import Reservations                 from "../../../features/reservations/Reservations.svelte";
 
 import CartDetails                  from "../../../features/cart/CartDetails.svelte";
 import Checkout                     from "../../../features/cart/Checkout.svelte";
@@ -45,7 +45,8 @@ export const components: ComponentRegistry =
     "/stats": Stats,
     "/products": Products,
     "/products/:id": ProductDetail,
-    "/products/mngmt/:id": ProductAdministration,
+    "/products-mngmt": ProductsAdminList,    
+    "/products-mngmt/:id": ProductAdministration,
     "/tables": Tables,
     "/reservations": Reservations,
     "/users": Users,
@@ -94,6 +95,7 @@ export function generateRoutes()
     routes["/artikli/:id"] = ArtikliAdministration;
     routes["/users/my-account"] = MyAccount;
     routes["/orders/:id"] = OrderDetails;
+    routes["/products-mngmt"] = ProductsAdminList;
 
     //Not found component: This must be last added (order matters), otherwise it catches all
     routes["*"] = NotFound; 

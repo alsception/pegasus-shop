@@ -23,7 +23,7 @@
   let products: Product[] = [];
   let loading: boolean = false;
   let error: string | null = null;
-  let isListView = false;
+  let isListView = true;
   let isAdminView = true;
   let isDark = true;
   let page = 0;
@@ -259,81 +259,87 @@
     {/if}
 
     {#if isListView && isAdminView}
-      <div
-        class="w-full max-w-[1280px] overflow-x-auto rounded-lg align-middle mx-auto"
-      >
-        <table class="table table-zebra min-w-[1200px] divide-y divide-accent">
-          <thead class="bg-[#10273c]">
-            <tr class="h-12">
-              <th class="pgs-th-l">Proizvod</th>
-              <th class="pgs-th-l">Kategorija</th>
-              <th class="pgs-th-r">Cijena</th>
-              <th class="pgs-th-l"></th>
-              <th class="pgs-th-l"></th>
-              <th class="pgs-th"></th>
-            </tr>
-          </thead>
-          <tbody class="">
-            {#each products as product, i}
-              <tr class="bg-base-200/80 outline-1 outline-transparent /*hover:outline-blue-500*/ hover:bg-base-300/70">            
-                <td class="pgs-td whitespace-nowrap">
-                  <a
-                    use:link
-                    href="/products/{product.id}"
-                    class="text-primary pgs-hyperlink">{product.name}</a
-                  >
-                </td>
-                <td class="pgs-td">{product.category}</td>
-                <td class="pgs-td-num">€ {product.priceEur}</td>
-                <td class="text-center"
-                  >{@html formatCommentInfo(product.comment)}</td
+     <div class="w-full max-w-[2048px] overflow-x-auto rounded-lg align-middle text-center mx-auto">
+  <table class="table table-zebra min-w-full divide-y divide-accent">
+    <thead class="bg-base-300">
+      <tr class="h-12">
+        <th class="pgs-th">Proizvod</th>
+        <th class="pgs-th">Kategorija</th>
+        <th class="pgs-th">Status</th> <th class="pgs-th"></th> <th class="pgs-th">Kreirano</th>
+        <th class="pgs-th-r">Cijena</th>
+        <th class="pgs-th">Akcije</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each products as product, i}
+        <tr 
+          class="bg-base-200/60 tr-highlight" 
+          transition:fly={{ y: -50, duration: 300 }}
+        >            
+          <td class="pgs-td">
+            <a
+              use:link
+              href="/products/{product.id}"
+              class="pgs-hyperlink font-bold"
+            >{product.name}</a>
+          </td>
+          <td class="pgs-td font-mono">{product.category}</td>
+          <td class="text-center">
+            {#if product.active !== undefined}
+              <span
+                class="badge badge-soft badge-{product.active ? 'success' : 'neutral'} font-mono badge-sm uppercase"
+              >
+                {product.active ? 'Aktivan' : 'Neaktivan'}
+              </span>
+            {/if}
+          </td>
+          <td class="text-center">
+            {@html formatCommentInfo(product.comment)}
+          </td>
+          <td class="pgs-td font-mono">
+            {@html formatDate(product.created, "new", 15)}
+          </td>
+          <td class="pgs-td-num font-mono font-bold text-right">
+            € {product.priceEur}
+          </td>
+        
+          <td class="px-2">
+            <div class="flex justify-center items-center gap-2">
+              <div class="tooltip tooltip-info group" data-tip="Edit">
+                <a
+                  class="px-4"
+                  aria-label="Edit"
+                  use:link
+                  href="#/products-mngmt/{product.id}"
                 >
-                <td class="pgs-td font-mono whitespace-nowrap"
-                  >{@html formatDate(product.created, "new", 15)}</td
-                >
-              
-                <td class="px-2">
-                  <div
-                    class="flex justify-center items-center gap-2"
-                    style="font-size: 14px;"
-                  >
-                    <div class="tooltip tooltip-info" data-tip="Edit">
-                      <a
-                        class="px-4"
-                        aria-label="Edit"
-                        use:link
-                        href="/products/mngmt/{product.id}"
-                      >
-                        <i
-                          class="fas fa-pen text-gray-500 hover:text-sky-400 cursor-pointer"
-                        ></i>
-                      </a>
-                    </div>
-                    <button
-                      class="px-4"
-                      aria-label="Delete"
-                      on:click={() => deleteDialog(product.id)}
-                    >
-                      <div class="tooltip tooltip-info" data-tip="Delete">
-                        <i
-                          class="fas fa-times-circle text-gray-500 hover:text-red-400 cursor-pointer"
-                        ></i>
-                      </div>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            {/each}
-            <tr class="bg-base-200">
-              <td colspan="18" class="pgs-td font-mono h-[64px]">
-                Showing <b>{products.length}</b> product(s) on this page.<br />
-                Total products found: <b>{totalProducts}</b> | Total pages:
-                <b>{totalPages}</b>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                  <i class="fas fa-pen text-gray-500 group-hover:text-sky-400 cursor-pointer"></i>
+                </a>
+              </div>
+              <button
+                class="px-4 group"
+                aria-label="Delete"
+                on:click={() => deleteDialog(product.id)}
+              >
+                <div class="tooltip tooltip-info" data-tip="Delete">
+                  <i class="fas fa-times-circle text-gray-500 group-hover:text-red-400 cursor-pointer"></i>
+                </div>
+              </button>
+            </div>
+          </td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+
+  <div
+    class="nb-table-footer text-left bg-secondary w-full p-4"
+    style="background-color: var(--color-base-200);"
+  >
+    Prikazano: <span class="font-bold font-mono text-xl text-primary">{products.length}</span> proizvoda
+    <br />
+    Ukupno u bazi: <span class="font-bold text-lg text-primary">{totalProducts}</span> | Stranica: <span class="font-bold text-lg text-primary">{totalPages}</span>
+  </div>
+</div>
     {:else if products.length === 0 && !loading}
       no products found :/
     {:else}

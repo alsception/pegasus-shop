@@ -43,12 +43,12 @@ export const navRoutes: NavRoutesMap =
       customer: true,
       default: true,
     },
-    "/products/mngmt/:id": {
+    "/products/mngmt": {
       label: "Upravljanje proizvodima",
       icon: "box",
-      href: "#/products?listView=true",
-      component: null,
-      componentDetails: "/products/mngmt/:id",
+      href: "#/products-mngmt",
+      component: "/products-mngmt",
+      componentDetails: "/products-mngmt/:id",
       admin: true,
       customer: false,
     },

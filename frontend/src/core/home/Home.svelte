@@ -96,6 +96,18 @@
       customer: false,
     },
     {
+      id: 8,
+      emoji: "📦",
+      title: "Upr. proizv.",
+      description: "Upravljanje proizvodima",
+      icon: "users--",
+      href: "/products-mngmt",
+      color: "blue",
+      default: false,
+      admin: true,
+      customer: false,
+    },
+    {
       id: 5,
       emoji: "📅",
       title: "Rezervacije",
@@ -176,15 +188,15 @@
 
   <div
     class="pt-8 sm:pt-0 mx-0 px-0 sm:gap-0
-    grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-8 menu-container "
+    grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-9 menu-container "
   >
     {#each displayedItems as item}
       <a
         href="#{item.href}"
-        class="m-2 sm:m-1"        
+        class="m-2 sm:m-1 shadow-sm hover:shadow-xl "        
       >
         <div
-          class="menu-card card-8 shadow-sm hover:shadow-xl  flex-col"
+          class="menu-card card-8  flex-col"
         >
           <div
             class="card-content hover:bg-info/20 dark:hover:bg-primary/10 flex flex-col items-center justify-center text-primary/70"
