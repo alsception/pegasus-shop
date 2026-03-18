@@ -64,7 +64,7 @@ export async function register(username: string, password: string)
 
   const data = await response.text();  
   
-  showSuccessToast(data);
+  return data;//showSuccessToast(data);
   
   /*setToken(data.token);*///in future we should send token
 }

@@ -7,6 +7,5 @@
     logout();
     //send to /home
     push("/");
-    window.location.reload();
   });
 </script>

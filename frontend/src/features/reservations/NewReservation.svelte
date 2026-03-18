@@ -95,257 +95,174 @@
   }
 </script>
 
-<div class="w-full h-full" >
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+  
+  <div class="bg-base-100 shadow-2xl rounded-2xl w-full max-w-[100rem] max-h-[90vh] flex flex-col overflow-hidden">
+    
+    <div class="overflow-y-auto p-2 md:p-4 custom-scrollbar">
 
-  <div class="bg-base-100 shadow-2xl">
-    <div class="card-body">
-      <!-- Header -->
-      <!-- <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-primary">
-          Nova Rezervacija
-        </h2>
-      </div> -->
-
-      <form on:submit|preventDefault={handleSubmit} class="space-y-6">
-        
-        <!-- Date & Time Section -->
-        <div class="bg-base-200 rounded-lg p-6">
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="form-control md:col-span-2">
-              <!-- svelte-ignore a11y_label_has_associated_control -->
-              <label class="label">
-                <span class="label-text font-semibold">👤 Ime</span>
-                <span class="label-text-alt text-error">*obavezno</span>
-              </label>
-              <input 
-                type="text" 
-                class="pgs-input w-full mt-2" 
-                bind:value={reservation.ime} 
-                required 
-              />
-            </div>
-            <div class="form-control">
-              <!-- svelte-ignore a11y_label_has_associated_control -->
-              <label class="label">
-                <span class="label-text font-semibold">📅 Datum</span>
-                <span class="label-text-alt text-error">*obavezno</span>
-              </label>
-              <input 
-                type="date" 
-                class="pgs-input w-full mt-2" 
-                bind:value={reservation.dan}
-                required
-              />
-            </div>
-
-            <div class="form-control">
-              <!-- svelte-ignore a11y_label_has_associated_control -->
-              <label class="label">
-                <span class="label-text font-semibold">🕐 Vreme</span>
-              </label>
-              <input 
-                type="time" 
-                class="pgs-input w-full mt-2" 
-                bind:value={reservation.vreme}
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Guest Information Section -->
-        <div class="bg-base-200 rounded-lg p-6">
-        
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            
-
-            <div class="form-control">
-              <!-- svelte-ignore a11y_label_has_associated_control -->
-              <label class="label">
-                <span class="label-text font-semibold">📧 Email</span>
-              </label>
-              <input 
-                type="email" 
-                class="pgs-input w-full mt-2" 
-                bind:value={reservation.email}
-              />
-            </div>
-
-            <div class="form-control">
-              <!-- svelte-ignore a11y_label_has_associated_control -->
-              <label class="label">
-                <span class="label-text font-semibold">📞 Telefon</span>
-              </label>
-              <input 
-                type="tel" 
-                class="pgs-input w-full mt-2" 
-                bind:value={reservation.telefon}
-              />
-            </div>
-
-            <div class="form-control md:col-span-2">
-              <!-- svelte-ignore a11y_label_has_associated_control -->
-              <label class="label">
-                <span class="label-text font-semibold">👥 Broj Gostiju</span>
-                <span class="label-text-alt text-error">*obavezno</span>
-              </label>
-              <div class="flex items-center gap-4">
-                <input 
-                  type="range" 
-                  min="1" 
-                  max="50" 
-                  class="range range-primary flex-1" 
-                  bind:value={reservation.brojGostiju}
-                />
-                <div class="badge badge-lg badge-primary font-bold text-lg w-16">
-                  {reservation.brojGostiju}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Menu Selection Section -->
-        <div class="bg-base-200 rounded-lg p-6 hidden">
-          <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-            <i class="fas fa-utensils text-accent"></i>
-            Izbor Menija
-          </h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
-              <div class="card-body p-4">
-                <h4 class="card-title text-base">🍽️ Standard Menu</h4>
-                <input 
-                  type="number" 
-                  class="input input-bordered w-full" 
-                  bind:value={reservation.menuStandard} 
-                  min="0"
-                  placeholder="0"
-                />
-              </div>
-            </div>
-
-            <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
-              <div class="card-body p-4">
-                <h4 class="card-title text-base">⭐ Gold Menu</h4>
-                <input 
-                  type="number" 
-                  class="input input-bordered input-warning w-full" 
-                  bind:value={reservation.menuGold} 
-                  min="0"
-                  placeholder="0"
-                />
-              </div>
-            </div>
-
-            <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
-              <div class="card-body p-4">
-                <h4 class="card-title text-base">💎 Premium Menu</h4>
-                <input 
-                  type="number" 
-                  class="input input-bordered w-full" 
-                  bind:value={reservation.menuPremium} 
-                  min="0"
-                  placeholder="0"
-                />
-              </div>
-            </div>
-
-            <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
-              <div class="card-body p-4">
-                <h4 class="card-title text-base">🥗 Vegetarian Menu</h4>
-                <input 
-                  type="number" 
-                  class="input input-bordered input-success w-full" 
-                  bind:value={reservation.menuVege} 
-                  min="0"
-                  placeholder="0"
-                />
-              </div>
-            </div>
-
-            <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow sm:col-span-2 lg:col-span-2">
-              <div class="card-body p-4">
-                <h4 class="card-title text-base">🌟 X Menu (Special)</h4>
-                <input 
-                  type="number" 
-                  class="input input-bordered input-accent w-full" 
-                  bind:value={reservation.menuX} 
-                  min="0"
-                  placeholder="0"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Meal Type & Options Section -->
-        <div class="bg-base-200 rounded-lg p-6 hidden">
-         
-
-          <!-- Status Options -->
-          <div>
-            <!-- svelte-ignore a11y_label_has_associated_control -->
-            <label class="label">
-              <span class="label-text font-semibold">Status</span>
-            </label>
-            <div class="grid grid-cols-2 gap-3">
-              <label class="label cursor-pointer bg-base-100 rounded-lg p-4 hover:bg-base-300 transition-colors border-2" class:border-warning={reservation.vazno}>
-                <span class="label-text flex items-center gap-2">
-                  <i class="fas fa-exclamation-triangle text-warning"></i>
-                  Važno
-                </span>
-                <input type="checkbox" class="checkbox checkbox-warning" bind:checked={reservation.vazno} />
-              </label>
-
-            </div>
-          </div>
-        </div>
-
-        <!-- Notes Section -->
-        <div class="bg-base-200 rounded-lg p-6">
-           
-          <div class="form-control">
-           <label
-                  for="napomena"
-                  class="label-text font-semibold mb-20"
-                  >Napomena</label
-                >
-            <textarea 
-              class="textarea pgs-input resize-vertical" 
-              bind:value={reservation.napomena}
-            ></textarea>
-          </div>
-        </div>
-
-        <!-- Submit Button -->
-        <div class="mt-6 flex justify-end space-x-3">          
-          <button type="button" on:click={closeModal} class="btn">
-            Otkaži
-          </button>
-          <button type="submit" class="btn btn-primary"> Spremi </button>
-        </div>
-
-<!-- 
-        <div class="flex justify-end gap-3 pt-4">
-          <button type="button" class="btn btn-ghost btn-lg">
-            <i class="fas fa-times"></i>
-            Otkaži
-          </button>
-          <button type="submit" class="btn btn-primary btn-lg">
-            <i class="fas fa-check"></i>
-            Spremi
-          </button>
-        </div> -->
-
-      </form>
+<form
+  on:submit|preventDefault={handleSubmit}
+  class="max-w-[100rem] mx-auto bg-base-200 rounded-lg p-8 w-full space-y-8"
+>
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div>
+      <h3 class="text-3xl font-semibold text-primary">Rezervacija</h3>
+      <div id="loadingMessage" style="display: none;" class="mt-2">
+        <span class="loading loading-dots loading-xs"></span>
+      </div>
+    </div>
+    <div class="flex gap-3">
+      <button type="button" on:click={closeModal} class="btn btn-outline">
+        <i class="fas fa-arrow-left text-primary/60"></i> Nazad
+      </button>
+      <button type="submit" class="btn btn-primary px-8">
+        <i class="far fa-save text-primary-content"></i> Spremi
+      </button>
     </div>
   </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div class="lg:col-span-7 space-y-8">
+      
+      <div class="bg-base-200 p-6 rounded-xl shadow-sm border border-neutral/20">
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold text-primary">Termin</h3>
+          <p class="text-secondary text-sm uppercase tracking-wider">Vreme i detalji dolaska</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-secondary mb-2">
+              <i class="fas fa-user text-xs text-gray-400 mr-1"></i> Ime <span class="text-error">*</span>
+            </label>
+            <input 
+              type="text" 
+              class="pgs-input w-full" 
+              bind:value={reservation.ime} 
+              required 
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-secondary mb-2">
+              <i class="fas fa-calendar text-xs text-gray-400 mr-1"></i> Datum <span class="text-error">*</span>
+            </label>
+            <input 
+              type="date" 
+              class="pgs-input w-full" 
+              bind:value={reservation.dan}
+              required
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-secondary mb-2">
+              <i class="fas fa-clock text-xs text-gray-400 mr-1"></i> Vreme
+            </label>
+            <input 
+              type="time" 
+              class="pgs-input w-full" 
+              bind:value={reservation.vreme}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-base-200 p-6 rounded-xl shadow-sm border border-neutral/20">
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold text-primary">Gosti</h3>
+        </div>
+        <div class="space-y-4">
+          <label class="block text-sm font-medium text-secondary">
+            Broj osoba <span class="text-error">*</span>
+          </label>
+          <div class="flex items-center gap-6 bg-base-100 p-4 rounded-lg border border-neutral/20">
+            <input 
+              type="range" 
+              min="1" 
+              max="50" 
+              class="range range-primary flex-1" 
+              bind:value={reservation.brojGostiju}
+            />
+            <div class="badge badge-lg badge-primary font-mono font-bold text-lg h-10 w-16">
+              {reservation.brojGostiju}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-5 space-y-8">
+      
+      <div class="bg-base-200 p-6 rounded-xl shadow-sm border border-neutral/20">
+        <div class="mb-6 border-b border-neutral/10 pb-2">
+          <h3 class="text-xl font-semibold text-primary">Kontakt</h3>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-secondary mb-2">
+              <i class="fas fa-envelope text-xs text-gray-400 mr-1"></i> Email
+            </label>
+            <input 
+              type="email" 
+              class="pgs-input w-full" 
+              bind:value={reservation.email}
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-secondary mb-2">
+              <i class="fas fa-phone text-xs text-gray-400 mr-1"></i> Telefon
+            </label>
+            <input 
+              type="tel" 
+              class="pgs-input w-full" 
+              bind:value={reservation.telefon}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-base-200 p-6 rounded-xl shadow-sm border border-neutral/20">
+        <h3 class="text-xl font-semibold text-primary mb-6">Dodatno</h3>
+        
+        <div class="mb-6">
+          <label class="label cursor-pointer bg-base-100 rounded-lg p-4 border border-neutral/20 hover:bg-base-300 transition-colors" class:border-warning={reservation.vazno}>
+            <span class="label-text flex items-center gap-2 font-medium">
+              <i class="fas fa-exclamation-triangle text-warning"></i>
+              Označi kao važno
+            </span>
+            <input type="checkbox" class="checkbox checkbox-warning" bind:checked={reservation.vazno} />
+          </label>
+        </div>
+
+        <label class="block text-sm font-medium text-secondary mb-2">Napomena</label>
+        <textarea 
+          class="pgs-input w-full resize-vertical" 
+          bind:value={reservation.napomena}
+          rows="4"
+        ></textarea>
+      </div>
+    </div>
+  </div>
+</form>
+
 </div>
-
+  </div>
+</div>
 <style>
-  :global(body) {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  /* Opciono: Lepši skrolbar za moderne browsere */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
   }
-
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #88888844;
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #88888888;
+  }
 </style>

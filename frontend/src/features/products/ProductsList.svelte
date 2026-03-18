@@ -14,6 +14,7 @@
   import ProductCard from "./ProductCard.svelte";
   import ProductCategories from "./ProductCategories.svelte";
 
+  ///products-mngmt
   document.title = "Products | Pegasus";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -27,7 +28,7 @@
   let isAdminView = true;
   let isDark = true;
   let page = 0;
-  let size = 20; // Products per page
+  let size = 250; // Ucitacemo sve.
   let totalProducts = 0; // If backend returns total count
   let totalPages = 0; // Total pages from backend
   let selectedCategory: any;
@@ -178,6 +179,42 @@
   {
     console.log('selected category: '+category);
   }
+
+
+  function getKategorijaLabel(category: number | string): string {
+    switch (category) {
+      case '1':
+        return "Predjela";
+      case '2':
+        return "Glavna jela";
+      case '3':
+        return "Prilozi";
+      case '4':
+        return "Desert";
+      case '5':
+        return "Piće";
+      default:
+        return ''+category;
+    }
+  }
+
+
+  function getKategorijaColor(category: number | string) {
+    switch (category) {
+      case '1':
+        return "warning";
+      case '2':
+        return "error";
+      case '3':
+        return "success";
+      case '4':
+        return "accent";
+      case '5':
+        return "info";
+      default:
+        return ''+category;
+    }
+  }
 </script>
 
 {#if !$auth.isAuthenticated}
@@ -210,7 +247,7 @@
           <!-- Donji red: Kategorije, Pagination i View toggle -->
           <div class="flex gap-2 items-center">
             
-            <div class="flex-1">
+            <div class="flex-1 hidden">
               <ProductCategories bind:selectedCategory onSelect={handleCategorySelect} />
             </div>
 
@@ -279,11 +316,14 @@
           <td class="pgs-td">
             <a
               use:link
-              href="/products/{product.id}"
+              href="#/products/{product.id}"
               class="pgs-hyperlink font-bold"
             >{product.name}</a>
           </td>
-          <td class="pgs-td font-mono">{product.category}</td>
+          <td class="pgs-td font-mono">
+            <span class="badge badge-soft badge-font-mono badge-md badge-{getKategorijaColor(product.category)} font-mono badge-md" style="text-transform: uppercase;">
+                  {getKategorijaLabel(product.category)}
+                </span></td>
           <td class="text-center">
             {#if product.active !== undefined}
               <span

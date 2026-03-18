@@ -39,7 +39,7 @@ public class ProductController
         return products;
     }
     
-    //Ovo ne koristimo sad
+    //Ovo koristimo za upravljanje proizvodima
     @GetMapping("/p")
     public PaginatedProductsResponse getProductsWithPagination(
             @RequestParam(required = false) String search, 

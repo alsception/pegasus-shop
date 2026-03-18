@@ -2,9 +2,7 @@
   import { onMount } from "svelte";
   import { auth, getCurrentRole } from "../services/SessionStore";
   import InfoBlocks from "./InfoBlocks.svelte";
-  import Charts from "./Charts.svelte";
   import Login from "../auth/Login.svelte";
-  import { fly } from "svelte/transition";
   import OrdersList from "../../features/orders/OrdersList.svelte";
 
   document.title = "Pegasus";
@@ -29,7 +27,7 @@
       title: "Jelovnik",
       description: "Pregledaj proizvode",
       icon: "box--",
-      href: "/products?listView=false",
+      href: "/products",
       color: "green",
       default: true,
       admin: true,
@@ -45,7 +43,7 @@
       color: "yellow",
       default: false,
       admin: true,
-      customer: true,
+      customer: false,
     },
     {
       id: 4,
@@ -117,7 +115,7 @@
       color: "red",
       default: false,
       admin: true,
-      customer: true,
+      customer: false,
     },
     {
       id: 6,
@@ -129,7 +127,7 @@
       color: "",
       default: false,
       admin: true,
-      customer: true,
+      customer: false,
     },
     {
       id: 7,
@@ -148,7 +146,8 @@
 
   const role = getCurrentRole();
 
-  const getItemsByRole = (role: "ADMIN" | "CUSTOMER" | "EMPLOYEE"): Item[] => {
+  const getItemsByRole = (role: "ADMIN" | "CUSTOMER" | "EMPLOYEE"): Item[] => 
+  {
     return allItems.filter((route) => {
       if (route.default) return true;
 
@@ -184,7 +183,10 @@
 {#if !$auth.isAuthenticated}
   <Login />
 {:else}
-<InfoBlocks/>
+
+  {#if getCurrentRole() === "ADMIN"}
+  <InfoBlocks/>
+  {/if}
 
   <div
     class="pt-8 sm:pt-0 mx-0 px-0 sm:gap-0
@@ -193,10 +195,10 @@
     {#each displayedItems as item}
       <a
         href="#{item.href}"
-        class="m-2 sm:m-1 shadow-sm hover:shadow-xl "        
+        class="m-2 sm:m-1 shadow-sm hover:shadow-xl max-h-[170px]"        
       >
         <div
-          class="menu-card card-8  flex-col"
+          class="menu-card card-8 flex-col bg-base-100 dark:bg-[linear-gradient(135deg,_#1d1d1d_0%,_#0d0d0d_100%)]"
         >
           <div
             class="card-content hover:bg-info/20 dark:hover:bg-primary/10 flex flex-col items-center justify-center text-primary/70"
@@ -271,7 +273,7 @@
   }
 
   .menu-card {
-    background: var(--color-base-100);
+    /* background: var(--color-base-100); */
     min-width: none;
     position: relative;
     overflow: hidden;

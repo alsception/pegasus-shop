@@ -56,7 +56,6 @@
       // Inkrementacija indexa pokreće reaktivnost
       index = (index + 1) % photos.length;
 
-      console.log(photo.urls.regular);
     }, 1000 * 8);
 
     return () => clearInterval(interval);
@@ -96,9 +95,10 @@
 
     <form
       on:submit|preventDefault={handleLogin}
-      class="w-full max-w-md relative p-6 px-10 pb-10 m-[5px] rounded-2xl bg-zinc-950/84 bg-gradient-to-br 
+      class="w-full max-w-md relative p-6 px-10 pb-7 m-[5px] rounded-2xl bg-zinc-950/84 bg-gradient-to-br 
                 from-gray-50/80 via-base-200/80 to-zinc-100/80 
-                dark:from-gray-900/40 dark:via-base-200/40 dark:to-zinc-800/40 border border-2 border-base-200  backdrop-blur-lg /*border border-primary/14*/"
+                dark:from-gray-900/40 dark:via-base-200/40 dark:to-zinc-800/40 border border-2 
+                border-base-200  backdrop-blur-lg /*border border-primary/14*/"
     >
       {#if loading}
         <LoadingOverlay />
@@ -116,6 +116,7 @@
         bind:value={username}
         class="pgs-input mb-8 outline outline-primary/30"
         disabled={loading}
+        name="username" autocomplete="username"
       />
 
       <label
@@ -125,11 +126,13 @@
         <i class="fas fa-lock text-sm mx-2"></i>Password
       </label>
       <input
-        id="passowrd"
+        id="password"
         type="password"
         bind:value={password}
         class="pgs-input mb-8 outline outline-primary/30"
         disabled={loading}
+        name="password" 
+        autocomplete="current-password"
       />
 
       <button
@@ -148,9 +151,9 @@
         </p>
       {/if}
 
-      <div class="mt-8 hidden">
-        <label for="register" class="label">Don't have account?</label>
-        <a href="#/register" class="pgs-hyperlink"> Click here to register </a>
+      <div class="mt-8">
+        <label for="register" class="label">Nemate nalog?</label>
+        <a href="#/register" class="pgs-hyperlink">  Registrirajte se </a>
       </div>
     </form>
   </div>

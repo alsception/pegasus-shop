@@ -4,20 +4,25 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class UserActionLog {
+public class PGSLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    private Long userId;
 
     private String username;
+    
     private String action;
+    
+    private String type;
 
     private LocalDateTime timestamp;
 
-    public UserActionLog() {}
+    public PGSLog() {}
 
-    public UserActionLog(String username, String action) {
+    public PGSLog(String username, String action) {
         this.username = username;
         this.action = action;
         this.timestamp = LocalDateTime.now();

@@ -114,41 +114,31 @@ public class NotificationService {
 
     public String createNewOrderText(PGSOrder order)
     {
-        String text = "Nova narudžba <b>"+order.getCode()+"</b>, konobar <b>"+order.getUser().getUsername()+"</b>"
-        + ( order.getStol().isBlank() ? "" : 
-            (", stol <b>"+order.getStol()+"</b>"));
+        String text = "Nova narudžba <b>"+order.getCode()+"</b>, korisnik <b>"+order.getUser().getUsername()+"</b>";
         return text;
     }
 
     public String createOrderReadyText(PGSOrder order)
     {
-        String text = "Narudžba <b>"+order.getCode()+"</b> je spremna" + 
-        ( order.getStol().isBlank() ? "" : 
-            (", stol <b>"+order.getStol()+"</b>"));
+        String text = "Narudžba <b>"+order.getCode()+"</b> je spremna";
         return text;
     }
     
     public String createOrderInprepText(PGSOrder order)
     {
-        String text = "Narudžba <b>"+order.getCode()+"</b> je u pripremi" + 
-        ( order.getStol().isBlank() ? "" : 
-            (", stol <b>"+order.getStol()+"</b>"));
+        String text = "Narudžba <b>"+order.getCode()+"</b> je u pripremi";
         return text;
     }
 
     public String createOrderServedText(PGSOrder order)
     {
-        String text = "Narudžba <b>"+order.getCode()+"</b> je poslužena" + 
-        ( order.getStol().isBlank() ? "" : 
-            (". Stol <b>"+order.getStol()+"</b>"));;
+        String text = "Narudžba <b>"+order.getCode()+"</b> je dostavljena";
         return text;
     }
     
     public String createOrderStatusText(PGSOrder order)
     {
-        String text = "Narudžba <b>"+order.getCode()+"</b> je: <b>"+order.getStatus()+"</b>" + 
-        ( order.getStol().isBlank() ? "" : 
-            (", stol <b>"+order.getStol()+"</b>"));;
+        String text = "Narudžba <b>"+order.getCode()+"</b> je: <b>"+order.getStatus()+"</b>";
         return text;
     }
 }

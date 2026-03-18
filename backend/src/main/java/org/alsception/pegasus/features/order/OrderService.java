@@ -10,10 +10,8 @@ import org.alsception.pegasus.core.exception.BadRequestException;
 import org.alsception.pegasus.features.notifications.NotificationService;
 import org.alsception.pegasus.features.order.dto.OrderDTO;
 import org.alsception.pegasus.features.order.dto.OrderMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class OrderService 
@@ -126,10 +124,9 @@ public class OrderService
     @Transactional()
     public PGSOrder getById(Long id) throws BadRequestException
     {
-        List<PGSOrder> orders = orderRepository.findByIdWithItems(id);
-        if(orders.isEmpty()) throw new BadRequestException("Not found");
-        orders = this.processPrice(orders);
-        return orders.get(0);
+        PGSOrder order = orderRepository.findByIdWithItems(id);
+        if(order == null) throw new BadRequestException("Not found");
+        return order;
     }
     
     public void delete(Long id)
@@ -175,9 +172,9 @@ public class OrderService
 
         // PGSOrder existing = getById(id);
         // Load existing order IN THIS TRANSACTION (not the read-only one)
-        List<PGSOrder> orders = orderRepository.findByIdWithItems(id);
-        if(orders.isEmpty()) throw new BadRequestException("Not found");
-        PGSOrder existing = orders.get(0);
+        PGSOrder order = orderRepository.findByIdWithItems(id);
+        if(order== null) throw new BadRequestException("Not found");
+        PGSOrder existing = order;
         logger.debug("Existing order loaded");
         
         existing.setStatus(received.getStatus());
@@ -203,21 +200,19 @@ public class OrderService
     @Transactional
     public void updateOrderStatus(Long id, String status) 
     {
-        int rowsAffected = orderRepository.updateOrderStatus(id, status);
+        // 1. Prvo dohvatiš entitet (ovdje bacaš grešku ako ne postoji)
+        PGSOrder order = orderRepository.findByIdWithItems(id);
 
-        PGSOrder order = orderRepository.getReferenceById(id);
-        
-        if (rowsAffected == 0) 
-        {
-            throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, 
-                "Order with id " + id + " not found"
-            );
-        }
-        
-        //TODO: Izgleda da nestampa ovo kad je na info
+        // 2. Postaviš novi status (Hibernate će ovo sam spremiti na kraju metode - Dirty Checking)
+        order.setStatus(status);
+        order.setModified(LocalDateTime.now());
+
+        orderRepository.save(order);//za svaki slučaj
+
+        // 3. Logika za notifikacije i dodatna vremena
+
         logger.info("Order {} -> {} | id[{}] ", order.getCode(), status, id);
-        
+
         String msg = "";
         String type = "0";
 

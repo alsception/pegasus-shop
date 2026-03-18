@@ -43,6 +43,8 @@ public class PGSOrder
     private String status;
     private String comment;
     private String stol;
+    private String phone;
+    private String address;
     
     @Column(precision = 19, scale = 2, nullable = true)
     private BigDecimal price; 

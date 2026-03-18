@@ -239,6 +239,9 @@ public class CartService
     @Transactional
     public void checkout(PGSCheckoutRequestDTO prc, String username)
     {
+        //TODO: OVDE MORAMO PROVERITI I DALI JE PRODAVAONICA UOPSTE UKLJUCENA, TREBA BITI PARAMETAR DA SAMO ADMIN MOZE.
+
+
         //Pre svega proveravamo dali je otvoren fiskalni dan
         PGSDailySession dailySession = this.pgsSessionService.getActiveSession();
         //Ako nije dobro ovaj ce da baci exception ILI otvori novi dan
@@ -270,8 +273,9 @@ public class CartService
         order.setUser(u);
         
         
-        //3. Set table and comment ...
-        order.setStol(prc.getStol());
+        //3. Set phone and address ...
+        order.setAddress(prc.getAddress());
+        order.setPhone(prc.getPhone());
         order.setComment(prc.getComment());
                 
         

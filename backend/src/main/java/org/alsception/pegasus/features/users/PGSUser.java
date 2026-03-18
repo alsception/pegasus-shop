@@ -66,6 +66,9 @@ public class PGSUser
 
     @Column
     private String comment;
+
+    @Column
+    private String address;
     
     @Getter(AccessLevel.NONE)
     @Column(name = "active")

@@ -21,6 +21,7 @@ public class UserDTO
     private String phone;    
     private String organization;    
     private String comment;  
+    private String address;  
     private Boolean active;    
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

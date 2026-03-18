@@ -96,7 +96,7 @@ public class CartController {
         cartService.checkout(request, username);
         
         String msg = "Checkout successfull";
-        logger.debug(msg + " ["+username+"]");
+        logger.info(msg + " ["+username+"]");
         
         Map<String, String> response = new HashMap<>();
         response.put("message", msg);

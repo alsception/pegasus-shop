@@ -7,8 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import jakarta.transaction.Transactional;
-
 @Repository
 public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
    // ========== LAZY LOADING: Orders will be loaded without items ==========
@@ -134,8 +132,9 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
          LEFT JOIN FETCH o.items
          WHERE o.id = :id
          ORDER BY o.created DESC
+         LIMIT 1
          """)
-   List<PGSOrder> findByIdWithItems(@Param("id") Long id);
+   PGSOrder findByIdWithItems(@Param("id") Long id);
    
    @Query("""
          SELECT DISTINCT o FROM PGSOrder o
@@ -153,8 +152,7 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
       """)
     List<PGSOrder> findAllInActiveSessionWithItems();
    
-   @Modifying
-   @Transactional
+   @Modifying(clearAutomatically = true, flushAutomatically = true)
    @Query("""
          UPDATE PGSOrder o
          SET o.status = :status, o.modified = CURRENT_TIMESTAMP

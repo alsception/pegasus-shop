@@ -40,7 +40,7 @@
       title: "Jelovnik",
       description: "Pregledaj proizvode",
       icon: "box--",
-      href: "/products?listView=false",
+      href: "/products",
       color: "green",
       default: true,
       admin: true,

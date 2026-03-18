@@ -120,7 +120,7 @@
        * ??????? štaće ovo ovde???
        */
 
-      showErrorModal("Greška prilikom učitavanja narudžbi: " + error.message);
+      showErrorModal("Greška prilikom učitavanja narudžbe: " + error.message);
 
       // Handle 401 Unauthorized specifically
       if (error.message.includes("401")) {
@@ -243,6 +243,7 @@
         class="text-2xl font-extrabold text-primary pgs-hyperlink"
         >{formatCode(order.code)}</a
       >
+      <span class="hidden">{order.id}</span>
       <!-- TODO: Ovde isto prikazati bolje -->
         {#if order.status === 'READY' || order.status === 'SERVED'}
           <div

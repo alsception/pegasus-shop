@@ -11,7 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderDTO {
 
-    private Long id;
+    // id mora da bude string zbog javescripta 
+    // (JavaScript Number koristi samo 53 bita za pohranu cijelog broja.), 
+    // inace ode mast u propast
+    private String id;
+    
     private Long userId;
     private PGSUser user;
     private Long tableId;

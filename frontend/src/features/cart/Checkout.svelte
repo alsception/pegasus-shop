@@ -17,27 +17,16 @@
   let loading: boolean = false;
   let error: string | null = null;
   let user = getCurrentUsername();
-  let comment = "";
-
-  const stolovi = [
-    "DOSTAVA",
-    "ZA VAN",
-    "001",
-    "100",
-    "101",
-    "102",
-    "110",
-    "120",
-    "121",
-    "129",
-  ];
+  let address = "";
+  let phone = "";
+  //let comment = "";
 
   async function submitForm() {
     const url = API_BASE_URL + "/cart/checkout";
     const payload = {
-      stol: $brojStola, //ovde mora dollar sign kad ga koristimo...
       user,
-      comment,
+      address,
+      phone,
     };
 
     try {
@@ -91,9 +80,8 @@
         style="transform: none"
         transition:fly={{ y: -50, duration: 300 }}
       >
-        <!-- Header Section -->
         <div
-          class="p-0 bg-base-100 text-primary-content/80 dark:text-primary/80 rounded-t border-2 border-secondary/20 rounded-t-md"
+          class="p-0 bg-base-100 text-primary-content/80 dark:text-primary/80 border-2 border-secondary/20 rounded-t-md"
         >
           <h2 class="text-primary text-lg sm:text-2xl font-bold p-1 text-center h-14 pt-3">
             Checkout
@@ -105,74 +93,45 @@
             <div class="lg:col-span-2">
               <div class="">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  
                   <div class="w-full md:col-span-2">
                     <label
-                      for="user"
-                      class="block text-md font-medium text-gray-700 mb-2"
+                      for="phone"
+                      class="block text-md font-medium text-primary/80 mb-2"
                     >
-                      <i class="fas fa-user text-md text-primary/60 mr-2"
-                      ></i>Konobar
+                      <i class="fas fa-phone text-sm text-primary/60 mr-2"
+                      ></i>Telefon
                     </label>
                     <input
-                      id="user"
+                      id="phone"
                       class="pgs-input font-mono input-ghost font-bold"
-                      style="border: none;"
                       placeholder=""
-                      disabled
-                      bind:value={user}
+                      required                      
+                      bind:value={phone}
                     />
-                  </div>
-
-                  <div class="w-full md:col-span-2">
-                    <div class="w-full">
-                      <label
-                        for="stol"
-                        class="block text-md font-medium text-gray-700 mb-2"
-                      >
-                        <i class="fas fa-chair text-md text-primary/60 mr-2"
-                        ></i>Stol
-                      </label>
-                      <input
-                        id="stol"
-                        class="pgs-input font-mono input-ghost font-bold"
-                        style="border: none;"
-                        placeholder=""
-                        disabled
-                        bind:value={$brojStola}
-                      />
-                      <select
-                        id="stol"
-                        bind:value={$brojStola}
-                        class="pgs-input font-mono font-bold"
-                        style="border: none;"
-                      >
-                        {#each stolovi as sto}
-                          <option value={sto}>{sto}</option>
-                        {/each}
-                      </select>
-                    </div>
-                  </div>
+                  </div>               
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Other Section -->
+          <!-- Address Section -->
           <div class="grid grid-cols-1 mb-6">
             <div class="lg:col-span-2">
               <div class="rounded-lg">
                 <div class="">
                   <div class="w-full">
                     <label
-                      for="comment"
-                      class="block text-md font-medium text-gray-700 mb-2"
-                      >Napomena
+                      for="address"
+                      class="block text-md font-medium text-primary/80 mb-2"
+                      ><i class="fas fa-house text-sm text-primary/60 mr-2"
+                      ></i>Adresa
                     </label>
                     <textarea
-                      id="comment"
+                      id="address"
                       class="pgs-input resize-vertical"
-                      bind:value={comment}
-                      rows="4"
+                      bind:value={address}
+                      rows="8"
                       style="border: none;"
                       maxlength="255"
                     ></textarea>

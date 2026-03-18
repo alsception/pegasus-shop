@@ -28,7 +28,7 @@ public final class OrderMapper {
         }
 
         OrderDTO dto = new OrderDTO();
-        dto.setId(order.getId());
+        dto.setId(order.getId().toString());
         dto.setCode(order.getCode());
         dto.setStol(order.getStol());
         dto.setPaymentMethod(order.getPaymentMethod());
@@ -106,7 +106,7 @@ public final class OrderMapper {
         }
 
         PGSOrder order = new PGSOrder();
-        order.setId(dto.getId());
+        order.setId(Long.parseLong(dto.getId()));
         order.setCode(dto.getCode());
         order.setStol(dto.getStol());
         order.setPaymentMethod(dto.getPaymentMethod());

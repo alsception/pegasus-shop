@@ -4,6 +4,8 @@ public class PGSCheckoutRequestDTO
 {
     private String stol = "";
     private String comment = "";
+    private String address = "";
+    private String phone = "";
 
     public PGSCheckoutRequestDTO() {
     }
@@ -27,6 +29,22 @@ public class PGSCheckoutRequestDTO
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     

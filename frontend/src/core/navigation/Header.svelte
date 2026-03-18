@@ -58,16 +58,20 @@
  We'll leave it, for now...
   -->
 
-<div class="navbar shadow-sm fixed bg-base-100/94 /*dark:bg-zinc-950/84*/ backdrop-blur-lg z-9000">
+<div class="navbar shadow-sm fixed bg-[#0d0d0d]/84 bg-zinc-950/84 backdrop-blur-lg z-9000">
   <div class="navbar-start">
     <div class="pl-16">
       <a href="/#/home">
-        <h1
+        <!-- <h1
           class="text-md sm:text-md md:text-2xl lg:text-2xl font-bold bg-gradient-to-tr from-slate-400 via-orange-500 to-zinc-600
         text-transparent bg-clip-text font-mono uppercase tracking-widest"
         >
           Barbacoa
-        </h1>
+        </h1> -->
+
+        <img src="/white_barbacoa.png" alt="Barbacoa logo" title="Barbacoa" style="max-width:149px;">
+
+
       </a>
     </div>
   </div>
@@ -141,7 +145,7 @@
   style="    
             z-index: 9999;
             position: fixed;
-            top: 3px;
+            top: 0.8rem;
             left: 8px;"
 >
   <div
@@ -193,7 +197,7 @@
 
 <style>
   .navbar {
-    height: 3rem;
+    height: 4rem;
     min-height: 3rem;
   }
 </style>

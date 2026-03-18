@@ -60,6 +60,10 @@ i LITE APP!!, I MOZDA i WS.....
   let isCheckedInPrep = true;
   let isCheckedReady = false;
 
+  $: auth.subscribe((value) => {
+    isAuthenticated = value.isAuthenticated;
+  });
+
   function toggleView() 
   {
     isBlockView = !isBlockView;
@@ -75,14 +79,10 @@ i LITE APP!!, I MOZDA i WS.....
   onMount(async () => 
   {
     if (liteView) isBlockView = false;
+
     try 
     {
-      const { isAuthenticated } = get(auth);
-
-      /**
-       * TODO: this is not actually working
-       */
-
+      
       if (!isAuthenticated) 
       {
         error = "Session expired. Please login again.";
@@ -169,81 +169,89 @@ i LITE APP!!, I MOZDA i WS.....
 
   async function handleSearch(showLoading: boolean) 
   {
-    const token = $auth.token;
-    if (showLoading) loading = true;
-
-    try 
+    if(!$auth.isAuthenticated)
     {
-      const res = await fetch(API_BASE_URL + `/orders?search=${searchTerm}`, 
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      clearInterval(intervalId);
+    }
+    else
+    {
+      const token = $auth.token;
+      if (showLoading) loading = true;
 
-      // Check response status and handle specific cases
-      if (!res.ok) 
+      try 
       {
-        if (res.status === 401) 
+        const res = await fetch(API_BASE_URL + `/orders?search=${searchTerm}`, 
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        // Check response status and handle specific cases
+        if (!res.ok) 
+        {
+          if (res.status === 401) 
+          {
+            console.log("Authentication failed - token may be expired");
+            // Clear invalid token
+            localStorage.removeItem("token");
+            auth.set({ token: null, isAuthenticated: false });
+            // Redirect to login or show login modal
+            // window.location.href = '/login';
+            // OR: showLoginModal = true;
+            // OR: goto('/login');
+            throw new Error("Authentication failed");
+          }
+          throw new Error(`Fetch error: ${res.status} - ${res.statusText}`);
+        }
+
+        // Parse JSON directly - no need for JSON.parse since res.json() already does this
+        const data = await res.json();
+
+        // Update orders with the received data
+        orders = data;
+
+        if( liteView || !isBlockView ) orders = data.reverse();
+
+
+        ordersNaCekanju = orders.filter((o) => o.status === 'WAITING');
+        ordersUpripremi = orders.filter((o) => o.status === 'IN_PREPARATION');
+        ordersSpremni = orders.filter((o) => o.status === "READY" || o.status === "SERVED");
+        totalAmount = calculateTotal(orders);
+      } 
+      catch (error: any) 
+      {
+        console.error("Error during search:", error);
+
+        /**
+         * TODO: see if this works. should display error message.
+         * ako je failed to fetch, server je nedostupan.
+         */
+
+        showErrorModal("Greška prilikom učitavanja narudžbi: " + error.message);
+        clearInterval(intervalId);
+        console.log('asdasd');
+        // Handle 401 Unauthorized specifically
+        if (error.message.includes("401")) 
         {
           console.log("Authentication failed - token may be expired");
           // Clear invalid token
-          localStorage.removeItem("token");
-          auth.set({ token: null, isAuthenticated: false });
+          $auth.token = null;
           // Redirect to login or show login modal
           // window.location.href = '/login';
           // OR: showLoginModal = true;
           // OR: goto('/login');
-          throw new Error("Authentication failed");
         }
-        throw new Error(`Fetch error: ${res.status} - ${res.statusText}`);
-      }
 
-      // Parse JSON directly - no need for JSON.parse since res.json() already does this
-      const data = await res.json();
-
-      // Update orders with the received data
-      orders = data;
-
-      if( liteView || !isBlockView ) orders = data.reverse();
-
-
-      ordersNaCekanju = orders.filter((o) => o.status === 'WAITING');
-      ordersUpripremi = orders.filter((o) => o.status === 'IN_PREPARATION');
-      ordersSpremni = orders.filter((o) => o.status === "READY" || o.status === "SERVED");
-      totalAmount = calculateTotal(orders);
-    } 
-    catch (error: any) 
-    {
-      console.error("Error during search:", error);
-
-      /**
-       * TODO: see if this works. should display error message.
-       * ako je failed to fetch, server je nedostupan.
-       */
-
-      showErrorModal("Greška prilikom učitavanja narudžbi: " + error.message);
-
-      // Handle 401 Unauthorized specifically
-      if (error.message.includes("401")) 
+        // Handle other errors appropriately (show user message, etc.)
+      } 
+      finally 
       {
-        console.log("Authentication failed - token may be expired");
-        // Clear invalid token
-        $auth.token = null;
-        // Redirect to login or show login modal
-        // window.location.href = '/login';
-        // OR: showLoginModal = true;
-        // OR: goto('/login');
+        if (showLoading) loading = false;
       }
-
-      // Handle other errors appropriately (show user message, etc.)
-    } 
-    finally 
-    {
-      if (showLoading) loading = false;
-    }
+    }         
   }
 
   function calculateTotal(orders: Order[]): number 

@@ -52,6 +52,7 @@ public class OrderController {
         } 
         catch (BadRequestException e) 
         {
+            //Ovo ne bi trebalo vise da se pojavljuje
             logger.warn("ERR_50: "+e.getMessage());
             return ResponseEntity.notFound().build();
         }

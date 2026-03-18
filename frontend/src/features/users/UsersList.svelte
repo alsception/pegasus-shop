@@ -192,7 +192,7 @@
         return "primary ";
       
       case "CUSTOMER":
-        return "secondary ";
+        return "success ";
         
       default:
         return "primary "; // ili neka podrazumevana boja

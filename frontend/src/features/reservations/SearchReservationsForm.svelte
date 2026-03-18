@@ -10,8 +10,11 @@
   import InlineEdit from "./InlineEdit.svelte";
   import NewReservationModal from "./NewReservationModal.svelte";
   import { link } from "svelte-spa-router";
-  import Chart from "./Chart.svelte";
 
+  const { from, to } = getCurrentMonthRange();
+
+  let searchDateFrom = from; // pocetak meseca "2026-03-01"
+  let searchDateTo = to;     // kraj meseca"2026-03-31"
   let showCreateModal = false;
   let totalReservations = 0;
 
@@ -22,9 +25,6 @@
   // Authentication
   let isAuthenticated = false;
 
-  // Search parameters
-  let searchDateFrom = "2025-11-01";
-  let searchDateTo = "2025-11-30";
   let searchName = "";
 
   // Results
@@ -42,6 +42,20 @@
   totalReservations: 0,
     reservations: []
   };
+
+  function getCurrentMonthRange(): { from: string; to: string } {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+
+  const from = new Date(year, month, 1);
+  const to = new Date(year, month + 1, 0); // dan 0 sljedećeg mjeseca = zadnji dan trenutnog
+
+  const fmt = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+  return { from: fmt(from), to: fmt(to) };
+}
 
   function toggleView() {
     isBlockView = !isBlockView;
@@ -211,91 +225,79 @@
   <ErrorDiv {error} />
 {:else}
   <div class="">
+ 
     <!-- Search Form -->
-    <div class="w-full flex justify-center px-1">
-  <div class="w-full /*max-w-4xl*/ p-4 bg-base-200 rounded-lg mb-1"  style="min-width: fit-content">
-    <form class="flex flex-col sm:flex-row items-center gap-3 w-full">
+<div class="w-full flex justify-center px-1">
+  <div class="w-full p-4 bg-base-200 rounded-lg mb-1 pb-2">
+    <form
+      on:submit|preventDefault={handleSearch}
+      class="flex flex-col md:flex-row items-center gap-3"
+    >
       <!-- Ime -->
-       <div class="flex flex-col px-2">
-        <label for="searchName" class="text-sm font-medium text-secondary mb-1">
-          Ime
-        </label>
-        <input
-          id="searchName"
-          type="text"
-          class="input pgs-input"
-          bind:value={searchName}
-          placeholder="Upiši ime za pretragu..."
-          on:keypress={(e) => e.key === "Enter" && handleSearch()}
-        />
-      </div>      
+      <input
+        id="searchName"
+        type="text"
+        class="input border-2 w-full md:flex-1 max-w-md"
+        bind:value={searchName}
+        placeholder="Upiši ime za pretragu..."
+      />
 
-      <!-- Datum od -->
-      <div class="flex flex-col px-2">
-        <label for="searchDateFrom" class="text-sm font-medium text-secondary mb-1">
-          Datum od
-        </label>
-        <input
-          id="searchDateFrom"
-          type="date"
-          class="input pgs-input max-w-[9rem]"
-          bind:value={searchDateFrom}
-          placeholder="Datum od"
-        />
-      </div>
-
-      <!-- Datum do -->
-      <div class="flex flex-col px-2">
-        <label for="searchDateTo" class="text-sm font-medium text-secondary mb-1">
-          Datum do
-        </label>
-        <input
+      <!-- Datum od / do -->
+    <div class="flex flex-row w-full md:w-auto gap-3">
+      <input
+        id="searchDateFrom"
+        type="date"
+        class="input border-2 w-1/2 md:w-auto"
+        bind:value={searchDateFrom}
+      />
+      <input
         id="searchDateTo"
         type="date"
-        class="input pgs-input max-w-[9rem]"
+        class="input border-2 w-1/2 md:w-auto"
         bind:value={searchDateTo}
-        placeholder="Datum do"
       />
-      </div>      
+    </div>
 
-      <!-- Dugmad -->
-      <button
-        type="button"
-        class="btn btn-dash"
-        on:click={handleSearch}
-        disabled={loading}
-      >
-        <i class="fas fa-search"></i>
-        {loading ? "Tražim..." : "Traži   "}
-      </button>
-      <button
-        type="button"
-        class="btn btn-dash"
-        on:click={resetSearch}
-        disabled={loading}
-      >
-        Resetuj
-      </button>
-      <button
-        on:click={openCreateModal}
-        class="btn btn-dash"
-      >       
+      <div class="flex flex-row gap-3 w-full md:w-auto">
+        <button
+          type="submit"
+          class="btn btn-dash flex-1 md:flex-none whitespace-nowrap"
+          disabled={loading}
+        >
+          <i class="fas fa-search"></i>
+          {loading ? "Tražim..." : "Traži"}
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-dash flex-1 md:flex-none whitespace-nowrap"
+          on:click={resetSearch}
+          disabled={loading}
+        >
+          Resetuj
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-dash flex-1 md:flex-none whitespace-nowrap"
+          on:click={openCreateModal}
+        >
           <i class="fas fa-calendar-plus"></i>
           Nova rezervacija
-      </button>
-      <button 
-                  type="button"
+        </button>
 
-        class="btn btn-dash" on:click={toggleView}>
-        
-        <i class="fas fa-th-large"></i>
-        Prikaz
-      </button>
-
+        <button
+          type="button"
+          class="btn btn-dash flex-1 md:flex-none whitespace-nowrap"
+          on:click={toggleView}
+        >
+          <i class="fas fa-th-large"></i>
+          Prikaz
+        </button>
+      </div>
     </form>
   </div>
 </div>
-
 
     {#if loading}
       <LoadingOverlay />
@@ -642,18 +644,6 @@
   </div>
 </dialog>
 
-
-<svg viewBox="0 0 300 100" class="w-full h-32">
-  <polyline
-    points={data.map((val, i) => `${i * 50},${100 - (val/max * 80)}`).join(' ')}
-    fill="none"
-    stroke="#00ff9f"
-    stroke-width="2"
-  />
-</svg>
-
-
-<Chart {dailyReservations} />
 
 <style>
  

@@ -229,7 +229,7 @@
   <ErrorDiv {error} />
 {:else}
   <div
-    class="w-[100%] flex justify-center p-0 fixed z-9003 bg-transparent top-[-0.1rem]"
+    class="w-[40%] flex justify-center p-0 fixed z-9003 bg-transparent top-[-0.1rem]"
     style="justify-self: center;"
   >
     <div
@@ -289,8 +289,7 @@
           {/if}
 
           <div
-            class="text-xs sm:text-md text-gray-600 dark:text-gray-400 w-full m-0 my-2 flex flex-wrap justify-stretch items-stretch
-"
+            class="text-xs sm:text-md text-gray-600 dark:text-gray-400 w-full m-0 my-2 flex flex-wrap justify-stretch items-stretch"
           >
             {#each kategorije as k}
               <div

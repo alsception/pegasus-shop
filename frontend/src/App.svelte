@@ -49,7 +49,7 @@
   <Router routes={unauthenticatedRoutes} />
 {:else}
 <Header/>
-  <main class="flex-1 overflow-auto main-content w-full mt-11 p-0 sm:p-6">
+  <main class="flex-1 overflow-auto main-content w-full mt-14 p-0 sm:p-6">
     <Router {routes} />
   </main>
 {/if}
