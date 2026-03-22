@@ -12,7 +12,7 @@
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-  document.title = "Checkout | Pegasus";
+  document.title = "Checkout | Barbacoa";
 
   let loading: boolean = false;
   let error: string | null = null;

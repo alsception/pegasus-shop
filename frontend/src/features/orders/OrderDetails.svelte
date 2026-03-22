@@ -14,7 +14,7 @@
   } from "../../utils/formatting";
   import { showSuccessToast } from "../../core/utils/toaster";
 
-  document.title = "Order details | Pegasus";
+  document.title = "Order details | Barbacoa";
 
   let loading: boolean = false;
   let error: string | null = null;

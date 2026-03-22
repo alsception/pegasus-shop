@@ -18,7 +18,7 @@
   let showCreateModal = false;
   let totalReservations = 0;
 
-  document.title = "Rezervacije | Pegasus";
+  document.title = "Rezervacije | Barbacoa";
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 

@@ -3,7 +3,7 @@
   import Login from "../../core/auth/Login.svelte";
   import SearchReservationsForm from "./SearchReservationsForm.svelte";
 
-  document.title = "Rezervacije | Pegasus";
+  document.title = "Rezervacije | Barbacoa";
 
   // State variables
   let isAuthenticated = false;

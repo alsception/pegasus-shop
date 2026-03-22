@@ -18,7 +18,7 @@
   let error: string | null = null;
   let ID: number | string;
 
-  document.title = "Account details | Pegasus";
+  document.title = "Account details | Barbacoa";
 
   /**
    *   TODO: Pitanje kakve date formate koristimo ovde, moguce da su pogresni
@@ -104,7 +104,7 @@
       });
 
       formData = data;
-      document.title = formData.username + " | Account details " + " | Pegasus";
+      document.title = formData.username + " | Account details " + " | Barbacoa";
       error = null;
       formData.created = data.created;
       // Convert created date to datetime-local format

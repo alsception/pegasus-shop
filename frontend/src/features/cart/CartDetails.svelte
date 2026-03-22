@@ -20,7 +20,7 @@
   const randomImage =
     emptyImages[Math.floor(Math.random() * emptyImages.length)];
 
-  document.title = "Cart | Pegasus";
+  document.title = "Cart | Barbacoa";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   let isAuthenticated = false;

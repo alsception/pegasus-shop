@@ -16,7 +16,7 @@
   let ID: number | string;
   const codeLength = 15;
 
-  document.title = "Artikli | Pegasus";
+  document.title = "Artikli | Barbacoa";
 
   $: {
     if ($params?.id) {

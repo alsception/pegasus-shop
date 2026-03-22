@@ -23,7 +23,7 @@
   let sortAsc = true;
   let searchTerm = "";
 
-  document.title = "Korisnici | Pegasus";
+  document.title = "Korisnici | Barbacoa";
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 

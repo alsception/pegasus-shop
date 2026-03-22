@@ -15,7 +15,7 @@
   import ProductCategories from "./ProductCategories.svelte";
 
   ///products-mngmt
-  document.title = "Products | Pegasus";
+  document.title = "Jelovnika | Barbacoa";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   //DEFINITIONS

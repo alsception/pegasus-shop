@@ -7,7 +7,7 @@
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
 
-  document.title = "Log in | Pegasus";
+  document.title = "Log in | Barbacoa";
 
   let username = "";
   let password = "";
@@ -61,14 +61,20 @@
     return () => clearInterval(interval);
   });
 
-  async function handleLogin() {
-    try {
+  async function handleLogin() 
+  {
+    try 
+    {
       loading = true;
       await login(username, password);
       push("/home");
-    } catch (err: any) {
+    } 
+    catch (err: any) 
+    {
       error = "ERROR: " + err.message;
-    } finally {
+    } 
+    finally 
+    {
       loading = false;
     }
   }

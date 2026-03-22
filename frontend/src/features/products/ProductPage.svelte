@@ -8,7 +8,7 @@
   import AddToCartButton from "./AddToCartButton.svelte";
   import { formatPrice } from "../../utils/formatting";
 
-  document.title = "Product details | Pegasus";
+  document.title = "Product details | Barbacoa";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   export let productId: number;

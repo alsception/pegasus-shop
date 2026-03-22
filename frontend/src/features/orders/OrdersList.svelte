@@ -35,7 +35,7 @@ i LITE APP!!, I MOZDA i WS.....
 
 ***************************************************************** */
 
-  document.title = "Narudžbe | Pegasus";
+  document.title = "Narudžbe | Barbacoa";
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 

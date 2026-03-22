@@ -25,7 +25,7 @@
   export let order: Order;
   export let liteView = false;
 
-  document.title = "Narudžbe | Pegasus";
+  document.title = "Narudžbe | Barbacoa";
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 

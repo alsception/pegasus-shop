@@ -80,7 +80,7 @@
   <div class="flex items-center gap-6">
 
     <label
-      class="swap swap-rotate text-gray-500 cursor-pointer"
+      class="swap swap-rotate text-gray-500 cursor-pointer hidden"
       data-tip="Dark Mode"
     >
       <input
@@ -98,13 +98,25 @@
     </label>
 
     <div
-      class="text-gray-500 cursor-pointer"
+      class="text-gray-500 cursor-pointer hidden"
       data-tip="Poruke"
     >
       <span class="text-xl">
         <i class="fas fa-envelope text-sm md:text-lg"></i>
       </span>
     </div>
+
+    <div class="dropdown dropdown-hover dropdown-bottom dropdown-left hidden">
+      <div tabindex="0" role="button" class="btn m-1">Kosarica</div>
+      <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+            <li> 
+              <div class="max-h-[90vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-100 bg-transparent">        
+                <!-- TODO: OVDE CEMO STAVITI CARTLITE -->
+                <CartDetails />
+       </div>
+            </li>
+          </ul>
+        </div>
 
     <button
       tabindex="0"

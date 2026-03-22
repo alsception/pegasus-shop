@@ -5,7 +5,7 @@
   import Router from "svelte-spa-router";
 
   //Our imports - core
-  import { auth } from "./core/services/SessionStore";
+  import { auth, getCurrentRole } from "./core/services/SessionStore";
   import Login from "./core/auth/Login.svelte";
   import Register from "./core/auth/Register.svelte";
   import Header from "./core/navigation/Header.svelte";
@@ -49,7 +49,7 @@
   <Router routes={unauthenticatedRoutes} />
 {:else}
 <Header/>
-  <main class="flex-1 overflow-auto main-content w-full mt-14 p-0 sm:p-6">
+  <main class="flex-1 overflow-auto main-content w-full mt-0 p-0 sm:p-6" class:mt-14={getCurrentRole() === "ADMIN"}>
     <Router {routes} />
   </main>
 {/if}

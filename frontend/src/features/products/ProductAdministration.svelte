@@ -17,7 +17,7 @@
   let ID: number | string;
   const codeLength = 15;
 
-  document.title = "Product details: | Pegasus";
+  document.title = "Product details: | Barbacoa";
 
   //Authenticacion
   $: isAuthenticated = $auth.isAuthenticated;

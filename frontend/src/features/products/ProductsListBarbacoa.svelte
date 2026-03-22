@@ -16,7 +16,7 @@
   import ProductCategories from "./ProductCategories.svelte";
   import AddToCartButton from "./AddToCartButton.svelte";
 
-  document.title = "Products | Pegasus";
+  document.title = "Jelovnik | Barbacoa";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   //DEFINITIONS
@@ -213,7 +213,7 @@
       filteredProducts = products;
     }
 
-    //reset croll position
+    //reset scroll position
     document
       .getElementById("products-container")
       ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -242,7 +242,7 @@
         id="brb-prod-l-f"
       >
         <!-- Gornji red: Input i Traži dugme -->
-        <div class="flex gap-1">
+        <div class="flex gap-1 mb-4">
           <input
             id="i-search"
             type="text"
@@ -276,17 +276,8 @@
         </div>
 
         <!-- Donji red: Kategorije, Pagination i View toggle -->
-        <div class="flex gap-2 items-center">
-          {#if getCurrentRole() === "ADMIN"}
-            <button
-              type="button"
-              on:click={() => (window.location.href = "#/products/mngmt/0")}
-              class="btn btn-dash flex-1 lg:flex-none whitespace-nowrap hidden"
-            >
-              <i class="fas fa-plus"></i>
-              Dodaj novi
-            </button>
-          {/if}
+        <div class="flex gap-2 items-center hidden">
+     
 
           <div
             class="text-xs sm:text-md text-gray-600 dark:text-gray-400 w-full m-0 my-2 flex flex-wrap justify-stretch items-stretch"
