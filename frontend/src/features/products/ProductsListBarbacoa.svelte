@@ -329,11 +329,15 @@
           </tbody>
         </table>
       </div>
+      {#if !hideButtonDalje}
+      {@render btnNext()}
+    {/if}
     </div>
   {:else if !products && !loading}
     no products found :/
   {:else}
-    <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 4xl:grid-cols-5 gap-8 p-4" style="justify-items: center;">
+    <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 4xl:grid-cols-5 gap-8 p-4 mb-20" 
+      style="justify-items: center;">
       {#each filteredProducts as product, i}
         <ProductCard {product} />
       {/each}
@@ -345,7 +349,7 @@
 {/if}
 
 {#snippet btnNext()}
-  <div class="fixed top-[90%] left-[72%] md:left-[80%] lg:left-[88%] z-[9000]">
+  <div class="fixed top-[92%] left-[84%] md:left-[84%] lg:left-[92%] z-[9000]">
     <a class="btn btn-lg btn-primary border border-primary-content/40" use:link href="/cart">
       Dalje<i class="fas fa-arrow-right text-primary-content/60"></i>
     </a>
