@@ -260,13 +260,7 @@
               <i class="fas fa-plus"></i>
               Dodaj novi
             </button>
-      <!--       <a
-  href="/novi"
-  class="btn btn-dash flex-1 lg:flex-none whitespace-nowrap"
->
-  <i class="fas fa-plus"></i>
-  Dodaj novi
-</a> -->
+   
             {/if}
             
             <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">

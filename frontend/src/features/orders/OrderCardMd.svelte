@@ -275,10 +275,6 @@
       <i class="fas fa-user"></i>
       <span><strong>{order.user?.username}</strong></span>
     </div>
-    <div class="flex items-center gap-1 text-sm text-primary/60 mr-2">
-      <i class="fas fa-chair"></i>
-      <span><strong>{order.stol ? order.stol : "-"}</strong></span>
-    </div>
     <div
       class="text-sm flex items-center text-primary/60 gap-2"
       class:hidden={liteView}
@@ -298,7 +294,7 @@
 
   <div>
       <span
-        class="indicator-item badge badge-ghost text-primary font-bold rounded-md mt-3"
+        class="indicator-item badge badge-ghost  text-primary font-bold rounded-md mt-3"
         style=""
       >
         Napomena:
@@ -306,7 +302,7 @@
       <br />
       <div
         class=" 
-          border-0 border-info bg-base-100 text-primary p-1  py-2 px-0 rounded-lg break-words mb-4"
+          border-0 border-info text-primary p-1  py-2 px-0 rounded-lg break-words mb-4"
           class:truncate={ order.status != 'IN_PREPARATION'}
           class:max-w-xs={ order.status != 'IN_PREPARATION'}          
           title="{order?.comment}"

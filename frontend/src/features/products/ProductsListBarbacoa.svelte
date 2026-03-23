@@ -15,6 +15,8 @@
   import ProductCard from "./ProductCard.svelte";
   import ProductCategories from "./ProductCategories.svelte";
   import AddToCartButton from "./AddToCartButton.svelte";
+  import { fly } from "svelte/transition";
+  import ProductPage from "./ProductPage.svelte";
 
   document.title = "Jelovnik | Barbacoa";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -35,6 +37,7 @@
   let totalProducts = 0; 
   let totalPages = 0; 
   let selectedCategory: number;
+  let productId = 0; //Product koji cemo prikazati na modalu kada se klikne
   export let hideButtonDalje = false;
 
   /* const kategorije = [
@@ -226,6 +229,24 @@
       .getElementById("products-list-container")
       ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
+
+  /* product modal */
+  let showModal = false;
+
+  function openModal() {
+    showModal = true;
+  }
+
+  function closeModal() {
+    showModal = false;
+  }
+
+  function handleProductClick(id: number | undefined) 
+  {
+    if (id != undefined) productId = id;
+    openModal();
+  }
+
 </script>
 
 {#if !$auth.isAuthenticated}
@@ -299,7 +320,10 @@
                 <td class="pgs-td whitespace-nowrap p-0">
                   <div class="">
                     <h3 class="font-semibold text-lg max-w-[382px;] truncate text-primary" title={product.name}>
-                      <a use:link href="/products/{product.id}" class="pgs-hyperlink">{product.name}</a>
+                      <!-- svelte-ignore a11y_click_events_have_key_events -->
+                      <!-- svelte-ignore a11y_no_static_element_interactions -->
+                      <span on:click={() => handleProductClick(product.id)}
+                       class="pgs-hyperlink">{product.name}</span>
                     </h3>
                     {#if isLiteListView}
                       <p class="text-sm text-primary/50 mt-1 line-clamp-3 max-w-[80%;]" title={product.description} style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; white-space: normal;">
@@ -336,7 +360,7 @@
   {:else if !products && !loading}
     no products found :/
   {:else}
-    <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 4xl:grid-cols-5 gap-8 p-4 mb-20" 
+    <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 4xl:grid-cols-5 gap-8 p-4 mb-20 mt-[-4rem] sm:mt-[-6rem]" 
       style="justify-items: center;">
       {#each filteredProducts as product, i}
         <ProductCard {product} />
@@ -349,12 +373,49 @@
 {/if}
 
 {#snippet btnNext()}
-  <div class="fixed top-[92%] left-[84%] md:left-[84%] lg:left-[92%] z-[9000]">
+  <div class="fixed top-[92%] left-[75%] md:left-[84%] lg:left-[92%] z-[9000]">
     <a class="btn btn-lg btn-primary border border-primary-content/40" use:link href="/cart">
       Dalje<i class="fas fa-arrow-right text-primary-content/60"></i>
     </a>
   </div>
 {/snippet}
+
+{#if showModal}
+  <div class="modal pt-0" style="backdrop-filter: blur(10px);">
+    <div
+      class="modal-box max-h-[90vh] w-full sm:w-8/12 max-w-5xl p-0 flex flex-col bg-base-200"
+      transition:fly={{ y: 50, duration: 300 }}
+    >
+      <!-- Fixed Header -->
+      <div
+        class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300"
+      >
+        <h3 class="font-bold text-lg hidden">Detalji proizvoda</h3>
+      </div>
+
+      <!-- Scrollable Content -->
+      <div class="overflow-y-auto flex-1">
+        <ProductPage {productId} liteView={true}></ProductPage>
+      </div>
+
+      <!-- Fixed Footer -->
+      <div
+        class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300"
+      >
+        <div class="flex justify-end gap-2">
+          <button class="btn btn-secondary" on:click={closeModal}
+            >Zatvori</button
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Glass Backdrop -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="modal-backdrop" on:click={closeModal}></div>
+  </div>
+{/if}
 
 <style>
   .active {

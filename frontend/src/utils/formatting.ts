@@ -205,7 +205,7 @@ export function getOrderStatusLabel(status: string ): string
 
       case "DELIVERED":
       case "SERVED":
-        return "SERVIRANO"
+        return "DOSTAVLJENO"
 
       case "CANCELLED":
       case "REFUNDED":

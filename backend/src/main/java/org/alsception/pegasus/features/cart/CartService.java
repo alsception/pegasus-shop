@@ -259,9 +259,8 @@ public class CartService
         order.setId(id);
 
         //calculate suffix
-        String suffix = "R";    
-        if("DOSTAVA".equalsIgnoreCase(prc.getStol().trim())) suffix = "D";
-        else if("ZA VAN".equalsIgnoreCase(prc.getStol().trim())) suffix = "Z";
+        String suffix = "D";    //Dostavan
+        if( prc.getTakeAway() ) suffix = "Z"; //Za van        
 
         order.setCode(CodeGenerator.generateOrderCode(suffix));        
         
@@ -331,7 +330,7 @@ public class CartService
         logger.trace("Order created, deleting cart...");
         deleteCartAsync(cart); 
 
-        logger.info("**New order {}, {}, stol {}, id[{}] ", order.getCode(), username, order.getStol(), id);
+        logger.info("**New order {}, {}, id[{}] ", order.getCode(), username, id);
        
         //10. finally notification
         notificationService.createNotification(

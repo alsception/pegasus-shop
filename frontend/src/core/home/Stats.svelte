@@ -206,7 +206,7 @@
   grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 scale-up-center-normal menu-container"
 >
 <!-- TODO: ovo dugme mora da ide negde drugde u posebnu componentu Settings -->
-<div class="flex flex-row gap-3 w-full md:w-auto">
+<div class="flex flex-row gap-3 w-full md:w-auto hidden">
         <button
           type="submit" 
           onclick={syncData}

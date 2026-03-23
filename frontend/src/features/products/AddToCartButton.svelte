@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  /**
+
+/**
    * We will pass parameters to this button:
    * 1. product: The product to be added to the cart.
    * 2. addToCart: A function to call when the button is clicked.
@@ -19,11 +19,6 @@
   //TODO:
   //index-DM9PQ1bj.js:42 Failed to load animation data from URL: /lottie/check2.lottie. Error: Failed to fetch animation data from URL: /lottie/check2.lottie. 403: 
 
-  if ($addedItems.has(product.id)){
-    console.log('has '+product.id)
-  }
-  
-
 </script>
 
 {#if product.active === false || product.stock === 0}
@@ -34,7 +29,7 @@
     disabled
     aria-label="Product not available"
   >
-    <span class="">Not available</span>
+    <span class="">Nedostupno</span>
   </button>
 
 {:else if $loadingItems.has(product.id)}  
@@ -42,7 +37,7 @@
   <button
     class="btn btn-secondary"
     style="width: {width}; height: {width};"
-    aria-label="Dodaj"
+    aria-label="Dodaj u košaricu"
   >
     <span class="loading loading-spinner loading-xl bg-primary/70"></span>
   </button>
@@ -68,8 +63,8 @@
   <button
     class="btn btn-secondary"
     style="width: {width}; height: {width};/*transition-delay: 0.3s;*/"
-    aria-label="Dodaj"
-    title="Dodaj"
+    aria-label="Dodaj u košaricu"
+    title="Dodaj u košaricu"
     on:click={() => addToCart(product.id)}
   >
     <i class="fa fa-plus text-gray-300 text-xl" aria-hidden="true"></i>

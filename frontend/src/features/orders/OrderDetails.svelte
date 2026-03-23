@@ -304,7 +304,7 @@
             >
               <span class="flex flex-row lg:flex-col gap-1 items-center">
                 <span class="m-0 badge min-w-[110px]"
-                  ><i class="fas fa-check-double"></i>Servirano</span
+                  ><i class="fas fa-check-double"></i>Dostavljeno</span
                 >
                 <span class="font-mono font-bold badge-md badge badge-ghost"
                   >{formattedTime(formData.servedAt)}</span

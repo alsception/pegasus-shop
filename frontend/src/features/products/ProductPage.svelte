@@ -124,11 +124,14 @@
         <button type="button" on:click={close} class=" btn btn-ghost mr-5">
         Zatvori
         </button>
-        <div class="ml-auto">
-          <AddToCartButton {product} width="75px" />
-        </div>
+        
       </div>
     {/if}
+    <div class="w-full">
+    <div class="ml-auto">
+          <AddToCartButton {product} width="45px" />
+        </div>
+        </div>
   </div>
 {/if}
 

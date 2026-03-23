@@ -46,10 +46,10 @@
     "https://images.unsplash.com/photo-1607013251379-e6eecfffe234?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQzNzd8MHwxfHNlYXJjaHw1fHxidXJnZXJzfGVufDB8fHx8MTc3MjcxNDA0NHww&ixlib=rb-4.1.0&q=85";
 
   const photos = [photo1, photo2, photo3];
-  let index = 0;
+  let index = Math.floor(Math.random() * photos.length);
 
   // Reaktivna deklaracija - ovo je ispravno za Svelte 4
-  $: photo = photos[index];
+  $: photo = photos[index];//random da nebude uvek ista slicica
 
   onMount(() => {
     const interval = setInterval(() => {
@@ -101,10 +101,10 @@
 
     <form
       on:submit|preventDefault={handleLogin}
-      class="w-full max-w-md relative p-6 px-10 pb-7 m-[5px] rounded-2xl bg-zinc-950/84 bg-gradient-to-br 
-                from-gray-50/80 via-base-200/80 to-zinc-100/80 
-                dark:from-gray-900/40 dark:via-base-200/40 dark:to-zinc-800/40 border border-2 
-                border-base-200  backdrop-blur-lg /*border border-primary/14*/"
+      class="w-full max-w-md relative p-6 px-10 pb-7 m-[5px] rounded-2xl bg-base-content/10 bg-gradient-to-br 
+                from-gray-50/40 via-base-200/40 to-zinc-100/40 
+                dark:from-gray-900/40 dark:via-base-200/40 dark:to-zinc-800/40 border 
+                border-base-content/20 backdrop-blur-lg /*border border-primary/14*/"
     >
       {#if loading}
         <LoadingOverlay />

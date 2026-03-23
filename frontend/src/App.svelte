@@ -49,7 +49,8 @@
   <Router routes={unauthenticatedRoutes} />
 {:else}
 <Header/>
-  <main class="flex-1 overflow-auto main-content w-full mt-0 p-0 sm:p-6" class:mt-14={getCurrentRole() === "ADMIN"}>
+<!--  class:mt-14={getCurrentRole() === "ADMIN"} -->
+  <main class="flex-1 overflow-auto main-content w-full mt-14 p-0 sm:p-6">
     <Router {routes} />
   </main>
 {/if}

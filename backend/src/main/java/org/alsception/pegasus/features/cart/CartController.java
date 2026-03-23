@@ -83,16 +83,6 @@ public class CartController {
 
         logger.debug("Initiating checkout for user: "+ username);
         
-        //todo:// Ovde bi se mogla dodati validacija tokena
-        /**
-         // Primer provere tokena (dummy provera)
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).body("Unauthorized");
-        }
-        * }
-        String token = authHeader.substring(7); // ukloni "Bearer "
-        */    
-
         cartService.checkout(request, username);
         
         String msg = "Checkout successfull";

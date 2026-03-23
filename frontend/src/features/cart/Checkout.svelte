@@ -27,7 +27,8 @@
   let user = getCurrentUsername();
   let address = "";
   let phone = "";
-  //let comment = "";
+  let comment = "";
+  let takeAway: boolean = false; 
 
   const emptyImages = [EmptyImg1, EmptyImg2, EmptyImg3, EmptyImg4, EmptyImg5];
 
@@ -75,6 +76,8 @@
       user,
       address,
       phone,
+      comment,
+      takeAway
     };
 
     try {
@@ -88,7 +91,7 @@
 
       showSuccessToast("Narudžba uspješno poslata!");
       resetCartItems(); //Mora da resetujemo cart items da neprikazuje kao dodate proizvode
-      push("/orders?v=1");//orders page otvorimo na narudzbe na cekanju
+      push("/home");//orders page otvorimo na narudzbe na cekanju
     } catch (err: any) {
       console.error("kect", err);
 
@@ -126,7 +129,6 @@
       <div
         class="text-primary mx-auto bg-base-200 dark:bg-black lg:dark:bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl"
         style="transform: none"
-        transition:fly={{ y: -50, duration: 300 }}
       >
         <div
           class="p-0 bg-base-100 text-primary-content/80 dark:text-primary/80 border-2 border-secondary/20 rounded-t-md"
@@ -139,7 +141,7 @@
          {#if cart && cart.items && cart.items.length > 0}
 
         <form class="p-12 w-full border-2 border-secondary/20 " on:submit|preventDefault={submitForm}>
-          <div class="grid grid-cols-1 mb-16 w-full">
+          <div class="grid grid-cols-1 mb-6 w-full">
             <div class="lg:col-span-2">
               <div class="">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -150,7 +152,7 @@
                       class="block text-md font-medium text-primary/80 mb-2"
                     >
                       <i class="fas fa-phone text-sm text-primary/60 mr-2"
-                      ></i>Telefon
+                      ></i>Telefon<span class="text-error ml-2">*</span>
                     </label>
                     <input
                       id="phone"
@@ -171,17 +173,52 @@
               <div class="rounded-lg">
                 <div class="">
                   <div class="w-full">
+                  
                     <label
                       for="address"
                       class="block text-md font-medium text-primary/80 mb-2"
                       ><i class="fas fa-house text-sm text-primary/60 mr-2"
-                      ></i>Adresa
+                      ></i>Adresa<span class="text-error ml-2">*</span>
                     </label>
                     <textarea
                       id="address"
                       class="pgs-input resize-vertical"
                       bind:value={address}
-                      rows="8"
+                      rows="4"
+                      style="border: none;"
+                      maxlength="255"
+                      required
+                    ></textarea>
+                  </div>
+                  <label class="fieldset-legend w-fit">
+                  <input 
+                    type="checkbox" 
+                    bind:checked={takeAway} 
+                    class="checkbox border" 
+                  />
+                  Preuzimanje u restoranu
+                </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 mb-6">
+            <div class="lg:col-span-2">
+              <div class="rounded-lg">
+                <div class="">
+                  <div class="w-full">
+                    <label
+                      for="comment"
+                      class="block text-md font-medium text-primary/80 mb-2"
+                      ><i class="fas fa-comment text-sm text-primary/60 mr-2"
+                      ></i>Napomena
+                    </label>
+                    <textarea
+                      id="comment"
+                      class="pgs-input resize-vertical"
+                      bind:value={comment}
+                      rows="4"
                       style="border: none;"
                       maxlength="255"
                     ></textarea>

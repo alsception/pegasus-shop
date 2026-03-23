@@ -130,11 +130,11 @@ function clickChange(value: any)
 
     <div class="dropdown z-49">
       <div tabindex="0" role="button" class="btn btn-dash ">
-        <i class="fas fa-filter"></i>Kategorije
+        Kategorije
       </div>
       <ul tabindex="-1" class="dropdown-content menu rounded-box z-9991 w-[240px] p-2 shadow-sm bg-base-200/90 dark:bg-zinc-950/92 rounded-lg
       pointer-events-auto border border-primary/30"
-      style="left: -50%;backdrop-filter: blur(12px) !important; 
+      style="left: -90%;backdrop-filter: blur(12px) !important; 
         -webkit-backdrop-filter: blur(16px) !important;">
         {#each $categories as category}
           <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -155,7 +155,7 @@ function clickChange(value: any)
   
   .selected-cat{
     color: cornflowerblue;
-    color: var(--color-warning);
+    /*color: var(--color-info);*/
     background-color: black;
     font-weight: bold !important;
     font-style: bold;

@@ -43,7 +43,7 @@
       href: "/tables",
       color: "yellow",
       default: false,
-      admin: true,
+      admin: false,
       customer: false,
     },
     {
@@ -187,7 +187,7 @@
 
   <div
     class="pt-8 sm:pt-0 mx-0 px-0 sm:gap-0
-    grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-9 menu-container"
+    grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 menu-container"
   >
     {#each displayedItems as item}
       <a

@@ -69,4 +69,4 @@ class="btn btn-sm btn-success text-primary-content ml-auto"
           e.preventDefault();
           updateOrderState(order.id, 'SERVED');
         }}>
-    <i class="fa fa-check-double text-xs cursor-pointer"></i>Servirano</button>
+    <i class="fa fa-check-double text-xs cursor-pointer"></i>Dostavljeno</button>

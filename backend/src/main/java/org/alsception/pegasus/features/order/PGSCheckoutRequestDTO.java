@@ -6,6 +6,7 @@ public class PGSCheckoutRequestDTO
     private String comment = "";
     private String address = "";
     private String phone = "";
+    private Boolean takeAway = false;    
 
     public PGSCheckoutRequestDTO() {
     }
@@ -46,6 +47,12 @@ public class PGSCheckoutRequestDTO
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
     
+    public Boolean getTakeAway() {
+        return takeAway;
+    }
+
+    public void setTakeAway(Boolean takeAway) {
+        this.takeAway = takeAway;
+    }
 }
