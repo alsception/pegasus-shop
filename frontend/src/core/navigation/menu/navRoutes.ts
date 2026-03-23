@@ -13,7 +13,7 @@ export const navRoutes: NavRoutesMap =
       component: "/home",
       admin: true,
       customer: false,
-      default: true,
+      default: false,
     },
     "/stats": {
       label: "Statistike",

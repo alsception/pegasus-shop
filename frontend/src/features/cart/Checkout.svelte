@@ -5,21 +5,69 @@
   import Login from "../../core/auth/Login.svelte";
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
-  import { push } from "svelte-spa-router";
+  import { link, push } from "svelte-spa-router";
   import { brojStola } from "./../../core/services/CheckoutStore";
   import { resetCartItems } from "../products/ProductService";
   import { fly } from "svelte/transition";
+  import { onMount } from "svelte";
+  import type { Cart } from "./Cart";
+  import EmptyImg1 from "../../assets/img/empty-amico-1.svg";
+  import EmptyImg2 from "../../assets/img/empty-amico.svg";
+  import EmptyImg3 from "../../assets/img/empty-bro-1.svg";
+  import EmptyImg4 from "../../assets/img/empty-bro.svg";
+  import EmptyImg5 from "../../assets/img/empty-pana.svg";
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   document.title = "Checkout | Barbacoa";
 
+  let cart: Cart | null = null;
   let loading: boolean = false;
   let error: string | null = null;
   let user = getCurrentUsername();
   let address = "";
   let phone = "";
   //let comment = "";
+
+  const emptyImages = [EmptyImg1, EmptyImg2, EmptyImg3, EmptyImg4, EmptyImg5];
+
+  // Get a random image (TODO: see if this has sense, to load many images at once )
+  const randomImage =
+    emptyImages[Math.floor(Math.random() * emptyImages.length)];
+
+
+  //AXIOS DEf
+  const axiosInstance = axios.create({
+    baseURL: API_BASE_URL,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  // Add Bearer token if available
+  axiosInstance.interceptors.request.use((config) => {
+    const token = localStorage.getItem("token"); // or getToken() if you have a helper
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  });
+
+  onMount(async () => {
+    await loadCart();
+  });
+
+  async function loadCart() {
+    loading = true;
+    try {
+      const response = await axiosInstance.get<Cart>("cart");
+      cart = response.data;
+    } catch (err) {
+      error = err instanceof Error ? err.message : "Unknown error";
+    } finally {
+      loading = false;
+    }
+  }
 
   async function submitForm() {
     const url = API_BASE_URL + "/cart/checkout";
@@ -87,6 +135,8 @@
             Checkout
           </h2>
         </div>
+
+         {#if cart && cart.items && cart.items.length > 0}
 
         <form class="p-12 w-full border-2 border-secondary/20 " on:submit|preventDefault={submitForm}>
           <div class="grid grid-cols-1 mb-16 w-full">
@@ -160,6 +210,22 @@
             </div>
           </div>
         </form>
+
+        {:else}
+
+            <p class="text-center text-gray-500 py-8 px-4">
+              Košarica je prazna. <a
+                use:link
+                href="/products"
+                class="pgs-hyperlink">Dodaj proizvod</a
+              >
+            </p>
+            <div class="flex justify-center pb-4">
+              <img src={randomImage} alt="Cart empty" class="max-w-xs" />
+            </div>
+            
+          {/if}
+
       </div>
     {/if}
   {/if}

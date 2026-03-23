@@ -8,7 +8,7 @@
   import AddToCartButton from "./AddToCartButton.svelte";
   import { formatPrice } from "../../utils/formatting";
 
-  document.title = "Product details | Barbacoa";
+  document.title = "Barbacoa";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   export let productId: number;
@@ -27,21 +27,32 @@
 
   const token = $auth.token;
 
-  async function fetchProduct(id: number) {
+  async function fetchProduct(id: number) 
+  {
     loading = true;
-    try {
-      const res = await fetch(API_BASE_URL + `/products/${id}`, {
+    try 
+    {
+      const res = await fetch(API_BASE_URL + `/products/${id}`, 
+      {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
+      
       if (!res.ok) throw new Error("Failed to fetch product");
+      
       product = await res.json();
-    } catch (err) {
+
+      document.title = product?.name + " | Barbacoa";
+    } 
+    catch (err) 
+    {
       error = (err as Error).message;
-    } finally {
+    } 
+    finally 
+    {
       loading = false;
     }
   }
