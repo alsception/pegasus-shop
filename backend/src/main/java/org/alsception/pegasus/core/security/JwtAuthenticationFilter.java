@@ -125,7 +125,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 request.getRequestURI().startsWith("/sound/")     ||
                 request.getRequestURI().endsWith(".js")           ||
                 request.getRequestURI().endsWith(".css")          ||
-                request.getRequestURI().equals("/pegasus-icon.png")
+                request.getRequestURI().endsWith(".png")
 
                 //Todo: lottie, /assets, i /sound izlaze ovde a trebalo bi da su permitall
             )))

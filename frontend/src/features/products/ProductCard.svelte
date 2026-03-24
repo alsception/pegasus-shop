@@ -72,7 +72,7 @@
 
       {:else}
         
-        <span class="text-xl font-bold text-sky-500">         
+        <span class="text-xl font-bold text-amber-600 dark:text-amber-500">         
           {@html getFormattedPrice(product.basePrice)}
         </span>   
 
