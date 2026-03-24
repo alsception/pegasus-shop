@@ -57,14 +57,20 @@
     await loadCart();
   });
 
-  async function loadCart() {
+  async function loadCart() 
+  {
     loading = true;
-    try {
+    try 
+    {
       const response = await axiosInstance.get<Cart>("cart");
       cart = response.data;
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       error = err instanceof Error ? err.message : "Unknown error";
-    } finally {
+    } 
+    finally 
+    {
       loading = false;
     }
   }
@@ -113,20 +119,11 @@
     window.location.href = "#/cart";
   }
 
-  function handleToggle(event) {
-    // Pošto koristimo bind, takeAway je već ažuriran ovde
-    console.log("Preuzimanje:", takeAway);
-    
-    /* if (takeAway) {
-      alert("Korisnik želi da dođe u restoran.");
-    } */
-  }
-
   // Ovo se izvršava kad god se takeAway promeni
   $: {
     if (takeAway) 
     {
-      console.log("Korisnik preuzima lično, brišem adresu iz memorije...");
+      //Korisnik preuzima lično, brišem adresu iz memorije...
       address = ""; // Automatski resetuješ polje kad god se čekira checkbox
     }
   }
@@ -136,12 +133,15 @@
   {#if !$auth.isAuthenticated}
     <Login />
   {:else}
-    {#if loading}
-      <LoadingOverlay />
-    {/if}
+    
+  {#if loading}
+      
+    <LoadingOverlay />
 
-    {#if error}
+    {:else if error}
+      
       <ErrorDiv {error} />
+
     {:else}
       <div
         class="text-primary mx-auto bg-base-200 dark:bg-black lg:dark:bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl"

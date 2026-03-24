@@ -67,7 +67,7 @@
   --color-success-content: oklch(26% 0.051 172.552);
   --color-warning: oklch(85% 0.199 91.936);
   --color-warning-content: oklch(28% 0.066 53.813);
-  --color-error: oklch(63% 0.237 25.331);
+  --color-error: oklch(59.2% 0.249 0.584);/*oklch(63% 0.237 25.331);*/
   --color-error-content: oklch(28% 0.109 3.907);
   --color-wait: oklch(0.35 0.08 99.2);
   --color-inprep: oklch(0.19 0.12 263.61);

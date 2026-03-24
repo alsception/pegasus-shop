@@ -5,6 +5,12 @@
   import CartDetails from "../../features/cart/CartDetails.svelte";
   import { fly } from "svelte/transition";
 
+  //TODO: ovo sad mora da se ucita sa servera, i da moze da se promeni i posalje na server
+  // i da se razlikuje admin da moze da vidi i promeni a musterija ne da promeni, samo da vidi
+  //i nevidi se dobro kad je false na mobilnom
+  export let shopOpen = true;
+
+
   onMount(() => {
     const themeCheckbox = document.querySelector("input.theme-controller");
 
@@ -24,9 +30,6 @@
     }
   });
 
-  //TODO: ovo sad mora da se ucita sa servera, i da moze da se promeni i posalje na server
-  // i da se razlikuje admin da moze da vidi i promeni a musterija ne da promeni, samo da vidi
-  export let shopOpen = true;
 
   function resetNotificationsInfo() {
     console.log("reseting..");    
@@ -66,7 +69,9 @@
   <div class="flex items-center gap-6">
 
     {#if shopOpen}
-      <span class="text-white/90 text-xs" title="Dostava je aktivna">🟢 </span>  
+      <div class=" tooltip tooltip-info tooltip-bottom" data-tip="Dostava je aktivna">
+        <span class="text-white/90 text-xs">🟢 </span>  
+      </div> 
     {:else}
       <span class="text-white/90 text-xs">⚠️ Dostava trenutno nije aktivna!</span>  
     {/if}
@@ -95,7 +100,7 @@
       <i class="fas fa-shopping-basket text-sm md:text-lg"></i>
     </button>
 
-    <div class="dropdown">
+    <div class="dropdown mr-5">
       <button
         tabindex="0"
         class="btn btn-ghost p-0 hover:bg-primary/10 text-gray-500 text-xl"

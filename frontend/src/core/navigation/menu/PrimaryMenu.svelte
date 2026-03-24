@@ -41,8 +41,6 @@
   //This object is used for displaying menu
   let navItems = getNavigationItems();
 
-  console.log(navItems.find(n => n.href === '#/cart'))
-
   // Čim se promeni broj u Košarici, ažuriraj navigaciju
   $: {
     const count = $cartItemsCounter;
