@@ -57,7 +57,7 @@
   --color-primary-content: var(--color-slate-900);
   --color-secondary: var(--color-slate-600); /*used as hover on tables*/
   --color-secondary-content: var(--color-zinc-300);
-  --color-info: oklch(54% 0.245 262.881);
+  --color-info: var(--color-sky-500);/*oklch(54% 0.245 262.881);*/
   --color-info-content: oklch(98% 0.016 73.684);
   --color-neutral: var(--color-slate-700);
   --color-neutral-content: oklch(98% 0.001 106.423);

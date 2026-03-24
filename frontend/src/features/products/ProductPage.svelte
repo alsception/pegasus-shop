@@ -27,39 +27,33 @@
 
   const token = $auth.token;
 
-  async function fetchProduct(id: number) 
-  {
+  async function fetchProduct(id: number) {
     loading = true;
-    try 
-    {
-      const res = await fetch(API_BASE_URL + `/products/${id}`, 
-      {
+    try {
+      const res = await fetch(API_BASE_URL + `/products/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
-      
+
       if (!res.ok) throw new Error("Failed to fetch product");
-      
+
       product = await res.json();
 
       document.title = product?.name + " | Barbacoa";
-    } 
-    catch (err) 
-    {
+    } catch (err) {
       error = (err as Error).message;
-    } 
-    finally 
-    {
+    } finally {
       loading = false;
     }
   }
 
-  function close(event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }) 
-  {
-    window.location.href = "#/products"; 
+  function close(
+    event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }
+  ) {
+    window.location.href = "#/products";
   }
 
   // Optional: You can still call this on mount if you want to double-sure it triggers
@@ -81,7 +75,11 @@
     <h3>Product not found.</h3>
   </div>
 {:else}
-  <div class="product-card dark:product-card-dark" class:border-2={!liteView} class:border-zinc-600={!liteView}>
+  <div
+    class="product-card dark:product-card-dark"
+    class:border-2={!liteView}
+    class:border-zinc-600={!liteView}
+  >
     <div
       class="w-full flex items-center justify-center overflow-hidden rounded-md mb-4"
     >
@@ -110,28 +108,23 @@
       {/if}
     </h1>
     <div class="flex gap-2"></div>
-    
+
     {#if product.description}
       <p>{product.description}</p>
     {/if}
 
-    <h3 class="product-detail"
-      style="font-size: x-large;">{formatPrice( product.basePrice   )}</h3>
+    <h3 class="product-detail" style="font-size: x-large;">
+      {formatPrice(product.basePrice)}
+    </h3>
     <p></p>
-   
+
     {#if !liteView && isAdminView}
       <div class="w-full flex mr-0 mt-6 mb-6">
         <button type="button" on:click={close} class=" btn btn-ghost mr-5">
-        Zatvori
+          Zatvori
         </button>
-        
       </div>
     {/if}
-    <div class="w-full">
-    <div class="ml-auto">
-          <AddToCartButton {product} width="45px" />
-        </div>
-        </div>
   </div>
 {/if}
 
@@ -166,7 +159,7 @@
     margin-bottom: 0px;
   }
 
-  img{
+  img {
     object-fit: contain;
     max-height: 350px !important; /**trenutno je ovoliko velicina slike*/
   }

@@ -45,6 +45,7 @@ i LITE APP!!, I MOZDA i WS.....
   let ordersNaCekanju: Order[] = [];
   let ordersUpripremi: Order[] = [];
   let ordersSpremni: Order[] = [];
+  let ordersOstalo: Order[] = [];
   let loading: boolean = true;
   let error: string | null = null;
   let searchTerm = "";
@@ -59,6 +60,7 @@ i LITE APP!!, I MOZDA i WS.....
   let isCheckedWait = false;
   let isCheckedInPrep = true;
   let isCheckedReady = false;
+  let isCheckedOther = false;
 
   $: auth.subscribe((value) => {
     isAuthenticated = value.isAuthenticated;
@@ -128,9 +130,7 @@ i LITE APP!!, I MOZDA i WS.....
           {
             isCheckedReady = true;
           }
-        }
-
-        
+        }        
 
         // Prvo učitavanje
         await handleSearch(true);
@@ -219,6 +219,12 @@ i LITE APP!!, I MOZDA i WS.....
         ordersNaCekanju = orders.filter((o) => o.status === 'WAITING');
         ordersUpripremi = orders.filter((o) => o.status === 'IN_PREPARATION');
         ordersSpremni = orders.filter((o) => o.status === "READY" || o.status === "SERVED");
+        ordersOstalo = orders.filter((o) => (
+          o.status !== "READY" 
+           && o.status !== "SERVED"
+           && o.status !== "WAITING"
+           && o.status !== "IN_PREPARATION"
+        ));
         totalAmount = calculateTotal(orders);
       } 
       catch (error: any) 
@@ -239,13 +245,8 @@ i LITE APP!!, I MOZDA i WS.....
           console.log("Authentication failed - token may be expired");
           // Clear invalid token
           $auth.token = null;
-          // Redirect to login or show login modal
-          // window.location.href = '/login';
-          // OR: showLoginModal = true;
-          // OR: goto('/login');
         }
 
-        // Handle other errors appropriately (show user message, etc.)
       } 
       finally 
       {
@@ -274,7 +275,7 @@ i LITE APP!!, I MOZDA i WS.....
   // Add Bearer token if available
   axiosInstance.interceptors.request.use((config) => 
   {
-    const token = localStorage.getItem("token"); // or getToken() if you have a helper
+    const token = localStorage.getItem("token"); 
     if (token) 
     {
       config.headers.Authorization = `Bearer ${token}`;
@@ -333,31 +334,12 @@ i LITE APP!!, I MOZDA i WS.....
 
     showErrorToast(errorMessage);
   }
-/* 
-  function getOrderStatusColor(status: string | null | undefined): string 
-  {
-    switch (status?.toUpperCase()) {
-      case "READY":
-      case "DELIVERED":
-        return "success";
-      case "CANCELLED":
-      case "REFUNDED":
-        return "warning";
-      case "RETURNED":
-        return "error";
-      case "IN_PREPARATION":
-        return "accent";
-      case "WAITING":
-        return "info";
-      default:
-        return "secondary";
-    }
-  } */
 
   /**
    * Kad zavrsi ajax poziv iz OrderCardMd>StatusMenu, onda ce se ovde pozvati ova funkcija i osveziti sadrzaj na ekranu
    */
-  function handleOrderUpdateCompleted(event: { detail: any }) {
+  function handleOrderUpdateCompleted(event: { detail: any }) 
+  {
     handleSearch(true);
   }
 </script>
@@ -412,9 +394,7 @@ i LITE APP!!, I MOZDA i WS.....
   <!-- Show each item in the order card (Block view) -->
   {#if isBlockView}
     <!-- name of each tab group should be unique -->
-    <div class="tabs tabs-box rounded-lg">
-      <!-- vidi ovde te boje da rade i na lajt i na dark, neznam vise...
-   i kad je error za ucitavanje da nepokusava ko sivonja -->
+    <div class="tabs tabs-box rounded-lg">     
 
       <input
         type="radio"
@@ -452,6 +432,19 @@ i LITE APP!!, I MOZDA i WS.....
         class="tab-content bg-base-300 dark:bg-[#0a0a0a] border-base-300 p-6 h-full"
       >
         {@render ordersReady()}
+      </div>
+
+      <input
+        type="radio"
+        name="my_tabs_6"
+        class="tab font-bold text-primary"
+        aria-label="OSTALO ({ ordersOstalo.length })"
+        checked={isCheckedOther}
+      />
+      <div     
+        class="tab-content bg-base-300 dark:bg-[#0a0a0a] border-base-300 p-6 h-full"
+      >
+        {@render ordersOther()}
       </div>
     </div>
 
@@ -590,7 +583,6 @@ i LITE APP!!, I MOZDA i WS.....
 </div>
 
 {#snippet ordersWait()}
-
   <div
     class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 2xl:columns-5 gap-6"
   >
@@ -611,7 +603,6 @@ i LITE APP!!, I MOZDA i WS.....
 {/snippet}
 
 {#snippet ordersInprep()}
-
   <div
     class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 2xl:columns-5 gap-6"
   >
@@ -632,7 +623,6 @@ i LITE APP!!, I MOZDA i WS.....
 
 {#snippet ordersReady()}
   <!-- TODO: ovde mora fix na mali ekran nevidi se dobro -->
-
   <div class="grid grid-cols-2 lg:flex lg:flex-wrap gap-4">
     {#each ordersSpremni as order (order.id)}
       <div
@@ -645,6 +635,25 @@ i LITE APP!!, I MOZDA i WS.....
           liteView={true}
           on:orderUpdateCompleted={handleOrderUpdateCompleted}
         ></OrderCardMd>
+      </div>
+    {/each}
+  </div>
+{/snippet}
+
+{#snippet ordersOther()}
+  <div
+    class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 2xl:columns-5 gap-6"
+  >
+    {#each ordersOstalo as order (order.id)}
+      <div
+        class="break-inside-avoid mb-8 w-full"
+        animate:flip={{ duration: 400 }}
+        transition:fade
+      >
+        <OrderCardMd
+          {order}
+          on:orderUpdateCompleted={handleOrderUpdateCompleted}
+        />
       </div>
     {/each}
   </div>

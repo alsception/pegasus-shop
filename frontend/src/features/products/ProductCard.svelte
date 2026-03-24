@@ -72,7 +72,7 @@
 
       {:else}
         
-        <span class="text-xl font-bold text-primary">
+        <span class="text-xl font-bold text-sky-500">
           { formatPrice( product.basePrice )}
         </span>   
 

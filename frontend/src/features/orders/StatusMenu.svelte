@@ -35,6 +35,10 @@
       label: "SPREMNO",
       status: "READY",
     },
+    {
+      label: "ODBIJ",
+      status: "REFUSED",
+    },
   ];
 
   const axiosInstance = axios.create({
@@ -94,6 +98,7 @@
         .delete(`/orders/${orderId}`)
         .then((response) => {
           processSuccess(response);
+          dispatch("orderUpdateCompleted", { orderId });
           // e sad . ovde bi treblo refresh content na ekranu... todo
         })
         .catch((error) => {

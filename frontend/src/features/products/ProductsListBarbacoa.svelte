@@ -255,12 +255,13 @@
   <ErrorDiv {error} />
 {:else}
   <div
-    class="w-[40%] flex justify-center p-0 fixed z-9003 bg-transparent top-[-0.1rem]"
+    class="w-[50%] left-[25%] flex justify-center p-0 fixed z-9003 bg-transparent top-[-0.1rem]"
     style="justify-self: center;"
   >
     <div
       class="w-full lg:max-w-4xl lg:p-4 lg:m-6 lg:mb-4 lg:mt-0.5 bg-base-200/80 lg:rounded-lg border-1 border-primary/20 backdrop-blur-lg lg:pb-[5px]
-              max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:p-[10px] max-lg:pb-0 fixed top-[-16.5] lg:-top-16.5 left-0.5 [width:-webkit-fill-available] lg:static lg:w-auto md:min-w-[680px]"
+              max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:p-[10px] max-lg:pb-0 fixed top-[-16.5] lg:-top-16.5 left-0.5 [width:-webkit-fill-available] 
+              lg:static lg:w-auto md:min-w-[680px] justify-self-center"
     >
       <form
         on:submit|preventDefault={handleFormSubmit}
@@ -375,7 +376,7 @@
 {#snippet btnNext()}
   <div class="fixed top-[92%] left-[75%] md:left-[84%] lg:left-[92%] z-[9000]">
     <a class="btn btn-lg btn-primary border border-primary-content/40" use:link href="/cart">
-      Dalje<i class="fas fa-arrow-right text-primary-content/60"></i>
+      Naruči<i class="fas fa-arrow-right text-primary-content/60"></i>
     </a>
   </div>
 {/snippet}
@@ -421,4 +422,60 @@
   .active {
     background-color: color-mix(in srgb, var(--color-info) 40%, transparent);
   }
+  .neon-btn {
+  position: relative;
+  padding: 15px 30px;
+  background: #000; /* Boja unutrašnjosti dugmeta */
+  color: #fff;
+  /* font-family: sans-serif; */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border: none;
+  cursor: pointer;
+  overflow: hidden; /* Ključno: da sakrije ostatak animacije */
+  /* border-radius: 8px; */
+}
+
+/* "Zmija" koja kruži */
+.neon-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    transparent, 
+    #ae00ff, /* Boja neona */
+    transparent 30%
+  );
+  animation: rotate 3s linear infinite;
+}
+
+/* Overlay koji pravi efekat tanke ivice */
+.neon-btn::after {
+  content: '';
+  position: absolute;
+  inset: 2px; /* Debljina ivice (što manji broj, tanja ivica) */
+  background: #000;
+  border-radius: 6px;
+  z-index: 0;
+}
+
+/* Tekst mora biti iznad svega */
+.neon-btn span {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Dodatni glow efekat na hover */
+.neon-btn:hover {
+  box-shadow: 0 0 20px #ff0055;
+  transition: 0.3s;
+}
 </style>

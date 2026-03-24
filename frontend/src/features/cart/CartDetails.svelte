@@ -159,7 +159,7 @@
 
         <div class="pt-4 lg:px-4">
           {#if cart.items && cart.items.length > 0}
-            <div class="p-2 sm:p-2">
+            <div class="p-2 sm:p-6">
               <div class="divide-y divide-primary/10">
                 {#each cart.items as item (item.id)}
                   <div
@@ -259,7 +259,7 @@
               <br />
             </div>           
 
-            <div class="sticky bottom-0 z-10 px-2 lg:p-6 lg:px-0 py-4 border-t border-base-300 ">
+            <div class="sticky bottom-0 z-10 px-6 lg:p-6 lg:px-4 py-4 border-t border-base-300 ">
               <div class="flex justify-between items-center">
                 <button
                 type="button"

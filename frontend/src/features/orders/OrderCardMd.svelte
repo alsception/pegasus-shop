@@ -11,6 +11,7 @@
     formatPrice,
     formatPriceRaw,
     getOrderCardBgClass,
+    formatTime,
   } from "../../utils/formatting";
   import axios from "axios";
   import { showErrorModal } from "../../utils/modal";
@@ -209,23 +210,9 @@
     if (id != undefined) productId = id;
     openModal3();
   }
+
 </script>
 
-<!-- class:bg-inprep={order.status == 'IN_PREPARATION'}
-    class:bg-wait={order.status == 'WAITING'}
-    class:bg-ready={order.status == 'READY'}
-    
-    
-    
-    READY COLOR: color-mix(in oklab, oklch(0.6 0.23 142.37) 30%, transparent)
-    WAITING COLOR: color-mix(in oklab, oklch(0.89 0.18 91.93) 30%, transparent)
-    
-    
-    TODO:
-    Probaj ovu boju za waiting: #fdc700
-
-    
-    -->
 <div
   class="rounded-xl p-2 flex flex-col gap-1 h-fit
          shadow border border-primary/20 hover:outline-primary/20 hover:outline-1
@@ -237,22 +224,28 @@
       class="flex items-center gap-1 w-full"
       style="justify-content: space-between;"
     >
-      <a
-        use:link
-        href="/orders/{order.id}"
-        class="text-2xl font-extrabold text-primary pgs-hyperlink"
-        >{formatCode(order.code)}</a
-      >
+      <div        
+        class="text-2xl font-extrabold text-primary"
+        >{formatCode(order.code)}</div>      
       <span class="hidden">{order.id}</span>
-      <!-- TODO: Ovde isto prikazati bolje -->
-        {#if order.status === 'READY' || order.status === 'SERVED'}
-          <div
-          class="text-sm hidden md:flex items-center text-primary/60 gap-2"
-        >    
-          <i class="fas fa-clock"></i>{@html formatTime2(order.created)}
-        </div>
+      {#if order.status === 'READY' || order.status === 'SERVED'}
+        <div
+        class="text-sm hidden md:flex items-center text-primary/60 gap-2"
+      >    
+        <i class="fas fa-clock"></i>{@html formatTime2(order.created)}
+      </div>
       {/if}
-      {#if isNew(order.created, 10)}
+      {#if order.status === 'WAITING' || order.status === 'IN_PREPARATION'}
+        {#if order.code.endsWith('Z')}
+          <span class="badge badge-soft badge-success">
+            <i class="fas fa-walking"></i>ZA VAN</span>
+        {:else}
+          <span class="badge badge-soft badge-info">
+          <i class="fas fa-car"></i>
+            DOSTAVA</span>
+        {/if}
+      {/if}
+      {#if isNew(order.created, 10) && order.status === 'WAITING' }
         <div>
           <div
             class=" tooltip tooltip-info cursor-pointer"
@@ -282,10 +275,24 @@
       <i class="fas fa-clock"></i>{@html formatTime2(order.created)}
     </div>
     {#if order.status == "READY" || order.status == "SERVED"}    
-    <div class="items-center gap-1 text-sm text-primary/60 mr-2 hidden md:flex">
-      <i class="fas fa-euro"></i>
-      <span><strong>{ formatPriceRaw(order.price)}</strong></span>
-    </div>
+      <div class="items-center gap-1 text-sm text-primary/60 mr-2 hidden md:flex">
+        <i class="fas fa-euro"></i>
+        <span><strong>{ formatPriceRaw(order.price)}</strong></span>
+      </div>
+      <div class="items-center gap-1 text-sm text-primary/60 mr-2 hidden md:flex">
+        {#if order.code.endsWith('Z')}
+          <z class=" tooltip tooltip-info tooltip-top" data-tip="Za van">
+            <span class="badge badge-soft badge-success">
+              <i class="fas fa-walking"></i></span>
+            </z>
+        {:else}
+          <z class=" tooltip tooltip-info tooltip-top" data-tip="Dostava">
+            <span class="badge badge-soft badge-info">
+              <i class="fas fa-car"></i>
+            </span>
+          </z>  
+        {/if}
+      </div>
     {/if}
   </div>
   <div class="h-px bg-neutral/40 w-full mb-1"></div>

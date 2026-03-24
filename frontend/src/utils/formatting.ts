@@ -129,7 +129,7 @@ export const formattedTime = (value: string | number | Date | null | undefined):
     if (!value) return "-";
     const date = new Date(value);
     if (isNaN(date.getTime())) return "-";
-    return date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", second:"2-digit", hour12: false });
+    return date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false });
 };
 
 export function formatActive(active: boolean | null | undefined)

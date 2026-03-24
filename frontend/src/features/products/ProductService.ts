@@ -1,6 +1,8 @@
 import axios from "axios";
-import { showAddSuccessToastWithLink, showErrorToast } from "../../core/utils/toaster";
+import { showErrorToast } from "../../core/utils/toaster";
 import { writable } from "svelte/store";
+import { cartItemsCounter } from './../../core/services/CheckoutStore';
+
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -57,6 +59,8 @@ export async function addToCart(productId: number): Promise<void>
         prevSet.add(productId);
         return prevSet; 
     });
+
+    cartItemsCounter.update(n => n + 1);
   }
   catch (error: any) 
   {
@@ -76,6 +80,7 @@ export function resetCartItems()
   //console.log('reseting cart items');//TODO: CUDNO PONASANJE, ako nema ovog console.loga izlgeda kao da neresetuje
   addedItems.set(new Set());
   loadingItems.set(new Set());
+  cartItemsCounter.update(n => 0);
 }
 
 export function processError(error: any) 

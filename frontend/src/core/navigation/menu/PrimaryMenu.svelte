@@ -4,6 +4,7 @@
   import { getCurrentUsername } from "../../services/SessionStore";
   import { getCurrentRole } from "../../services/SessionStore";
   import type { NavRoutesMap } from "./MenuTypes";
+  import { cartItemsCounter } from "../../services/CheckoutStore";
 
   const role = getCurrentRole();  
 
@@ -38,15 +39,23 @@
   }
 
   //This object is used for displaying menu
-  const navItems = getNavigationItems();
+  let navItems = getNavigationItems();
+
+  console.log(navItems.find(n => n.href === '#/cart'))
+
+  // Čim se promeni broj u Košarici, ažuriraj navigaciju
+  $: {
+    const count = $cartItemsCounter;
+    navItems = navItems.map(n => 
+      n.href === '#/cart' 
+        ? { ...n, label: count > 0 ? `<b>Košarica (${count})</b>` : 'Košarica' } 
+        : n
+    );
+  }
 
   //CSS: here we need shadow
 </script>
 
-<!-- TODO BUG TO FIX: dark:bgslate does not work if theme is switched from theme swithcer but work from browsers -->
-<!--    position: absolute;
-        top: 270px;
-        left: 120px; -->
 <ul
   class="menu menu-md dropdown-content  w-52 p-2 
          bg-base-200/70 dark:bg-zinc-950/84 border-1 border-zinc-500/50 dark:border-zinc-500/20 
@@ -84,7 +93,7 @@
                   hover:bg-primary/15 text-primary/70 text-sm"
         >
           <i class="fas fa-{item.icon} w-5 mr-2"></i>
-          <span class="text-primary/80" style="width: 150px;">{item.label}</span>
+          <span class="text-primary/80" style="width: 150px;">{@html item.label}</span>
         </a>
       {:else}
         <div
@@ -93,7 +102,7 @@
               text-base "
         >
           <i class="fas fa-{item.icon} w-5 mr-2"></i>
-          <span class="text-zinc-400 dark:text-zinc-400">{item.label}</span>
+          <span class="text-zinc-400 dark:text-zinc-400">{@html item.label}</span>
         </div>
       {/if}
     </li>

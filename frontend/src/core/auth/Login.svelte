@@ -159,7 +159,7 @@
 
       <div class="mt-8">
         <label for="register" class="label">Nemate nalog?</label>
-        <a href="#/register" class="pgs-hyperlink">  Registrirajte se </a>
+        <a href="#/register" class="pgs-hyperlink hover:bg-primary-content/40">&nbsp; Registrirajte se &nbsp;</a>
       </div>
     </form>
   </div>

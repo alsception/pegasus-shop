@@ -6,9 +6,8 @@
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import { link, push } from "svelte-spa-router";
-  import { brojStola } from "./../../core/services/CheckoutStore";
   import { resetCartItems } from "../products/ProductService";
-  import { fly } from "svelte/transition";
+  import { slide } from "svelte/transition";
   import { onMount } from "svelte";
   import type { Cart } from "./Cart";
   import EmptyImg1 from "../../assets/img/empty-amico-1.svg";
@@ -113,6 +112,24 @@
   ) {
     window.location.href = "#/cart";
   }
+
+  function handleToggle(event) {
+    // Pošto koristimo bind, takeAway je već ažuriran ovde
+    console.log("Preuzimanje:", takeAway);
+    
+    /* if (takeAway) {
+      alert("Korisnik želi da dođe u restoran.");
+    } */
+  }
+
+  // Ovo se izvršava kad god se takeAway promeni
+  $: {
+    if (takeAway) 
+    {
+      console.log("Korisnik preuzima lično, brišem adresu iz memorije...");
+      address = ""; // Automatski resetuješ polje kad god se čekira checkbox
+    }
+  }
 </script>
 
 <div class="w-full max-w-4xl mx-auto p-2 sm:p-4">
@@ -140,7 +157,8 @@
 
          {#if cart && cart.items && cart.items.length > 0}
 
-        <form class="p-12 w-full border-2 border-secondary/20 " on:submit|preventDefault={submitForm}>
+        <form class="p-12 w-full border-2 border-secondary/20 border-t-0" 
+          on:submit|preventDefault={submitForm}>
           <div class="grid grid-cols-1 mb-6 w-full">
             <div class="lg:col-span-2">
               <div class="">
@@ -172,14 +190,16 @@
             <div class="lg:col-span-2">
               <div class="rounded-lg">
                 <div class="">
-                  <div class="w-full">
-                  
+                  {#if !takeAway}
+                  <div class="w-full" transition:slide={{ duration: 300 }}>
                     <label
                       for="address"
                       class="block text-md font-medium text-primary/80 mb-2"
-                      ><i class="fas fa-house text-sm text-primary/60 mr-2"
-                      ></i>Adresa<span class="text-error ml-2">*</span>
+                    >
+                      <i class="fas fa-house text-sm text-primary/60 mr-2"></i>
+                      Adresa za dostavu<span class="text-error ml-2">*</span>
                     </label>
+                    
                     <textarea
                       id="address"
                       class="pgs-input resize-vertical"
@@ -187,16 +207,18 @@
                       rows="4"
                       style="border: none;"
                       maxlength="255"
-                      required
+                      required={!takeAway} 
                     ></textarea>
                   </div>
-                  <label class="fieldset-legend w-fit">
-                  <input 
-                    type="checkbox" 
-                    bind:checked={takeAway} 
-                    class="checkbox border" 
-                  />
-                  Preuzimanje u restoranu
+                {/if}
+                  <label class="fieldset-legend w-fit cursor-pointer hover:text-info">
+                    <input 
+                      type="checkbox" 
+                      bind:checked={takeAway} 
+                      on:change={handleToggle}
+                      class="checkbox border" 
+                    />
+                  Preuzimanje u restoranu (15-25 minuta)
                 </label>
                 </div>
               </div>

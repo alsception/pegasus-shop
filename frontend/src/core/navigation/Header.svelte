@@ -79,33 +79,6 @@
 <div class="navbar-end">
   <div class="flex items-center gap-6">
 
-    <label
-      class="swap swap-rotate text-gray-500 cursor-pointer hidden"
-      data-tip="Dark Mode"
-    >
-      <input
-        id="theme-controller"
-        type="checkbox"
-        class="theme-controller"
-        value="dark"
-      />
-      <span class="swap-off text-xl">
-        <i class="fas fa-sun text-sm md:text-lg"></i>
-      </span>
-      <span class="swap-on text-xl">
-        <i class="fas fa-moon text-sm md:text-lg"></i>
-      </span>
-    </label>
-
-    <div
-      class="text-gray-500 cursor-pointer hidden"
-      data-tip="Poruke"
-    >
-      <span class="text-xl">
-        <i class="fas fa-envelope text-sm md:text-lg"></i>
-      </span>
-    </div>
-
     <div class="dropdown dropdown-hover dropdown-bottom dropdown-left hidden">
       <div tabindex="0" role="button" class="btn m-1">Kosarica</div>
       <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
@@ -120,7 +93,7 @@
 
     <button
       tabindex="0"
-      class="btn btn-ghost p-0 hover:bg-primary/10 text-gray-500 text-xl"
+      class="btn btn-ghost p-0 hover:bg-primary/10 text-gray-500 text-xl hidden"
 
       data-tip="Cart"
       aria-label="Cart"
