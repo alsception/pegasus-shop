@@ -154,9 +154,8 @@ function clickChange(value: any)
 <style>
   
   .selected-cat{
-    color: cornflowerblue;
-    /*color: var(--color-info);*/
-    background-color: black;
+    color: var(--color-primary);
+    background-color: var(--color-base-300);
     font-weight: bold !important;
     font-style: bold;
   }

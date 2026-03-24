@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatPrice } from "../../utils/formatting";
+  import { formatPrice, getFormattedPrice } from "../../utils/formatting";
   import AddToCartButton from "./AddToCartButton.svelte";
   import { link } from "svelte-spa-router";
   import ProductPage from "./ProductPage.svelte";
@@ -35,7 +35,7 @@
   <div class="w-full h-48 flex items-center justify-center overflow-hidden">
     {#if product.imageUrl}
       <img
-        class="w-full h-full object-cover"
+        class="w-full h-full object-cover zoom"
         src={product.imageUrl}
         alt={product.name}
       />
@@ -66,14 +66,14 @@
           { formatPrice( product.basePrice )}
         </span>   
         
-        <span class="text-2xl font-bold text-success">
-          { formatPrice( product.discount )}
+        <span class="text-xl font-bold text-error">
+          {@html getFormattedPrice(product.discount)}
         </span>   
 
       {:else}
         
-        <span class="text-xl font-bold text-sky-500">
-          { formatPrice( product.basePrice )}
+        <span class="text-xl font-bold text-sky-500">         
+          {@html getFormattedPrice(product.basePrice)}
         </span>   
 
       {/if}
@@ -119,3 +119,13 @@
     <div class="modal-backdrop" on:click={closeModal}></div>
   </div>
 {/if}
+
+<style>
+ .zoom {
+  transition: transform 0.3s ease; /* definiše brzinu i glatkoću */
+}
+
+.zoom:hover {
+  transform: scale(1.1); /* 1.1 znači povećanje od 10% */
+}
+</style>

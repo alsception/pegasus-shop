@@ -55,11 +55,10 @@ export function formatTime(dateStr: string | number | Date | null | undefined, t
     if (diffInMinutes < minDiff) 
     {
         output = `<div>
-                    <span class="indicator-item badge badge-info dark:text-black dark:bg-violet-800 dark:text-primary">🔥 `+badgeInfo+`</span><br>
+                    <span class="indicator-item badge badge-info dark:bg-violet-800 dark:text-primary">🔥 `+badgeInfo+`</span><br>
                     <div class=" tooltip tooltip-info cursor-pointer" data-tip="`+tooltip+` - Stiglo prije manje od `+minDiff+` minuta ">
                         <span class="text-primary font-bold"> ${formattedDateTime} </span>
-                    </div>
-                    
+                    </div>                    
                   </div>`;
     }
     else
@@ -280,7 +279,6 @@ export function formatPrice(price: number | undefined): string
   return new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(
     price,
   )
-
 }  
 
 /**Cena, bez euro znaka */
@@ -292,5 +290,42 @@ export function formatPriceRaw(price: number | undefined): string
   }
   
   return new Intl.NumberFormat("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(price);
-
 }  
+
+// Prvo pretvorimo u string sa fiksne dve decimale (3.14) i podelimo na delove
+export function getPriceWholePart(price: number | undefined): string 
+{
+  if (price === undefined || price === null) 
+  {
+    return "0";
+  }
+
+  const formatiranaCena = price.toFixed(2); 
+  const delovi = formatiranaCena.split('.');
+  const ceoBroj = delovi[0]; 
+
+  return ceoBroj;
+}
+
+export function getPriceCents(price: number | undefined): string 
+{
+   if (price === undefined || price === null) 
+  {
+    return "0";
+  }
+  
+  const formatiranaCena = price.toFixed(2); 
+  const delovi = formatiranaCena.split('.');
+  const centi = delovi[1];
+
+  return centi;
+}
+
+export function getFormattedPrice(price: number | undefined): string 
+{
+  return `<div class="flex items-baseline font-bold">
+            <span class="text-2xl"> `+getPriceWholePart(price)+`</span>
+            <span class="text-md ml-0">,`+getPriceCents(price)+`</span>
+            <span class="text-xl ml-1">€</span>
+          </div>`;
+}

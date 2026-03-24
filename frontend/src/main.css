@@ -104,14 +104,14 @@ button:focus {
 }
 
 :root {
-  --my-color: #fff;
+  --my-dark-color: #fff;
   /* or any other variables/style */
 }
 [data-theme='dark'] {
-  --my-color: #000;
+  --my-dark-color: #000;
 }
 [data-theme='pink'] {
-  --my-color: #ffabc8;
+  --my-dark-color: #ffabc8;
 }
 
 /** END THEME CONFIG, START STYLING RULES

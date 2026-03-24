@@ -386,7 +386,7 @@
 
 <!-- ovde cemo staviti order details modal -->
 {#if showModal2}
-  <div class="modal modal-open pt-10" style="backdrop-filter: blur(10px);">
+  <div class="modal modal-open pt-14" style="backdrop-filter: blur(10px);">
     <div
       class="modal-box max-h-[95vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-100"
       transition:fly={{ y: 50, duration: 250 }}

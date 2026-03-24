@@ -24,11 +24,12 @@
     }
   });
 
+  //TODO: ovo sad mora da se ucita sa servera, i da moze da se promeni i posalje na server
+  // i da se razlikuje admin da moze da vidi i promeni a musterija ne da promeni, samo da vidi
+  export let shopOpen = true;
+
   function resetNotificationsInfo() {
-    console.log("reseting..");
-    /*  document.getElementById('notifications-icon')?.classList.remove('text-error');
-    document.getElementById('notifications-indicator')?.classList.add('hidden');
-    document.getElementById('notifications-indicator').textContent = ''; */
+    console.log("reseting..");    
   }
 
   let showModal = false;
@@ -52,32 +53,24 @@
   }
 </script>
 
-<!-- 
- Should we have this (bg-slate-950/84 backdrop-blur-sm) glassy effect or not?
- Sure it looks nice, but is it necesary/usefull and non blocking?
- We'll leave it, for now...
-  -->
-
 <div class="navbar shadow-sm fixed bg-[#0d0d0d]/84 bg-zinc-950/84 backdrop-blur-lg z-9000">
   <div class="navbar-start">
     <div class="pl-16">
       <a href="/#/home">
-        <!-- <h1
-          class="text-md sm:text-md md:text-2xl lg:text-2xl font-bold bg-gradient-to-tr from-slate-400 via-orange-500 to-zinc-600
-        text-transparent bg-clip-text font-mono uppercase tracking-widest"
-        >
-          Barbacoa
-        </h1> -->
-
         <img src="/white_barbacoa.png" alt="Barbacoa logo" title="Barbacoa" style="max-width:149px;">
-
-
       </a>
     </div>
   </div>
   <div class="navbar-center"></div>
 <div class="navbar-end">
   <div class="flex items-center gap-6">
+
+    {#if shopOpen}
+      <span class="text-white/90 text-xs" title="Dostava je aktivna">🟢 </span>  
+    {:else}
+      <span class="text-white/90 text-xs">⚠️ Dostava trenutno nije aktivna!</span>  
+    {/if}
+    <!-- 🔴🔴 -->
 
     <div class="dropdown dropdown-hover dropdown-bottom dropdown-left hidden">
       <div tabindex="0" role="button" class="btn m-1">Kosarica</div>
@@ -86,7 +79,7 @@
               <div class="max-h-[90vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-100 bg-transparent">        
                 <!-- TODO: OVDE CEMO STAVITI CARTLITE -->
                 <CartDetails />
-       </div>
+              </div>
             </li>
           </ul>
         </div>

@@ -259,7 +259,7 @@
               <br />
             </div>           
 
-            <div class="sticky bottom-0 z-10 px-6 lg:p-6 lg:px-4 py-4 border-t border-base-300 ">
+            <div class="sticky bottom-0 z-10 px-2 lg:p-6 sm:px-2 lg:px-4 py-4 border-t border-base-300 ">
               <div class="flex justify-between items-center">
                 <button
                 type="button"

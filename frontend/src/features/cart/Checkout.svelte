@@ -157,7 +157,7 @@
 
          {#if cart && cart.items && cart.items.length > 0}
 
-        <form class="p-12 w-full border-2 border-secondary/20 border-t-0" 
+        <form class="p-6 sm:p-12 sm:pb-6 w-full border-2 border-secondary/20 border-t-0" 
           on:submit|preventDefault={submitForm}>
           <div class="grid grid-cols-1 mb-6 w-full">
             <div class="lg:col-span-2">
