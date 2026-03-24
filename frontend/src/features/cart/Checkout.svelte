@@ -215,7 +215,6 @@
                     <input 
                       type="checkbox" 
                       bind:checked={takeAway} 
-                      on:change={handleToggle}
                       class="checkbox border" 
                     />
                   Preuzimanje u restoranu (15-25 minuta)
