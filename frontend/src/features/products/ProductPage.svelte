@@ -99,7 +99,7 @@
         <a
           class="text-gray-400 hover:text-blue-300 text-md"
           use:link
-          href="#/products/mngmt/{product.id}"
+          href="#/inventory/{product.id}"
           title="Edit"
           aria-label="Edit"
         >

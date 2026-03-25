@@ -43,12 +43,12 @@ export const navRoutes: NavRoutesMap =
       customer: true,
       default: true,
     },
-    "/products/mngmt": {
+    "/inventory": {
       label: "Upravljanje proizvodima",
       icon: "box",
-      href: "#/products-mngmt",
-      component: "/products-mngmt",
-      componentDetails: "/products-mngmt/:id",
+      href: "#/inventory",
+      component: "/inventory",
+      componentDetails: "/inventory/:id",
       admin: true,
       customer: false,
     },

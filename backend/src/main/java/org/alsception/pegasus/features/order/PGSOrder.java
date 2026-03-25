@@ -103,12 +103,27 @@ public class PGSOrder
     public String toString() {
         return "PGSOrder{" +
                 "id=" + id +
-                ", code='" + code + "'" +
-                ", status='" + status + "'" +
-                ", session=" + (session != null ? session.getId() : "N/A") +
-                ", items=" + (items != null ? items.size() : 0) +
+                ", user=" + (user != null ? user.getId() : "null") +
+                ", code='" + code + '\'' +
+                ", paymentMethod='" + paymentMethod + '\'' +
+                ", currency='" + currency + '\'' +
+                ", status='" + status + '\'' +
+                ", comment='" + comment + '\'' +
+                ", stol='" + stol + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", price=" + price +
+                ", itemsCount=" + (items != null ? items.size() : 0) +
+                ", table=" + (table != null ? table.getId() : "null") +
                 ", created=" + created +
-                "}";
+                ", modified=" + modified +
+                ", uPripremiAt=" + uPripremiAt +
+                ", spremnoAt=" + spremnoAt +
+                ", servedAt=" + servedAt +
+                ", synced=" + synced +
+                ", totalAmount=" + totalAmount +
+                ", session=" + (session != null ? session.getId() : "null") +
+                '}';
     }
     
 }

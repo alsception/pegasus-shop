@@ -11,7 +11,7 @@ import Artikli                      from "../../../features/artikli/ArtikliList.
 import ArtikliAdministration        from "../../../features/artikli/ArtikliAdministration.svelte";
 import Products                     from "../../../features/products/ProductsListBarbacoa.svelte";
 import ProductDetail                from "../../../features/products/ProductPage.svelte";
-import ProductsAdminList            from "../../../features/products/ProductsList.svelte";
+import ProductsAdminList            from "../../../features/products/InventoryList.svelte";
 import ProductAdministration        from "../../../features/products/ProductAdministration.svelte";
 
 import Tables                       from "../../../features/tables/Tables.svelte";
@@ -45,8 +45,8 @@ export const components: ComponentRegistry =
     "/stats": Stats,
     "/products": Products,
     "/products/:id": ProductDetail,
-    "/products-mngmt": ProductsAdminList,    
-    "/products-mngmt/:id": ProductAdministration,
+    "/inventory": ProductsAdminList,    
+    "/inventory/:id": ProductAdministration,
     "/tables": Tables,
     "/reservations": Reservations,
     "/users": Users,
@@ -95,7 +95,7 @@ export function generateRoutes()
     routes["/artikli/:id"] = ArtikliAdministration;
     routes["/users/my-account"] = MyAccount;
     routes["/orders/:id"] = OrderDetails;
-    routes["/products-mngmt"] = ProductsAdminList;
+    routes["/inventory"] = ProductsAdminList;
 
     //Not found component: This must be last added (order matters), otherwise it catches all
     routes["*"] = NotFound; 

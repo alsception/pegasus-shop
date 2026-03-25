@@ -97,10 +97,10 @@
     {
       id: 8,
       emoji: "📦",
-      title: "Upr. proizv.",
+      title: "Upravljanje jelovnikom",
       description: "Upravljanje proizvodima",
       icon: "users--",
-      href: "/products-mngmt",
+      href: "/inventory",
       color: "blue",
       default: false,
       admin: true,
@@ -201,7 +201,7 @@
             class="card-content hover:bg-info/20 dark:hover:bg-primary/10 flex flex-col items-center justify-center text-primary/70"
           >
             <span class="icon">{item.emoji}</span>
-            <h2 class="title">{item.title}</h2>
+            <h4 class="title">{item.title}</h4>
           </div>
           <span class="arrow">→</span>
         </div>
@@ -314,7 +314,7 @@
   }
 
   .title {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 600;
     margin-bottom: 10px;
     letter-spacing: -0.5px;

@@ -13,44 +13,21 @@
     getOrderStatusLabel,
   } from "../../utils/formatting";
   import { showSuccessToast } from "../../core/utils/toaster";
+  import L from 'leaflet';
+  import type { Map as LeafletMap } from 'leaflet'; // Uvezi tip da se ne meša sa JS Map
+  import 'leaflet-routing-machine';
 
-  document.title = "Order details | Barbacoa";
+  document.title = "Narudžba | Barbacoa";
+
+  export let ID: number | string;
 
   let loading: boolean = false;
   let error: string | null = null;
-  export let ID: number | string;
   let rows = 2;
-
-  //Authenticacion
-  $: isAuthenticated = $auth.isAuthenticated;
-
-  $: {
-    if ($params?.id) {
-      ID = Number($params.id);
-      fetch(ID); // reactively fetch when id changes
-    }
-  }
-
-  onMount(() => {
-    fetch(ID);
-  });
-
-  // Available order statuses
-  const orderStatuses = [
-    "WAITING",
-    "IN_PREPARATION",
-    "READY",
-    "DELIVERED",
-    //---------
-    "CANCELLED",
-    "RETURNED",
-  ];
-
-  // Available payment statuses
-  const paymentStatuses = ["PENDING", "PAID", "FAILED", "REFUNDED", "PARTIAL"];
-
-  // Available payment methods
-  const paymentMethods = ["CASH", "CARD", "CRYPTOCURRENCY", "OTHER"];
+  let map: LeafletMap; // Ovde definišemo varijablu
+  let mapContainer: HTMLElement;
+  let marker: any;
+  let routingControl: any;
 
   let formData: Partial<Order> = {
     code: "",
@@ -65,9 +42,97 @@
     servedAt: null,
     upripremiAt: null,
     spremnoAt: null,
+    address: "",
+    phone: ""
   };
 
-  async function fetch(id: string | number) 
+  $: {
+    if ($params?.id) 
+    {
+      ID = Number($params.id);
+      fetchOrder(ID); // reactively fetch when id changes
+    }
+  }
+
+  onMount( async () =>
+  {
+    fetchOrder(ID);
+    // inicijalizacija mape (Leaflet mora u onMount jer mu treba DOM)
+    initMap();
+  });
+
+  async function initMap() 
+  {    
+    map = L.map(mapContainer).setView([45.35439056, 14.3615457], 16); // Barbacoa adresa (ex furinac)
+    /*** Zoom level
+      1 je ceo svet (vidiš kontinente).
+      13 je  nivo grada.
+      18-20 je maksimalni zum. Na 20 bukvalno vidiš krov zgrade ili pojedinačno drvo u dvorištu.
+    */
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap'
+    }).addTo(map);    
+  }
+
+  // Umesto window.drawRoute, napravi običnu funkciju
+  async function searchAddressAndDrawRoute(address: string | undefined) {
+    if (!address || address.length < 3) return;
+
+    try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
+        const response = await fetch(url);
+        const data = await response.json() as any[];
+
+        if (data.length > 0) {
+            const { lat, lon } = data[0];
+            const targetLat = parseFloat(lat);
+            const targetLon = parseFloat(lon);
+
+            // 1. Pomeri mapu na lokaciju kupca
+            map.setView([targetLat, targetLon], 17);
+
+            // 2. Nacrtaj rutu od restorana do te lokacije
+            drawRoute(targetLat, targetLon);
+            
+            // 3. (Opciono) Ako želiš i marker na kući kupca
+            if (marker) {
+                marker.setLatLng([targetLat, targetLon]);
+            } else {
+                marker = L.marker([targetLat, targetLon]).addTo(map);
+            }
+        }
+    } catch (error) {
+        console.error("Greška pri pretrazi ili crtanju rute:", error);
+    }
+}
+
+function drawRoute(endLat: number, endLon: number) {
+    // Tvoj fiksni start (Restoran)
+    const startLat = 45.35439056;
+    const startLon = 14.3615457;
+
+    if (!map) return;
+
+    if (routingControl) {
+        map.removeControl(routingControl);
+    }
+
+    routingControl = (L as any).Routing.control({
+        waypoints: [
+            L.latLng(startLat, startLon),
+            L.latLng(endLat, endLon)
+        ],
+        lineOptions: {
+            styles: [{ color: '#3b82f6', weight: 6 }]
+        } as any,
+        routeWhileDragging: true,
+        addWaypoints: false,
+        show: true // tekstualni panel s uputstvima
+    }).addTo(map);
+}
+
+  async function fetchOrder(id: string | number) 
   {
     startLoadingAnimation();
 
@@ -78,10 +143,14 @@
       });
 
       formData = data;
-      document.title = `Narudžba ${formData.code} | Pegasus`;
+      document.title = `Narudžba ${formData.code} | Barbacoa`;
       error = null;
       if(formData.comment && formData.comment.toString.length > -1 )
         rows = 5;
+      
+      if(formData.address){
+        searchAddressAndDrawRoute(formData.address);
+      }
     } 
     catch (err) 
     {
@@ -112,7 +181,7 @@
       });
 
       showSuccessToast("Order saved");
-      fetch(ID);
+      fetchOrder(ID);
     } 
     catch (err) 
     {
@@ -125,7 +194,8 @@
     }
   }
 
-  function showErrorInModal(error: any): void {
+  function showErrorInModal(error: any): void 
+  {
     //Note to myself: moguce da nam vecina ovoga zapravo netreba
     const contentEl = document.getElementById("modal-content");
     const dialogEl = document.getElementById("modal") as HTMLDialogElement;
@@ -196,6 +266,8 @@
       input.disabled = false;
     });
   }
+  
+ 
 </script>
 
 <div class="relative w-full scale-up-center-normal">
@@ -367,27 +439,62 @@
         </div>
       </div>
 
-      <!-- Notes Section -->
+      {#if (formData.comment)}
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-1 mb-1">
         <div class="lg:col-span-2">
           <div class="w-full">
-            <label
-              for="notes"
-              class="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Napomena</label
-            >
-            <!-- TODO: staviti ovde da bude veci rows ako ima comment -->
+            <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">
+              <i class="fas fa-comment text-primary/60">&nbsp;</i>
+              Napomena
+            </label>
             <textarea
               id="notes"
               class="pgs-input resize-vertical rounded-md"
               style="background-color: var(--color-base-200);"
               bind:value={formData.comment}
-              rows="{rows}"
+              rows="{formData.comment ? 4 : 2}"
             ></textarea>
           </div>
         </div>
       </div>
+      {/if}
+
+      <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-4">
+        <div>
+          <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+            <i class="fas fa-phone text-primary/60">&nbsp;</i>Telefon
+          </label>
+          <input
+            id="phone"
+            type="tel"
+            class="pgs-input rounded-md w-full"
+            style="background-color: var(--color-base-200);"
+            bind:value={formData.phone}
+          />
+        </div>
+        <div>
+          <label for="address" class="block text-sm font-medium text-gray-700 mb-2">
+            <i class="fas fa-home text-primary/60">&nbsp;</i>Adresa
+          </label>
+          <textarea
+            id="address"
+            class="pgs-input resize-vertical rounded-md w-full"
+            style="background-color: var(--color-base-200);"
+            bind:value={formData.address}
+            rows="{formData.address ? 3 : 2}"
+          ></textarea>
+        </div>        
+      </div>
+      
+    <button 
+      type="button"      
+      on:click={() => searchAddressAndDrawRoute(formData.address)}
+      class="btn btn-ghost btn-md m-0.5"
+    >
+      <i class="fas fa-location-arrow text-primary/60">&nbsp;</i>Nađi put
+    </button>
+    
+      <div bind:this={mapContainer} class="w-full h-164 rounded-md shadow-inner"></div>
 
       <div class="grid grid-cols-1 hidden">
         <div class="flex justify-end gap-3 pt-4">

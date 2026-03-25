@@ -77,7 +77,7 @@
       });
 
       showSuccessToast("Saved");
-      push('/products?listView=true');
+      push('/inventory');
       //window.location.href = "/#/products";
       fetch(ID);
     } catch (err) {
@@ -97,7 +97,7 @@
   function cancelEditing(
     event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }
   ) {
-    window.location.href = "#/products-mngmt"; // Putanja do početne stranice
+    window.location.href = "#/inventory"; // Putanja do početne stranice
   }
 
   function toggleActive() {}
@@ -201,17 +201,18 @@ https://svelte.dev/e/a11y_no_noninteractive_element_interactionssvelte(a11y_no_n
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label for="price" class="block text-sm font-medium text-secondary mb-2">Cijena</label>
-            <input id="price" type="number" class="pgs-input w-full" bind:value={formData.basePrice} />
+            <input 
+              id="price" 
+              type="number" 
+              step="0.01" 
+              class="pgs-input w-full" 
+              bind:value={formData.basePrice} 
+            />
           </div>
 
           <div>
             <label for="currency" class="block text-sm font-medium text-secondary mb-2">Valuta</label>
             <input id="currency" type="text" class="pgs-input w-full" bind:value={formData.baseCurrency} />
-          </div>
-
-          <div>
-            <label for="shipping_cost" class="block text-sm font-medium text-secondary mb-2">Troškovi dostave</label>
-            <input id="shipping_cost" type="number" class="pgs-input w-full" bind:value={formData.shippingCost} />
           </div>
 
           <div>
@@ -225,8 +226,8 @@ https://svelte.dev/e/a11y_no_noninteractive_element_interactionssvelte(a11y_no_n
           </div>
 
           <div>
-            <label for="discount" class="block text-sm font-medium text-secondary mb-2">Popust</label>
-            <input id="discount" type="number" class="pgs-input w-full" bind:value={formData.discount} />
+            <label for="discount" class="block text-sm font-medium text-secondary mb-2">Cijena na sniženju</label>
+            <input id="discount" type="number" step="0.01" class="pgs-input w-full" bind:value={formData.discount} />
           </div>
         </div>
       </div>

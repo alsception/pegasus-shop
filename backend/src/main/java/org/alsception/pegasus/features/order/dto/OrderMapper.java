@@ -23,14 +23,14 @@ public final class OrderMapper {
     {
         logger.trace("Mapping to dto");
 
-        if (order == null) {
+        if (order == null) 
+            {
             return null;
         }
 
         OrderDTO dto = new OrderDTO();
         dto.setId(order.getId().toString());
         dto.setCode(order.getCode());
-        dto.setStol(order.getStol());
         dto.setPaymentMethod(order.getPaymentMethod());
         dto.setCurrency(order.getCurrency());
         dto.setStatus(order.getStatus());
@@ -41,14 +41,13 @@ public final class OrderMapper {
         dto.setUPripremiAt(order.getUPripremiAt());
         dto.setSpremnoAt(order.getSpremnoAt());
         dto.setServedAt(order.getServedAt());
+        dto.setAddress(order.getAddress());
+        dto.setPhone(order.getPhone());
 
-        if (order.getUser() != null) {
+        if (order.getUser() != null) 
+        {
             dto.setUserId(order.getUser().getId());
             dto.setUser(order.getUser());
-        }
-
-        if (order.getTable() != null) {
-            dto.setTableId(order.getTable().getId());
         }
 
         dto.setItems(toItemDtoList(order.getItems()));
@@ -108,7 +107,6 @@ public final class OrderMapper {
         PGSOrder order = new PGSOrder();
         order.setId(Long.parseLong(dto.getId()));
         order.setCode(dto.getCode());
-        order.setStol(dto.getStol());
         order.setPaymentMethod(dto.getPaymentMethod());
         order.setCurrency(dto.getCurrency());
         order.setStatus(dto.getStatus());
@@ -117,6 +115,8 @@ public final class OrderMapper {
         order.setUser(dto.getUser());
         order.setUPripremiAt(dto.getUPripremiAt());
         order.setSpremnoAt(dto.getSpremnoAt());
+        order.setAddress(dto.getAddress());
+        order.setPhone(dto.getPhone());
 
         List<PGSOrderItem> items = new ArrayList<>();
         if (dto.getItems() != null) {

@@ -11,6 +11,7 @@ export interface Order {
   email: string;
   name: string;
   address: string;
+  phone: string;
   paymentMethod: string;
   paymentStatus: string;
   currency: string;

@@ -20,9 +20,9 @@ public class OrderDTO {
     private PGSUser user;
     private Long tableId;
     private String code;
-    private String stol;
     private String name;
     private String address;
+    private String phone;
     private String paymentMethod;
     private String currency;
     private String status;

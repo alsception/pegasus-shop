@@ -3,7 +3,7 @@
   import { link } from "svelte-spa-router";
   import { get } from "svelte/store";
   import { auth, getCurrentRole, isAdmin } from "../../core/services/SessionStore";
-  import { formatDate } from "../../utils/formatting";
+  import { formatDate, formatPrice } from "../../utils/formatting";
   import { formatActive } from "../../utils/formatting";
   import { formatCommentInfo } from "../../utils/formatting";
   import type { Product } from "./Product";
@@ -14,7 +14,7 @@
   import ProductCard from "./ProductCard.svelte";
   import ProductCategories from "./ProductCategories.svelte";
 
-  ///products-mngmt
+  ///inventory
   document.title = "Jelovnika | Barbacoa";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -254,7 +254,7 @@
           {#if getCurrentRole() === 'ADMIN'}
             <button
               type="button"
-              on:click={() => window.location.href = '#/products/mngmt/0'}
+              on:click={() => window.location.href = '#/inventory/0'}
               class="btn btn-dash flex-1 lg:flex-none whitespace-nowrap"
             >       
               <i class="fas fa-plus"></i>
@@ -295,9 +295,13 @@
     <thead class="bg-base-300">
       <tr class="h-12">
         <th class="pgs-th">Proizvod</th>
-        <th class="pgs-th">Kategorija</th>
-        <th class="pgs-th">Status</th> <th class="pgs-th"></th> <th class="pgs-th">Kreirano</th>
         <th class="pgs-th-r">Cijena</th>
+        <th class="pgs-th-r">Cijena na sniženju</th>
+        <th class="pgs-th">Kategorija</th>
+        <th class="pgs-th">Status</th> 
+        <th class="pgs-th"></th> 
+        <th class="pgs-th">Kreirano</th>        
+        <th class="pgs-th">Izmijenjeno</th>        
         <th class="pgs-th">Akcije</th>
       </tr>
     </thead>
@@ -305,7 +309,6 @@
       {#each products as product, i}
         <tr 
           class="bg-base-200/60 tr-highlight" 
-          transition:fly={{ y: -50, duration: 300 }}
         >            
           <td class="pgs-td">
             <a
@@ -314,6 +317,15 @@
               class="pgs-hyperlink font-bold"
             >{product.name}</a>
           </td>
+          <td class="pgs-td-num font-mono font-bold text-right">
+           { formatPrice(product.basePrice)}
+          </td>
+          <td class="pgs-td-num font-mono font-bold text-right">
+           {#if (product.discount)} 
+              {formatPrice(product.discount)}
+           {/if}
+          </td>
+        
           <td class="pgs-td font-mono">
             <span class="badge badge-soft badge-font-mono badge-md badge-{getKategorijaColor(product.category)} font-mono badge-md" style="text-transform: uppercase;">
                   {getKategorijaLabel(product.category)}
@@ -333,10 +345,10 @@
           <td class="pgs-td font-mono">
             {@html formatDate(product.created, "new", 15)}
           </td>
-          <td class="pgs-td-num font-mono font-bold text-right">
-            € {product.priceEur}
+          <td class="pgs-td font-mono">
+            {@html formatDate(product.modified, "new", 15)}
           </td>
-        
+          
           <td class="px-2">
             <div class="flex justify-center items-center gap-2">
               <div class="tooltip tooltip-info group" data-tip="Edit">
@@ -344,7 +356,7 @@
                   class="px-4"
                   aria-label="Edit"
                   use:link
-                  href="#/products-mngmt/{product.id}"
+                  href="#/inventory/{product.id}"
                 >
                   <i class="fas fa-pen text-gray-500 group-hover:text-sky-400 cursor-pointer"></i>
                 </a>
@@ -378,7 +390,7 @@
       no products found :/
     {:else}
       <div
-        class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 4xl:grid-cols-5 gap-8 p-4"
+        class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-4 4xl:grid-cols-6 gap-8 p-4"
         style="justify-items: center;"
       >
         {#each products as product, i}
