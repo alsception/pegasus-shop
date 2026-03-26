@@ -46,7 +46,7 @@
     const count = $cartItemsCounter;
     navItems = navItems.map(n => 
       n.href === '#/cart' 
-        ? { ...n, label: count > 0 ? `<b>Košarica (${count})</b>` : 'Košarica' } 
+        ? { ...n, label: count > 0 ? `<b>Košarica <span class="text-warning">(${count})</span></b>` : 'Košarica' } 
         : n
     );
   }

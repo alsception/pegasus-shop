@@ -98,6 +98,27 @@ public class PGSProduct {
     @Column(name = "tag") 
     private Set<String> tags = new HashSet<>(); 
     
+    public PGSProduct(String name, BigDecimal basePrice, String description) {
+        this.name = name;
+        this.basePrice = basePrice;
+        this.description = description;
+    }    
+    
+    public PGSProduct(String name, BigDecimal basePrice, String description, String code) {
+        this.name = name;
+        this.basePrice = basePrice;
+        this.description = description;
+        this.code = code;
+    }    
+
+    public PGSProduct(String name, BigDecimal basePrice, String description, String code, int category) {
+        this.name = name;
+        this.basePrice = basePrice;
+        this.description = description;
+        this.code = code;
+        this.category = category;
+    }        
+    
     @PrePersist
     protected void onCreate() {
         created = LocalDateTime.now();

@@ -29,7 +29,7 @@
     class="btn default bg-gray-600 button-fx w-full flex items-center justify-center"
     style="width: {width}"
     disabled
-    aria-label="Product not available"
+    aria-label="Nedostupno"
   >
     <span class="">Nedostupno</span>
   </button>
@@ -48,7 +48,7 @@
 
   <button on:click={() => addToCart(product.id)}>
     <div
-      class="lottie-container bg-secondary"
+      class="lottie-container bg-secondary cursor-pointer"
       style="width: {width}; height: {width};"
     >
       <DotLottieSvelte
@@ -63,13 +63,13 @@
 {:else}
 
   <button
-    class="btn btn-secondary"
+    class="btn btn-ghost bg-base-100 hover:bg-base-300 dark:bg-primary-content/80 dark:hover:border-2 border-accent"
     style="width: {width}; height: {width};/*transition-delay: 0.3s;*/"
     aria-label="Dodaj u košaricu"
     title="Dodaj u košaricu"
     on:click={() => addToCart(product.id)}
   >
-    <i class="fa fa-plus text-gray-300 text-xl" aria-hidden="true"></i>
+    <i class="fa fa-plus text-primary/40 text-xl" aria-hidden="true"></i>
   </button>
 {/if}
 

@@ -46,7 +46,7 @@ public class ProductController
             @RequestParam(required = false) String code, 
             @RequestParam(required = false) String name,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "250") int size)
+            @RequestParam(defaultValue = "299") int size)
     {        
         logger.debug("getProductsWithPagination: search=["+search+"] code=["+code+"], name=["+name+"], page=["+page+"], size=["+size+"]");
         return productService.findProductsWithPagination(search, code, name, page, size);

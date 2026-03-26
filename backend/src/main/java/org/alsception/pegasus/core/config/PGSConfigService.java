@@ -31,7 +31,8 @@ public class PGSConfigService
 
     public boolean isServiceEnabled(String parameterName)
     {
-        try{
+        try
+        {
             logger.trace("Loading service config from database");
             Optional<PGSConfig> pgsc = this.configRepository.findByName(parameterName);
             if(pgsc.isPresent())

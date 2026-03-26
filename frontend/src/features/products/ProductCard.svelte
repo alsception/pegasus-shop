@@ -21,9 +21,7 @@
   }
 
   function handleProductClick(id: number | undefined) 
-  {
-    /* console.log('handling product click');
-    if (id != undefined) productId = id; */
+  {    
     openModal();
   }
 </script>
@@ -31,7 +29,7 @@
 <div 
   class="bg-white dark:bg-[linear-gradient(135deg,_#1d1d1d_0%,_#0d0d0d_100%)] dark:hover:border-primary/40
   overflow-hidden w-full shadow hover:shadow-lg transition-shadow border-1 border-primary/20 z-2
-  flex flex-col h-ful rounded-t-3xl rounded-b-3xl" >
+  flex flex-col h-ful rounded-t-3xl rounded-b-3xl" class:pgs-discount={product.discount>0} >
   <div class="w-full h-48 flex items-center justify-center overflow-hidden">
     {#if product.imageUrl}
       <img
@@ -40,16 +38,24 @@
         alt={product.name}
       />
     {:else}
-      <span class="text-gray-400 dark:text-gray-500">No image available</span>
+    <div class="product-card-image-container" style="display: flex; align-items: center; justify-content: center; height: 150px;">
+      <!-- svelte-ignore a11y_missing_attribute -->
+      <img src="https://cdn.master-fb.com/gallery/Proizvodi/Hrana/Logo/e1624014329cdc45781f54f77db58e891753943002.webp" 
+         style="width: 40%;opacity: 0.21;pointer-events: none;">
+    </div>
+      <!-- <span class="text-gray-400 dark:text-gray-500">No image available</span> -->
     {/if}
   </div>
-<div class="p-6 flex flex-col flex-1">
-    <h3 class="font-semibold text-lg break-words text-primary" title={product.name}>
+  <div class="p-6 flex flex-col flex-1">
+    <h3 class="font-semibold text-lg break-words text-primary flex items-center justify-between " title={product.name}>
       <!-- svelte-ignore a11y_click_events_have_key_events -->
       <!-- svelte-ignore a11y_no_static_element_interactions -->
       <span on:click={() => handleProductClick(product.id)} class="pgs-hyperlink">{product.name}</span>
+      {#if product.discount }
+        <span class="badge badge-accent text-2xl">AKCIJA</span>
+      {/if}
     </h3>
-
+    
     <p
       class="text-sm text-gray-500 dark:text-gray-500 mt-1 line-clamp-3"
       title={product.description}
@@ -66,7 +72,7 @@
           { formatPrice( product.basePrice )}
         </span>   
         
-        <span class="text-xl font-bold text-error">
+        <span class="text-xl font-bold text-error ">
           {@html getFormattedPrice(product.discount)}
         </span>   
 
@@ -127,5 +133,9 @@
 
 .zoom:hover {
   transform: scale(1.1); /* 1.1 znači povećanje od 10% */
+}
+
+.pgs-discount{
+  outline: 2px solid var(--color-accent);
 }
 </style>
