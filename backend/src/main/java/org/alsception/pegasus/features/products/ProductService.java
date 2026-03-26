@@ -150,6 +150,7 @@ public class ProductService
         }).orElseThrow(() -> new EntityNotFoundException("Product not found"));
     }
 
+    //wtf sta ce nam ovo????? trenutno nemamo reviews
     private PGSProduct createProductAndReviews(PGSProduct product) 
     {
         if (product == null) {

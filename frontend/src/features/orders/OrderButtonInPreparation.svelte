@@ -31,6 +31,8 @@
 
   async function updateOrderState(id: any, status: any) 
   {
+    console.log("KLIK TEST");
+
     if (!id || !status) return;
     loading = true;
     
@@ -69,8 +71,8 @@
 <button 
 class="btn btn-sm btn-primary text-primary-content ml-auto"
     on:click={(e) => {
-          e.preventDefault();
-          updateOrderState(order.id, 'IN_PREPARATION');
-        }}>
+      e.preventDefault();
+      updateOrderState(order.id, 'IN_PREPARATION');
+    }}>
     PRIHVATI</button>
 </div>

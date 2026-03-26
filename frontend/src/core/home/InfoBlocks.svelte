@@ -25,25 +25,25 @@
     {
       title: "Narudžbe na čekanju",
       description: "Narudžbe koje čekaju pripremu",
-      color: "yellow",
+      color: "gray",
       amount: 0,
     },
     {
       title: "Narudžbe u pripremi",
-      color: "blue",
+      color: "gray",
       description: "Narudžbe koje se trenutno pripremaju",
       amount: 0,
     },
     {
       title: "Pripremljeno narudžbi",
       description: "Narudžbe spremne za preuzimanje",
-      color: "green",
+      color: "gray",
       amount: 0,
     },
     {
       title: "Ukupan promet danas",
       description: "Trenutno naplaćeno",
-      color: "purple",
+      color: "gray",
       amount: 0,
     },
   ];

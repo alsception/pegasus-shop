@@ -51,7 +51,12 @@
     );
   }
 
-  //CSS: here we need shadow
+  // Funkcija koja zatvara meni micanjem fokusa s trenutno aktivnog elementa, gazda tako trazio
+  const closeMenu = () => {
+    if (typeof document !== 'undefined') {
+      (document.activeElement as HTMLElement)?.blur();
+    }
+  };
 </script>
 
 <ul
@@ -61,7 +66,7 @@
   style="min-width: 280px;
         position:fixed; top: 48px; left:1px;
         backdrop-filter: blur(12px) !important; 
-        -webkit-backdrop-filter: blur(16px) !important;"
+        -webkit-backdrop-filter: blur(16px) !important;"        
 >
   <li class="flex  px-3 py-2 rounded-md">
     <div class="inline-flex gap-1">
@@ -89,6 +94,7 @@
           href={item.disabled ? "#" : item.href}
           class="flex items-center px-3 py-2 rounded-md cursor-pointer
                   hover:bg-primary/15 text-primary/70 text-sm"
+                  on:click={closeMenu}
         >
           <i class="fas fa-{item.icon} w-5 mr-2"></i>
           <span class="text-primary/80" style="width: 150px;">{@html item.label}</span>
