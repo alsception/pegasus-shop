@@ -68,13 +68,16 @@
 
       {#if product.discount }
 
-        <span class="text-xl font-bold text-primary line-through">
-          { formatPrice( product.basePrice )}
-        </span>   
+        <div class="flex">
+          <span class="text-xl font-bold text-primary line-through">
+            { formatPrice( product.basePrice )}
+          </span>   
+          
+          <span class="text-xl font-bold text-error ml-4">
+            {@html getFormattedPrice(product.discount)}
+          </span>   
+        </div>
         
-        <span class="text-xl font-bold text-error ">
-          {@html getFormattedPrice(product.discount)}
-        </span>   
 
       {:else}
         

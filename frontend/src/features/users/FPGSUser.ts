@@ -1,7 +1,5 @@
 export interface FPGSUser 
 {
-    json(): unknown;
-    ok: any;
     id: number;
     role: string;
     username: string;
@@ -12,10 +10,9 @@ export interface FPGSUser
     //svi posle ovoga mogu biti null ili da ne postoje
     modified?: string | Date | number | null;
     zadnjiPutAktivan?: string | Date | number | null;
-    dob: string | null;
     password?: string | null;
     email?: string | null;
     phone?: string | null;
-    organization?: string | null;
+    address?: string | null;
     comment?: string | null;
 }

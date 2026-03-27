@@ -47,7 +47,7 @@
     const count = $cartItemsCounter;
     navItems = navItems.map(n => 
       n.href === '#/cart' 
-        ? { ...n, label: count > 0 ? `<b>Košarica <span class="text-warning">(${count})</span></b>` : 'Košarica' } 
+        ? { ...n, label: count > 0 ? `<b>Košarica <span class="text-info">(${count})</span></b>` : 'Košarica' } 
         : n
     );
   }
@@ -74,6 +74,7 @@
       <a
         class="text-primary pgs-hyperlink inline-flex items-center max-w-[100px] whitespace-nowrap overflow-hidden text-ellipsis"
         href="#/users/my-account"
+        on:click={closeMenu}
         title={getCurrentUsername()}
       >
         <i class="fas fa-user mr-1"></i>

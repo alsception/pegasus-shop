@@ -50,7 +50,8 @@ public class UserDTO
         this.active = active;
     }
 
-    public UserDTO(PGSUser user) {
+    public UserDTO(PGSUser user) 
+    {
         this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
@@ -62,6 +63,7 @@ public class UserDTO
         this.lastName = user.getLastName();
         this.active = user.isActive();
         this.phone = user.getPhone();
+        this.address = user.getAddress();
         this.email = user.getEmail();
         this.organization = user.getOrganization();
         this.comment = user.getComment();
@@ -80,6 +82,7 @@ public class UserDTO
         p.setFirstName(user.getFirstName());
         p.setLastName(user.getLastName());
         p.setActive(user.getActive());
+        p.setAddress(user.getAddress());
         p.setPhone(user.getPhone());
         p.setEmail(user.getEmail());
         p.setOrganization(user.getOrganization());

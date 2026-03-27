@@ -37,7 +37,7 @@
 {:else if $loadingItems.has(product.id)}  
 
   <button
-    class="btn btn-secondary"
+    class="btn btn-ghost bg-base-100 dark:bg-primary-content/80"
     style="width: {width}; height: {width};"
     aria-label="Dodaj u košaricu"
   >
@@ -49,18 +49,18 @@
     <div class="flex items-center bg-base-100 dark:bg-primary-content/80 rounded-lg border border-accent/20 overflow-hidden h-full shadow-sm cursor-pointer"
     style="height: {width};border-radius:1000px">
         <button 
-            class="px-3 bg-base-300/30 hover:bg-base-300/60 text-primary font-bold transition-colors cursor-pointer text-3xl rounded-2xl"
+            class="px-3 bg-base-300/30 hover:bg-base-300/60 text-info font-bold transition-colors cursor-pointer text-3xl rounded-2xl"
             on:click={() => ProductService.updateQuantity(product.id, -1)}
         >
             -
         </button>
         
-        <span class="px-2 font-bold text-primary min-w-[20px] text-center text-2xl">
+        <span class="px-2 font-bold min-w-[20px] text-center text-2xl text-info">
             {$addedItems[product.id]}
         </span>
         
         <button 
-            class="px-3 bg-base-300/30 hover:bg-base-300/60 text-primary font-bold transition-colors cursor-pointer text-3xl rounded-2xl"
+            class="px-3 bg-base-300/30 hover:bg-base-300/60 text-info font-bold transition-colors cursor-pointer text-3xl rounded-2xl"
             on:click={() => ProductService.updateQuantity(product.id, 1)}
         >
             +

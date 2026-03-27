@@ -324,8 +324,8 @@ export function getPriceCents(price: number | undefined): string
 export function getFormattedPrice(price: number | undefined): string 
 {
   return `<div class="flex items-baseline font-bold">
-            <span class="text-2xl"> `+getPriceWholePart(price)+`</span>
+            <span class="text-3xl"> `+getPriceWholePart(price)+`</span>
             <span class="text-md ml-0">,`+getPriceCents(price)+`</span>
-            <span class="text-xl ml-1">€</span>
+            <span class="text-2xl ml-1">€</span>
           </div>`;
 }

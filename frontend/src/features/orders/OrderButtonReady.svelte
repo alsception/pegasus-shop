@@ -45,7 +45,7 @@
       loadingDone = true;
       setTimeout(() => {
         dispatch("orderUpdateCompleted", { id, status });
-      }, 2000); //sacekamo dve sekunde
+      }, 1000); //sacekamo dve sekunde
     } catch (err) {
       showErrorToast("Greška");
     } finally {

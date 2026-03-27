@@ -8,15 +8,15 @@
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import { showSuccessToast } from "../../core/utils/toaster";
   import { formatDateTime } from "../../utils/formatting";
-  import Pix from "../pix/Pix.svelte";
   import { showErrorModalWithTitle } from "../../utils/modal";
 
   export let endpoint: string | null = null; // Optional if used in a route
+
   let resolvedEndpoint: string;
 
   let loading: boolean = false;
   let error: string | null = null;
-  let ID: number | string;
+  let ID: number | string | undefined;
 
   document.title = "Account details | Barbacoa";
 
@@ -28,52 +28,47 @@
    *
    *  I fali endpoint za submit
    *
-   *
+   * 27/3/26 submit radi ali sad ima novi bug kad se udje iz userlist :D
    */
 
+    onMount(() => {
+      //console.log('mounted');
+    });
+
   $: {
-    if (endpoint) {
+    if (endpoint) 
+    {
       // Embedded mode — endpoint is passed in directly
       resolvedEndpoint = endpoint;
     }
-    if ($params?.id) {
+    if ($params?.id)//ovo ce biti true cak i ako je /my-account 
+    {
       const parsedId = Number($params.id);
-      if (!isNaN(parsedId)) {
+      if (!isNaN(parsedId)) 
+      {
         resolvedEndpoint = `/users/${parsedId}`;
         ID = parsedId;
-      } else {
-        error = "Invalid ID in route.";
+      } 
+      else 
+      {
         resolvedEndpoint = "/users/my-account";
       }
-    } else {
+    } 
+    else 
+    {
       resolvedEndpoint = "/users/my-account";
     }
   }
 
-  $: if (resolvedEndpoint) {
-    fetch(resolvedEndpoint);
+  $: if (resolvedEndpoint) 
+  {
+    fetchUser();
   }
-
-  /* 
-   
-
-  $: {
-    if ($params?.id) {
-      const parsedId = Number($params.id);
-      // We only permit valid numbers to be called.
-      if (!isNaN(parsedId)) {
-        ID = parsedId;
-        fetch(ID); // reactively fetch when id changes
-      } else {
-        error = "Invalid user ID.";
-        formData = {};
-      }
-    }
-  }
- */
+ 
   // Available user types
   const userTypes = [
     "ADMIN",
+    "CUSTOMER",
     "WAITER",
     "KITCHEN",
     "EMPLOYEE",
@@ -89,48 +84,47 @@
     active: null,
     created: new Date().toISOString(),
     modified: null,
-    dob: null,
-    organization: "",
     comment: "",
   };
 
-  async function fetch(id: string | number) 
+  async function fetchUser() 
   {
     startLoadingAnimation();
-
-    try {
-      let data = await api<FPGSUser>(resolvedEndpoint, {
+    try 
+    {
+      let data = await api<FPGSUser>(resolvedEndpoint,{
         method: "GET",
       });
-
       formData = data;
-      document.title = formData.username + " | Account details " + " | Barbacoa";
+      ID = formData.id;//Ako je my-acc id cemo dobiti tek kad se ucita user.
+      document.title = formData.username + " | Detalji računa " + " | Barbacoa";
       error = null;
-      formData.created = data.created;
-      // Convert created date to datetime-local format
-      // Treba biti oprezan s ovim
-      if (data.dob) {
-        const date = new Date(data.dob);
-        formData.dob = data.dob.substring(0, 10);
-      }
-    } catch (err) {
+      formData.created = data.created;      
+    } 
+    catch (err) 
+    {
       processError(err);
-    } finally {
+    } 
+    finally 
+    {
       removeLoadingAnimation();
     }
   }
 
-  function processError(err: any) {
+  function processError(err: any) 
+  {
     formData = {};
     error =
       (err as Error)?.message ||
       "User not found or an unknown error occurred. ERR_80";
   }
 
-  async function handleSubmit() {
-    try {
+  async function handleSubmit() 
+  {
+    try 
+    {
+      console.log(ID);
       loading = true;
-      if (formData.dob) formData.dob += "T00:00"; //hack :)
 
       const response = await api<FPGSUser>(`/users/${ID}`, {
         method: "PUT",
@@ -141,10 +135,14 @@
 
       showSuccessToast("Sačuvano");
       push("/home"); //TODO: AKO je my-account onda netreba ovo
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       // fallback if fetch itself fails (e.g. network error)
       showErrorInModal({ message: (err as Error).message });
-    } finally {
+    } 
+    finally 
+    {
       loading = false;
     }
   }
@@ -218,29 +216,19 @@
     });
   }
 
-  function openModal() {
-    const dialog = document.getElementById("modal") as HTMLDialogElement;
-    dialog.showModal();
-  }
-
-  function openPixModal() {
-    const dialog = document.getElementById("modal-pix") as HTMLDialogElement;
-    dialog.showModal();
-  }
-
   function deleteDialog() {
     if (confirm("Jeste li sigurni?") == true) {
       deleteUser(ID);
     }
   }
 
-  async function executeDelete(id: number | string) {
+  async function executeDelete(id: number | string | undefined) {
     return api("/users/" + id, {
       method: "DELETE",
     });
   }
 
-  async function deleteUser(id: number | string) {
+  async function deleteUser(id: number | string | undefined) {
     try {
       await executeDelete(id);
       //We just assume its deleted if no error happens...
@@ -249,6 +237,11 @@
       //TODO: process this err msg to show network error failed to fetch, and json msg error from server
       showErrorModalWithTitle("Error deleting user", error);
     }
+  }
+
+  function shouldHide() {
+    //Nije bas najelegantnije resenje, ali za sad moramo da sakrijemo neka polje
+    return resolvedEndpoint == "/users/my-account"
   }
 </script>
 
@@ -293,7 +286,7 @@
         class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
       >
         <div>
-          <h3 class="text-3xl font-semibold text-primary">Korisnik</h3>&nbsp;
+          <h3 class="text-3xl font-semibold text-primary">Detalji računa</h3>&nbsp;
           <div id="loadingMessage" style="display: none;" class="mt-2">
             <span class="loading loading-dots loading-xs"></span>
           </div>
@@ -354,7 +347,7 @@
                 <label
                   for="password"
                   class="block text-sm font-medium text-secondary mb-2"
-                  >Lozinka</label
+                  ><i class="fas fa-lock text-xs text-gray-400 mr-1"></i> Lozinka</label
                 >
                 <input
                   id="password"
@@ -368,7 +361,7 @@
                 />
               </div>
 
-              <div>
+              <div class:hidden={shouldHide()}>
                 <label
                   for="role"
                   class="block text-sm font-medium text-secondary mb-2"
@@ -385,7 +378,7 @@
                 </select>
               </div>
 
-              <div>
+              <div class:hidden={shouldHide()}>
                 <label
                   for="active"
                   class="block text-sm font-medium text-secondary mb-2"
@@ -445,36 +438,7 @@
                   bind:value={formData.lastName}
                 />
               </div>
-
-              <div>
-                <label
-                  for="dob"
-                  class="block text-sm font-medium text-secondary mb-2"
-                  >Datum rođenja</label
-                >
-                <input
-                  id="dob"
-                  type="date"
-                  class="pgs-input w-full"
-                  bind:value={formData.dob}
-                />
-              </div>
-
-              <div>
-                <label
-                  for="organization"
-                  class="block text-sm font-medium text-secondary mb-2"
-                >
-                  <i class="fas fa-building text-xs text-gray-400 mr-1"></i> Organizacija
-                </label>
-                <input
-                  id="organization"
-                  type="text"
-                  class="pgs-input w-full"
-                  bind:value={formData.organization}
-                />
-              </div>
-            </div>
+          </div>
           </div>
         </div>
 
@@ -519,8 +483,26 @@
             </div>
           </div>
 
-          <!-- Ostalo / Comment -->
+          <!-- Adresa -->
           <div
+            class="bg-base-200 p-6 rounded-xl shadow-sm border border-neutral/20"
+          >
+            <h3 class="text-xl font-semibold text-primary mb-6">Adresa</h3>
+            <label
+              for="address"
+              class="block text-sm font-medium text-secondary mb-2"
+              ><i class="fas fa-home text-xs text-gray-400 mr-1"></i> Adresa za dostavu</label
+            >
+            <textarea
+              id="address"
+              class="pgs-input w-full resize-vertical"
+              bind:value={formData.address}
+              rows="6"
+            ></textarea>
+          </div>
+
+          <!-- Ostalo / Comment -->
+          <!-- <div
             class="bg-base-200 p-6 rounded-xl shadow-sm border border-neutral/20"
           >
             <h3 class="text-xl font-semibold text-primary mb-6">Ostalo</h3>
@@ -535,7 +517,8 @@
               bind:value={formData.comment}
               rows="6"
             ></textarea>
-          </div>
+          </div> -->
+
         </div>
 
         <!-- Footer timestamps -->
@@ -567,11 +550,11 @@
 
 <dialog id="modal" class="modal modal-bottom sm:modal-middle w-full">
   <div
-    class="modal-box bg-red-200 text-red-700"
+    class="modal-box bg-base-200 text-red-700"
     style="min-width: min-content;"
   >
     <h3 class="text-lg font-bold" id="modal-title">Error</h3>
-    <p class="py-4" id="modal-content"></p>
+    <p class="p-4 bg-error/10" id="modal-content"></p>
     <div class="modal-action">
       <form method="dialog">
         <button class="btn">Close</button>

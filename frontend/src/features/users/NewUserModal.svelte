@@ -31,6 +31,7 @@
   // Available user types
   const userTypes = [
   "ADMIN",
+  "CUSTOMER",
     "WAITER",
     "KITCHEN",
     "EMPLOYEE",
@@ -114,7 +115,7 @@
         <fieldset
           class="fieldset bg-base-200 rounded-box w-full p-4"
         >
-          <label class="label" for="username">Username</label>
+          <label class="label" for="username">Username<span class="text-error ml-2">*</span></label>
           <input
             type="text"
             class="pgs-input mb-2"
@@ -123,7 +124,7 @@
             required
           />
 
-          <label class="label" for="password">Password</label>
+          <label class="label" for="password">Password<span class="text-error ml-2">*</span></label>
           <input
             type="password"
             class="pgs-input mb-2"
@@ -164,8 +165,8 @@
             bind:value={newUser.phone}
           />
 
-          <label for="role" class="label"> Role </label>
-          <select id="type" bind:value={newUser.role} class="pgs-input mb-2">
+          <label for="role" class="label"> Role <span class="text-error ml-2">*</span> </label>
+          <select id="type" bind:value={newUser.role} class="pgs-input mb-2" required>
             {#each userTypes as type}
               <option value={type}>{type}</option>
             {/each}

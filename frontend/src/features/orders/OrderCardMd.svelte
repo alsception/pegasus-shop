@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { Order } from "./Order";
-  import { onDestroy, onMount } from "svelte";
-  import { link } from "svelte-spa-router";
+  import { onMount } from "svelte";
   import { auth } from "../../core/services/SessionStore";
   import { get } from "svelte/store";
   import {
@@ -11,7 +10,6 @@
     formatPrice,
     formatPriceRaw,
     getOrderCardBgClass,
-    formatTime,
   } from "../../utils/formatting";
   import axios from "axios";
   import { showErrorModal } from "../../utils/modal";
@@ -245,11 +243,11 @@
             DOSTAVA</span>
         {/if}
       {/if}
-      {#if isNew(order.created, 10) && order.status === 'WAITING' }
+      {#if isNew(order.created, 15) && order.status === 'WAITING' }
         <div>
           <div
             class=" tooltip tooltip-info cursor-pointer"
-            data-tip="Stiglo prije manje od 10 minuta"
+            data-tip="Stiglo prije manje od 15 minuta"
           >
             <span
               class="indicator-item badge badge-accent dark:text-black dark:bg-violet-500"
@@ -329,7 +327,6 @@
   <div class="mt-2" class:hidden={liteView}>
     <ul class="flex flex-col gap-0 bg-base-300/40 rounded-t-2xl">
       {#each order.items as item}
-        {#if item.product.category != 5}
           <li
             class="flex items-center gap-0 px-1.5 py-0.5 border-0 border-b-1 border-primary/5"
           >
@@ -354,7 +351,6 @@
               {/if}
             </div>
           </li>
-        {/if}
       {/each}
     </ul>
     <div
@@ -389,7 +385,7 @@
   <div class="modal modal-open pt-14" style="backdrop-filter: blur(10px);">
     <div
       class="modal-box max-h-[95vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-100"
-      transition:fly={{ y: 50, duration: 250 }}
+      transition:fly={{ y: 50, duration: 200 }}
     >
       <!-- Fixed Header -->
       <div

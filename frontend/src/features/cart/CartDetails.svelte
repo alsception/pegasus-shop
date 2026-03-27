@@ -264,12 +264,12 @@
                 <button
                 type="button"
                 on:click={cancel}
-                class="btn btn-neutral text-primary/80 mr-12"
+                class="btn btn-ghost text-primary/80 mr-12"
               >
                 Zatvori
               </button>
 
-                <a href="#/checkout" class="btn btn-primary bg-primary">
+                <a href="#/checkout" class="btn btn-primary bg-primary text-accent">
                 Potvrdi</a
               >
               </div>

@@ -96,10 +96,12 @@ public class UserService
         dbUser.setActive(receivedUser.getActive());     
         dbUser.setEmail(receivedUser.getEmail());
         dbUser.setPhone(receivedUser.getPhone());
-        dbUser.setOrganization(receivedUser.getOrganization());
-        dbUser.setComment(receivedUser.getComment());        
+        dbUser.setAddress(receivedUser.getAddress());
         dbUser.setRole(PGSUserRole.valueOf(receivedUser.getRole()));
-        dbUser.setDob(receivedUser.getDob());
+        /* not gonna use this anymore
+        dbUser.setOrganization(receivedUser.getOrganization());
+        dbUser.setComment(receivedUser.getComment());                
+        dbUser.setDob(receivedUser.getDob());*/
         
         if(receivedUser.getPassword()!=null && !"".equals(receivedUser.getPassword()))
         {

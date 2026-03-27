@@ -10,6 +10,8 @@
   import { slide } from "svelte/transition";
   import { onMount } from "svelte";
   import type { Cart } from "./Cart";
+  import api from "../../core/services/client";
+  import type { FPGSUser } from "../users/FPGSUser";
   import EmptyImg1 from "../../assets/img/empty-amico-1.svg";
   import EmptyImg2 from "../../assets/img/empty-amico.svg";
   import EmptyImg3 from "../../assets/img/empty-bro-1.svg";
@@ -28,6 +30,16 @@
   let phone = "";
   let comment = "";
   let takeAway: boolean = false; 
+  let userData: Partial<FPGSUser> = {
+    role: "",
+    username: "",
+    firstName: "",
+    lastName: "",
+    active: null,
+    created: new Date().toISOString(),
+    modified: null,
+    comment: "",
+  };
 
   const emptyImages = [EmptyImg1, EmptyImg2, EmptyImg3, EmptyImg4, EmptyImg5];
 
@@ -54,6 +66,7 @@
   });
 
   onMount(async () => {
+    loadUser();
     await loadCart();
   });
 
@@ -72,6 +85,28 @@
     finally 
     {
       loading = false;
+    }
+  }
+
+  async function loadUser() 
+  {
+    try 
+    {
+      let data = await api<FPGSUser>("/users/my-account",{
+        method: "GET",
+      });
+      userData = data;
+      if(userData.address) address = userData.address;
+      if(userData.phone) phone = userData.phone;
+
+    } 
+    catch (err) 
+    {
+      console.error(err);
+    } 
+    finally 
+    {
+      
     }
   }
 
@@ -258,11 +293,11 @@
               <button
                 type="button"
                 on:click={cancel}
-                class="btn btn-neutral text-primary/80 mr-12"
+                class="btn btn-ghost text-primary/80 mr-12"
               >
                 <i class="fa fa-arrow-left text-md cursor-pointer"> </i>Nazad
               </button>
-              <button type="submit" class="btn btn-primary bg-primary">
+              <button type="submit" class="btn btn-primary bg-primary text-accent">
                 <i class="fa fa-check text-md cursor-pointer"> </i>Potvrdi
               </button>
             </div>

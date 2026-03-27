@@ -250,8 +250,8 @@
 {:else if error}
   <ErrorDiv {error} />
 {:else}
-  <div class="w-full flex justify-center px-4">
-    <div class="w-full max-w-7xl p-4 bg-base-200 rounded-lg">
+  <div class="w-full flex justify-center">
+    <div class="w-full  p-4 bg-base-200 rounded-lg">
       <form
         on:submit|preventDefault={handleFormSubmit}
         class="flex flex-col lg:flex-row items-center gap-3"

@@ -47,11 +47,9 @@ export const ProductService =
 {
     async updateQuantity(productId: number, delta: number) 
     {
-      console.log(delta);
         loadingItems.update(s => { s.add(productId); return s; });        
         try {
 
-            // API poziv (zamenite sa vašim endpointom za +/- ako postoji, ili ostavite postojeći)
             await axiosInstance.post<{ message: string }>(
               ( delta > 0 ) ? "/cart/add" : "/cart/reduce",
               null,
