@@ -3,12 +3,25 @@ import { showErrorToast } from "../../core/utils/toaster";
 import { writable } from "svelte/store";
 import { cartItemsCounter } from './../../core/services/CheckoutStore';
 
-
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const STORAGE_KEY = 'addedItemsMap';
 
-// workaround to make this reactivee to show loading spinner
-export const addedItems = writable(new Set());
-export const loadingItems = writable(new Set());
+/**
+ * UPOZORENJE: Sledi ai slop -.-
+ * 
+ * TODO:
+ * 1. Treba da se resetuju svi objekti kad je Checkout. [done]
+ * 2. Treba backend za reduce [done]
+ * 3. Treba da se sinhronizuju objekti kad se menja iz Checkouta
+ * 
+ */
+
+// 1. Učitavanje (Map id -> quantity)
+const saved = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
+const initialData: Record<number, number> = saved ? JSON.parse(saved) : {};
+
+export const addedItems = writable<Record<number, number>>(initialData);
+export const loadingItems = writable(new Set<number>());
 
 /**
  * Need to set axios and interceptor below to ensure that request is authorized with Bearer token
@@ -20,6 +33,76 @@ const axiosInstance = axios.create({
   },
 });
 
+// 2. Automatsko čuvanje i ažuriranje globalnog brojača
+addedItems.subscribe((items) => {
+    if (typeof window !== 'undefined') {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+        // Ažuriraj totalni broj u CheckoutStore
+        const total = Object.values(items).reduce((acc, curr) => acc + curr, 0);
+        cartItemsCounter.set(total);
+    }
+});
+
+export const ProductService = 
+{
+    async updateQuantity(productId: number, delta: number) 
+    {
+      console.log(delta);
+        loadingItems.update(s => { s.add(productId); return s; });        
+        try {
+
+            // API poziv (zamenite sa vašim endpointom za +/- ako postoji, ili ostavite postojeći)
+            await axiosInstance.post<{ message: string }>(
+              ( delta > 0 ) ? "/cart/add" : "/cart/reduce",
+              null,
+              {
+                params: {
+                  productId,
+                },
+              }
+            );
+            
+            addedItems.update(items => {
+                const currentQty = items[productId] || 0;
+                const newQty = currentQty + delta;
+                
+                if (newQty <= 0) {
+                    delete items[productId];
+                } else {
+                    items[productId] = newQty;
+                }
+                return { ...items };
+            });
+        } 
+        catch (error) 
+        {
+            console.error(error);
+        } 
+        finally 
+        {
+            loadingItems.update(s => { s.delete(productId); return s; });
+        }
+    },
+
+    clearCart() {
+        // 1. Resetuj mapu dodatih artikala na prazan objekat
+        addedItems.set({});
+
+        // 2. Resetuj globalni brojač na 0
+        cartItemsCounter.set(0);
+
+        // 3. Obriši podatke iz localStorage
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('addedItemsMap');
+            localStorage.removeItem('pgs-cart-items-counter');
+        }
+    }
+};
+
+export async function addToCart(productId: number) {
+    await ProductService.updateQuantity(productId, 1);
+}
+
 // Add Bearer token if available
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("token"); // or getToken() if you have a helper
@@ -28,60 +111,6 @@ axiosInstance.interceptors.request.use((config) => {
   }
   return config;
 });
-
-export async function addToCart(productId: number): Promise<void> 
-{
-
-  //add product id to set of ids
-  loadingItems.update(prevSet => {
-      prevSet.add(productId);
-      return prevSet; 
-    });
-
-  try {
-    await axiosInstance.post<{ message: string }>(
-      "/cart/add",
-      null,
-      {
-        params: {
-          productId,
-        },
-      }
-    );
-    // We assume success if no error happened
-    // No more toasts. we will show lottie animation in button
-    loadingItems.update(prevSet => {
-      prevSet.delete(productId);
-      return prevSet; 
-    });
-
-    addedItems.update(prevSet => {
-        prevSet.add(productId);
-        return prevSet; 
-    });
-
-    cartItemsCounter.update(n => n + 1);
-  }
-  catch (error: any) 
-  {
-    processError(error);
-  } 
-  finally 
-  {
-    loadingItems.update(prevSet => {
-      prevSet.delete(productId);
-      return prevSet; 
-    });
-  }
-}
-
-export function resetCartItems() 
-{
-  //console.log('reseting cart items');//TODO: CUDNO PONASANJE, ako nema ovog console.loga izlgeda kao da neresetuje
-  addedItems.set(new Set());
-  loadingItems.set(new Set());
-  cartItemsCounter.update(n => 0);
-}
 
 export function processError(error: any) 
 {

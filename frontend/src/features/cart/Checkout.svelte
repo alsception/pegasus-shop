@@ -6,7 +6,7 @@
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import { link, push } from "svelte-spa-router";
-  import { resetCartItems } from "../products/ProductService";
+  import { ProductService } from "../products/ProductService";
   import { slide } from "svelte/transition";
   import { onMount } from "svelte";
   import type { Cart } from "./Cart";
@@ -95,7 +95,7 @@
       });
 
       showSuccessToast("Narudžba uspješno poslata!");
-      resetCartItems(); //Mora da resetujemo cart items da neprikazuje kao dodate proizvode
+      ProductService.clearCart(); //Mora da resetujemo cart items da neprikazuje kao dodate proizvode
       push("/home");//orders page otvorimo na narudzbe na cekanju
     } catch (err: any) {
       console.error("kect", err);

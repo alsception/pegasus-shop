@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { PGSTable } from "./PGSTable";
-  import { brojStola } from './../../core/services/CheckoutStore';
   import { link, push } from 'svelte-spa-router';
   import ProductsListBarbacoa from "../products/ProductsListBarbacoa.svelte";
 
@@ -16,8 +15,6 @@
   function handleClick() 
   {
     // Postavljaš vrijednost u store (ovo automatski sprema u localStorage)
-    brojStola.set(table.number);
-
     openModal2();
   }
 

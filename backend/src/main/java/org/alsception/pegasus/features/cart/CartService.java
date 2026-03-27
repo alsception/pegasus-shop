@@ -100,15 +100,20 @@ public class CartService
         PGSProduct product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         
-        if(quantity == null)
+        if ( quantity == null )
             quantity = 1;
         
-        if(quantity < 0)
+        if ( quantity < -1 )
             throw new RuntimeException("Illegal quantity: ["+quantity+"]. Must be > 0");
+        /**
+         * Šta se ovde dešava? Ok ako je quantity = -1, smanjićemo količinu za 1
+         * Ali neke tamo veće, odnosno manje količine, sad da smanjujemo za 10 komada
+         * To je previše komplikovano da razmišljamo o tome.
+         */
 
-        if (!product.isActive() /*|| product.getStockQuantity()<= 0 || (product.getStockQuantity() - quantity < 0)-*/) 
+        if ( !product.isActive() ) 
         {
-            throw new RuntimeException("Product is not available or out of stock");
+            throw new RuntimeException("Proizvod trenutno nije dostupan");
         }
 
         // 3. Get or create cart
@@ -128,7 +133,14 @@ public class CartService
         if (existingItem != null) 
         {
             existingItem.setQuantity(existingItem.getQuantity() + quantity);
-            existingItem.setPrice(product.getBasePrice());//WHAT IF PRICE CHANGED???
+            existingItem.setPrice(product.getBasePrice());//WHAT IF PRICE CHANGED IN MEANTIME???
+
+            //Ako je nula mora ga obrisemo ne treba nam
+            if(existingItem.getQuantity() == 0)
+            {
+                //gemini kako da ja sad obrisem item iz carta?????
+               cart.getItems().remove(existingItem);                
+            }            
         }
         else 
         {
@@ -240,6 +252,9 @@ public class CartService
     public void checkout(PGSCheckoutRequestDTO prc, String username)
     {
         //TODO: OVDE MORAMO PROVERITI I DALI JE PRODAVAONICA UOPSTE UKLJUCENA, TREBA BITI PARAMETAR DA SAMO ADMIN MOZE.
+        //TODO: takodje moramo staviti limite, da se ucitavaju iz baze podataka:
+        //    * 1. MAX_CART_ITEMS
+        //    * 2. MAX_CART_AMOUNT
 
 
         //Pre svega proveravamo dali je otvoren fiskalni dan

@@ -8,7 +8,7 @@
    * 4. addedItems: set of product ids to show that was loaded
    */
 
-  import { addedItems, addToCart, loadingItems } from "./ProductService";
+  import { addedItems, addToCart, loadingItems, ProductService } from "./ProductService";
   import { DotLottieSvelte } from "@lottiefiles/dotlottie-svelte";
   import { cartItemsCounter } from './../../core/services/CheckoutStore';
 
@@ -44,21 +44,28 @@
     <span class="loading loading-spinner loading-xl bg-primary/70"></span>
   </button>
 
-{:else if $addedItems.has(product.id)}  
+{:else if $addedItems[product.id] > 0}  
 
-  <button on:click={() => addToCart(product.id)}>
-    <div
-      class="lottie-container bg-secondary cursor-pointer"
-      style="width: {width}; height: {width};"
-    >
-      <DotLottieSvelte
-        src={lottieAnimationUrl}
-        loop={false}
-        autoplay={true}
-        speed={2}
-      />
+    <div class="flex items-center bg-base-100 dark:bg-primary-content/80 rounded-lg border border-accent/20 overflow-hidden h-full shadow-sm cursor-pointer"
+    style="height: {width};border-radius:1000px">
+        <button 
+            class="px-3 bg-base-300/30 hover:bg-base-300/60 text-primary font-bold transition-colors cursor-pointer text-3xl rounded-2xl"
+            on:click={() => ProductService.updateQuantity(product.id, -1)}
+        >
+            -
+        </button>
+        
+        <span class="px-2 font-bold text-primary min-w-[20px] text-center text-2xl">
+            {$addedItems[product.id]}
+        </span>
+        
+        <button 
+            class="px-3 bg-base-300/30 hover:bg-base-300/60 text-primary font-bold transition-colors cursor-pointer text-3xl rounded-2xl"
+            on:click={() => ProductService.updateQuantity(product.id, 1)}
+        >
+            +
+        </button>
     </div>
-  </button>
 
 {:else}
 

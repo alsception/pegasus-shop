@@ -30,12 +30,27 @@ public class CartController {
             @RequestParam(required = false) Integer quantity) 
     {
         String username = principal.getName();
-        logger.debug("Adding to cart for user: " + username);
+        logger.info("Adding product ["+productId+"] to cart, user: " + username);
 
         cartService.addProductToCart(username, productId, quantity);
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Product added to cart");
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/reduce")
+    public ResponseEntity<Map<String, String>> addProductToCart(
+            Principal principal,
+            @RequestParam Long productId) 
+    {
+        String username = principal.getName();
+        logger.info("Reducing product ["+productId+"] qt, user: " + username);
+
+        cartService.addProductToCart(username, productId, -1);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Product quantity reduced from cart");
         return ResponseEntity.ok(response);
     }
 

@@ -7,9 +7,6 @@
  *   Optional logout logic
 **/
 
-
-import { resetCartItems } from '../../features/products/ProductService';
-import { showSuccessToast } from '../utils/toaster';
 import { authenticate, clearToken, getToken } from './SessionStore';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -40,7 +37,6 @@ export function logout()
 {
   clearToken();
   // Optionally: call backend logout endpoint if you have one, i dont
-  resetCartItems();
 }
 
 export async function register(username: string, password: string) 

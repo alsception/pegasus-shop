@@ -294,11 +294,11 @@
   <table class="table table-zebra min-w-full divide-y divide-accent">
     <thead class="bg-base-300">
       <tr class="h-12">
+        <th class="pgs-th">Status</th> 
         <th class="pgs-th">Proizvod</th>
         <th class="pgs-th-r">Cijena</th>
         <th class="pgs-th-r">Cijena na sniženju</th>
         <th class="pgs-th">Kategorija</th>
-        <th class="pgs-th">Status</th> 
         <th class="pgs-th"></th> 
         <th class="pgs-th">Kreirano</th>        
         <th class="pgs-th">Izmijenjeno</th>        
@@ -309,7 +309,18 @@
       {#each products as product, i}
         <tr 
           class="bg-base-200/60 tr-highlight" 
-        >            
+        >      
+        <td class="text-center">
+            {#if product.active !== undefined}
+            <div class=" tooltip tooltip-info cursor-pointer" data-tip="{product.active ? "Proizvod je dostupan za naručivanje" : "Proizvod nije dostupan za naručivanje"}">
+              <span
+                class="badge badge-soft badge-{product.active ? 'success' : 'neutral'} font-mono badge-sm uppercase"
+              >
+                {product.active ? "🟢" : "⚫"}
+              </span>
+              </div>
+            {/if}
+          </td>      
           <td class="pgs-td">
             <a
               use:link
@@ -330,15 +341,7 @@
             <span class="badge badge-soft badge-font-mono badge-md badge-{getKategorijaColor(product.category)} font-mono badge-md" style="text-transform: uppercase;">
                   {getKategorijaLabel(product.category)}
                 </span></td>
-          <td class="text-center">
-            {#if product.active !== undefined}
-              <span
-                class="badge badge-soft badge-{product.active ? 'success' : 'neutral'} font-mono badge-sm uppercase"
-              >
-                {product.active ? 'Aktivan' : 'Neaktivan'}
-              </span>
-            {/if}
-          </td>
+          
           <td class="text-center">
             {@html formatCommentInfo(product.comment)}
           </td>

@@ -42,6 +42,7 @@
   let navItems = getNavigationItems();
 
   // Čim se promeni broj u Košarici, ažuriraj navigaciju
+  // TODO: Ovde bi zapravo trebalo da se prikaže kolko kešovine a ne kolko proizvoda
   $: {
     const count = $cartItemsCounter;
     navItems = navItems.map(n => 
