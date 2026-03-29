@@ -50,7 +50,7 @@ public class CodeGenerator
     public static long generateNanoId() 
     {
         long uniqueID = System.nanoTime(); 
-        log.trace("Generated unique nano ID: " + uniqueID);
+        log.trace("Generated nano ID: " + uniqueID);
         return uniqueID;
     }
     

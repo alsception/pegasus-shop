@@ -116,7 +116,15 @@ function clickChange(value: any)
   } else {
     selectedCategory = 0;
   }
+
+  closeMenu();
 }
+
+const closeMenu = () => {
+    if (typeof document !== 'undefined') {
+      (document.activeElement as HTMLElement)?.blur();
+    }
+  };
 </script>
 
 <div class="form-control w-full max-w-xs">

@@ -24,7 +24,7 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Map<String, String>> addProductToCart(
+    public ResponseEntity<Map<String, Object>> addProductToCart(
             Principal principal,
             @RequestParam Long productId,
             @RequestParam(required = false) Integer quantity) 
@@ -32,25 +32,27 @@ public class CartController {
         String username = principal.getName();
         logger.info("Adding product ["+productId+"] to cart, user: " + username);
 
-        cartService.addProductToCart(username, productId, quantity);
+        int qt = cartService.addProductToCart(username, productId, quantity);
 
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Product added to cart");
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Product added");
+        response.put("qt", qt);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/reduce")
-    public ResponseEntity<Map<String, String>> addProductToCart(
+    public ResponseEntity<Map<String, Object>> addProductToCart(
             Principal principal,
             @RequestParam Long productId) 
     {
         String username = principal.getName();
         logger.info("Reducing product ["+productId+"] qt, user: " + username);
 
-        cartService.addProductToCart(username, productId, -1);
+        int qt = cartService.addProductToCart(username, productId, -1);
 
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Product quantity reduced from cart");
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "ok");
+        response.put("qt", qt);
         return ResponseEntity.ok(response);
     }
 
@@ -96,7 +98,7 @@ public class CartController {
     {
         String username = principal.getName();
 
-        logger.debug("Initiating checkout for user: "+ username);
+        logger.info("Initiating checkout for user: "+ username);
         
         cartService.checkout(request, username);
         

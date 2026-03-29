@@ -99,13 +99,13 @@ public class DataInitializer implements CommandLineRunner
         createDefaultUser();
                
         
-        List<PGSProduct> lp = this.parseProducts2(productsImport);
+        //List<PGSProduct> lp = this.parseProducts2(productsImport);
         
-        try{
-            lp.forEach(p -> this.productService.createProduct(p));
-        }catch(Exception e){
-            logger.error(e.getMessage());
-        }
+        //try{
+            //lp.forEach(p -> this.productService.createProduct(p));
+        //}catch(Exception e){
+        //    logger.error(e.getMessage());
+        //}
         
     }
 

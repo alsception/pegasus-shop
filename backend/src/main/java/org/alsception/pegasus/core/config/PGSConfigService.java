@@ -21,15 +21,20 @@ public class PGSConfigService
         /**
          * b_prefix means it is boolean
          */
-        return this.isServiceEnabled("b_login_enabled");
+        return this.isFeatureEnabled("b_login_enabled");
     }
 
     public boolean isRegistrationEnabled()
     {
-        return this.isServiceEnabled("b_registration_enabled");
+        return this.isFeatureEnabled("b_registration_enabled");
     }
 
-    public boolean isServiceEnabled(String parameterName)
+    public boolean isShoppingEnabled()
+    {
+        return this.isFeatureEnabled("b_shopping_enabled");
+    }
+
+    public boolean isFeatureEnabled(String parameterName)
     {
         try
         {

@@ -15,7 +15,7 @@
   import ProductCategories from "./ProductCategories.svelte";
 
   ///inventory
-  document.title = "Jelovnika | Barbacoa";
+  document.title = "Jelovnik | Barbacoa";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   //DEFINITIONS

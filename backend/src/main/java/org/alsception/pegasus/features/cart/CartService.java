@@ -8,6 +8,8 @@ import org.alsception.pegasus.features.products.PGSProduct;
 import org.alsception.pegasus.features.products.ProductRepository;
 import org.alsception.pegasus.features.users.PGSUser;
 import org.alsception.pegasus.features.users.UserRepository;
+import org.alsception.pegasus.core.config.PGSConfigService;
+import org.alsception.pegasus.core.exception.ProductValidationException;
 import org.alsception.pegasus.core.utils.CodeGenerator;
 import org.alsception.pegasus.features.notifications.NotificationService;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,8 @@ public class CartService
     private final OrderRepository orderRepository;
     private final NotificationService notificationService;
     private final PGSDailySessionService pgsSessionService;
+    private final PGSConfigService configService;
+
     
     private static final Logger logger = LoggerFactory.getLogger(CartService.class);
 
@@ -38,7 +42,8 @@ public class CartService
                        CartRepository cartRepository,
                        OrderRepository orderRepository,
                        NotificationService notificationService,
-                       PGSDailySessionService pgsSessionService)
+                       PGSDailySessionService pgsSessionService,
+                       PGSConfigService configService)
     {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
@@ -46,6 +51,7 @@ public class CartService
         this.orderRepository = orderRepository;
         this.notificationService = notificationService;        
         this.pgsSessionService = pgsSessionService;
+        this.configService = configService;
     }       
     
     @Transactional
@@ -64,12 +70,12 @@ public class CartService
     }
 
     @Transactional
-    public void addProductToCart(String username, Long productId, Integer quantity) 
+    public int addProductToCart(String username, Long productId, Integer quantity) 
     {
         PGSUser user = userRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new RuntimeException("User not found: "+username));
         
-        this.addProductToCart(user, productId, quantity);
+        return this.addProductToCart(user, productId, quantity);
     }
     
     @Transactional
@@ -82,8 +88,14 @@ public class CartService
     }
     
     @Transactional
-    public void addProductToCart(PGSUser user, Long productId, Integer quantity) 
+    public int addProductToCart(PGSUser user, Long productId, Integer quantity) 
     {
+        // 0. Shopping availability check
+        if( !this.configService.isShoppingEnabled() )
+        {
+            throw new ProductValidationException("Naručivanje trenutno nije moguće. Shopping is currently unavailable.");
+        }
+
         // 1. User check
         
         if(user == null)
@@ -104,7 +116,7 @@ public class CartService
             quantity = 1;
         
         if ( quantity < -1 )
-            throw new RuntimeException("Illegal quantity: ["+quantity+"]. Must be > 0");
+            throw new RuntimeException("Illegal quantity: ["+quantity+"]. Must be > -1");
         /**
          * Šta se ovde dešava? Ok ako je quantity = -1, smanjićemo količinu za 1
          * Ali neke tamo veće, odnosno manje količine, sad da smanjujemo za 10 komada
@@ -113,7 +125,7 @@ public class CartService
 
         if ( !product.isActive() ) 
         {
-            throw new RuntimeException("Proizvod trenutno nije dostupan");
+            throw new ProductValidationException("Proizvod trenutno nije dostupan");
         }
 
         // 3. Get or create cart
@@ -130,30 +142,45 @@ public class CartService
                 .findFirst()
                 .orElse(null);
 
-        if (existingItem != null) 
-        {
+        int newQt = 0;
+            
+        if ( existingItem != null ) 
+        {   
             existingItem.setQuantity(existingItem.getQuantity() + quantity);
-            existingItem.setPrice(product.getBasePrice());//WHAT IF PRICE CHANGED IN MEANTIME???
+            existingItem.setPrice(product.getBasePrice());//WHAT IF PRICE CHANGED IN MEANTIME??? We will set new updated price
+            newQt = existingItem.getQuantity();
 
             //Ako je nula mora ga obrisemo ne treba nam
-            if(existingItem.getQuantity() == 0)
-            {
-                //gemini kako da ja sad obrisem item iz carta?????
-               cart.getItems().remove(existingItem);                
-            }            
+            if(existingItem.getQuantity() <= 0)
+            {               
+               cart.getItems().remove(existingItem);  
+               newQt = 0;  
+            }                       
         }
         else 
         {
-            PGSCartItem newItem = new PGSCartItem();
-            newItem.setCart(cart);
-            newItem.setProduct(product);
-            newItem.setQuantity(quantity);
-            newItem.setPrice(product.getBasePrice());
-            cart.getItems().add(newItem);
+            /* Ako item ne postoji i trazeno je da se smanji onda ne treba nista
+             */
+            if( quantity != -1 )
+            {
+                //NEPOSTOJI PRAVIMO NEW ITEM 
+                PGSCartItem newItem = new PGSCartItem();
+                newItem.setCart(cart);
+                newItem.setProduct(product);
+                newItem.setQuantity(quantity);
+                newQt = newItem.getQuantity();
+                newItem.setPrice(product.getBasePrice());
+                cart.getItems().add(newItem);
+            }
+            else
+            {
+                return 0;
+            }
         }
 
-        // 5. Finally, save
+        // 5. Finally, save and return new quantity
         cartRepository.save(cart);
+        return newQt;
     }
     
     /**
@@ -251,13 +278,17 @@ public class CartService
     @Transactional
     public void checkout(PGSCheckoutRequestDTO prc, String username)
     {
-        //TODO: OVDE MORAMO PROVERITI I DALI JE PRODAVAONICA UOPSTE UKLJUCENA, TREBA BITI PARAMETAR DA SAMO ADMIN MOZE.
+        //OVDE MORAMO PROVERITI DALI JE PRODAVAONICA UOPSTE UKLJUCENA, Shopping availability check
+        if( !this.configService.isShoppingEnabled() )
+        {
+            throw new ProductValidationException("Naručivanje trenutno nije moguće. Shopping is currently unavailable.");
+        }
         //TODO: takodje moramo staviti limite, da se ucitavaju iz baze podataka:
         //    * 1. MAX_CART_ITEMS
         //    * 2. MAX_CART_AMOUNT
 
 
-        //Pre svega proveravamo dali je otvoren fiskalni dan
+        //Zatim proveravamo dali je otvoren fiskalni dan
         PGSDailySession dailySession = this.pgsSessionService.getActiveSession();
         //Ako nije dobro ovaj ce da baci exception ILI otvori novi dan
         
@@ -284,14 +315,12 @@ public class CartService
         PGSUser u = userRepository.findByUsernameIgnoreCase(username)
                 .orElseThrow(() -> new RuntimeException("User not found: "+username));
         
-        order.setUser(u);
-        
+        order.setUser(u);        
         
         //3. Set phone and address ...
         order.setAddress(prc.getAddress());
         order.setPhone(prc.getPhone());
-        order.setComment(prc.getComment());
-                
+        order.setComment(prc.getComment());                
         
         // 4. Load cart from db
         logger.trace("Loading cart from db");
@@ -307,15 +336,19 @@ public class CartService
                 PGSOrderItem orderItem = new PGSOrderItem();
                 logger.trace("Adding product: "+cartItem.getProduct().getCode());
                 logger.trace(cartItem.toString());
-                
-                /*****************************************************************
-                 *  TODO: OVDE CEMO MORATI DA VIDIMO PRVO PRE CHECKOUTA 
-                 * DALI JE PROIZVOD UOPSTE DOSTUPAN, ISTO KAO ADD TO CART...
-                 * 
-                 * 
-                 * * A gde ti je product details page????
-                 *
-                 ****************************************************************/                
+                                
+                // Validacija dostupnosti proizvoda
+                PGSProduct p = productRepository.getReferenceById(cartItem.getProduct().getId());                
+                if( !p.isActive() )
+                {
+                    throw new ProductValidationException("Proizvod trenutno nije dostupan / product currently not available: ["+p.getName()+"].");
+                }
+
+                if(cartItem.getQuantity() < 0)
+                {
+                    throw new RuntimeException("Illegal quantity: "+cartItem.getQuantity());
+                }
+
                 orderItem.setOrder(order); // važno zbog @ManyToOne
                 orderItem.setProduct(cartItem.getProduct());
                 orderItem.setQuantity(cartItem.getQuantity());
@@ -329,11 +362,15 @@ public class CartService
         
         // 6. ... dont forget the price        
         calculatePrice(order);
+        if (order.getPrice().compareTo(BigDecimal.ZERO) <= 0) 
+        {
+            //Nikad se nezna
+            throw new RuntimeException("Illegal price: "+order.getPrice());
+        }
         order.setCurrency("EUR");
         
         //7. Set initial status
-        order.setStatus("WAITING");
-        
+        order.setStatus("WAITING");        
         
         //8. Finally, save
         logger.trace("Saving order to db");

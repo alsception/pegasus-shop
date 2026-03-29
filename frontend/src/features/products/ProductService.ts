@@ -45,56 +45,71 @@ addedItems.subscribe((items) => {
 
 export const ProductService = 
 {
-    async updateQuantity(productId: number, delta: number) 
+  async updateQuantity(productId: number, delta: number) 
+  {
+    loadingItems.update(s => { s.add(productId); return s; });    
+
+    try 
+    {      
+      let response = await axiosInstance.post<{qt: any; message: string }>
+      (
+        ( delta > 0 ) ? "/cart/add" : "/cart/reduce",
+        null,
+        {
+          params: {
+            productId,
+          },
+        }
+      );   
+
+      let newQt = response.data.qt;      
+
+      addedItems.update(items => {
+          const currentQty = items[productId] || 0;
+          const newQty = newQt;
+          
+          if (newQty <= 0) {
+              delete items[productId];
+          } else {
+              items[productId] = newQty;
+          }
+          return { ...items };
+      });
+    } 
+    catch (error: any) 
     {
-        loadingItems.update(s => { s.add(productId); return s; });        
-        try {
-
-            await axiosInstance.post<{ message: string }>(
-              ( delta > 0 ) ? "/cart/add" : "/cart/reduce",
-              null,
-              {
-                params: {
-                  productId,
-                },
-              }
-            );
-            
-            addedItems.update(items => {
-                const currentQty = items[productId] || 0;
-                const newQty = currentQty + delta;
-                
-                if (newQty <= 0) {
-                    delete items[productId];
-                } else {
-                    items[productId] = newQty;
-                }
-                return { ...items };
-            });
-        } 
-        catch (error) 
-        {
-            console.error(error);
-        } 
-        finally 
-        {
-            loadingItems.update(s => { s.delete(productId); return s; });
-        }
-    },
-
-    clearCart() {
-        // 1. Resetuj mapu dodatih artikala na prazan objekat
-        addedItems.set({});
-
-        // 2. Resetuj globalni brojač na 0
-        cartItemsCounter.set(0);
-
-        // 3. Obriši podatke iz localStorage
-        if (typeof window !== 'undefined') {
-            localStorage.removeItem('addedItemsMap');
-            localStorage.removeItem('pgs-cart-items-counter');
-        }
+      // Ako server vrati error (npr. 400, 422, 500)
+      if (error.response && error.response.data) 
+      {        
+        const errorMessage = error.response.data.message;
+        showErrorToast(errorMessage);        
+      } 
+      else 
+      {
+        // U slučaju mrežne greške ili ako server ne odgovori
+        showErrorToast(error.message);
+      }
     }
+    finally 
+    {
+        loadingItems.update(s => { s.delete(productId); return s; });
+    }
+  },
+
+  clearCart() 
+  {
+    // 1. Resetuj mapu dodatih artikala na prazan objekat
+    addedItems.set({});
+
+    // 2. Resetuj globalni brojač na 0
+    cartItemsCounter.set(0);
+
+    // 3. Obriši podatke iz localStorage
+    if (typeof window !== 'undefined') {
+        localStorage.removeItem('addedItemsMap');
+        localStorage.removeItem('pgs-cart-items-counter');
+    }
+  }
 };
 
 export async function addToCart(productId: number) {
