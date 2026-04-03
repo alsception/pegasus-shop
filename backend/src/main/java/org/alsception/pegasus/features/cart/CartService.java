@@ -135,7 +135,7 @@ public class CartService
                     return cartRepository.save(newPGSCart);
                 });
 
-        // 4. Add product to cart
+        // 4. Get item or create new
         PGSCartItem existingItem = cart.getItems().stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst()
@@ -189,7 +189,7 @@ public class CartService
     private void setCartItemPrice(PGSCartItem item, PGSProduct product)
     {
         // Ako imamo popust:
-        if (product.getBasePrice() != null && product.getBasePrice().compareTo(BigDecimal.ZERO) != 0) 
+        if (product.getDiscount() != null && product.getDiscount().compareTo(BigDecimal.ZERO) != 0) 
         {
             item.setPrice(product.getDiscount());
             item.setDiscounted(true);
@@ -412,6 +412,7 @@ public class CartService
 
     void calculatePrice(PGSOrder order)
     {
+        System.err.println("-------------------calcluting price Cart service--------------------");
         BigDecimal total = order.getItems().stream()
             .map(item -> 
             {
