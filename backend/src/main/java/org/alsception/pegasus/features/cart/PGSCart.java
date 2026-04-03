@@ -69,7 +69,7 @@ public class PGSCart
 
     public BigDecimal getTotalPrice() {
         return items.stream()
-                .map(item -> item.getProduct().getBasePrice()
+                .map(item -> item.getPrice()
                                 .multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }

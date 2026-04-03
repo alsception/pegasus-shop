@@ -73,7 +73,7 @@
             { formatPrice( product.basePrice )}
           </span>   
           
-          <span class="text-xl font-bold text-error ml-4">
+          <span class="text-xl font-bold text-success ml-4">
             {@html getFormattedPrice(product.discount)}
           </span>   
         </div>

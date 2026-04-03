@@ -19,6 +19,7 @@ export interface Cart
 
 interface CartItem 
 {
+    price: number;
     id: number;    
     quantity: number;
     product: Product;

@@ -208,7 +208,7 @@
                         >
                           {item.product.name}
                           {#if item.quantity > 1}
-                            <span class="text-sm text-primary/50"> ({formatPrice(item.product.basePrice)}) </span>
+                            <span class="text-sm text-primary/50"> ({formatPrice(item.price)}) </span>
                           {/if}
                       </div>
                       </div>
@@ -232,7 +232,7 @@
                       <span
                         class="text-md sm:text-base font-bold font-mono text-primary"
                       >
-                        {formatPrice(item.quantity * item.product.basePrice)}
+                        {formatPrice(item.quantity * item.price)}
                       </span>
                     </div>
                   </div>
@@ -269,7 +269,7 @@
                 Zatvori
               </button>
 
-                <a href="#/checkout" class="btn btn-primary bg-primary text-accent">
+                <a href="#/checkout" class="btn btn-primary bg-primary dark:text-accent">
                 Potvrdi</a
               >
               </div>

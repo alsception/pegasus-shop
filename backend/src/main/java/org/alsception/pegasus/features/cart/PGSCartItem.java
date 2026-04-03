@@ -29,6 +29,9 @@ public class PGSCartItem {
         
     @Column(precision = 19, scale = 2, nullable = true)
     private BigDecimal price;     
+
+    @Column(nullable = true)
+    private Boolean discounted = false;   
     
     @Column(nullable = true, updatable = false)
     private LocalDateTime created;

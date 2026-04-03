@@ -33,7 +33,6 @@ public class CartService
     private final NotificationService notificationService;
     private final PGSDailySessionService pgsSessionService;
     private final PGSConfigService configService;
-
     
     private static final Logger logger = LoggerFactory.getLogger(CartService.class);
 
@@ -93,7 +92,7 @@ public class CartService
         // 0. Shopping availability check
         if( !this.configService.isShoppingEnabled() )
         {
-            throw new ProductValidationException("Naručivanje trenutno nije moguće. Shopping is currently unavailable.");
+            throw new ProductValidationException("Naručivanje trenutno nije moguće. Ordering is currently unavailable.");
         }
 
         // 1. User check
@@ -146,16 +145,19 @@ public class CartService
             
         if ( existingItem != null ) 
         {   
-            existingItem.setQuantity(existingItem.getQuantity() + quantity);
-            existingItem.setPrice(product.getBasePrice());//WHAT IF PRICE CHANGED IN MEANTIME??? We will set new updated price
-            newQt = existingItem.getQuantity();
+            // 1. cena
+            this.setCartItemPrice(existingItem, product);
 
+            //2. Kolicina
+            existingItem.setQuantity(existingItem.getQuantity() + quantity);
+            newQt = existingItem.getQuantity();
+            
             //Ako je nula mora ga obrisemo ne treba nam
             if(existingItem.getQuantity() <= 0)
             {               
                cart.getItems().remove(existingItem);  
                newQt = 0;  
-            }                       
+            }                 
         }
         else 
         {
@@ -169,7 +171,8 @@ public class CartService
                 newItem.setProduct(product);
                 newItem.setQuantity(quantity);
                 newQt = newItem.getQuantity();
-                newItem.setPrice(product.getBasePrice());
+
+                this.setCartItemPrice(newItem, product);
                 cart.getItems().add(newItem);
             }
             else
@@ -181,6 +184,20 @@ public class CartService
         // 5. Finally, save and return new quantity
         cartRepository.save(cart);
         return newQt;
+    }
+
+    private void setCartItemPrice(PGSCartItem item, PGSProduct product)
+    {
+        // Ako imamo popust:
+        if (product.getBasePrice() != null && product.getBasePrice().compareTo(BigDecimal.ZERO) != 0) 
+        {
+            item.setPrice(product.getDiscount());
+            item.setDiscounted(true);
+        }
+        else
+        {
+            item.setPrice(product.getBasePrice());
+        }    
     }
     
     /**
@@ -281,7 +298,7 @@ public class CartService
         //OVDE MORAMO PROVERITI DALI JE PRODAVAONICA UOPSTE UKLJUCENA, Shopping availability check
         if( !this.configService.isShoppingEnabled() )
         {
-            throw new ProductValidationException("Naručivanje trenutno nije moguće. Shopping is currently unavailable.");
+            throw new ProductValidationException("Naručivanje trenutno nije moguće. Ordering is currently unavailable.");
         }
         //TODO: takodje moramo staviti limite, da se ucitavaju iz baze podataka:
         //    * 1. MAX_CART_ITEMS

@@ -297,7 +297,7 @@
               >
                 <i class="fa fa-arrow-left text-md cursor-pointer"> </i>Nazad
               </button>
-              <button type="submit" class="btn btn-primary bg-primary text-accent">
+              <button type="submit" class="btn btn-primary bg-primary dark:text-accent">
                 <i class="fa fa-check text-md cursor-pointer"> </i>Potvrdi
               </button>
             </div>
