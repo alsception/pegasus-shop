@@ -293,7 +293,7 @@ public class CartService
      * Maybe pass the user object instead of string username ? -.-    
      */
     @Transactional
-    public void checkout(PGSCheckoutRequestDTO prc, String username)
+    public long checkout(PGSCheckoutRequestDTO prc, String username)
     {
         //OVDE MORAMO PROVERITI DALI JE PRODAVAONICA UOPSTE UKLJUCENA, Shopping availability check
         if( !this.configService.isShoppingEnabled() )
@@ -323,7 +323,7 @@ public class CartService
 
         //calculate suffix
         String suffix = "D";    //Dostavan
-        if( prc.getTakeAway() ) suffix = "Z"; //Za van        
+        if( prc.getTakeAway() ) suffix = "T"; //Za van, take away        
 
         order.setCode(CodeGenerator.generateOrderCode(suffix));        
         
@@ -385,6 +385,8 @@ public class CartService
             throw new RuntimeException("Illegal price: "+order.getPrice());
         }
         order.setCurrency("EUR");
+
+        order.setPaymentMethod(""+prc.getPaymentMethod());
         
         //7. Set initial status
         order.setStatus("WAITING");        
@@ -408,11 +410,12 @@ public class CartService
             "*",//order.getUser().getUsername()+",kitchen,admin", 
             "1"
             );
+
+        return id;
     }
 
     void calculatePrice(PGSOrder order)
     {
-        System.err.println("-------------------calcluting price Cart service--------------------");
         BigDecimal total = order.getItems().stream()
             .map(item -> 
             {

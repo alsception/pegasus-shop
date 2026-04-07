@@ -100,13 +100,14 @@ public class CartController {
 
         logger.info("Initiating checkout for user: "+ username);
         
-        cartService.checkout(request, username);
+        long id = cartService.checkout(request, username);
         
         String msg = "Checkout successfull";
         logger.info(msg + " ["+username+"]");
         
         Map<String, String> response = new HashMap<>();
         response.put("message", msg);
+        response.put("order_id", ""+id);
         
         return ResponseEntity.ok(response);
     }       

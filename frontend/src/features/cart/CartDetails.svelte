@@ -146,11 +146,11 @@
     {#if cart}
     
       <div
-        class="text-primary mx-auto bg-base-200 dark:bg-black lg:dark:bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl border-2 border-secondary/20 rounded-t-md"
+        class="text-primary mx-auto bg-base-200 dark:bg-black lg:dark:bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl rounded-t-md"
         style="transform: none"
       >
         <div
-          class="p-0 bg-base-100/94 text-primary-content/80 dark:text-primary/80 rounded-t border-b border-base-300"
+          class="p-0 bg-primary/10 text-primary-content/80 dark:text-primary/80 rounded-t"
         >
           <h2 class="text-primary text-lg sm:text-2xl font-bold p-1 text-center h-14 pt-3">
             Košarica

@@ -18,7 +18,8 @@ import Tables                       from "../../../features/tables/Tables.svelte
 import Reservations                 from "../../../features/reservations/Reservations.svelte";
 
 import CartDetails                  from "../../../features/cart/CartDetails.svelte";
-import Checkout                     from "../../../features/cart/Checkout.svelte";
+import CheckoutDelivery             from "../../../features/cart/CheckoutDelivery.svelte";
+import CheckoutPayment              from "../../../features/cart/CheckoutPayment.svelte";
 import Orders                       from "../../../features/orders/OrdersList.svelte";
 import OrderDetails                 from "../../../features/orders/OrderDetails.svelte";
 
@@ -27,6 +28,8 @@ import Pix                          from "../../../features/pix/Pix.svelte";
 import Logout                       from "../../auth/Logout.svelte";
 import Register                     from "../../auth/Register.svelte";
 import NotFound                     from "../error/NotFound.svelte"
+import StripeCheckout               from "../../../features/stripe/StripeCheckout.svelte";
+import Completition                 from "../../../features/cart/Completion.svelte";
 
 // Component Registry - central place for all components
 // Whenever new component is added it should be imported here and added its /url
@@ -60,7 +63,9 @@ export const components: ComponentRegistry =
     "/cart": CartDetails,
     "/orders/:id": OrderDetails,
     "/orders": Orders,
-    "/checkout": Checkout,
+    "/checkout": CheckoutDelivery,
+    "/pay/:id": CheckoutPayment,
+    "/completion": Completition,
     "/Todo": null,
     "/Hours": null,
     "/pix": Pix,
@@ -96,6 +101,9 @@ export function generateRoutes()
     routes["/users/my-account"] = MyAccount;
     routes["/orders/:id"] = OrderDetails;
     routes["/inventory"] = ProductsAdminList;
+    routes["/pay/:id"] = CheckoutPayment;
+    routes["/stripe-checkout"] = StripeCheckout;
+    routes["/completion"] = Completition;
 
     //Not found component: This must be last added (order matters), otherwise it catches all
     routes["*"] = NotFound; 

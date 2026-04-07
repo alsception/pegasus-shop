@@ -313,10 +313,7 @@ function drawRoute(endLat: number, endLon: number) {
             <i class="fas fa-user text-primary/60">&nbsp;</i>
             {formData.user?.username}
           </h6>
-          <h6 class="font-mono text-md font-semibold">
-            <i class="fas fa-chair text-primary/60">&nbsp;</i>
-            {formData.stol}
-          </h6>
+          
         </div>
 
         <div class="absolute top-0 right-0">

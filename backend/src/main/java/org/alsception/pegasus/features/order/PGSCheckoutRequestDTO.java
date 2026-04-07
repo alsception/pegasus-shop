@@ -7,6 +7,7 @@ public class PGSCheckoutRequestDTO
     private String address = "";
     private String phone = "";
     private Boolean takeAway = false;    
+    private int paymentMethod;
 
     public PGSCheckoutRequestDTO() {
     }
@@ -54,5 +55,13 @@ public class PGSCheckoutRequestDTO
 
     public void setTakeAway(Boolean takeAway) {
         this.takeAway = takeAway;
+    }
+
+    public int getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(int paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 }

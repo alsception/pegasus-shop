@@ -30,6 +30,8 @@
   let phone = "";
   let comment = "";
   let takeAway: boolean = false; 
+  let paymentMethod = 1; // cash on delivery default
+
   let userData: Partial<FPGSUser> = {
     role: "",
     username: "",
@@ -103,11 +105,7 @@
     catch (err) 
     {
       console.error(err);
-    } 
-    finally 
-    {
-      
-    }
+    }     
   }
 
   async function submitForm() {
@@ -117,7 +115,8 @@
       address,
       phone,
       comment,
-      takeAway
+      takeAway,
+      paymentMethod
     };
 
     try {
@@ -129,9 +128,20 @@
         },
       });
 
+      const orderId = response.data.order_id;
+
       showSuccessToast("Narudžba uspješno poslata!");
       ProductService.clearCart(); //Mora da resetujemo cart items da neprikazuje kao dodate proizvode
-      push("/home");//orders page otvorimo na narudzbe na cekanju
+
+      if( paymentMethod == 1)
+      {
+        push("/home");//orders page otvorimo na narudzbe na cekanju
+      }
+      else
+      {
+        push("/pay/"+orderId);//orders page otvorimo na narudzbe na cekanju
+      }
+      
     } catch (err: any) {
       console.error("kect", err);
 
@@ -179,11 +189,11 @@
 
     {:else}
       <div
-        class="text-primary mx-auto bg-base-200 dark:bg-black lg:dark:bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl"
+        class="text-primary mx-auto bg-base-200 dark:bg-black lg:dark:bg-base-200 w-full max-w-2xl"
         style="transform: none"
       >
         <div
-          class="p-0 bg-base-100 text-primary-content/80 dark:text-primary/80 border-2 border-secondary/20 rounded-t-md"
+          class="p-0 bg-primary/10 text-primary-content/80 dark:text-primary/80 rounded-t-md"
         >
           <h2 class="text-primary text-lg sm:text-2xl font-bold p-1 text-center h-14 pt-3">
             Checkout
@@ -192,7 +202,7 @@
 
          {#if cart && cart.items && cart.items.length > 0}
 
-        <form class="p-6 sm:p-12 sm:pb-6 w-full border-2 border-secondary/20 border-t-0" 
+        <form class="p-6 sm:p-12 sm:pb-6 w-full" 
           on:submit|preventDefault={submitForm}>
           <div class="grid grid-cols-1 mb-6 w-full">
             <div class="lg:col-span-2">
@@ -202,9 +212,9 @@
                   <div class="w-full md:col-span-2">
                     <label
                       for="phone"
-                      class="block text-md font-medium text-primary/80 mb-2"
+                      class="block text-md font-medium text-secondary mb-2"
                     >
-                      <i class="fas fa-phone text-sm text-primary/60 mr-2"
+                      <i class="fas fa-phone text-sm text-gray-400 mr-2"
                       ></i>Telefon<span class="text-error ml-2">*</span>
                     </label>
                     <input
@@ -229,9 +239,9 @@
                   <div class="w-full" transition:slide={{ duration: 300 }}>
                     <label
                       for="address"
-                      class="block text-md font-medium text-primary/80 mb-2"
+                      class="block text-md font-medium text-secondary mb-2"
                     >
-                      <i class="fas fa-house text-sm text-primary/60 mr-2"></i>
+                      <i class="fas fa-house text-sm text-gray-400 mr-2"></i>
                       Adresa za dostavu<span class="text-error ml-2">*</span>
                     </label>
                     
@@ -266,8 +276,8 @@
                   <div class="w-full">
                     <label
                       for="comment"
-                      class="block text-md font-medium text-primary/80 mb-2"
-                      ><i class="fas fa-comment text-sm text-primary/60 mr-2"
+                      class="block text-md font-medium text-secondary mb-2"
+                      ><i class="fas fa-comment text-sm text-gray-400 mr-2"
                       ></i>Napomena
                     </label>
                     <textarea
@@ -282,6 +292,16 @@
                 </div>
               </div>
             </div>
+          </div>
+
+          <div class="grid grid-cols-1 mb-6">           
+            <label for="payment-method" class="block text-md font-medium text-secondary mb-2">
+              <i class="fa fa-hand-holding-dollar text-sm text-gray-400 mr-1"></i> Način plaćanja
+            </label>
+            <select id="payment-method" class="pgs-input w-full font-mono" bind:value={paymentMethod}>
+              <option value={1}>💵 Cash / Gotovina </option>
+              <option value={2}>💳 Card / Kartica</option>
+            </select>
           </div>
 
           <!-- Full-width underline -->

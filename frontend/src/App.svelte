@@ -2,7 +2,7 @@
   //Svelte imports
   import { get } from "svelte/store";
   import { onMount } from "svelte";
-  import Router from "svelte-spa-router";
+  import Router, { push } from "svelte-spa-router";
 
   //Our imports - core
   import { auth, getCurrentRole } from "./core/services/SessionStore";
@@ -18,6 +18,7 @@
   export const unauthenticatedRoutes = {
     '/login': Login,
     '/register': Register,
+    /*'/products': ProductsListBarbacoa, mozda jednog dana?*/
     '*': Login  // fallback route
   };
 
@@ -36,7 +37,17 @@
     {
       const { isAuthenticated: authStatus } = get(auth);
       isAuthenticated = authStatus;
-    } catch (err) {
+      const params = new URLSearchParams(window.location.search);
+      if (window.location.pathname === '/completion') 
+      {
+        // Ovo treba za placanje karticom, taraba problem
+        const clientSecret = params.get('payment_intent_client_secret');
+        const query = window.location.search; // preserve Stripe params
+        window.location.replace(`/#/completion${query}`);
+      }
+    } 
+    catch (err) 
+    {
        console.error(err);
     } 
   });
@@ -49,7 +60,6 @@
   <Router routes={unauthenticatedRoutes} />
 {:else}
 <Header/>
-<!--  class:mt-14={getCurrentRole() === "ADMIN"} -->
   <main class="flex-1 overflow-auto main-content w-full mt-14 p-0 sm:p-6">
     <Router {routes} />
   </main>

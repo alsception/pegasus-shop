@@ -79,7 +79,8 @@ public class SecurityConfig {
                 ).permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/test/**").permitAll()
-                .requestMatchers("/api/sync/**").permitAll()    //Za cloud sync podataka
+                .requestMatchers("/api/sync/**").permitAll()    //Za cloud sync 
+                .requestMatchers("/api/payments/webhook").permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

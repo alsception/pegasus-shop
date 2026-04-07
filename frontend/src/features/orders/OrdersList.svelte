@@ -469,6 +469,7 @@ i LITE APP!!, I MOZDA i WS.....
               <th class="pgs-th">Spremno</th>
               <th class="pgs-th-r">Ukupno<br>stavki</th>
               <th class="pgs-th-r">Iznos</th>
+              <th class="pgs-th-l">Način<br>plaćanja</th>
               {#if !liteView}
                 <th class="pgs-th"></th>
               {/if}
@@ -513,6 +514,24 @@ i LITE APP!!, I MOZDA i WS.....
                 <td class="pgs-td-num font-mono font-bold text-right"
                   >{formatPrice(order.price)}</td
                 >
+                <td class="pgs-td font-mono text-center">
+                  {#if order.paymentMethod == '1'}
+                    <span
+                      class="badge badge-soft badge-success font-mono badge-sm whitespace-nowrap"
+                      style="text-transform: uppercase;"
+                    >GOTOVINA</span>
+                  {:else if order.paymentMethod == '2'}
+                    <span
+                      class="badge badge-soft badge-info font-mono badge-sm whitespace-nowrap"
+                      style="text-transform: uppercase;"
+                    >KARTICA</span>
+                  {:else}
+                    <span
+                      class="badge badge-soft badge-secondary font-mono badge-sm whitespace-nowrap"
+                      style="text-transform: uppercase;"
+                    >OSTALO</span>
+                  {/if}
+                </td>
                 {#if !liteView}
                   <td class=" justify-center">
                     <div class="tooltip tooltip-info group" data-tip="Edit">
@@ -589,7 +608,7 @@ i LITE APP!!, I MOZDA i WS.....
     {#each ordersNaCekanju as order (order.id)}
     <div 
       class="break-inside-avoid mb-8 w-full"
-      animate:flip={{ duration: 400 }}
+      animate:flip={{ duration: 200 }}
       transition:fade
       >
       <OrderCardMd
