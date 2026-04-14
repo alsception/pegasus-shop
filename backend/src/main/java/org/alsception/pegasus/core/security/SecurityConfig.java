@@ -61,26 +61,26 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/", 
-                    "/index.html",                      
+                    "/",                //storefront
+                    "/index.html",      //storefront    
+                    "/backoffice",      //backoffice
+                    "/backoffice/**",   //backoffice
                     "/static/**", 
                     "/assets/**", 
-                    "/lottie/**", //animations
-                    "/sound/**", //notifications
+                    "/lottie/**",       //animations
+                    "/sound/**",        //notifications
                     "/favicon.ico", 
-                    "/manifest.json", // za PWA
-                    "/sw.js",         // za PWA
                     "/*.png", 
                     "/*.js", 
                     "/*.css",
-                    "/*.webmanifest",  // za PWA
-                    "/kik",             //kik frontend
-                    "/kik/index.html"  
+                    "/manifest.json",   // za PWA
+                    "/sw.js",           // za PWA
+                    "/*.webmanifest"    // za PWA
                 ).permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/test/**").permitAll()
                 .requestMatchers("/api/sync/**").permitAll()    //Za cloud sync 
-                .requestMatchers("/api/payments/webhook").permitAll()
+                .requestMatchers("/api/payments/webhook").permitAll()   //stripe webhook
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
