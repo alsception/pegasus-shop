@@ -91,16 +91,29 @@
   {#each navItems as item}
     <li class="w-full">
       {#if !item.disabled}
-        <a
-          use:link
-          href={item.disabled ? "#" : item.href}
-          class="flex items-center px-3 py-2 rounded-md cursor-pointer
-                  hover:bg-primary/15 text-primary/70 text-sm"
-                  on:click={closeMenu}
-        >
-          <i class="fas fa-{item.icon} w-5 mr-2"></i>
-          <span class="text-primary/80" style="width: 150px;">{@html item.label}</span>
-        </a>
+        {#if item.href === "#/logout"}
+          <a
+            use:link
+            href={item.disabled ? "#" : item.href}
+            class="flex items-center px-3 py-2 rounded-md cursor-pointer
+                    hover:bg-primary/15 text-error text-sm"
+                    on:click={closeMenu}
+          >
+            <i class="fas fa-{item.icon} w-5 mr-2"></i>
+            <span class="text-error" style="width: 150px;">{@html item.label}</span>
+          </a>
+        {:else}
+          <a
+            use:link
+            href={item.disabled ? "#" : item.href}
+            class="flex items-center px-3 py-2 rounded-md cursor-pointer
+                    hover:bg-primary/15 text-primary/70 text-sm"
+                    on:click={closeMenu}
+          >
+            <i class="fas fa-{item.icon} w-5 mr-2"></i>
+            <span class="text-primary/80" style="width: 150px;">{@html item.label}</span>
+          </a>
+        {/if}
       {:else}
         <div
           class="flex items-center px-3 py-2 rounded-md pointer-events-none
