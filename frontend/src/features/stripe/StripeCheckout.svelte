@@ -2,8 +2,11 @@
   import { onMount } from 'svelte';
   import { loadStripe, type Stripe, type StripeElements } from '@stripe/stripe-js';
 
+  const STRIPE_PUBLIC_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+  const STRIPE_CLIENT_SECRET = import.meta.env.VITE_STRIPE_CLIENT_SECRET;
+
   // Ovo dobijaš od Jave (npr. preko props-a ili stora)
-  export let clientSecret: string = 'pi_3THQ7zQdWEpRyYG230k9oGBd_secret_33pyAVsjcWEfcAR6JvqamSwqv';
+  export let clientSecret: string = STRIPE_CLIENT_SECRET;
 
   let stripe: Stripe | null = null;
   let elements: StripeElements | null = null;
@@ -11,8 +14,8 @@
   let isLoading: boolean = false;
 
   onMount(async () => {
-    // 1. Inicijalizacija
-    stripe = await loadStripe('pk_test_51TGoKKQdWEpRyYG2bsUlvdtvZLd5hugwSPwkj3UPTpfqRgwhLJOWWu5zocfQqxd9BpXJ9IWfCFWe0D78wrIZ4ORF00fGwQnY5c');
+    // 1. Inicijalizacija 
+    stripe = await loadStripe(STRIPE_PUBLIC_KEY);
     
     if (stripe) {
       // 2. Kreiranje elemenata sa clientSecret-om
