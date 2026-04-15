@@ -40,14 +40,6 @@
   let productId = 0; //Product koji cemo prikazati na modalu kada se klikne
   export let hideButtonDalje = false;
 
-  /* const kategorije = [
-    { id: 1, ime: "🧀", title: "Predjela" },
-    { id: 2, ime: "🥩", title: "Glavna jela" },
-    { id: 3, ime: "🥗", title: "Prilozi" },
-    { id: 4, ime: "🍰", title: "Desert" },
-    { id: 5, ime: "🍺", title: "Piće" },
-    { id: 6, ime: "❤️", title: "Omiljeno" },
-  ]; */
 
   // AUTHENTICATION
   $: auth.subscribe((value) => 
@@ -258,8 +250,8 @@
     class="w-[50%] left-[25%] flex justify-center p-0 fixed z-9003 bg-transparent top-[-0.1rem]" 
     style="justify-self: center;"
   >
-  <!-- TODO: Ovo se nevidi dobro na svetloj temi mora da bude stalno tamno bg-[#111111]/80 -->
-    <div
+  <!-- ovo ovde je uvek tamno -->
+    <div data-theme="dark"
       class="w-full lg:max-w-4xl lg:p-4 lg:m-6 lg:mb-4 lg:mt-0.5 bg-base-200/80
       lg:rounded-lg border-1 border-primary/20 backdrop-blur-lg lg:pb-[5px]
               max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:p-[10px] max-lg:pb-0 fixed top-[-16.5] lg:-top-16.5 left-0.5 [width:-webkit-fill-available] 
@@ -279,7 +271,7 @@
             placeholder="Traži proizvod..."
             class="input border-1 flex-1 w-max ml-10 border-secondary/60"
           />
-          <button type="submit" class="btn btn-dash">
+          <button type="submit" class="btn btn-dash p-[0.5rem]">
             <i class="fas fa-search"></i>
             <span class="hidden sm:inline ml-1">Traži</span>
           </button>
@@ -296,7 +288,7 @@
             on:click={toggleView}
             class="btn btn-dash whitespace-nowrap"
           >
-            {#if !isListView}
+            {#if isListView}
               <i class="fas fa-image"></i>
             {:else}
               <i class="fas fa-list"></i>
@@ -307,14 +299,14 @@
     </div>
   </div>
 
-  <div id="results" class="w-full max-w-4xl mx-auto mt-22 pt-2"></div>
+  <div id="results" class="w-full max-w-4xl mx-auto mt-2 pt-2"></div>
 
   {#if loading}
     <LoadingOverlay />
   {/if}
 
   {#if isListView}
-    <div id="products-list-container" class="w-full max-w-[382px] mx-auto p-0">
+    <div id="products-list-container" class="w-full max-w-[382px] mx-auto p-0 mb-22">
       <div class="w-full overflow-x-auto">
         <table class="table w-full min-w-[382px]">
           <tbody>
@@ -357,18 +349,22 @@
         </table>
       </div>
       {#if !hideButtonDalje}
-      {@render btnNext()}
-    {/if}
+      <div style="position: fixed; bottom: 1.5rem; right: 1.5rem;">
+        {@render btnNext()}
+      </div>
+      {/if}
     </div>
   {:else if !products && !loading}
     no products found :/
   {:else}
-    <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 4xl:grid-cols-5 gap-8 p-4 mb-20 mt-[-4rem] sm:mt-[-6rem]" 
+  <div class="mt-20">
+    <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 4xl:grid-cols-5 gap-4 p-4 mb-20 mt-[-4rem] sm:mt-[-6rem]" 
       style="justify-items: center;">
       {#each filteredProducts as product, i}
         <ProductCard {product} />
       {/each}
     </div>
+  </div>
     {#if !hideButtonDalje}
       {@render btnNext()}
     {/if}
@@ -376,13 +372,40 @@
 {/if}
 
 {#snippet btnNext()}
-  <div class="fixed top-[92%] w-full z-[9000] flex">
-    <div class="ml-auto z-[9000]">
-      <a class="btn btn-lg btn-primary border border-primary-content/40 md:mr-15 lg:mr-15" use:link href="/cart">
-        Naruči<i class="fas fa-arrow-right text-primary-content/60"></i>
-      </a>
-    </div>
+  <div class="fixed bottom-6 right-4 md:right-15 lg:right-10 z-[9000]">
+    <a 
+      class="btn btn-lg bg-yellow-300/60 dark:bg-yellow-300/80 hover:bg-yellow-300 backdrop-blur-lg text-black border-2 border-primary shadow-2xl ring-4 ring-white/10 pulsing" 
+      use:link 
+      href="/cart"
+    >
+      <span class="flex items-center gap-2">
+          Naruči
+          <i class="fas fa-shopping-cart"></i> <i class="fas fa-arrow-right text-sm"></i>
+      </span>
+    </a>
   </div>
+
+<style>
+.pulsing:hover {
+  box-shadow: rgba(111, 0, 255, 0.357) 0px 0px 0px 10.3387px;
+  border: 2px solid 2px solid #6933ff;
+  animation: pulse 2.2s forwards;
+}
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(111, 0, 255, 0.7);
+  }
+  70% {
+    /* Senka se raširila, ali je još uvek malo vidljiva */
+    box-shadow: 0 0 0 21px rgba(0, 4, 255, 0);
+  }
+  100% {
+    /* Na kraju je potpuno nevidljiva i ostaje na nuli do novog kruga */
+    box-shadow: 0 0 0 0 rgba(0, 4, 255, 0);
+  }
+}
+</style> 
+
 {/snippet}
 
 {#if showModal}

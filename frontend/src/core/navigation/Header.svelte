@@ -8,7 +8,7 @@
   //TODO: ovo sad mora da se ucita sa servera, i da moze da se promeni i posalje na server
   // i da se razlikuje admin da moze da vidi i promeni a musterija ne da promeni, samo da vidi
   //i nevidi se dobro kad je false na mobilnom
-  export let shopOpen = true;
+  export let shopOpen = false;
 
 
   onMount(() => {

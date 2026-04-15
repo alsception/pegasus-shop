@@ -137,12 +137,12 @@ const closeMenu = () => {
   {:else}  
 
     <div class="dropdown z-49">
-      <div tabindex="0" role="button" class="btn btn-dash ">
+      <div tabindex="0" role="button" class="btn btn-dash p-[0.4rem]">
         Kategorije
       </div>
-      <ul tabindex="-1" class="dropdown-content menu rounded-box z-9991 w-[240px] p-2 shadow-sm bg-base-200/90 dark:bg-zinc-950/92 rounded-lg
+      <ul tabindex="-1" class="dropdown-content menu rounded-box z-9991 w-[240px] p-2 shadow-sm bg-base-200 dark:bg-zinc-950 rounded-lg
       pointer-events-auto border border-primary/30"
-      style="left: -90%;backdrop-filter: blur(12px) !important; 
+      style="right: 0.5rem; backdrop-filter: blur(12px) !important; 
         -webkit-backdrop-filter: blur(16px) !important;">
         {#each $categories as category}
           <!-- svelte-ignore a11y_no_static_element_interactions -->

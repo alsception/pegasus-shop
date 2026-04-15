@@ -38,7 +38,8 @@
       const { isAuthenticated: authStatus } = get(auth);
       isAuthenticated = authStatus;
       const params = new URLSearchParams(window.location.search);
-      if (window.location.pathname === '/completion') 
+      let page = params.get('page');
+      if (page === 'completion') 
       {
         // Ovo treba za placanje karticom, taraba problem
         const clientSecret = params.get('payment_intent_client_secret');

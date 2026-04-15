@@ -155,8 +155,9 @@
     // 4. Potvrda plaćanja
     const { error } = await stripe.confirmPayment({
       elements,
-      confirmParams: {
-        return_url: `${window.location.origin}/completion?order=`+order?.code,
+      confirmParams: 
+      { //moramo ovako sa parametrom ?page=completion, jer u suprotnom ce spring da odgovori pre sveltea da nezna sta ocemo!
+        return_url: `${window.location.origin}?page=completion&order=`+order?.code,
       },
     });
 

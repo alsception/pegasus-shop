@@ -22,7 +22,7 @@
 
   {:else if isFetchError}
     
-    <p class="text-red-500 text-xl mt-8 text-center dark:text-red-400 bg-error-content p-2">
+    <p class="text-primary/80 text-2xl mt-8 text-center p-2">
         {error}
     </p>
 

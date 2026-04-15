@@ -20,6 +20,9 @@
 
   //TODO: try /me
 
+  document.title = "Pix | Barbacoa";
+
+
   function searchBackgrounds(query: string) {
     try 
     {

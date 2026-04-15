@@ -18,9 +18,6 @@
 
   const lottieAnimationUrl = '/lottie/check2.lottie';//or check2.lottie or success3
 
-  //TODO:
-  //index-DM9PQ1bj.js:42 Failed to load animation data from URL: /lottie/check2.lottie. Error: Failed to fetch animation data from URL: /lottie/check2.lottie. 403: 
-
 </script>
 
 {#if product.active === false || product.stock === 0}
@@ -46,10 +43,10 @@
 
 {:else if $addedItems[product.id] > 0}  
 
-    <div class="flex items-center bg-base-100 dark:bg-primary-content/80 rounded-lg border border-accent/20 overflow-hidden h-full shadow-sm cursor-pointer"
-    style="height: {width};border-radius:1000px">
+    <div class="flex items-center bg-base-100 dark:bg-primary-content/80 rounded-lg border-0 overflow-hidden h-full shadow-sm cursor-pointer pulsing2"
+    style="height: {width};border-radius: 1000px; padding:4px;">
         <button 
-            class="px-3 bg-base-300/30 hover:bg-base-300/60 text-info font-bold transition-colors cursor-pointer text-3xl rounded-2xl"
+            class="px-3 bg-base-300/30 hover:bg-base-300/60 text-info font-bold transition-colors cursor-pointer text-3xl rounded-full"
             on:click={() => ProductService.updateQuantity(product.id, -1)}
         >
             -
@@ -60,7 +57,7 @@
         </span>
         
         <button 
-            class="px-3 bg-base-300/30 hover:bg-base-300/60 text-info font-bold transition-colors cursor-pointer text-3xl rounded-2xl"
+            class="px-3 bg-base-300/30 hover:bg-base-300/60 text-info font-bold transition-colors cursor-pointer text-3xl rounded-full"
             on:click={() => ProductService.updateQuantity(product.id, 1)}
         >
             +
@@ -70,13 +67,13 @@
 {:else}
 
   <button
-    class="btn btn-ghost bg-base-100 hover:bg-base-300 dark:bg-primary-content/80 dark:hover:border-2 border-accent"
+    class="btn btn-ghost bg-base-100 hover:bg-base-300 dark:bg-primary-content/80 dark:hover:border-2 border-accent/20 group"
     style="width: {width}; height: {width};/*transition-delay: 0.3s;*/"
     aria-label="Dodaj u košaricu"
     title="Dodaj u košaricu"
     on:click={() => addToCart(product.id)}
   >
-    <i class="fa fa-plus text-primary/40 text-xl" aria-hidden="true"></i>
+    <i class="fa fa-plus text-primary/40 group-hover:text-primary text-xl" aria-hidden="true"></i>
   </button>
 {/if}
 
@@ -103,4 +100,26 @@
     align-items: center;
     justify-content: center;
   }
-</style>
+
+.pulsing2 {
+  /* Osnovni stilovi */
+  box-shadow: rgba(0, 26, 255, 0.357) 0px 0px 0px 10.3387px;
+  border: 2px solid #6933ff79; /* Popravio sam tvoj dupli '2px solid' */
+  
+  /* Animacija: ime | trajanje | timing-function | broj ponavljanja | fill-mode */
+  animation: pulse2 0.7s ease-out 1 forwards;
+}
+@keyframes pulse2 {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 17, 255, 0.7);
+  }
+  70% {
+    /* Senka se raširila, ali je još uvek malo vidljiva */
+    box-shadow: 0 0 0 28px rgba(0, 4, 255, 0);
+  }
+  100% {
+    /* Na kraju je potpuno nevidljiva i ostaje na nuli do novog kruga */
+    box-shadow: 0 0 0 0 rgba(0, 4, 255, 0);
+  }
+}
+</style> 

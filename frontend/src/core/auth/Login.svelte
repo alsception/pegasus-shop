@@ -35,6 +35,27 @@
     },
   } as UnsplashPhoto;
 
+  let photo4: UnsplashPhoto = {
+    urls: {
+      regular: "https://...",
+      // ostala polja...
+    },
+  } as UnsplashPhoto;
+
+  let photo5: UnsplashPhoto = {
+    urls: {
+      regular: "https://...",
+      // ostala polja...
+    },
+  } as UnsplashPhoto;
+
+  let photo6: UnsplashPhoto = {
+    urls: {
+      regular: "https://...",
+      // ostala polja...
+    },
+  } as UnsplashPhoto;
+
   //TODO: ovde cemo staviti razne slike da se ucitavaju i menjaju
   photo1.urls.regular =
     "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQzNzd8MHwxfHNlYXJjaHw0fHxiYXJiYWN1ZXxlbnwwfHx8fDE3NzI3MTUwMTh8MA&ixlib=rb-4.1.0&q=85";
@@ -45,7 +66,23 @@
   photo3.urls.regular =
     "https://images.unsplash.com/photo-1607013251379-e6eecfffe234?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQzNzd8MHwxfHNlYXJjaHw1fHxidXJnZXJzfGVufDB8fHx8MTc3MjcxNDA0NHww&ixlib=rb-4.1.0&q=85";
 
-  const photos = [photo1, photo2, photo3];
+  photo4.urls.regular = "https://images.unsplash.com/photo-1558030137-a56c1b004fa3?ixid=M3w3NDQzNzd8MHwxfHNlYXJjaHwyMHx8c3RlYWt8ZW58MHx8fHwxNzc2MTc3NDQ1fDA&ixlib=rb-4.1.0"
+  photo5.urls.regular = "https://images.unsplash.com/photo-1504973960431-1c467e159aa4?ixid=M3w3NDQzNzd8MHwxfHNlYXJjaHwxNHx8c3RlYWt8ZW58MHx8fHwxNzc2MTc3NDQ1fDA&ixlib=rb-4.1.0"
+  photo6.urls.regular = "https://images.unsplash.com/photo-1558030089-02acba3c214e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDQzNzd8MHwxfHNlYXJjaHw1fHxzdGVha3xlbnwwfHx8fDE3NzYxNzczOTJ8MA&ixlib=rb-4.1.0&q=80&w=1080"
+  
+
+  /*
+  //todo:mozda jos ovo:
+
+  https://images.unsplash.com/photo-1614119068601-483274e9dcb7?ixid=M3w3NDQzNzd8MHwxfHNlYXJjaHwzMXx8c3RlYWt8ZW58MHx8fHwxNzc2MTc3Nzk5fDA&ixlib=rb-4.1.0
+  https://images.unsplash.com/photo-1615937662601-4724eceda00f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQzNzd8MHwxfHNlYXJjaHwyN3x8c3RlYWt8ZW58MHx8fHwxNzc2MTc3NzU0fDA&ixlib=rb-4.1.0&q=85
+  https://images.unsplash.com/photo-1615937691194-97dbd3f3dc29?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQzNzd8MHwxfHNlYXJjaHwyNnx8c3RlYWt8ZW58MHx8fHwxNzc2MTc3NzU0fDA&ixlib=rb-4.1.0&q=85
+  https://images.unsplash.com/photo-1565299524732-d2149c7eabf5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDQzNzd8MHwxfHNlYXJjaHwxN3x8c3RlYWt8ZW58MHx8fHwxNzc2MTc4MDYzfDA&ixlib=rb-4.1.0&q=80&w=1080
+  */
+
+
+
+  const photos = [photo1, photo2, photo3, photo4, photo5, photo6];
   let index = Math.floor(Math.random() * photos.length);
 
   // Reaktivna deklaracija - ovo je ispravno za Svelte 4

@@ -30,6 +30,7 @@ import Register                     from "../../auth/Register.svelte";
 import NotFound                     from "../error/NotFound.svelte"
 import StripeCheckout               from "../../../features/stripe/StripeCheckout.svelte";
 import Completition                 from "../../../features/cart/Completion.svelte";
+import OrderPage from "../../../features/orders/OrderPage.svelte";
 
 // Component Registry - central place for all components
 // Whenever new component is added it should be imported here and added its /url
@@ -61,7 +62,7 @@ export const components: ComponentRegistry =
     "/BB_Lists": null,
     "/BB_Cards": null,
     "/cart": CartDetails,
-    "/orders/:id": OrderDetails,
+    "/orders/:id": OrderPage,
     "/orders": Orders,
     "/checkout": CheckoutDelivery,
     "/pay/:id": CheckoutPayment,
