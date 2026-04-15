@@ -1,9 +1,11 @@
 package org.alsception.pegasus.core.security;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import org.alsception.pegasus.core.config.PGSConfigService;
+import org.alsception.pegasus.core.logging.PGSLoggingService;
 import org.alsception.pegasus.features.users.PGSUser;
 import org.alsception.pegasus.features.users.UserService;
 import org.slf4j.Logger;
@@ -37,17 +39,22 @@ public class AuthController
     private final CustomUserDetailsService userDetailsService;
     private final UserService userService;
     private final PGSConfigService configService;
+    private final PGSLoggingService logService;
+
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils,
                           CustomUserDetailsService userDetailsService,
-                          UserService userService, PGSConfigService configService) 
+                          UserService userService, PGSConfigService configService,
+                          PGSLoggingService logService) 
     {
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
-        this.userDetailsService = userDetailsService;        this.userService = userService;
+        this.userDetailsService = userDetailsService;        
+        this.userService = userService;
         this.configService = configService;
+        this.logService = logService;
     }
 
     /**
@@ -56,12 +63,12 @@ public class AuthController
      */
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody AuthRequest userDTO) 
+    public ResponseEntity<?> register(@RequestBody AuthRequest userDTO, HttpServletRequest request) 
     {
         try 
         {   
             logger.info("Registering new user: " + userDTO.getUsername());    
-
+            
             if(!configService.isRegistrationEnabled())
             {
                 logger.error("Registration disabled");
@@ -98,6 +105,8 @@ public class AuthController
 
             //TODO: Why dont we sign in automaticaly after registration? Or send json instead of plain text?
 
+            this.log(request, "registration", user.getUsername());
+
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body("Registration successfull!");
@@ -116,9 +125,12 @@ public class AuthController
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest userDTO) 
+    public ResponseEntity<?> login(@RequestBody AuthRequest userDTO, HttpServletRequest request) 
     {
-        logger.debug("Authenticating user: " + userDTO.getUsername());
+        logger.debug("Authenticating user: " + userDTO.getUsername());        
+        
+        //E sad, sta ako je login disabled? treba nam log, ali svejedno nije uspeo da se uloguje?
+        this.log(request, "login", userDTO.getUsername());        
 
         if(!configService.isLoginEnabled())
         {
@@ -153,21 +165,36 @@ public class AuthController
 
         logger.trace("Loading user: " + userDTO.getUsername());
         
-        /* try{ */
-            UserDetails userDetails = userDetailsService.loadUserByUsername(userDTO.getUsername());
-            String token = jwtUtils.generateJwtToken(userDetails);  
-            Map<String, String> response = new HashMap<>();
-            response.put("token", token);            
-            return ResponseEntity.ok(response);
-       /*  }
-        catch (DisabledException e) 
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userDTO.getUsername());
+        String token = jwtUtils.generateJwtToken(userDetails);  
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);  
+
+        return ResponseEntity.ok(response);
+    }
+
+    public void log(HttpServletRequest request, String action, String username)
+    {
+        try
         {
-            logger.warn("Account disabled");            
-            return ResponseEntity
-                    .status(403)
-                    .body("Account disabled");
-        } */
-    }    
+            // 1. Dobijanje IP adrese (uz proveru za proxy/load balancer)
+            String ipAddress = request.getHeader("X-Forwarded-For");
+            if (ipAddress == null || ipAddress.isEmpty()) {
+                ipAddress = request.getRemoteAddr();
+            } else {
+                ipAddress = ipAddress.split(",")[0];
+            }
+
+            // 2. Dobijanje User-Agenta
+            String userAgent = request.getHeader("User-Agent");   
+
+            logService.logAction(username, action, ipAddress, userAgent);
+        }
+        catch(Exception e)
+        {
+            logger.error(e.getMessage());
+        }
+    }
 
     public void printErrDetails(String title, AuthRequest userDTO, String msg) throws IOException 
     {
