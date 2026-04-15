@@ -37,7 +37,7 @@ public class OrderController {
     @GetMapping("/{id}")
     public ResponseEntity<OrderDTO> getOrderByUser(
             Principal principal,
-            @PathVariable Long id) 
+            @PathVariable String id) 
     {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -47,7 +47,7 @@ public class OrderController {
 
         try 
         {
-            PGSOrder order = orderService.getById(id);
+            PGSOrder order = orderService.getById(Long.parseLong(id));
             return ResponseEntity.ok(OrderMapper.toDto(order));
         } 
         catch (BadRequestException e) 
