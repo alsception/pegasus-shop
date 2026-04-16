@@ -90,12 +90,26 @@ public class CartController {
             @RequestParam Long productId)
     {
         String username = principal.getName();
-        logger.debug("Deleting product " + productId + " from cart for user: " + username);
+        logger.info("Deleting product " + productId + " from cart for user: " + username);
 
         cartService.deleteProductFromCart(username, productId);
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Product removed from cart");
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/delete/all")
+    public ResponseEntity<Map<String, String>> deleteCart(
+            Principal principal)
+    {
+        String username = principal.getName();
+        logger.info("Clearing cart for user: " + username);
+
+        cartService.deleteCart(username);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Cart cleared");
         return ResponseEntity.ok(response);
     }
     

@@ -175,6 +175,32 @@
     }
   }
 
+  async function deleteAll() 
+  {
+    if (!cart) return;
+
+    if(confirm('Jeste li sigurni?'))
+    {
+
+      loading = true;
+      error = null;
+      try {
+        await axiosInstance.delete("/cart/delete/all");
+
+        //kad zavrsi brisanje ucitavamo novi prazan cart i sinhronizujemo podatke
+        await loadCart();
+      } 
+      catch (err) 
+      {
+        error = err instanceof Error ? err.message : "Unknown error";
+      } 
+      finally 
+      {
+        loading = false;
+      }
+    }
+  }
+
   function cancel(
     event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }
   ) {
@@ -304,14 +330,29 @@
                   class="divide-y divide-gray-200 dark:divide-slate-700"
                 ></div>
 
-                <div class="pt-4 px-0 flex justify-end items-end">
-                  <div class="text-lg sm:text-xl text-primary/70 mr-6 mb-0.5">
-                    Ukupno:
+                <div class="pt-4 px-0 flex justify-between items-end">
+                  <div class="flex items-center w-fit">
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-md text-pink-600 h-3 mx-4 mb-2 mt-2 pt-1"
+                      aria-label="Delete"
+                      on:click={() => deleteAll()}
+                    >
+                      <i class="fa fa-trash text-md cursor-pointer"> </i>
+                      <span> Isprazni košaricu</span>
+                    </button>
                   </div>
-                  <div class="text-xl sm:text-2xl font-bold font-mono text-primary mb-0">
-                    {formatPrice(cart.totalPrice || 0)}
+
+                  <div class="flex items-end">
+                    <div class="text-lg sm:text-xl text-primary/70 mr-6 mb-0.5">
+                      Ukupno:
+                    </div>
+                    <div class="text-xl sm:text-2xl font-bold font-mono text-primary mb-0">
+                      {formatPrice(cart.totalPrice || 0)}
+                    </div>
                   </div>
                 </div>
+
               </div>
               <br />
             </div>           

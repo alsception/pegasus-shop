@@ -252,6 +252,7 @@ public class CartService
         cart.getItems().removeIf(item -> item.getProduct().getId().equals(productId));
         cartRepository.save(cart);
     }
+
     /**
      * Same as other method
      *
@@ -309,6 +310,19 @@ public class CartService
         cartRepository.deleteById(cart.getId()); // avoid LazyInitializationException
         logger.trace("Cart cleared");
     }
+
+    @Transactional
+    public void deleteCart(String username) 
+    {
+        cartRepository.delete( this.getCartByUsername(username) ); 
+        logger.info("Cart cleared ["+username+"]");
+    }  
+
+    public void deleteCart(PGSCart cart) 
+    {
+        cartRepository.delete(cart); 
+        logger.trace("Cart cleared");
+    }    
     
     /*
      * Maybe pass the user object instead of string username ? -.-    
