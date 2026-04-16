@@ -17,7 +17,7 @@
     "@types/leaflet-routing-machine": "^3.2.9",
     "@zerodevx/svelte-toast": "^0.9.6",
     "autoprefixer": "^10.4.21",
-    "daisyui": "^5.0.38",
+    "daisyui": "^5.5.19",
     "postcss": "^8.5.3",
     "svelte": "^5.20.2",
     "svelte-check": "^4.1.4",

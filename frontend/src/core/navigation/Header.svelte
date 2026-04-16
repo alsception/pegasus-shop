@@ -11,23 +11,39 @@
   export let shopOpen = false;
 
 
-  onMount(() => {
-    const themeCheckbox = document.querySelector("input.theme-controller");
+  onMount(() => 
+  {
+    //IMPORTANT! Ovde postavljamo DAISYUI temu na dark ako je sistem dark, u suprotnom ce da bude pola-pola :/
 
-    const updateTheme = () => {
-      const newTheme = themeCheckbox?.checked ? "dark" : "light";
-      document.documentElement.setAttribute("data-theme", newTheme);
-      document.documentElement.classList.toggle("dark", newTheme === "dark");
-      console.log("Theme switched to:", newTheme);
+    // Funkcija koja menja temu na <html> elementu
+    const applyTheme = (isDark: boolean) => {
+        const theme = isDark ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.classList.toggle("dark", isDark);        
     };
 
-    if (themeCheckbox) {
-      const currentTheme =
-        document.documentElement.getAttribute("data-theme") || "light";
-      themeCheckbox.checked = currentTheme === "dark";
-      updateTheme();
-      themeCheckbox.addEventListener("change", updateTheme);
+    // 1. Proveri temu odmah pri učitavanju stranice
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    applyTheme(mediaQuery.matches);
+
+    // 2. Dodaj listener koji prati promenu u sistemu "uživo"
+    const handler = (e: MediaQueryListEvent) => applyTheme(e.matches);
+    
+    // Moderni browseri koriste addEventListener, stariji addListener
+    if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener("change", handler);
+    } else {
+        mediaQuery.addListener(handler);
     }
+
+    // Cleanup: obriši listener kada se komponenta uništi (Svelte praksa)
+    return () => {
+        if (mediaQuery.removeEventListener) {
+            mediaQuery.removeEventListener("change", handler);
+        } else {
+            mediaQuery.removeListener(handler);
+        }
+    };
   });
 
 
@@ -141,6 +157,8 @@
   <PrimaryMenu />
 </div>
 
+
+
 {#if showModal}
   <div class="modal modal-open pt-10" style="backdrop-filter: blur(10px);">
     <div
@@ -176,6 +194,8 @@
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div class="modal-backdrop" on:click={closeModal}></div>
   </div>
+
+  
 {/if}
 
 <style>

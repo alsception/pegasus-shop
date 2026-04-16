@@ -64,7 +64,7 @@
 {:else}
 
   <button
-    class="btn btn-ghost bg-base-100 hover:bg-base-300 dark:bg-primary-content/80 dark:hover:border-2 border-accent/20 group"
+    class="btn btn-ghost bg-base-100 hover:bg-base-300 dark:bg-primary-content/80 dark:hover:border-2 border-info/60 group"
     style="width: {width}; height: {width};/*transition-delay: 0.3s;*/"
     aria-label="Dodaj u košaricu"
     title="Dodaj u košaricu"
@@ -101,7 +101,7 @@
 .pulsing2 {
   /* Osnovni stilovi */
   box-shadow: rgba(0, 26, 255, 0.357) 0px 0px 0px 10.3387px;
-  border: 2px solid #6933ff79; /* Popravio sam tvoj dupli '2px solid' */
+  border: 2px solid #337aff79; /* Popravio sam tvoj dupli '2px solid' */
   
   /* Animacija: ime | trajanje | timing-function | broj ponavljanja | fill-mode */
   animation: pulse2 0.7s ease-out 1 forwards;
