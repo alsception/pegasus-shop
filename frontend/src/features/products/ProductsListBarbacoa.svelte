@@ -23,7 +23,6 @@
 
   //DEFINITIONS
   let isAuthenticated = false;
-  let modalProduct: Product | null = null;
   let products: Product[] = [];
   let filteredProducts: Product[] = [];
   let loading: boolean = false;
@@ -196,24 +195,20 @@
     }
   }
 
-  function handleCategorySelect(category: number): void {
-    filteredProducts = products.filter((p) => p.category == category);
-  }
-
-  function clickChange(id: any): any {
-    if (selectedCategory != id) {
-      selectedCategory = id;
-
-      if (selectedCategory === 6) {
-        filteredProducts = products.filter((p) => p.favourite === true);
-      } else {
-        filteredProducts = products.filter((p) => p.category == id);
-      }
-    } else {
-      selectedCategory = 0;
+  function handleCategorySelect(category: number): void 
+  {    
+    //Imamo posebnu kategoriju sa id 6 za sve, ili 0 ali to nije u db. 
+    // Bitno je da se prikaze sve u oba slucaja
+    if ( category == 6 || category == 0 ) 
+    {
       filteredProducts = products;
+    } 
+    else 
+    {
+      filteredProducts = products.filter((p) => p.category == category);
     }
 
+    //scrolujemo na vrh (neradi uvek)
     document
       .getElementById("products-container")
       ?.scrollIntoView({ behavior: "smooth", block: "nearest" });

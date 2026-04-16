@@ -9,9 +9,6 @@
    */
 
   import { addedItems, addToCart, loadingItems, ProductService } from "./ProductService";
-  import { DotLottieSvelte } from "@lottiefiles/dotlottie-svelte";
-  import { cartItemsCounter } from './../../core/services/CheckoutStore';
-
 
   export let product;
   export let width;

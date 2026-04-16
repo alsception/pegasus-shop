@@ -1,6 +1,8 @@
 package org.alsception.pegasus.features.cart;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import org.alsception.pegasus.features.order.PGSOrder;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -273,6 +275,25 @@ public class CartService
                 newPGSCart.setUser(user);
                 return cartRepository.save(newPGSCart);
             });
+    }
+
+    public BigDecimal getCartTotalByUsername(String username) 
+    {
+        logger.debug("Searching username: "+username);
+        
+        PGSUser user = userRepository.findByUsernameIgnoreCase(username)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        logger.debug("Looking for cart...");
+        
+        PGSCart cart = cartRepository.findByUser(user)            
+            .orElseGet(() -> {
+                PGSCart newPGSCart = new PGSCart();
+                newPGSCart.setUser(user);
+                return cartRepository.save(newPGSCart);
+            });
+
+        return cart.getTotalPrice().setScale(2, RoundingMode.HALF_UP);
     }
     
     public List<PGSCart> getAll(String search) 

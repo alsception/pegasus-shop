@@ -89,32 +89,18 @@ onMount(async () =>
     loading.set(false);
   }
 });
-/* 
-function handleChange(event: Event) 
-{
-  const value = (event.target as HTMLSelectElement).value;
-  selectedCategory = value;
-  onSelect(value);
-}
- */
+
 function clickChange(value: any) 
 {
-  /* selectedCategory = value;
-  onSelect(value);
- */
-
   if (selectedCategory != value) 
   {
     selectedCategory = value;
     onSelect(value);
-    /* if (selectedCategory === 6) {
-      //favourites, which are not in product.category but product.favourite
-      filteredProducts = products.filter((p) => p.favourite === true);
-    } else {
-      filteredProducts = products.filter((p) => p.category == id);
-    } */
-  } else {
+  } 
+  else 
+  {
     selectedCategory = 0;
+    onSelect(0);
   }
 
   closeMenu();
@@ -132,7 +118,7 @@ const closeMenu = () => {
   {#if $loading}
     <div tabindex="0" role="button" class="btn btn-dash ">
         <i class="fas fa-search"></i>
-        Loading<span class="loading loading-dots loading-xs"></span>
+        <span class="loading loading-dots loading-xs"></span>
       </div>
   {:else}  
 
@@ -159,13 +145,11 @@ const closeMenu = () => {
     </div>
   {/if}
 </div>
-<style>
-  
+<style> 
   .selected-cat{
     color: var(--color-primary);
     background-color: var(--color-base-300);
     font-weight: bold !important;
     font-style: bold;
   }
-
 </style>

@@ -1,6 +1,8 @@
 package org.alsception.pegasus.features.cart;
 
+import java.math.BigDecimal;
 import java.security.Principal;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import org.alsception.pegasus.features.order.PGSCheckoutRequestDTO;
@@ -33,10 +35,13 @@ public class CartController {
         logger.info("Adding product ["+productId+"] to cart, user: " + username);
 
         int qt = cartService.addProductToCart(username, productId, quantity);
+        BigDecimal total = cartService.getCartTotalByUsername(username);
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Product added");
         response.put("qt", qt);
+        response.put("cart_total", total);
+        response.put("timestamp", ""+Instant.now().toEpochMilli());
         return ResponseEntity.ok(response);
     }
 
@@ -49,10 +54,13 @@ public class CartController {
         logger.info("Reducing product ["+productId+"] qt, user: " + username);
 
         int qt = cartService.addProductToCart(username, productId, -1);
+        BigDecimal total = cartService.getCartTotalByUsername(username);
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", "ok");
         response.put("qt", qt);
+        response.put("cart_total", total);
+        response.put("timestamp", ""+Instant.now().toEpochMilli());
         return ResponseEntity.ok(response);
     }
 

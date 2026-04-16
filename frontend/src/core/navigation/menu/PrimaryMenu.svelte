@@ -4,7 +4,8 @@
   import { getCurrentUsername } from "../../services/SessionStore";
   import { getCurrentRole } from "../../services/SessionStore";
   import type { NavRoutesMap } from "./MenuTypes";
-  import { cartItemsCounter } from "../../services/CheckoutStore";
+  import { cartTotalCounter } from "../../services/CheckoutStore";
+  import { formatPrice } from "../../../utils/formatting";
 
   const role = getCurrentRole();  
 
@@ -44,10 +45,12 @@
   // Čim se promeni broj u Košarici, ažuriraj navigaciju
   // TODO: Ovde bi zapravo trebalo da se prikaže kolko kešovine a ne kolko proizvoda
   $: {
-    const count = $cartItemsCounter;
+    const total = $cartTotalCounter;
+    const price = formatPrice(total);
+
     navItems = navItems.map(n => 
       n.href === '#/cart' 
-        ? { ...n, label: count > 0 ? `<b>Košarica <span class="text-info">(${count})</span></b>` : 'Košarica' } 
+        ? { ...n, label: total > 0 ? `<b>Košarica (<span class="text-info">${price}</span>)</b>` : 'Košarica' } 
         : n
     );
   }
@@ -80,9 +83,9 @@
         <i class="fas fa-user mr-1"></i>
         <span class="">{getCurrentUsername()}</span>
       </a>
-      |
-      <span class="badge badge-accent badge-outline badge-xs">
-        {getCurrentRole()}
+      
+      <span class="badge badge-info badge-outline badge-xs">
+        { role !== 'CUSTOMER' ? role : '' }
       </span>
     </div>
   </li>

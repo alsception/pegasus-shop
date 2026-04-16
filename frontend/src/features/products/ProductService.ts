@@ -1,7 +1,8 @@
 import axios from "axios";
 import { showErrorToast } from "../../core/utils/toaster";
-import { writable } from "svelte/store";
-import { cartItemsCounter } from './../../core/services/CheckoutStore';
+import { get, writable } from "svelte/store";
+import { cartItemsCounter, cartTimestamp, cartTotalCounter } from './../../core/services/CheckoutStore';
+
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const STORAGE_KEY = 'addedItemsMap';
@@ -35,7 +36,8 @@ const axiosInstance = axios.create({
 
 // 2. Automatsko čuvanje i ažuriranje globalnog brojača
 addedItems.subscribe((items) => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') 
+    {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
         // Ažuriraj totalni broj u CheckoutStore
         const total = Object.values(items).reduce((acc, curr) => acc + curr, 0);
@@ -51,7 +53,10 @@ export const ProductService =
 
     try 
     {      
-      let response = await axiosInstance.post<{qt: any; message: string }>
+      let response = await axiosInstance.post<{
+        timestamp: any;
+        cart_total: any;qt: any; message: string 
+      }>
       (
         ( delta > 0 ) ? "/cart/add" : "/cart/reduce",
         null,
@@ -63,6 +68,17 @@ export const ProductService =
       );   
 
       let newQt = response.data.qt;      
+      let cartTotal = response.data.cart_total;
+      let timestamp = response.data.timestamp;
+      const cartts = get(cartTimestamp);
+
+      if( cartts < timestamp )
+      {
+        //stigo novi podatak -> updatujemo
+        //moramo ovo da pratimo, jer sta ako dodje kasnije stariji podatak
+        cartTimestamp.set(timestamp);
+        cartTotalCounter.set(cartTotal);
+      }
 
       addedItems.update(items => {
           const currentQty = items[productId] || 0;
@@ -103,6 +119,8 @@ export const ProductService =
 
     // 2. Resetuj globalni brojač na 0
     cartItemsCounter.set(0);
+    cartTotalCounter.set(0);
+    cartTimestamp.set(0);
 
     // 3. Obriši podatke iz localStorage
     if (typeof window !== 'undefined') {

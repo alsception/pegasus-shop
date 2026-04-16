@@ -13,6 +13,8 @@
   import EmptyImg5 from "../../assets/img/empty-pana.svg";
   import { link } from "svelte-spa-router";
   import { formatPrice } from "../../utils/formatting";
+  import { cartTotalCounter } from "../../core/services/CheckoutStore";
+  import { addedItems } from "../products/ProductService";
 
   const emptyImages = [EmptyImg1, EmptyImg2, EmptyImg3, EmptyImg4, EmptyImg5];
 
@@ -28,14 +30,12 @@
   let cart: Cart | null = null;
   let error: any = null;
 
-  /********************************************************************
-   * TODO FIX 0 ERROR
-   *
-   * TODO: Resetovati added items kad se obrise iz carta product
-   *      I ne samo to, nego kad se refreshuje, onda nestane sve
-   *      ali zato kad se izadje i uloguje kao drugi korisnik onda ostane [IMPORTANT FIX TODO]
-   * ************************************************************
-   */
+  /**********************************************************************************
+   * TODO: 
+   * Prethodni bug je popravljen, ali sad imamo interesantan slucaj:
+   * Sta ako musterija krene na checkout a u drugom tabu i dalje dodaje proizvode?
+   * Mislice da radi checkout sa manjom cenom i nece videti da se cena promenila.
+   * *******************************************************************************/
 
   // AUTHENTICATION
   $: auth.subscribe((value) => {
@@ -63,14 +63,25 @@
     await loadCart();
   });
 
-  async function loadCart() {
+  async function loadCart() 
+  {
     loading = true;
-    try {
+    try 
+    {
       const response = await axiosInstance.get<Cart>("cart");
       cart = response.data;
-    } catch (err) {
+      if(cart)      
+      { //sync data
+        cartTotalCounter.set(cart?.totalPrice);
+        syncAddedItemsWithCart(cart, addedItems);
+      }        
+    } 
+    catch (err) 
+    {
       error = err instanceof Error ? err.message : "Unknown error";
-    } finally {
+    } 
+    finally 
+    {
       loading = false;
     }
   }
@@ -86,21 +97,62 @@
           quantity: item.quantity,
         },
       });
+
       cart = (await response).data.cart;
-    } catch (err) {
+
+      if(cart)
+      {
+        //i ovde isto sync data
+        cartTotalCounter.set(cart?.totalPrice);
+        syncAddedItemsWithCart(cart, addedItems);
+      }        
+    } 
+    catch (err) 
+    {
       error = err instanceof Error ? err.message : "Unknown error";
-    } finally {
+    } 
+    finally 
+    {
       loading = false;
     }
   }
 
-  function handleQuantityChange(event: Event, item: any) {
+  function syncAddedItemsWithCart(cart: Cart, addedItems: any) 
+  {
+    addedItems.update((items: number[]) => {
+      // 1. Napravimo set ID-jeva koji se zapravo nalaze u korpi radi brže provere
+      const productIdsInCart = new Set(cart.items?.map(item => item.product.id) || []);
+
+      // 2. Prolazimo kroz sve ID-jeve koji su trenutno u addedItems (lokalnoj mapi)
+      Object.keys(items).forEach(key => {
+        const productId = Number(key);
+        
+        // TAČKA 3: Ako ID postoji u addedItems, a NE postoji u cart.items, obriši ga
+        if (!productIdsInCart.has(productId)) {
+          delete items[productId];
+        }
+      });
+
+      // TAČKA 1 & 2: Iteriramo kroz stavke iz korpe i ažuriramo quantity u addedItems
+      cart.items?.forEach(item => {
+        const productId = item.product.id;
+        // Ako artikal postoji u korpi, uskladi lokalni quantity sa onim sa servera
+        items[productId] = item.quantity;
+      });
+
+      return { ...items };
+    });
+  }
+
+  function handleQuantityChange(event: Event, item: any) 
+  {
     const input = event.target as HTMLInputElement;
     item.quantity = Number(input.value);
     updateCart(item);
   }
 
-  async function deleteCartItem(productId: number) {
+  async function deleteCartItem(productId: number) 
+  {
     if (!cart) return;
     loading = true;
     error = null;
@@ -110,10 +162,15 @@
           productId,
         },
       });
+      //kad se ucita cart sinhronizujemo podatke
       await loadCart();
-    } catch (err) {
+    } 
+    catch (err) 
+    {
       error = err instanceof Error ? err.message : "Unknown error";
-    } finally {
+    } 
+    finally 
+    {
       loading = false;
     }
   }
