@@ -13,6 +13,7 @@
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import NewUserModal from "./NewUserModal.svelte";
   import { showErrorModalWithTitle } from "../../utils/modal";
+  import { fly } from "svelte/transition";
 
   let isAuthenticated = false;
   let loading: boolean = false;
@@ -378,7 +379,9 @@
       </thead>
       <tbody class="">
         {#each users as user, i}
-          <tr class="bg-base-200/60 tr-highlight">
+          <tr
+            class={`tr-highlight ${i % 2 === 1 ? 'bg-base-200/30' : 'bg-base-200/60'}`}
+          >
             <td class="justify-center pgs-td-center px-4">
               <input
                 type="checkbox"

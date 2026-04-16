@@ -15,6 +15,8 @@
   import { formatPrice } from "../../utils/formatting";
   import { cartTotalCounter } from "../../core/services/CheckoutStore";
   import { addedItems } from "../products/ProductService";
+  import ProductPage from "../products/ProductPage.svelte";
+  import { fly } from "svelte/transition";
 
   const emptyImages = [EmptyImg1, EmptyImg2, EmptyImg3, EmptyImg4, EmptyImg5];
 
@@ -29,6 +31,7 @@
   let loading: boolean = false;
   let cart: Cart | null = null;
   let error: any = null;
+  let productId = 0;
 
   /**********************************************************************************
    * TODO: 
@@ -206,7 +209,32 @@
   ) {
     window.location.href = "#/products";
   }
+
+
+  let showModal = false;
+
+  function openModal() {
+    showModal = true;
+  }
+
+  function closeModal() {
+    showModal = false;
+  }
+
+  function handleKeydown(event: { key: string }) {
+    if (event.key === "Escape") {
+      closeModal();
+    }
+  }
+
+  function handleProductClick(id: number | undefined) {
+    if (id != undefined) productId = id;
+    openModal();
+  }
+
 </script>
+
+<svelte:window on:keydown={handleKeydown} />
 
 <div class="w-full max-w-4xl mx-auto p-2 sm:p-4">
 
@@ -286,12 +314,16 @@
                           </button>
                         </div>
 
+                        <!-- svelte-ignore a11y_click_events_have_key_events -->
+                        <!-- svelte-ignore a11y_no_static_element_interactions -->
                         <div
-                          class="text-md sm:text-base font-semibold text-primary px-1"
+                          class="text-md sm:text-base font-semibold text-primary px-1 pgs-hyperlink"
+                          on:click={() => handleProductClick(item.product.id)}
                         >
                           {item.product.name}
                           {#if item.quantity > 1}
-                            <span class="text-sm text-primary/50"> ({formatPrice(item.price)}) </span>
+                            <span class="text-sm text-primary/50"
+                            > ({formatPrice(item.price)}) </span>
                           {/if}
                       </div>
                       </div>
@@ -334,7 +366,7 @@
                   <div class="flex items-center w-fit">
                     <button
                       type="button"
-                      class="btn btn-ghost btn-md text-pink-600 h-3 mx-4 mb-2 mt-2 pt-1"
+                      class="btn btn-ghost btn-md text-pink-600"
                       aria-label="Delete"
                       on:click={() => deleteAll()}
                     >
@@ -372,6 +404,45 @@
               >
               </div>
             </div>
+
+            {#if showModal}
+              <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+              <!-- svelte-ignore a11y_no_static_element_interactions -->
+              <div class="modal modal-open pt-0" style="backdrop-filter: blur(10px);">
+                <div
+                  class="modal-box max-h-[90vh] w-full sm:w-8/12 max-w-5xl p-0 flex flex-col bg-base-200"
+                  transition:fly={{ y: 50, duration: 300 }}
+                >
+                  <!-- Fixed Header -->
+                  <div
+                    class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300"
+                  >
+                    <h3 class="font-bold text-lg">Detalji proizvoda</h3>
+                  </div>
+
+                  <!-- Scrollable Content -->
+                  <div class="overflow-y-auto flex-1">
+                    <ProductPage {productId} liteView={true}></ProductPage>
+                  </div>
+
+                  <!-- Fixed Footer -->
+                  <div
+                    class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300"
+                  >
+                    <div class="flex justify-end gap-2">
+                      <button class="btn btn-secondary" on:click={closeModal}
+                        >Zatvori</button
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Glass Backdrop -->
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                <div class="modal-backdrop" on:click={closeModal}></div>
+              </div>
+            {/if}
 
           {:else}
             <p class="text-center text-gray-500 py-8 px-4">

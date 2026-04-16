@@ -477,7 +477,10 @@ i LITE APP!!, I MOZDA i WS.....
           </thead>
           <tbody>
             {#each orders as order, i}
-              <tr class="bg-base-200/60 tr-highlight" transition:fly={{ y: -50, duration: 300 }}>
+              <tr
+                class={`tr-highlight ${i % 2 === 1 ? 'bg-base-200/30' : 'bg-base-200/60'}`}
+                transition:fly={{ y: -50, duration: 300 }}
+              >
                 <td class="pgs-td">
                   <a use:link href="/orders/{order.id}" class="pgs-hyperlink"
                     >{formatCode(order.code)}</a
