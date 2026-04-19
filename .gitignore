@@ -62,5 +62,5 @@ frontend_backoffice/nbproject/private/
 backend/src/main/resources/keystore.p12
 backend/src/main/resources/application-prod.properties
 keystore.p12
-#razni frontend buildovi koji nam netrebaju
-backend/src/main/resources/static/
+#razni frontend buildovi koji nam netrebaju:
+backend/src/main/resources/static/*
