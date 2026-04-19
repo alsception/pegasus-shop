@@ -7,7 +7,6 @@
   //Our imports - core
   import { auth, getCurrentRole } from "./core/services/SessionStore";
   import Login from "./core/auth/Login.svelte";
-  import Register from "./core/auth/Register.svelte";
   import Header from "./core/navigation/Header.svelte";
   import { generateRoutes } from "./core/navigation/routing/routes";
   import { SvelteToast } from "@zerodevx/svelte-toast";
@@ -17,7 +16,6 @@
 
   export const unauthenticatedRoutes = {
     '/login': Login,
-    '/register': Register,
     /*'/products': ProductsListBarbacoa, mozda jednog dana?*/
     '*': Login  // fallback route
   };

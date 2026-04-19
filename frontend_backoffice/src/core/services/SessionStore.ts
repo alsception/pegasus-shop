@@ -13,7 +13,7 @@ interface AuthState {
   isAuthenticated: boolean;
 }
 
-const storedToken = localStorage.getItem('token');
+const storedToken = localStorage.getItem('token_b');
 
 export const auth = writable<AuthState>({
   token: storedToken,
@@ -21,17 +21,17 @@ export const auth = writable<AuthState>({
 });
 
 export function authenticate(token: string) {
-  localStorage.setItem('token', token);
+  localStorage.setItem('token_b', token);
   auth.set({ token, isAuthenticated: true });
 }
 
 export function clearToken() {
-  localStorage.removeItem('token');
+  localStorage.removeItem('token_b');
   auth.set({ token: null, isAuthenticated: false });
 }
 
 export function getToken() {
-  return localStorage.getItem('token');
+  return localStorage.getItem('token_b');
 }
 
 export function getCurrentUsername() 

@@ -13,7 +13,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export async function login(username: string, password: string) 
 {
-  const response = await fetch(`${API_BASE_URL}/auth/login`, {
+  const response = await fetch(`${API_BASE_URL}/auth/b/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -38,33 +38,6 @@ export function logout()
   clearToken();
   // Optionally: call backend logout endpoint if you have one, i dont
 }
-
-export async function register(username: string, password: string) 
-{
-  const response = await fetch(`${API_BASE_URL}/auth/register`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ username, password }),
-    credentials: 'include' // if backend uses cookies
-  });
-
-  console.log(response)
-  
-  if (!response.ok) 
-  {
-    let message = await processErrMsg(response, '');
-    throw new Error(`${message}`);
-  }
-
-  const data = await response.text();  
-  
-  return data;//showSuccessToast(data);
-  
-  /*setToken(data.token);*///in future we should send token
-}
-
 
 /**
  * This function executes call to the backend

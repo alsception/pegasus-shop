@@ -72,7 +72,7 @@
   }
 </script>
 
-<div class="navbar shadow-sm fixed bg-[#0d0d0d]/84 bg-sky-300/84 dark:bg-slate-900/84 backdrop-blur-lg z-9000">
+<div class="navbar shadow-sm fixed bg-[#0d0d0d]/84 bg-sky-300/84 dark:bg-slate-900/84 backdrop-blur-lg z-9000 polka-dots">
   <div class="navbar-start">
     <div class="pl-16 flex items-center gap-3">
       <a href="#/home" class="flex items-center">
@@ -200,8 +200,27 @@
 {/if}
 
 <style>
-  .navbar {
-    height: 4rem;
-    min-height: 3rem;
-  }
+.navbar {
+  height: 4rem;
+  min-height: 3rem;
+}
+
+.polka-dots::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1; 
+  
+  /* Your pattern styling */
+  background-color: #29a4eb;
+  opacity: 0.15;
+  background-image: radial-gradient(#444cf7 1.1px, transparent 2.1px), 
+                    radial-gradient(#444cf7 3.1px, #e5e5f7 4.1px);
+  background-size: 44px 44px;
+  background-position: 0 0, 22px 22px;
+}
+
 </style>

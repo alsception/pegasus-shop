@@ -2,6 +2,7 @@ package org.alsception.pegasus.core.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import org.alsception.pegasus.core.config.PGSConfigService;
@@ -166,6 +167,61 @@ public class AuthController
         logger.trace("Loading user: " + userDTO.getUsername());
         
         UserDetails userDetails = userDetailsService.loadUserByUsername(userDTO.getUsername());
+        String token = jwtUtils.generateJwtToken(userDetails);  
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);  
+
+        return ResponseEntity.ok(response);
+    }
+    
+    //Backoffice login
+    @PostMapping("/b/login")
+    public ResponseEntity<?> backofficeLogin(@RequestBody AuthRequest userDTO, HttpServletRequest request) 
+    {
+        logger.debug("Authenticating user to backoffice: " + userDTO.getUsername());             
+        
+        //E sad, sta ako je login disabled? treba nam log, ali svejedno nije uspeo da se uloguje?
+        this.log(request, "login backoffice", userDTO.getUsername());        
+
+        try 
+        {
+            authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword()));
+        } 
+        catch (AuthenticationException e) 
+        {
+            //TODO: We should not return disabled message is account is disabled, and user tried to login with wrong password
+            
+            logger.warn(e.getMessage()+"!");            
+            return ResponseEntity
+                    .status(401)
+                    .body(e.getMessage());
+        }        
+        catch (Exception e) 
+        {
+            logger.error(e.getMessage());            
+            return ResponseEntity
+                    .status(500)
+                    .body(e.getMessage());
+        }
+
+        logger.trace("Loading user: " + userDTO.getUsername());
+        
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userDTO.getUsername());
+                
+        // CHECK ROLES HERE
+        boolean isAdmin = userDetails.getAuthorities().stream()
+            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")); // Adjust "ROLE_ADMIN" to your exact DB value
+
+        if (!isAdmin) 
+        {
+            logger.warn("Unauthorized login attempt by non-admin: " + userDTO.getUsername());
+            this.log(request, "Unauthorized backoffice login attempt by non-admin", userDTO.getUsername());        
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN) // 403 Forbidden
+                    .body("Access denied");
+        }
+        
         String token = jwtUtils.generateJwtToken(userDetails);  
         Map<String, String> response = new HashMap<>();
         response.put("token", token);  

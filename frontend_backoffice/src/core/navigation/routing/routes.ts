@@ -26,7 +26,6 @@ import OrderDetails                 from "../../../features/orders/OrderDetails.
 import Pix                          from "../../../features/pix/Pix.svelte";
 
 import Logout                       from "../../auth/Logout.svelte";
-import Register                     from "../../auth/Register.svelte";
 import NotFound                     from "../error/NotFound.svelte"
 import StripeCheckout               from "../../../features/stripe/StripeCheckout.svelte";
 import Completition                 from "../../../features/cart/Completion.svelte";
@@ -71,7 +70,6 @@ export const components: ComponentRegistry =
     "/Hours": null,
     "/pix": Pix,
     "/logout": Logout,
-    "/register": Register,
     "*": NotFound, // catch-all
 };
 
