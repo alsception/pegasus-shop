@@ -1,0 +1,472 @@
+<script lang="ts">
+  import { onMount } from "svelte";
+  import { auth } from "../../core/services/SessionStore";
+  import Login from "../../core/auth/Login.svelte";
+  import axios from "axios";
+  import type { Cart } from "./Cart";
+  import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
+  import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
+  import EmptyImg1 from "../../assets/img/empty-amico-1.svg";
+  import EmptyImg2 from "../../assets/img/empty-amico.svg";
+  import EmptyImg3 from "../../assets/img/empty-bro-1.svg";
+  import EmptyImg4 from "../../assets/img/empty-bro.svg";
+  import EmptyImg5 from "../../assets/img/empty-pana.svg";
+  import { link } from "svelte-spa-router";
+  import { formatPrice } from "../../utils/formatting";
+  import { cartTotalCounter } from "../../core/services/CheckoutStore";
+  import { addedItems } from "../products/ProductService";
+  import ProductPage from "../products/ProductPage.svelte";
+  import { fly } from "svelte/transition";
+
+  const emptyImages = [EmptyImg1, EmptyImg2, EmptyImg3, EmptyImg4, EmptyImg5];
+
+  // Get a random image (TODO: see if this has sense, to load many images at once )
+  const randomImage =
+    emptyImages[Math.floor(Math.random() * emptyImages.length)];
+
+  document.title = "Cart | Barbacoa";
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  let isAuthenticated = false;
+  let loading: boolean = false;
+  let cart: Cart | null = null;
+  let error: any = null;
+  let productId = 0;
+
+  /**********************************************************************************
+   * TODO: 
+   * Prethodni bug je popravljen, ali sad imamo interesantan slucaj:
+   * Sta ako musterija krene na checkout a u drugom tabu i dalje dodaje proizvode?
+   * Mislice da radi checkout sa manjom cenom i nece videti da se cena promenila.
+   * *******************************************************************************/
+
+  // AUTHENTICATION
+  $: auth.subscribe((value) => {
+    isAuthenticated = value.isAuthenticated;
+  });
+
+  //AXIOS DEf
+  const axiosInstance = axios.create({
+    baseURL: API_BASE_URL,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  // Add Bearer token if available
+  axiosInstance.interceptors.request.use((config) => {
+    const token = localStorage.getItem("token"); // or getToken() if you have a helper
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  });
+
+  onMount(async () => {
+    await loadCart();
+  });
+
+  async function loadCart() 
+  {
+    loading = true;
+    try 
+    {
+      const response = await axiosInstance.get<Cart>("cart");
+      cart = response.data;
+      if(cart)      
+      { //sync data
+        cartTotalCounter.set(cart?.totalPrice);
+        syncAddedItemsWithCart(cart, addedItems);
+      }        
+    } 
+    catch (err) 
+    {
+      error = err instanceof Error ? err.message : "Unknown error";
+    } 
+    finally 
+    {
+      loading = false;
+    }
+  }
+
+  async function updateCart(item: any) {
+    if (!cart || !item) return;
+    loading = true;
+    error = null;
+    try {
+      const response = axiosInstance.put("/cart/update", null, {
+        params: {
+          productId: item.product.id,
+          quantity: item.quantity,
+        },
+      });
+
+      cart = (await response).data.cart;
+
+      if(cart)
+      {
+        //i ovde isto sync data
+        cartTotalCounter.set(cart?.totalPrice);
+        syncAddedItemsWithCart(cart, addedItems);
+      }        
+    } 
+    catch (err) 
+    {
+      error = err instanceof Error ? err.message : "Unknown error";
+    } 
+    finally 
+    {
+      loading = false;
+    }
+  }
+
+  function syncAddedItemsWithCart(cart: Cart, addedItems: any) 
+  {
+    addedItems.update((items: number[]) => {
+      // 1. Napravimo set ID-jeva koji se zapravo nalaze u korpi radi brže provere
+      const productIdsInCart = new Set(cart.items?.map(item => item.product.id) || []);
+
+      // 2. Prolazimo kroz sve ID-jeve koji su trenutno u addedItems (lokalnoj mapi)
+      Object.keys(items).forEach(key => {
+        const productId = Number(key);
+        
+        // TAČKA 3: Ako ID postoji u addedItems, a NE postoji u cart.items, obriši ga
+        if (!productIdsInCart.has(productId)) {
+          delete items[productId];
+        }
+      });
+
+      // TAČKA 1 & 2: Iteriramo kroz stavke iz korpe i ažuriramo quantity u addedItems
+      cart.items?.forEach(item => {
+        const productId = item.product.id;
+        // Ako artikal postoji u korpi, uskladi lokalni quantity sa onim sa servera
+        items[productId] = item.quantity;
+      });
+
+      return { ...items };
+    });
+  }
+
+  function handleQuantityChange(event: Event, item: any) 
+  {
+    const input = event.target as HTMLInputElement;
+    item.quantity = Number(input.value);
+    updateCart(item);
+  }
+
+  async function deleteCartItem(productId: number) 
+  {
+    if (!cart) return;
+    loading = true;
+    error = null;
+    try {
+      await axiosInstance.delete("/cart/delete", {
+        params: {
+          productId,
+        },
+      });
+      //kad se ucita cart sinhronizujemo podatke
+      await loadCart();
+    } 
+    catch (err) 
+    {
+      error = err instanceof Error ? err.message : "Unknown error";
+    } 
+    finally 
+    {
+      loading = false;
+    }
+  }
+
+  async function deleteAll() 
+  {
+    if (!cart) return;
+
+    if(confirm('Jeste li sigurni?'))
+    {
+
+      loading = true;
+      error = null;
+      try {
+        await axiosInstance.delete("/cart/delete/all");
+
+        //kad zavrsi brisanje ucitavamo novi prazan cart i sinhronizujemo podatke
+        await loadCart();
+      } 
+      catch (err) 
+      {
+        error = err instanceof Error ? err.message : "Unknown error";
+      } 
+      finally 
+      {
+        loading = false;
+      }
+    }
+  }
+
+  function cancel(
+    event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }
+  ) {
+    window.location.href = "#/products";
+  }
+
+
+  let showModal = false;
+
+  function openModal() {
+    showModal = true;
+  }
+
+  function closeModal() {
+    showModal = false;
+  }
+
+  function handleKeydown(event: { key: string }) {
+    if (event.key === "Escape") {
+      closeModal();
+    }
+  }
+
+  function handleProductClick(id: number | undefined) {
+    if (id != undefined) productId = id;
+    openModal();
+  }
+
+</script>
+
+<svelte:window on:keydown={handleKeydown} />
+
+<div class="w-full max-w-4xl mx-auto p-2 sm:p-4">
+
+  {#if !$auth.isAuthenticated}
+
+    <Login />
+
+  {:else if error}
+
+    <ErrorDiv {error} />
+
+  {:else}
+
+    {#if loading}
+
+      <LoadingOverlay />
+
+    {/if}
+
+    {#if cart}
+    
+      <div
+        class="text-primary mx-auto bg-base-200 dark:bg-black lg:dark:bg-base-200 mt-6 sm:mt-10 w-full max-w-2xl rounded-t-md"
+        style="transform: none"
+      >
+        <div
+          class="p-0 bg-primary/10 text-primary-content/80 dark:text-primary/80 rounded-t"
+        >
+          <h2 class="text-primary text-lg sm:text-2xl font-bold p-1 text-center h-14 pt-3">
+            Košarica
+          </h2>
+        </div>
+
+        <div class="pt-4 lg:px-4">
+          {#if cart.items && cart.items.length > 0}
+            <div class="p-2 sm:p-6">
+              <div class="divide-y divide-primary/10">
+                {#each cart.items as item (item.id)}
+                  <div
+                    class="py-1 grid grid-cols-1 sm:grid-cols-3 gap-0 items-center pt-4"
+                  >
+                    <div class="sm:col-span-2 flex flex-col gap-0.5">
+                      <div class="flex items-center gap-1">
+                        <div
+                          class="flex items-center rounded-md overflow-hidden border border-primary/10 shrink-0 h-6"
+                        >
+                          <button
+                            type="button"
+                            class="btn btn- btn-sm text-primary px-3 bg-base-100 rounded-none"
+                            on:click={() => {
+                              if (item.quantity > 1) {
+                                item.quantity = item.quantity - 1;
+                                updateCart(item);
+                              }
+                            }}
+                          >
+                            -
+                          </button>
+                          <input
+                            id="myNumber"
+                            value={item.quantity}
+                            min="1"
+                            class="w-12 h-8 text-center text-md text-primary bg-transparent border-0 font-semibold"
+                            on:change={(e) => handleQuantityChange(e, item)}
+                          />
+                          <button
+                            type="button"
+                            class="btn btn-ghost btn-sm text-primary px-3 bg-base-100 rounded-none"
+                            on:click={() => {
+                              if (item.quantity < 100) {
+                                item.quantity = item.quantity + 1;
+                                updateCart(item);
+                              }
+                            }}
+                          >
+                            +
+                          </button>
+                        </div>
+
+                        <!-- svelte-ignore a11y_click_events_have_key_events -->
+                        <!-- svelte-ignore a11y_no_static_element_interactions -->
+                        <div
+                          class="text-md sm:text-base font-semibold text-primary px-1 pgs-hyperlink"
+                          on:click={() => handleProductClick(item.product.id)}
+                        >
+                          {item.product.name}
+                          {#if item.quantity > 1}
+                            <span class="text-sm text-primary/50"
+                            > ({formatPrice(item.price)}) </span>
+                          {/if}
+                      </div>
+                      </div>
+
+                      <div class="flex items-center w-fit">
+                        <button
+                          type="button"
+                          class="btn btn-ghost btn-sm text-pink-600 h-3 mx-4 mb-2 mt-2 pt-1"
+                          aria-label="Delete"
+                          on:click={() => deleteCartItem(item.product.id)}
+                        >
+                          <i class="fa fa-remove text-md cursor-pointer"> </i>
+                          <span> Ukloni</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div
+                      class="text-right sm:text-right pt-0 sm:pt-0 relative -top-6 h-0 sm:top-0"
+                    >
+                      <span
+                        class="text-md sm:text-base font-bold font-mono text-primary"
+                      >
+                        {formatPrice(item.quantity * item.price)}
+                      </span>
+                    </div>
+                  </div>
+                  
+                {/each}
+              </div>
+
+              <div
+                class="space-y-4 mt-4 divide-y divide-primary/20 justify-end"
+              >
+                <div
+                  class="divide-y divide-gray-200 dark:divide-slate-700"
+                ></div>
+
+                <div class="pt-4 px-0 flex justify-between items-end">
+                  <div class="flex items-center w-fit">
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-md text-pink-600"
+                      aria-label="Delete"
+                      on:click={() => deleteAll()}
+                    >
+                      <i class="fa fa-trash text-md cursor-pointer"> </i>
+                      <span> Isprazni košaricu</span>
+                    </button>
+                  </div>
+
+                  <div class="flex items-end">
+                    <div class="text-lg sm:text-xl text-primary/70 mr-6 mb-0.5">
+                      Ukupno:
+                    </div>
+                    <div class="text-xl sm:text-2xl font-bold font-mono text-primary mb-0">
+                      {formatPrice(cart.totalPrice || 0)}
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <br />
+            </div>           
+
+            <div class="sticky bottom-0 z-10 px-2 lg:p-6 sm:px-2 lg:px-4 py-4 border-t border-base-300 ">
+              <div class="flex justify-between items-center">
+                <button
+                type="button"
+                on:click={cancel}
+                class="btn btn-ghost text-primary/80 mr-12"
+              >
+                Zatvori
+              </button>
+
+                <a href="#/checkout" class="btn btn-primary bg-primary dark:text-accent">
+                Potvrdi</a
+              >
+              </div>
+            </div>
+
+            {#if showModal}
+              <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+              <!-- svelte-ignore a11y_no_static_element_interactions -->
+              <div class="modal modal-open pt-0" style="backdrop-filter: blur(10px);">
+                <div
+                  class="modal-box max-h-[90vh] w-full sm:w-8/12 max-w-5xl p-0 flex flex-col bg-base-200"
+                  transition:fly={{ y: 50, duration: 300 }}
+                >
+                  <!-- Fixed Header -->
+                  <div
+                    class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300"
+                  >
+                    <h3 class="font-bold text-lg">Detalji proizvoda</h3>
+                  </div>
+
+                  <!-- Scrollable Content -->
+                  <div class="overflow-y-auto flex-1">
+                    <ProductPage {productId} liteView={true}></ProductPage>
+                  </div>
+
+                  <!-- Fixed Footer -->
+                  <div
+                    class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300"
+                  >
+                    <div class="flex justify-end gap-2">
+                      <button class="btn btn-secondary" on:click={closeModal}
+                        >Zatvori</button
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Glass Backdrop -->
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                <div class="modal-backdrop" on:click={closeModal}></div>
+              </div>
+            {/if}
+
+          {:else}
+            <p class="text-center text-gray-500 py-8 px-4">
+              Košarica je prazna. <a
+                use:link
+                href="/products"
+                class="pgs-hyperlink">Dodaj proizvod</a
+              >
+            </p>
+            <div class="flex justify-center pb-4">
+              <img src={randomImage} alt="Cart empty" class="max-w-xs" />
+            </div>
+          {/if}
+        </div>
+      </div>      
+    {/if}
+  {/if}
+</div>
+
+<style>
+  /**need to remove this*/
+  button:focus {
+    outline: none;
+    box-shadow: none;
+    border-color: none;
+  }
+</style>

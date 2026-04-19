@@ -1,0 +1,461 @@
+/* https://tailwindcss.com/docs/installation/using-vite */
+
+@import 'tailwindcss';
+
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: 'light';
+  default: true;
+  prefersdark: false;
+  color-scheme: 'light';
+  --color-base-100: /*#f9f9f9*/ var(--color-stone-100);
+  --color-base-200: oklch(100% 0 0);
+  --color-base-300: #e7e5e4; /* This is the color of the body background in light/default theme. bg-stone-200 */
+  --color-base-content: oklch(44% 0.043 257.281);
+  --color-primary: /*oklch(44% 0.043 257.281);*/black;
+  --color-primary-content: oklch(97% 0.013 17.38);
+  --color-secondary: var(--color-slate-500); /*used as hover on tables*/
+  --color-secondary-content: oklch(97% 0.014 343.198);
+  --color-info: oklch(54% 0.245 262.881);
+  --color-info-content: oklch(98% 0.016 73.684);
+  --color-neutral: var(--color-slate-300);
+  --color-neutral-content: oklch(96% 0.007 247.896);
+  --color-accent: #6f14f4;
+  --color-accent-content: oklch(97% 0.013 236.62);
+  --color-success: oklch(62% 0.194 149.214);
+  --color-success-content: oklch(100% 0 0);
+  --color-warning: oklch(0.72 0.17 86.54);
+  --color-warning-content: oklch(100% 0 0);
+  --color-error: oklch(63% 0.237 25.331);
+  --color-error-content: #ffc5c875;
+  --color-wait: var(--color-yellow-200);
+  --color-inprep: var(--color-sky-200);
+  --color-ready: var(--color-green-200);
+  --color-wait-bg: #fdfd9645;
+  --radius-selector: 1rem;
+  --radius-field: 2rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 0px;
+  --depth: 1;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: 'dark';
+  default: false;
+  prefersdark: true;
+  color-scheme: 'dark';
+  /*NEKA BUDE TABLE TRANSPARENT NO COLOR*/
+  --color-base-100: oklch(0.18 0 0);
+  --color-base-200: #111111;/*#111113; /*radix colors, slate 1*/
+  --color-base-300: rgb(39 39 42);
+  --color-base-content: rgb(183, 183, 183);
+  --color-primary: rgb(229 231 233); /*blue 500*/
+  --color-primary-content: var(--color-slate-900);
+  --color-secondary: var(--color-slate-600); /*used as hover on tables*/
+  --color-secondary-content: var(--color-zinc-300);
+  --color-info: var(--color-sky-500);/*oklch(54% 0.245 262.881);*/
+  --color-info-content: oklch(98% 0.016 73.684);
+  --color-neutral: var(--color-slate-700);
+  --color-neutral-content: oklch(98% 0.001 106.423);
+  --color-accent: #6f14f4;
+  --color-accent-content: oklch(97% 0.013 236.62);
+  --color-success: rgb(0 255 88 / 67%);
+  --color-success-content: oklch(26% 0.051 172.552);
+  --color-warning: oklch(85% 0.199 91.936);
+  --color-warning-content: oklch(28% 0.066 53.813);
+  --color-error: oklch(59.2% 0.249 0.584);/*oklch(63% 0.237 25.331);*/
+  --color-error-content: oklch(28% 0.109 3.907);
+  --color-wait: oklch(0.35 0.08 99.2);
+  --color-inprep: oklch(0.19 0.12 263.61);
+  --color-ready: var(--color-green-950);
+  --radius-selector: 1rem;
+  --radius-field: 2rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 0px;
+  --depth: 1;
+  --noise: 0;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+button:focus {
+  outline: none; /* Remove default focus outline */
+  box-shadow: 0 0 0 2px rgb(0, 98, 255); /* Simulates Tailwind's ring-blue-500 */
+  border-color: rgb(59, 130, 246); /* Optional: match border to ring color */
+}
+
+:root {
+  --custom-purple: #8b5cf6;
+  --brand-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+[data-theme='light'] {
+  --custom-purple: #cf9bff;
+}
+
+[data-theme='dark'] {
+  --custom-purple: #3d1681;
+}
+
+:root {
+  --my-dark-color: #fff;
+  /* or any other variables/style */
+}
+[data-theme='dark'] {
+  --my-dark-color: #000;
+}
+[data-theme='pink'] {
+  --my-dark-color: #ffabc8;
+}
+
+/** END THEME CONFIG, START STYLING RULES
+    Maybe split in 2 files ? */
+
+/** We dont use default selection */
+::selection {
+  color: black;
+  background-color: yellow;
+}
+
+/* Dark mode selection */
+@media (prefers-color-scheme: dark) {
+  ::selection {
+    background: #2b5e6b;
+    color: #ffffff; /* deep purple */
+    /* text-shadow: 0 0 8px #ff00ea, 0 0 16px #00fff7;  */ /* magenta & cyan glow */
+  }
+}
+
+/* [data-theme='dark'] ::selection {
+  background: #00fff7;
+  color: #2d0036;
+} */
+[data-theme='dark'] {
+  ::selection {
+    background-color: #2b5e6b !important;
+    color: #ffffff !important;
+  }
+}
+
+.cyberpunk {
+  color: #00fff7 !important; /* neon cyan */
+  background-color: #2d0036 !important; /* deep purple */
+  text-shadow: 0 0 8px #ff00ea, 0 0 16px #00fff7 !important; /* magenta & cyan glow */
+}
+
+/* This is used for logo. edit: not anymore lol*/
+.yellowtail-regular {
+  font-family: 'Yellowtail', cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.input-form {
+  border-radius: 0.5rem;
+  width: 100%;
+}
+
+.input-form:has(> input[disabled]),
+.input-form:disabled,
+.input-form[disabled] {
+  background-color: var(
+    --color-base-300
+  ); /* Pitanje dali je ovo uopste dobra boja, ali mora zbog loading skeleton :/ */
+}
+
+/** Whenever we have table view for some data, we will apply these rules (tailwind classes) */
+/**
+Attention, truncate class apparently f*cks with tooltips, because of overflow: hidden;
+*/
+
+/** This one is use for table header */
+.pgs-th {
+  @apply px-4 py-2 text-center text-xs font-bold uppercase tracking-wider font-mono text-primary;
+  color: var(--color-primary) !important; /**or neutral*/
+  background-color: var(--color-base-200);
+  height: 64px;
+}
+
+.pgs-th-l {
+  @apply px-4 py-2 text-left text-xs font-bold uppercase tracking-wider font-mono text-primary;
+  color: var(--color-primary) !important; /**or neutral*/
+  background-color: var(--color-base-200);
+  height: 64px;
+}
+
+.pgs-th-r {
+  @apply px-4 py-2 text-right text-xs font-bold uppercase tracking-wider font-mono text-primary;
+  color: var(--color-primary) !important; /**or neutral*/
+  background-color: var(--color-base-200);
+  height: 64px;
+}
+
+/** Table cell normal, alling to left*/
+.pgs-td {
+  @apply px-4 py-2 text-sm text-gray-500 dark:text-gray-400 max-w-md text-left;
+  /**Apparently, truncate interferes with tooltips*/
+}
+
+/** Numerical cell, with font mono and align to right, as it should be */
+.pgs-td-num {
+  @apply px-4 py-2 text-sm text-gray-500 dark:text-gray-400 max-w-md font-mono text-right;
+}
+
+/** Numerical cell, with font mono and align to right, as it should be */
+.pgs-td-num-p {
+  @apply px-4 py-2 text-sm text-primary max-w-md font-mono text-right;
+}
+
+/** Font mono center, for small centered cells */
+.pgs-td-fmc {
+  @apply px-4 py-2 text-sm text-gray-500 dark:text-gray-400 max-w-md truncate font-mono text-center;
+}
+
+.pgs-tr-hov {
+  @apply hover:bg-blue-100 dark:hover:bg-slate-700;
+}
+
+.pgs-gradient-bg {
+  @apply bg-gradient-to-r from-sky-400 via-blue-500 to-violet-600;
+}
+
+.pgs-gradient-text {
+  @apply text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-500 to-violet-600;
+}
+
+.pgs-info-text {
+  color: rgb(0, 255, 88);
+}
+
+/** Some nice effect for links */
+.pgs-hyperlink {
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  font-weight: 700;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+.pgs-hyperlink:hover {
+  color: #0064ff;
+}
+
+.pgs-hyperlink::before,
+.pgs-hyperlink::after {
+   content: '';
+  position: absolute;
+  width: 100%;
+  left: 0;
+} 
+.pgs-hyperlink::before {
+  background-color: #0077b6;
+  height: 2px;
+  bottom: 0;
+  transform-origin: 100% 50%;
+  transform: scaleX(0);
+  transition: transform 0.3s cubic-bezier(0.76, 0, 0.24, 1); 
+}
+.pgs-hyperlink::after {
+  content: attr(data-replace);
+  height: 100%;
+  top: 0;
+  transform-origin: 100% 50%;
+  transform: translate3d(200%, 0, 0);
+  transition: transform 0.3s cubic-bezier(0.76, 0, 0.24, 1);
+  color: var(--color-primary); 
+}
+
+.pgs-hyperlink:hover::before {
+  transform-origin: 0% 50%;
+  transform: scaleX(1); 
+}
+
+.pgs-hyperlink:hover::after {
+  transform: translate3d(0, 0, 0); 
+}
+
+/* Dark mode, we need both settings */
+@media (prefers-color-scheme: dark) {
+  .pgs-hyperlink:hover {
+    color: #728bff;
+  }
+}
+
+/* Dark mode (when .dark is on <html> or <body>) */
+.dark .pgs-hyperlink:hover {
+  color: #728bff;
+}
+
+html {
+  cursor: default;
+  line-height: 1.5;
+}
+
+body {
+  background-color: /*#e7e5e4;*/ /*var(--color-stone-200);*/#eff2f6;
+  @apply /*bg-white*/ text-gray-700;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+
+  .container {
+    padding: 16px;
+  }
+}
+
+/**
+ * Here we set body background for darkmode
+ */
+@media (prefers-color-scheme: dark) {
+  body {
+    @apply bg-neutral-950 text-gray-200;
+  }
+}
+.dark body {
+  @apply bg-neutral-950 text-gray-200;
+}
+
+.search-bar {
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 48px;
+  background-color: var(--color-base-200);
+}
+
+.btn-dash:hover {
+  background-color: var(--color-base-100);
+}
+
+.pgs-input {
+  @apply w-full px-3 py-2 border-0 border-base-300 rounded-md 
+  outline outline-primary/10
+  focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent 
+  font-bold text-primary bg-base-100 input-ghost;
+  min-width: max-content;
+  min-height: 40px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .pgs-input {
+    border-color: var(--color-zinc-700);
+    background-color: var(--color-zinc-800) !important;
+    @apply focus:ring-sky-500;
+  }
+}
+
+.dark .pgs-input {
+  border-color: var(--color-zinc-700);
+  background-color: var(--color-zinc-900);
+}
+
+@media (prefers-color-scheme: dark) {
+  .pgs-input {
+    @apply focus:ring-sky-500;
+  }
+}
+.dark .pgs-input {
+  @apply focus:ring-sky-500;
+}
+
+.toggle {
+  transition: 200ms ease !important;
+  background-color: rgb(57, 57, 36);
+}
+
+.claude {
+  outline-color: #0ac581;
+}
+
+/*This is default light, only slightly blue, no border, just the standard behaviour...*/
+.pgs-tr{
+  @apply hover:bg-blue-100 outline-1 outline-transparent;
+}
+
+/*...but at night we like neon lines... */
+@media (prefers-color-scheme: dark) {
+  .pgs-tr{
+  @apply /*hover:outline-blue-500*/ hover:bg-blue-600/15;
+}
+}
+/* ... and here also to be sure that it works */
+.dark .pgs-tr{
+  @apply /*hover:outline-blue-500*/ hover:bg-blue-600/15;
+}
+
+/** Following 2 rules are used for selected rows in tables on darkmode, but it doesnt work if its put in component 
+  *  bc svelte adds some strings to css classes */
+@media (prefers-color-scheme: dark) {
+  .selected {
+    background-color: #1a4585d5 !important;
+  }
+}
+.dark .selected {
+    background-color: #1a4585d5 !important;
+}
+
+/**
+  * We use this class to apply to every feature's main div container, so everything is of the same size
+  */
+.feat-container{  
+  @apply relative w-full;
+}
+
+.badge{
+  border-radius: 5px;
+}
+
+/** Tooltip pozadina*/
+.tooltip::before{
+  background-color: #000 !important;
+}
+
+.card-new {
+  border: 2px solid 2px solid #6933ff;
+  animation: pulse 6s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(111, 0, 255, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 21px rgba(0, 4, 255, 0);
+  }
+}
+
+.tr-highlight{
+  @apply outline-1 outline-transparent hover:bg-blue-400/10
+}
+
+/* We gonna apply some additional styling ONLY for Dark mode */
+@media (prefers-color-scheme: dark) {
+  .tr-highlight {
+    @apply /*outline-1 outline-transparent hover:outline-blue-500*/ hover:bg-zinc-600/45
+  }
+}
+
+[data-theme='dark'] {
+  .tr-highlight {
+    @apply /*outline-1 outline-transparent hover:outline-blue-500*/ hover:bg-zinc-600/45
+  }
+}
+
+.gg{
+  background: linear-gradient(135deg, #a8edca, #00b894);
+    background: linear-gradient(135deg, #39ff14, #008000);
+}

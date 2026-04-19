@@ -1,0 +1,207 @@
+<script lang="ts">
+  import { onMount } from "svelte";
+  import PrimaryMenu from "./menu/PrimaryMenu.svelte";
+  import NotificationsInfo from "./NotificationsInfo.svelte";
+  import CartDetails from "../../features/cart/CartDetails.svelte";
+  import { fly } from "svelte/transition";
+
+  //TODO: ovo sad mora da se ucita sa servera, i da moze da se promeni i posalje na server
+  // i da se razlikuje admin da moze da vidi i promeni a musterija ne da promeni, samo da vidi
+  //i nevidi se dobro kad je false na mobilnom
+  export let shopOpen = false;
+
+
+  onMount(() => 
+  {
+    //IMPORTANT! Ovde postavljamo DAISYUI temu na dark ako je sistem dark, u suprotnom ce da bude pola-pola :/
+
+    // Funkcija koja menja temu na <html> elementu
+    const applyTheme = (isDark: boolean) => {
+        const theme = isDark ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.classList.toggle("dark", isDark);        
+    };
+
+    // 1. Proveri temu odmah pri učitavanju stranice
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    applyTheme(mediaQuery.matches);
+
+    // 2. Dodaj listener koji prati promenu u sistemu "uživo"
+    const handler = (e: MediaQueryListEvent) => applyTheme(e.matches);
+    
+    // Moderni browseri koriste addEventListener, stariji addListener
+    if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener("change", handler);
+    } else {
+        mediaQuery.addListener(handler);
+    }
+
+    // Cleanup: obriši listener kada se komponenta uništi (Svelte praksa)
+    return () => {
+        if (mediaQuery.removeEventListener) {
+            mediaQuery.removeEventListener("change", handler);
+        } else {
+            mediaQuery.removeListener(handler);
+        }
+    };
+  });
+
+
+  function resetNotificationsInfo() {
+    console.log("reseting..");    
+  }
+
+  let showModal = false;
+
+  function handleModal(){
+    showModal = !showModal
+  }
+
+  function openModal() {
+    showModal = true;
+  }
+
+  function closeModal() {
+    showModal = false;
+  }
+
+  function handleKeydown(event: { key: string }) {
+    if (event.key === "Escape") {
+      closeModal();
+    }
+  }
+</script>
+
+<div class="navbar shadow-sm fixed bg-[#0d0d0d]/84 bg-sky-300/84 dark:bg-slate-900/84 backdrop-blur-lg z-9000">
+  <div class="navbar-start">
+    <div class="pl-16 flex items-center gap-3">
+      <a href="#/home" class="flex items-center">
+        <img src="/white_barbacoa.png" alt="Barbacoa logo" title="Barbacoa" style="max-width:149px;">
+      </a>
+      <span class="font-bold">BACKOFFICE</span>
+    </div>
+  </div>
+  <div class="navbar-center"></div>
+<div class="navbar-end">
+  <div class="flex items-center gap-6">
+
+    {#if shopOpen}
+      <div class=" tooltip tooltip-info tooltip-bottom" data-tip="Dostava je aktivna">
+        <span class="text-primary/90 text-xs">🟢 </span>  
+      </div> 
+    {:else}
+      <span class="text-primary/90 text-xs">⚠️ Dostava trenutno nije aktivna!</span>  
+    {/if}
+    <!-- 🔴🔴 -->
+
+    <div class="dropdown dropdown-hover dropdown-bottom dropdown-left hidden">
+      <div tabindex="0" role="button" class="btn m-1">Kosarica</div>
+      <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+            <li> 
+              <div class="max-h-[90vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-100 bg-transparent">        
+                <!-- TODO: OVDE CEMO STAVITI CARTLITE -->
+                <CartDetails />
+              </div>
+            </li>
+          </ul>
+        </div>
+
+    <button
+      tabindex="0"
+      class="btn btn-ghost p-0 hover:bg-primary/10 text-gray-500 text-xl hidden"
+
+      data-tip="Cart"
+      aria-label="Cart"
+      on:click={handleModal}
+    >
+      <i class="fas fa-shopping-basket text-sm md:text-lg"></i>
+    </button>
+
+    <div class="dropdown mr-5">
+      <button
+        tabindex="0"
+        class="btn btn-ghost p-0 hover:bg-primary/10 text-gray-500 text-xl"
+        data-tip="Notifications"
+        aria-label="Notifications"
+        on:click={() => resetNotificationsInfo()}
+      >
+        <i id="notifications-icon" class="fas fa-bell text-sm md:text-lg"></i>
+        <span
+          id="notifications-indicator"
+          class="text-sm text-zinc-50 bg-error px-1 hidden"
+          style="position: relative;top: -0.5rem;left: -0.5rem;">12</span
+        >
+      </button>
+
+      <NotificationsInfo />
+    </div>
+
+  </div>
+</div>
+</div>
+
+<div
+  class="dropdown"
+  style="    
+            z-index: 9999;
+            position: fixed;
+            top: 0.8rem;
+            left: 8px;"
+>
+  <div
+    tabindex="0"
+    role="button"
+    class="btn btn-ghost btn-circle text-gray-500 hover:bg-primary/10"
+  >
+    <i class="fas fa-bars text-xl"></i>
+  </div>
+  <PrimaryMenu />
+</div>
+
+
+
+{#if showModal}
+  <div class="modal modal-open pt-10" style="backdrop-filter: blur(10px);">
+    <div
+      class="modal-box max-h-[90vh] w-11/12 max-w-5xl p-0 flex flex-col bg-base-100 bg-transparent"
+      transition:fly={{ y: 50, duration: 300 }}
+    >
+      <!-- Fixed Header -->
+      <div
+        class="sticky top-0 z-10 px-6 py-4 border-b border-base-300"
+      >
+        <!-- <h3 class="font-bold text-lg">Košarica</h3> -->
+      </div>
+
+      <!-- Scrollable Content -->
+      <div class="overflow-y-auto flex-1 px-3 py-2">
+        <CartDetails />
+      </div>
+
+      <!-- Fixed Footer -->
+      <div
+        class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300 hidden"
+      >
+        <div class="flex justify-end gap-2">
+          <button class="btn btn-secondary" on:click={closeModal}
+            >Zatvori</button
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Glass Backdrop -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <div class="modal-backdrop" on:click={closeModal}></div>
+  </div>
+
+  
+{/if}
+
+<style>
+  .navbar {
+    height: 4rem;
+    min-height: 3rem;
+  }
+</style>
