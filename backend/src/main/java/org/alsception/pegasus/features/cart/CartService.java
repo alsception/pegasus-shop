@@ -413,13 +413,15 @@ public class CartService
         order.setItems(orderItems);
         
         // 6. ... dont forget the price        
+        order.setCurrency("EUR");
         calculatePrice(order);
         if (order.getPrice().compareTo(BigDecimal.ZERO) <= 0) 
         {
             //Nikad se nezna
             throw new RuntimeException("Illegal price: "+order.getPrice());
         }
-        order.setCurrency("EUR");
+
+        processDiscountAction(order);        
 
         order.setPaymentMethod(""+prc.getPaymentMethod());
         
@@ -459,6 +461,43 @@ public class CartService
             }).reduce(BigDecimal.ZERO, BigDecimal::add);
 
         order.setPrice(total);
+    }
+
+    /**Ako imamo neku aktivnu akciju, naprimer kod sa popustom, to cemo obraditi ovde */
+    void processDiscountAction(PGSOrder order)
+    {
+        String comment = order.getComment();
+        if(comment != null && !comment.isEmpty())
+        {
+            if(comment.equals("BARBACOA_LESKOVAC_2026"))
+            {
+                logger.info("*** DICOUNT CODE FOUND, APPLYING DISCOUNT ***");
+
+                BigDecimal startingPrice = order.getPrice();
+                order.setBasePrice(startingPrice);//originalna cena
+
+                BigDecimal popustPosto = new BigDecimal("20");
+
+                // 1. Izračun faktora popusta (20 / 100 = 0.20)
+                BigDecimal faktor = popustPosto.divide(new BigDecimal("100"));
+
+                // 2. Izračun iznosa popusta (150.00 * 0.20 = 30.00)
+                BigDecimal iznosPopusta = startingPrice.multiply(faktor);
+
+                // 3. Konačna cijena (150.00 - 30.00 = 120.00)
+                BigDecimal konacnaCijena = startingPrice.subtract(iznosPopusta);
+
+                System.out.println("Iznos popusta: " + iznosPopusta);
+                System.out.println("Konačna cijena: " + konacnaCijena);
+
+                order.setPrice(konacnaCijena);
+                order.setDiscount(iznosPopusta);
+                order.setDiscountPercent(popustPosto);
+
+                logger.info("Order "+order.getCode()+" applied "+popustPosto.toString()+"% discount");
+                //TODO: mora i u db log da ide ovo
+            }
+        }
     }
 
     

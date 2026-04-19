@@ -50,12 +50,12 @@ i LITE APP!!, I MOZDA i WS.....
   let error: string | null = null;
   let searchTerm = "";
   let totalAmount = 0;
-  let isBlockView = true;
+  let isBlockView = false;
   let intervalId: string | number | NodeJS.Timeout | undefined;
   let mojParametar = null;
   const REFRESH_INTERVAL = 5000; // 5 sekundi
   const autoRefresh = true;
-  export let liteView = false;
+  export let liteView = true;
 
   let isCheckedWait = false;
   let isCheckedInPrep = true;
@@ -392,7 +392,7 @@ i LITE APP!!, I MOZDA i WS.....
   {/if}
 
   <!-- Show each item in the order card (Block view) -->
-  {#if isBlockView}
+  {#if false}
     <!-- name of each tab group should be unique -->
     <div class="tabs tabs-box rounded-lg">     
 
@@ -460,13 +460,13 @@ i LITE APP!!, I MOZDA i WS.....
           <thead class="bg-base-300">
             <tr class="h-12">
               <th class="pgs-th">Broj</th>
-              <th class="pgs-th">Korisnik</th>
-              <th class="pgs-th">Stol</th>
+              <th class="pgs-th">Dostava<br>/ za van</th>
               <th class="pgs-th">Status</th>
               <th class="pgs-th"></th>
               <th class="pgs-th">Primljeno</th>
               <th class="pgs-th">U pripremi</th>
               <th class="pgs-th">Spremno</th>
+              <th class="pgs-th">Dostavljeno</th>
               <th class="pgs-th-r">Ukupno<br>stavki</th>
               <th class="pgs-th-r">Iznos</th>
               <th class="pgs-th-l">Način<br>plaćanja</th>
@@ -486,8 +486,24 @@ i LITE APP!!, I MOZDA i WS.....
                     >{formatCode(order.code)}</a
                   >
                 </td>                
-                <td class="pgs-td font-mono font-bold">{order.user?.username}</td>
-                <td class="pgs-td-num font-mono">{order.stol}</td>
+                <td class="pgs-td font-mono p-2">
+                  <div class="flex items-center justify-center gap-1 text-sm text-primary/60 w-full">
+                    
+                    {#if order.code.endsWith('T')}
+                      <div class="tooltip tooltip-info tooltip-top flex items-center" data-tip="Za van">
+                        <span class="badge badge-soft badge-success flex items-center justify-center">
+                          <i class="fas fa-walking"></i>
+                        </span>
+                      </div>
+                    {:else}
+                      <div class="tooltip tooltip-info tooltip-top flex items-center" data-tip="Dostava">
+                        <span class="badge badge-soft badge-info flex items-center justify-center">
+                          <i class="fas fa-car"></i>
+                        </span>
+                      </div>  
+                    {/if}
+                  </div>
+                </td>
                 <td class="text-center">
                   {#if order.status}
                     <span
@@ -496,7 +512,7 @@ i LITE APP!!, I MOZDA i WS.....
                       )} font-mono badge-sm whitespace-nowrap"
                       style="text-transform: uppercase;"
                     >
-                      { getOrderStatusLabel(order.status) }
+                      {@html getOrderStatusLabel(order.status) }
                     </span>
                   {/if}
                 </td>
@@ -513,21 +529,26 @@ i LITE APP!!, I MOZDA i WS.....
                 <td class="pgs-td font-mono">
                   {@html formatTime2(order.spremnoAt)}
                 </td>
+                <td class="pgs-td font-mono">
+                  {@html formatTime2(order.servedAt)}
+                </td>
                 <td class="pgs-td-num font-mono">{order.items.length}</td>
                 <td class="pgs-td-num font-mono font-bold text-right"
                   >{formatPrice(order.price)}</td
                 >
                 <td class="pgs-td font-mono text-center">
                   {#if order.paymentMethod == '1'}
-                    <span
-                      class="badge badge-soft badge-success font-mono badge-sm whitespace-nowrap"
-                      style="text-transform: uppercase;"
-                    >GOTOVINA</span>
+                    <div class="tooltip tooltip-info tooltip-top inline-flex" data-tip="Gotovina">
+                      <span class="badge badge-soft badge-warning flex items-center justify-center">
+                        <i class="fas fa-coins"></i>
+                      </span>
+                    </div>
                   {:else if order.paymentMethod == '2'}
-                    <span
-                      class="badge badge-soft badge-info font-mono badge-sm whitespace-nowrap"
-                      style="text-transform: uppercase;"
-                    >KARTICA</span>
+                    <div class="tooltip tooltip-info tooltip-top inline-flex" data-tip="Kartica">
+                      <span class="badge badge-soft badge-accent flex items-center justify-center">
+                        <i class="fas fa-credit-card"></i>
+                      </span>
+                    </div>
                   {:else}
                     <span
                       class="badge badge-soft badge-secondary font-mono badge-sm whitespace-nowrap"

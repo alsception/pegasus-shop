@@ -116,7 +116,8 @@ public class SecurityConfig {
                     "https://6bccb69e3fd5.ngrok-free.app",          //ngrok2
                     "https://pegasus-uvnn.onrender.com",            //Render public
                     "http://192.168.178.66",                        //Barbacoa network
-                    "http://192.168.178.66:5173"                    ////Barbacoa network
+                    "http://192.168.178.66:5173",                   //Barbacoa network
+                    "http://localhost:5174"                         //Local dev backoffice
             );
             
             configuration.setAllowedOrigins(allowedServers);

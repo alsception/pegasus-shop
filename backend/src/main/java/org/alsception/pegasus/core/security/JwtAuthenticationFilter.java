@@ -121,6 +121,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             (
                 request.getRequestURI().equals("/")             || 
                 request.getRequestURI().startsWith("/assets/")    ||
+                request.getRequestURI().startsWith("/backoffice/assets/")    ||
                 request.getRequestURI().startsWith("/lottie/")    ||
                 request.getRequestURI().startsWith("/sound/")     ||
                 request.getRequestURI().endsWith(".js")           ||

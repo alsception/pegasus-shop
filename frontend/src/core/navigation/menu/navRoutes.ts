@@ -6,6 +6,7 @@ import type { NavRoutesMap } from "./MenuTypes";
 
 export const navRoutes: NavRoutesMap = 
 {
+    // home mora da stoji ovde ali ga necemo prikazati u meniju
     "/home": {
       label: "Početak",
       icon: "home",
@@ -14,25 +15,7 @@ export const navRoutes: NavRoutesMap =
       admin: true,
       customer: false,
       default: false,
-    },
-    "/stats": {
-      label: "Statistike",
-      icon: "bar-chart",
-      href: "#/stats",
-      component: "/stats",
-      admin: true,
-      customer: false,
-      default: false,
-    },
-    "/users": {
-      label: "Korisnici",
-      icon: "users",
-      href: "#/users",
-      component: "/users",
-      componentDetails: "/users/:id",
-      admin: true,
-      customer: false,
-    },
+    },     
     "/products": {
       label: "Jelovnik",
       icon: "book",
@@ -42,25 +25,8 @@ export const navRoutes: NavRoutesMap =
       admin: true,
       customer: true,
       default: true,
-    },
-    "/inventory": {
-      label: "Upravljanje proizvodima",
-      icon: "box",
-      href: "#/inventory",
-      component: "/inventory",
-      componentDetails: "/inventory/:id",
-      admin: true,
-      customer: false,
-    },
-    "/orders": {
-      label: "Narudžbe",
-      icon: "truck",
-      href: "#/orders",
-      component: null,
-      disabled: false,
-      admin: true,
-      customer: false,
-    },
+    },   
+   
     "/cart": {
       label: "Košarica",
       icon: "shopping-basket",
@@ -69,24 +35,6 @@ export const navRoutes: NavRoutesMap =
       disabled: false,
       admin: true,
       customer: true,
-    },
-    "/tables": {
-      label: "Stolovi",
-      icon: "table",
-      href: "#/tables",
-      component: null,
-      disabled: true,
-      admin: false,
-      customer: false,
-    },
-    "/reservations": {
-      label: "Rezervacije",
-      icon: "calendar",
-      href: "#/reservations",
-      component: null,
-      disabled: true,
-      admin: false,
-      customer: false,
     },
     "/checkout": {
       label: "Checkout",
@@ -98,25 +46,15 @@ export const navRoutes: NavRoutesMap =
       admin: true,
       customer: true,
     },   
-    "/statistics": {
-      label: "Statistics",
-      icon: "bar-chart",
-      href: "#/statistics",
-      component: null,
-      disabled: true,
-      admin: false,
-      customer: false,
-    }, 
-    "/pix": {
-      label: "Galerija",
-      icon: "image",
-      href: "#/pix",
+    "/orders": {
+      label: "Narudžbe",
+      icon: "truck",
+      href: "#/orders",
       component: null,
       disabled: false,
-      hidden: true,
-      admin: false,
-      customer: false,
-    },  
+      admin: true,
+      customer: true,
+    },
     "/logout": {
       label: "Odjavi se ",
       icon: "right-from-bracket",

@@ -16,6 +16,7 @@ export interface Order {
   paymentStatus: string;
   currency: string;
   price?: number; // BigDecimal maps to number in TS, nullable so optional
+  basePrice?: number; // BigDecimal maps to number in TS, nullable so optional
   items: OrderItem[];
   created?: string  | null; // LocalDateTime as ISO string
   modified?: string | null; // LocalDateTime as ISO string, nullable so optional
@@ -25,6 +26,7 @@ export interface Order {
   status?: string;
   taxPercent?: number | string;
   discount?: number | string;
+  discountPercent?: number | string;
 }
 
 export interface OrderItem {
@@ -32,7 +34,7 @@ export interface OrderItem {
   // order?: PGSOrder; // Not included due to @JsonBackReference
   // Add other PGSOrderItem properties here
   quantity: number;
-  price?: number;
+  price: number;
   productName?: string;
   product: Product;
   productId: number;

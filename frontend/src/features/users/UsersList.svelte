@@ -13,7 +13,6 @@
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import NewUserModal from "./NewUserModal.svelte";
   import { showErrorModalWithTitle } from "../../utils/modal";
-  import { fly } from "svelte/transition";
 
   let isAuthenticated = false;
   let loading: boolean = false;

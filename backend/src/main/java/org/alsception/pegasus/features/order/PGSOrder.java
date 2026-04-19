@@ -48,6 +48,15 @@ public class PGSOrder
     
     @Column(precision = 19, scale = 2, nullable = true)
     private BigDecimal price; 
+
+    @Column(precision = 19, scale = 2, nullable = true)
+    private BigDecimal basePrice; 
+
+    @Column(precision = 19, scale = 2, nullable = true)
+    private BigDecimal discount; 
+
+    @Column(precision = 19, scale = 2, nullable = true)
+    private BigDecimal discountPercent; 
     
     @JsonManagedReference
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -113,6 +122,9 @@ public class PGSOrder
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
                 ", price=" + price +
+                ", basePrice=" + basePrice +
+                ", discount=" + discount +
+                ", discountPercent=" + discountPercent +
                 ", itemsCount=" + (items != null ? items.size() : 0) +
                 ", table=" + (table != null ? table.getId() : "null") +
                 ", created=" + created +

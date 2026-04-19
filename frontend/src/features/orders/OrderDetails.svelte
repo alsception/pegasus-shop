@@ -35,6 +35,8 @@
     paymentMethod: "",
     taxPercent: 0,
     discount: 0,
+    price: 0,
+    discountPercent: 0,
     currency: "",
     comment: "",
     created: null,
@@ -329,6 +331,156 @@ function drawRoute(endLat: number, endLon: number) {
         </div>
       </div>
 
+      
+
+      <!-- Order Items Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-4">
+        <div class="lg:col-span-2">
+          <div class="space-y-4">
+            {#if formData.items && formData.items.length > 0}
+              <div class="divide-y divide-primary/10">
+                {#each formData.items as item, index (item.id || index)}
+                  <div
+                    class="py-1 grid grid-cols-1 sm:grid-cols-3 gap-0 items-center"
+                  >
+                    <div class="sm:col-span-2 flex flex-col gap-0.5">
+                      <div class="flex items-center gap-1">
+                        <p
+                          class="text-sm sm:text-base font-medium text-primary/80 px-1"
+                        >
+                          {item.quantity} x {item.product.name}
+                          {#if item.quantity > 1}
+                            <span class="text-sm text-primary/60"> ({formatPrice(item.price)}) </span>
+                          {/if}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="text-right pt-0 sm:pt-0 relative mt-[0.14rem]">
+                      <span
+                        class="text-sm sm:text-base text-primary/80 font-mono"
+                      >
+                        {formatPrice(item.quantity * item.price)}
+                      </span>
+                    </div>
+                  </div>
+                {/each}
+
+                {#if formData.basePrice && (formData.discount || formData.discountPercent)}
+                  <div style="display: flex; align-items: baseline; justify-content: flex-end;" class="p-0 mr-0 gap-2">
+                    <span class="text-2xl font-light text-primary">
+                      Početna cijena:
+                    </span>
+                    <span class="text-2xl font-bold text-primary font-mono w-32 text-right">
+                      {formatPrice(formData.basePrice)}
+                    </span>
+                  </div>
+
+                  <div style="display: flex; align-items: baseline; justify-content: flex-end;" class="p-0 mr-0 gap-2">
+                    <span class="text-2xl font-light text-primary">
+                      Popust:
+                    </span>
+                    <span class="text-2xl font-bold text-success font-mono w-32 text-right">
+                      -{formData.discountPercent}%
+                    </span>
+                  </div>
+                {/if}
+
+                <div style="display: flex; align-items: baseline; justify-content: flex-end;" class="p-0 mr-0 gap-2">
+                  <span class="text-2xl font-light text-primary">
+                    Ukupno:
+                  </span>
+                  <span class="text-2xl font-bold text-primary font-mono w-32 text-right">
+                    {formatPrice(formData.price)}
+                  </span>
+                </div>
+              </div>
+            {:else}
+              <div class="text-center py-8 text-gray-500">
+                <i class="fas fa-box-open text-4xl mb-4"></i>
+                <p>No items in this order</p>
+              </div>
+            {/if}
+          </div>
+        </div>
+      </div>
+
+      {#if (formData.comment)}
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-1 mb-1">
+        <div class="lg:col-span-2">
+          <div class="w-full">
+            <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">
+              <i class="fas fa-comment text-primary/60">&nbsp;</i>
+              Napomena
+            </label>
+            <textarea
+              id="notes"
+              class="pgs-input resize-vertical rounded-md"
+              style="background-color: var(--color-base-200);"
+              bind:value={formData.comment}
+              rows="{formData.comment ? 4 : 2}"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+      {/if}
+
+      <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-4">
+        <div>
+          <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+            <i class="fas fa-phone text-primary/60">&nbsp;</i>Telefon
+          </label>
+          <input
+            id="phone"
+            type="tel"
+            class="pgs-input rounded-md w-full"
+            style="background-color: var(--color-base-200);"
+            bind:value={formData.phone}
+          />
+        </div>
+
+        {#if formData.address}
+        <div>
+          <label for="address" class="block text-sm font-medium text-gray-700 mb-2">
+            <i class="fas fa-home text-primary/60">&nbsp;</i>Adresa
+          </label>
+          <textarea
+            id="address"
+            class="pgs-input resize-vertical rounded-md w-full"
+            style="background-color: var(--color-base-200);"
+            bind:value={formData.address}
+            rows="{formData.address ? 3 : 2}"
+          ></textarea>
+        </div>        
+        {/if}
+      </div>
+      
+    {#if formData.address}  
+    <button 
+      type="button"      
+      on:click={() => searchAddressAndDrawRoute(formData.address)}
+      class="btn btn-ghost btn-md m-0.5"
+    >
+      <i class="fas fa-location-arrow text-primary/60">&nbsp;</i>Nađi put
+    </button>
+    <div bind:this={mapContainer} class="w-full h-164 rounded-md shadow-inner"></div>
+    {/if}
+
+      <div class="grid grid-cols-1 hidden">
+        <div class="flex justify-end gap-3 pt-4">
+          <button
+            type="button"
+            on:click={cancelEditing}
+            class="btn btn-outline btn-lg m-3"
+          >
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary btn-lg m-3">
+            Save
+          </button>
+        </div>
+      </div>
+
       <div class="w-full p-0 m-0 pb-4 mb-4 border-b-2 border-secondary/10">
         <div class="rounded-lg p-">
           <ul
@@ -381,130 +533,6 @@ function drawRoute(endLat: number, endLon: number) {
               </span>
             </li>
           </ul>
-        </div>
-      </div>
-
-      <!-- Order Items Section -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-4">
-        <div class="lg:col-span-2">
-          <div class="space-y-4">
-            {#if formData.items && formData.items.length > 0}
-              <div class="divide-y divide-primary/10">
-                {#each formData.items as item, index (item.id || index)}
-                  <div
-                    class="py-1 grid grid-cols-1 sm:grid-cols-3 gap-0 items-center"
-                  >
-                    <div class="sm:col-span-2 flex flex-col gap-0.5">
-                      <div class="flex items-center gap-1">
-                        <p
-                          class="text-sm sm:text-base font-medium text-primary/80 px-1"
-                        >
-                          {item.quantity} x {item.product.name}
-                          {#if item.quantity > 1}
-                            <span class="text-xs text-primary/40"> ({formatPrice(item.product.basePrice)}) </span>
-                          {/if}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="text-right pt-0 sm:pt-0 relative mt-[0.14rem]">
-                      <span
-                        class="text-sm sm:text-base text-primary/80 font-mono"
-                      >
-                        {formatPrice(item.quantity * item.product.basePrice)}
-                      </span>
-                    </div>
-                  </div>
-                {/each}
-                <div
-                  style="align-items: end;display:grid;align-content: end; text-align: right; "
-                  class="p-0 mr-0"
-                >
-                  <span
-                    class="text-2xl font-bold text-primary p0 pt-2 font-mono"
-                    >{formatPrice(formData.price)}</span
-                  >
-                </div>
-              </div>
-            {:else}
-              <div class="text-center py-8 text-gray-500">
-                <i class="fas fa-box-open text-4xl mb-4"></i>
-                <p>No items in this order</p>
-              </div>
-            {/if}
-          </div>
-        </div>
-      </div>
-
-      {#if (formData.comment)}
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-1 mb-1">
-        <div class="lg:col-span-2">
-          <div class="w-full">
-            <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">
-              <i class="fas fa-comment text-primary/60">&nbsp;</i>
-              Napomena
-            </label>
-            <textarea
-              id="notes"
-              class="pgs-input resize-vertical rounded-md"
-              style="background-color: var(--color-base-200);"
-              bind:value={formData.comment}
-              rows="{formData.comment ? 4 : 2}"
-            ></textarea>
-          </div>
-        </div>
-      </div>
-      {/if}
-
-      <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-4">
-        <div>
-          <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
-            <i class="fas fa-phone text-primary/60">&nbsp;</i>Telefon
-          </label>
-          <input
-            id="phone"
-            type="tel"
-            class="pgs-input rounded-md w-full"
-            style="background-color: var(--color-base-200);"
-            bind:value={formData.phone}
-          />
-        </div>
-        <div>
-          <label for="address" class="block text-sm font-medium text-gray-700 mb-2">
-            <i class="fas fa-home text-primary/60">&nbsp;</i>Adresa
-          </label>
-          <textarea
-            id="address"
-            class="pgs-input resize-vertical rounded-md w-full"
-            style="background-color: var(--color-base-200);"
-            bind:value={formData.address}
-            rows="{formData.address ? 3 : 2}"
-          ></textarea>
-        </div>        
-      </div>
-      
-    <button 
-      type="button"      
-      on:click={() => searchAddressAndDrawRoute(formData.address)}
-      class="btn btn-ghost btn-md m-0.5"
-    >
-      <i class="fas fa-location-arrow text-primary/60">&nbsp;</i>Nađi put
-    </button>
-    
-      <div bind:this={mapContainer} class="w-full h-164 rounded-md shadow-inner"></div>
-
-      <div class="grid grid-cols-1 hidden">
-        <div class="flex justify-end gap-3 pt-4">
-          <button
-            type="button"
-            on:click={cancelEditing}
-            class="btn btn-outline btn-lg m-3"
-          >
-            Close
-          </button>
-          <button type="submit" class="btn btn-primary btn-lg m-3">
-            Save
-          </button>
         </div>
       </div>
     </form>

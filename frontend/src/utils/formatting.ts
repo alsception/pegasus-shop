@@ -200,7 +200,7 @@ export function getOrderStatusLabel(status: string ): string
     switch (status?.toUpperCase()) 
     {
       case "READY":      
-        return "SPREMNO";
+        return "<i class='fas fa-check'>SPREMNO";
 
       case "DELIVERED":
       case "SERVED":
@@ -208,16 +208,16 @@ export function getOrderStatusLabel(status: string ): string
 
       case "CANCELLED":
       case "REFUNDED":
-        return "warning";
+        return "OTKAZANO";
 
       case "RETURNED":
-        return "error";
+        return "VRAĆENO";
 
       case "IN_PREPARATION":
-        return "U PRIPREMI";
+        return "<i class='fas fa-fire'>U PRIPREMI";
 
       case "WAITING":
-        return "NA ČEKANJU";
+        return "<i class='fas fa-hourglass'></i>NA ČEKANJU";
         
       default:
         return status;

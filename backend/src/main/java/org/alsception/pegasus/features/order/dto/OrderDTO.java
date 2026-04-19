@@ -28,6 +28,9 @@ public class OrderDTO {
     private String status;
     private String comment;
     private BigDecimal price;
+    private BigDecimal basePrice;
+    private BigDecimal discount;
+    private BigDecimal discountPercent;
     private List<OrderItemDTO> items;
     private LocalDateTime created;
     private LocalDateTime modified;

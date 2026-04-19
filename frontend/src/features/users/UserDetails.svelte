@@ -191,7 +191,7 @@
   function cancelEditing(
     event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }
   ) {
-    window.location.href = "#/users"; // Back to users
+    window.location.href = "#/home"; // Back to home
   }
 
   const inputSkeletons =

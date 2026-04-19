@@ -220,7 +220,7 @@
   /* product modal */
   let showModal = false;
 
-  function openModal() {
+  function openModal() {   
     showModal = true;
   }
 
@@ -230,6 +230,7 @@
 
   function handleProductClick(id: number | undefined) 
   {
+    console.log('clicked');
     if (id != undefined) productId = id;
     openModal();
   }
@@ -251,10 +252,12 @@
       lg:rounded-lg border-1 border-primary/20 backdrop-blur-lg lg:pb-[5px]
               max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:p-[10px] max-lg:pb-0 fixed top-[-16.5] lg:-top-16.5 left-0.5 [width:-webkit-fill-available] 
               lg:static lg:w-auto md:min-w-[680px] justify-self-center"
+              class:hidden={showModal}
     >
       <form
         on:submit|preventDefault={handleFormSubmit}
         class="flex flex-col gap-1"
+        
         id="brb-prod-l-f"
       >
         <div class="flex gap-1 mb-4">
@@ -283,7 +286,7 @@
             on:click={toggleView}
             class="btn btn-dash whitespace-nowrap"
           >
-            {#if isListView}
+            {#if isListView && isLiteListView}
               <i class="fas fa-image"></i>
             {:else}
               <i class="fas fa-list"></i>
@@ -301,12 +304,12 @@
   {/if}
 
   {#if isListView}
-    <div id="products-list-container" class="w-full max-w-[382px] mx-auto p-0 mb-22">
+    <div id="products-list-container" class="w-full max-w-[382px] md:max-w-[500px] lg:max-w-[600px] mx-auto p-0 mb-22">
       <div class="w-full overflow-x-auto">
         <table class="table w-full min-w-[382px]">
           <tbody>
             {#each filteredProducts as product, i}
-              <tr class="bg-base-200 outline-1 outline-transparent hover:bg-base-300/70 border-b border-b-base-300">
+              <tr class="bg-base-200 outline-1 outline-primary/7 hover:bg-info/5">
                 <td class="pgs-td whitespace-nowrap p-0">
                   <div class="">
                     <h3 class="font-semibold text-lg max-w-[382px;] truncate text-primary" title={product.name}>
@@ -367,7 +370,7 @@
 {/if}
 
 {#snippet btnNext()}
-  <div class="fixed bottom-6 right-4 md:right-15 lg:right-10 z-[9000]">
+  <div class="fixed bottom-6 right-4 md:right-15 lg:right-10 z-[9000]" class:hidden={showModal}>
     <a 
       class="btn btn-lg bg-yellow-300/60 dark:bg-yellow-300/80 hover:bg-yellow-300 backdrop-blur-lg text-black border-2 border-primary shadow-2xl ring-4 ring-white/10 pulsing" 
       use:link 
@@ -402,9 +405,8 @@
 </style> 
 
 {/snippet}
-
 {#if showModal}
-  <div class="modal pt-0" style="backdrop-filter: blur(10px);">
+  <div class="modal pt-0 {showModal ? 'modal-open' : ''}" style="backdrop-filter: blur(10px); pointer-events: auto;">
     <div
       class="modal-box max-h-[90vh] w-full sm:w-8/12 max-w-5xl p-0 flex flex-col bg-base-200"
       transition:fly={{ y: 50, duration: 300 }}

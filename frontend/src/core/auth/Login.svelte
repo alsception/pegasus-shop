@@ -149,7 +149,7 @@
 
       <label
         for="username"
-        class="block text-md font-semibold mb-2 text-zinc-700 dark:text-zinc-300"
+        class="block text-md font-semibold mb-2 text-primary"
       >
         <i class="fas fa-user text-sm mx-2"></i>Username
       </label>
@@ -164,7 +164,7 @@
 
       <label
         for="password"
-        class="block text-md font-semibold mb-2 text-zinc-700 dark:text-zinc-300"
+        class="block text-md font-semibold mb-2 text-primary"
       >
         <i class="fas fa-lock text-sm mx-2"></i>Password
       </label>
@@ -195,8 +195,8 @@
       {/if}
 
       <div class="mt-8">
-        <label for="register" class="label">Nemate nalog?</label>
-        <a href="#/register" class="pgs-hyperlink hover:bg-primary-content/40">&nbsp; Registrirajte se &nbsp;</a>
+        <label for="register" class="label text-primary/70">Nemate nalog?</label>
+        <a href="#/register" class="hover:text-blue-800 dark:hover:text-sky-500 text-primary/90 font-bold">&nbsp; Registrirajte se &nbsp;</a>
       </div>
     </form>
   </div>

@@ -36,6 +36,9 @@ public final class OrderMapper {
         dto.setStatus(order.getStatus());
         dto.setComment(order.getComment());
         dto.setPrice(order.getPrice());
+        dto.setBasePrice(order.getBasePrice());
+        dto.setDiscount(order.getDiscount());
+        dto.setDiscountPercent(order.getDiscountPercent());
         dto.setCreated(order.getCreated());
         dto.setModified(order.getModified());
         dto.setUPripremiAt(order.getUPripremiAt());
@@ -112,6 +115,9 @@ public final class OrderMapper {
         order.setStatus(dto.getStatus());
         order.setComment(dto.getComment());
         order.setPrice(dto.getPrice());
+        order.setBasePrice(dto.getBasePrice());
+        order.setDiscount(dto.getDiscount());
+        order.setDiscountPercent(dto.getDiscountPercent());
         order.setUser(dto.getUser());
         order.setUPripremiAt(dto.getUPripremiAt());
         order.setSpremnoAt(dto.getSpremnoAt());

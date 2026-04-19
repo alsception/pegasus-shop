@@ -234,7 +234,7 @@
       </div>
       {/if}
       {#if order.status === 'WAITING' || order.status === 'IN_PREPARATION'}
-        {#if order.code.endsWith('Z')}
+        {#if order.code.endsWith('T')}
           <span class="badge badge-soft badge-success">
             <i class="fas fa-walking"></i>ZA VAN</span>
         {:else}
@@ -278,7 +278,7 @@
         <span><strong>{ formatPriceRaw(order.price)}</strong></span>
       </div>
       <div class="items-center gap-1 text-sm text-primary/60 mr-2 hidden md:flex">
-        {#if order.code.endsWith('Z')}
+        {#if order.code.endsWith('T')}
           <z class=" tooltip tooltip-info tooltip-top" data-tip="Za van">
             <span class="badge badge-soft badge-success">
               <i class="fas fa-walking"></i></span>
