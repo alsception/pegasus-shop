@@ -6,8 +6,6 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
 
-  //base: '/backoffice/', //poseban routing za backoffice
-
   plugins: [
     svelte(),
     tailwindcss(),

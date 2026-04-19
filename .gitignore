@@ -49,11 +49,11 @@ frontend/.env.*  # catches .env.local, .env.production, etc.
 frontend/nbproject/private/
 
 # === Frontend kik svelte ===
-frontend-kik/node_modules/
-frontend-kik/dist/
-frontend-kik/.env
-frontend-kik/.env.*  # catches .env.local, .env.production, etc.
-frontend-kik/nbproject/private/
+frontend_backoffice/node_modules/
+frontend_backoffice/dist/
+frontend_backoffice/.env
+frontend_backoffice/.env.*  # catches .env.local, .env.production, etc.
+frontend_backoffice/nbproject/private/
 
 # === Editor backup files ===
 *~
