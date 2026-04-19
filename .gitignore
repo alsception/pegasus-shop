@@ -41,19 +41,19 @@ nbdist/
 backend/src/main/resources/application-local.properties
 backend/src/main/resources/application-dev.properties
 
-# === Frontend svelte ===
+# === Frontend store front svelte ===
 frontend/node_modules/
 frontend/dist/
 frontend/.env
 frontend/.env.*  # catches .env.local, .env.production, etc.
 frontend/nbproject/private/
 
-# === Frontend kik svelte ===
+# === Frontend backoffice svelte ===
 frontend_backoffice/node_modules/
 frontend_backoffice/dist/
 frontend_backoffice/.env
 frontend_backoffice/.env.*  # catches .env.local, .env.production, etc.
-frontend_backoffice/nbproject/private/
+frontend_backoffice/nbproject/*
 
 # === Editor backup files ===
 *~
