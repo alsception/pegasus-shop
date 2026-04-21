@@ -12,6 +12,7 @@
   import { generateRoutes } from "./core/navigation/routing/routes";
   import { SvelteToast } from "@zerodevx/svelte-toast";
   import InfoModal from "./core/utils/ErrorModal.svelte";
+  import ProductsListBarbacoa from "./features/products/ProductsListBarbacoa.svelte";
 
   document.title = 'Pegasus'
 

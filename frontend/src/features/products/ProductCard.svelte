@@ -4,8 +4,9 @@
   import { link } from "svelte-spa-router";
   import ProductPage from "./ProductPage.svelte";
   import { fly } from "svelte/transition";
+  import type { Product } from "./Product";
 
-  export let product;
+  export let product: Product;
 
   let productId = product.id; //Product koji cemo prikazati na modalu kada se klikne
 
@@ -24,12 +25,19 @@
   {    
     openModal();
   }
+
+  if(product.name == 'Kulen') product.isNew = true;//TODO: ovo skloniti za deploy/live i dodati polje u entitet
 </script>
+
+
 
 <div 
   class="bg-white dark:hover:border-primary/40
   overflow-hidden w-full  hover:shadow-lg transition-shadow /*hover:outline-1 hover:outline-primary/30*/ z-2
-  flex flex-col h-ful rounded-3xl" class:pgs-discount={product.discount>0} >
+  flex flex-col h-ful rounded-3xl" 
+  class:pgs-discount={product.discount>0} 
+  class:pgs-new={product.isNew} 
+  >
   <div class="w-full h-48 flex items-center justify-center overflow-hidden">
     {#if product.imageUrl}
       <img
@@ -52,7 +60,10 @@
       <!-- svelte-ignore a11y_no_static_element_interactions -->
       <span on:click={() => handleProductClick(product.id)} class="pgs-hyperlink">{product.name}</span>
       {#if product.discount }
-        <span class="badge badge-accent text-2xl">AKCIJA</span>
+        <span class="badge badge-accent text-3xl p-4 rotate-12">AKCIJA</span>
+      {/if}
+      {#if product.isNew }
+        <span class="badge badge-info text-2xl p-4 /*rotate-348*/">NOVO</span>
       {/if}
     </h3>
     
@@ -139,6 +150,13 @@
 }
 
 .pgs-discount{
-  outline: 2px solid var(--color-accent);
+  outline: 4px solid var(--color-accent);
+  background-color: oklch(50.131% 0.28782 284.203 / 0.11);
+
+}
+
+.pgs-new{
+  outline: 4px solid var(--color-info);
+  background-color: oklch(0.54 0.25 262.88 / 0.11);
 }
 </style>

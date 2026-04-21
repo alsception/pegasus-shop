@@ -251,7 +251,7 @@
   <ErrorDiv {error} />
 {:else}
   <div class="w-full flex justify-center">
-    <div class="w-full  p-4 bg-base-200 rounded-lg">
+    <div class="w-full max-w-[1568px] p-4 bg-base-200 rounded-lg">
       <form
         on:submit|preventDefault={handleFormSubmit}
         class="flex flex-col lg:flex-row items-center gap-3"

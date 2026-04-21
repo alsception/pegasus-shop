@@ -89,7 +89,10 @@
         <span class="text-white/90 text-xs">🟢 </span>  
       </div> 
     {:else}
-      <span class="text-white/90 text-xs">⚠️ Dostava trenutno nije aktivna!</span>  
+    <div class=" tooltip tooltip-info tooltip-bottom" data-tip=" Dostava trenutno nije aktivna!">
+        <span class="text-white/90 text-xs">⚠️ </span>  
+      </div>
+      <!-- <span class="text-white/90 text-xs">⚠️ Dostava trenutno nije aktivna!</span>   -->
     {/if}
     <!-- 🔴🔴 -->
 

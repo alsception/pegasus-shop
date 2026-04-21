@@ -283,7 +283,7 @@
                         >
                           <button
                             type="button"
-                            class="btn btn- btn-sm text-primary px-3 bg-base-100 rounded-none"
+                            class="btn btn-ghost btn-md text-primary px-3 bg-base-100 rounded-none"
                             on:click={() => {
                               if (item.quantity > 1) {
                                 item.quantity = item.quantity - 1;
@@ -302,7 +302,7 @@
                           />
                           <button
                             type="button"
-                            class="btn btn-ghost btn-sm text-primary px-3 bg-base-100 rounded-none"
+                            class="btn btn-ghost btn-md text-primary px-3 bg-base-100 rounded-none"
                             on:click={() => {
                               if (item.quantity < 100) {
                                 item.quantity = item.quantity + 1;

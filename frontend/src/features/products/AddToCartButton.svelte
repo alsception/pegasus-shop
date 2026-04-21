@@ -41,9 +41,9 @@
 {:else if $addedItems[product.id] > 0}  
 
     <div class="flex items-center bg-base-100 dark:bg-primary-content/80 rounded-lg border-0 overflow-hidden h-full shadow-sm cursor-pointer pulsing2"
-    style="height: {width};border-radius: 1000px; padding:4px;">
+    style="height: {width};border-radius: 14px; padding:4px;">
         <button 
-            class="px-3 bg-base-300/30 hover:bg-base-300/60 text-info font-bold transition-colors cursor-pointer text-3xl rounded-full"
+            class="px-3 bg-base-300/30 hover:bg-base-300/60 text-primary/40 font-bold transition-colors cursor-pointer text-3xl rounded-full"
             on:click={() => ProductService.updateQuantity(product.id, -1)}
         >
             -
@@ -54,7 +54,7 @@
         </span>
         
         <button 
-            class="px-3 bg-base-300/30 hover:bg-base-300/60 text-info font-bold transition-colors cursor-pointer text-3xl rounded-full"
+            class="px-3 bg-base-300/30 hover:bg-base-300/60 text-primary/40 font-bold transition-colors cursor-pointer text-3xl rounded-full"
             on:click={() => ProductService.updateQuantity(product.id, 1)}
         >
             +

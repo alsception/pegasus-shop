@@ -29,7 +29,7 @@ import Logout                       from "../../auth/Logout.svelte";
 import NotFound                     from "../error/NotFound.svelte"
 import StripeCheckout               from "../../../features/stripe/StripeCheckout.svelte";
 import Completition                 from "../../../features/cart/Completion.svelte";
-import OrderPage from "../../../features/orders/OrderPage.svelte";
+import OrderPage                    from "../../../features/orders/OrderPage.svelte";
 
 // Component Registry - central place for all components
 // Whenever new component is added it should be imported here and added its /url

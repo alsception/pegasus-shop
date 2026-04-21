@@ -37,4 +37,6 @@ export interface Product
 
     created?: Date | EpochTimeStamp | string;
     modified?: Date | EpochTimeStamp | string;
+
+    isNew?: boolean;
 }

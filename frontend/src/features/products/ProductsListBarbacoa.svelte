@@ -381,8 +381,9 @@
     no products found :/
   {:else}
   <div class="mt-20">
-    <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 4xl:grid-cols-5 gap-6 p-4 mb-20 mt-[-4rem] sm:mt-[-6rem]" 
+    <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 4xl:grid-cols-5 gap-6 p-4 mb-20 mt-[-4rem] sm:mt-[-6rem]" 
       style="justify-items: center;">
+      <!-- todo: ovde staviti kategorije -->
       {#each filteredProducts as product, i}
         <ProductCard {product} />
       {/each}

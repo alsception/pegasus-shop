@@ -72,7 +72,7 @@
   }
 </script>
 
-<div class="navbar shadow-sm fixed bg-[#0d0d0d]/84 bg-sky-300/84 dark:bg-slate-900/84 backdrop-blur-lg z-9000 polka-dots">
+<div class="navbar shadow-sm fixed bg-[#0d0d0d]/84 bg-sky-300/84 dark:bg-slate-900/84 backdrop-blur-lg z-9000">
   <div class="navbar-start">
     <div class="pl-16 flex items-center gap-3">
       <a href="#/home" class="flex items-center">
@@ -90,7 +90,10 @@
         <span class="text-primary/90 text-xs">🟢 </span>  
       </div> 
     {:else}
-      <span class="text-primary/90 text-xs">⚠️ Dostava trenutno nije aktivna!</span>  
+      <div class=" tooltip tooltip-info tooltip-bottom" data-tip=" Dostava trenutno nije aktivna!">
+        <span class="text-white/90 text-xs">⚠️ </span>  
+      </div>
+      <!-- <span class="text-white/90 text-xs">⚠️ Dostava trenutno nije aktivna!</span>   -->
     {/if}
     <!-- 🔴🔴 -->
 
