@@ -50,7 +50,7 @@
   color-scheme: 'dark';
   /*NEKA BUDE TABLE TRANSPARENT NO COLOR*/
   --color-base-100: oklch(0.18 0 0);
-  --color-base-200: #111111;/*#111113; /*radix colors, slate 1*/
+  --color-base-200: oklch(0.2 0 0); /*radix colors, slate 1*/
   --color-base-300: rgb(39 39 42);
   --color-base-content: rgb(183, 183, 183);
   --color-primary: rgb(229 231 233); /*blue 500*/
@@ -458,4 +458,11 @@ body {
 .gg{
   background: linear-gradient(135deg, #a8edca, #00b894);
     background: linear-gradient(135deg, #39ff14, #008000);
+}
+
+[data-theme='dark'] {
+  /*fix on dark theme*/
+.btn-ghost:hover{
+  background-color: #242424;
+}
 }

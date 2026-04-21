@@ -62,16 +62,16 @@
     </div>
 
 {:else}
-
+<z class="{typeof window !== 'undefined' && window.innerWidth > 768 ? 'tooltip tooltip-info tooltip-top' : ''} z-[100] relative" data-tip="Dodaj u košaricu  ...">
   <button
-    class="btn btn-ghost bg-base-100 hover:bg-base-300 dark:bg-primary-content/80 dark:hover:border-2 border-info/60 group"
-    style="width: {width}; height: {width};/*transition-delay: 0.3s;*/"
+    class="btn btn-ghost bg-base-100 hover:bg-base-300 dark:bg-secondary-content/10 dark:hover:border-2 border-info/ group"
+    style="width: {width}; height: {width};"
     aria-label="Dodaj u košaricu"
-    title="Dodaj u košaricu"
     on:click={() => addToCart(product.id)}
   >
-    <i class="fa fa-plus text-primary/40 group-hover:text-primary text-xl" aria-hidden="true"></i>
+    <i class="fa fa-cart-plus text-primary/40 group-hover:text-primary text-xl dark:hover:text-info" aria-hidden="true"></i>
   </button>
+</z>
 {/if}
 
 <style>

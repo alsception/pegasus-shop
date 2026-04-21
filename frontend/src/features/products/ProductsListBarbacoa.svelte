@@ -17,6 +17,7 @@
   import AddToCartButton from "./AddToCartButton.svelte";
   import { fly } from "svelte/transition";
   import ProductPage from "./ProductPage.svelte";
+  import { cartTotalCounter } from "../../core/services/CheckoutStore";
 
   document.title = "Jelovnik | Barbacoa";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -235,6 +236,30 @@
     openModal();
   }
 
+  // 1. Deklariraj varijable izvan bloka
+  let cartTotal = 0;
+  let cartPriceFormatted = "";
+  let isPulsing = false;
+
+  // 2. Ažuriraj ih reaktivno
+  $: {
+    cartTotal = $cartTotalCounter;
+    cartPriceFormatted = formatPrice(cartTotal);
+  }
+
+  // Reaktivni blok koji prati promjene u košarici
+  $: if ($cartTotalCounter !== undefined) {
+    triggerPulse();
+  }
+
+  function triggerPulse() {
+    isPulsing = true;
+    // Nakon 600ms (dužina animacije) makni klasu kako bi se mogla ponovno aktivirati
+    setTimeout(() => {
+      isPulsing = false;
+    }, 600); 
+  }
+
 </script>
 
 {#if !$auth.isAuthenticated}
@@ -286,7 +311,7 @@
             on:click={toggleView}
             class="btn btn-dash whitespace-nowrap"
           >
-            {#if isListView && isLiteListView}
+            {#if /*isListView && isLiteListView*/false}
               <i class="fas fa-image"></i>
             {:else}
               <i class="fas fa-list"></i>
@@ -356,7 +381,7 @@
     no products found :/
   {:else}
   <div class="mt-20">
-    <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 4xl:grid-cols-5 gap-4 p-4 mb-20 mt-[-4rem] sm:mt-[-6rem]" 
+    <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 4xl:grid-cols-5 gap-6 p-4 mb-20 mt-[-4rem] sm:mt-[-6rem]" 
       style="justify-items: center;">
       {#each filteredProducts as product, i}
         <ProductCard {product} />
@@ -372,19 +397,28 @@
 {#snippet btnNext()}
   <div class="fixed bottom-6 right-4 md:right-15 lg:right-10 z-[9000]" class:hidden={showModal}>
     <a 
-      class="btn btn-lg bg-yellow-300/60 dark:bg-yellow-300/80 hover:bg-yellow-300 backdrop-blur-lg text-black border-2 border-primary shadow-2xl ring-4 ring-white/10 pulsing" 
+      class="btn btn-lg bg-yellow-300/60 dark:bg-yellow-300/80 hover:bg-yellow-300 backdrop-blur-lg text-black border-2 border-primary 
+      shadow-2xl ring-4 ring-white/10 pulsing-hov "
+      
       use:link 
       href="/cart"
     >
+      {#if (cartTotal > 0)}
       <span class="flex items-center gap-2">
-          Naruči
+          Naruči | <span class="text-blue-800">{cartPriceFormatted}</span>
           <i class="fas fa-shopping-cart"></i> <i class="fas fa-arrow-right text-sm"></i>
       </span>
+      {:else}
+      <span class="flex items-center gap-2">          
+        Naruči 
+          <i class="fas fa-shopping-cart"></i> <i class="fas fa-arrow-right text-sm"></i>
+      </span>
+      {/if}
     </a>
   </div>
 
 <style>
-.pulsing:hover {
+.pulsing-hov:hover {
   box-shadow: rgba(111, 0, 255, 0.357) 0px 0px 0px 10.3387px;
   border: 2px solid 2px solid #6933ff;
   animation: pulse 2.2s forwards;

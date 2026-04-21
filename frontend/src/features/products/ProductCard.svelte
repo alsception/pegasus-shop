@@ -27,9 +27,9 @@
 </script>
 
 <div 
-  class="bg-white dark:bg-[linear-gradient(135deg,_#1d1d1d_0%,_#0d0d0d_100%)] dark:hover:border-primary/40
+  class="bg-white dark:hover:border-primary/40
   overflow-hidden w-full  hover:shadow-lg transition-shadow /*hover:outline-1 hover:outline-primary/30*/ z-2
-  flex flex-col h-ful rounded-xl" class:pgs-discount={product.discount>0} >
+  flex flex-col h-ful rounded-3xl" class:pgs-discount={product.discount>0} >
   <div class="w-full h-48 flex items-center justify-center overflow-hidden">
     {#if product.imageUrl}
       <img

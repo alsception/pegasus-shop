@@ -42,15 +42,14 @@
   //This object is used for displaying menu
   let navItems = getNavigationItems();
 
-  // Čim se promeni broj u Košarici, ažuriraj navigaciju
-  // TODO: Ovde bi zapravo trebalo da se prikaže kolko kešovine a ne kolko proizvoda
+  // Čim se promeni broj kešovine u Košarici, ažuriraj navigaciju
   $: {
     const total = $cartTotalCounter;
     const price = formatPrice(total);
 
     navItems = navItems.map(n => 
       n.href === '#/cart' 
-        ? { ...n, label: total > 0 ? `<b>Košarica (<span class="text-info">${price}</span>)</b>` : 'Košarica' } 
+        ? { ...n, label: total > 0 ? `<b>Košarica | <span class="text-info">${price}</span></b>` : 'Košarica' } 
         : n
     );
   }
