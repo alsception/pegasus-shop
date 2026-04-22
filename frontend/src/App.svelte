@@ -13,14 +13,14 @@
   import { SvelteToast } from "@zerodevx/svelte-toast";
   import InfoModal from "./core/utils/ErrorModal.svelte";
   import ProductsListBarbacoa from "./features/products/ProductsListBarbacoa.svelte";
+  import { registerGuest } from "./core/services/client";
 
   document.title = 'Pegasus'
 
   export const unauthenticatedRoutes = {
     '/login': Login,
     '/register': Register,
-    /*'/products': ProductsListBarbacoa, mozda jednog dana?*/
-    '*': Login  // fallback route
+    '*': Login  // fallback route | edit: dali nam ovo treba sada kada moze anonimus da vidi i kupi?
   };
 
   //Definitions
@@ -29,6 +29,7 @@
 
   //Authenticacion
   $: auth.subscribe((value) => {
+    console.log('subscribe to auth',value);
     isAuthenticated = value.isAuthenticated;
   });
 
@@ -38,6 +39,13 @@
     {
       const { isAuthenticated: authStatus } = get(auth);
       isAuthenticated = authStatus;
+
+      if(!isAuthenticated)
+      {
+        //no auth -> creating guest
+        registerGuest();
+      }
+
       const params = new URLSearchParams(window.location.search);
       let page = params.get('page');
       if (page === 'completion') 

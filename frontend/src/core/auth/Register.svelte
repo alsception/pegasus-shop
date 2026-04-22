@@ -31,9 +31,9 @@
   }
 </script>
 
-<HeaderLite/>
-
-<div class="flex items-center justify-center min-h-screen">
+<!-- <HeaderLite/>
+ -->
+<div class="flex items-center justify-center h-[80vh]">
   <form
     on:submit|preventDefault={handleSubmit}
     class="w-full max-w-md relative p-6 px-10 rounded-2xl bg-base-100 border border-primary/10"
@@ -56,8 +56,8 @@
     <input
       type="text"
       bind:value={username}
-      placeholder="Username"
-        class="pgs-input mb-8 outline outline-primary/30"
+      placeholder=""
+      class="pgs-input mb-8 outline outline-primary/30"
       disabled={loading}
     />
     
@@ -67,8 +67,8 @@
     <input
       type="password"
       bind:value={password}
-      placeholder="Password"
-        class="pgs-input mb-8 outline outline-primary/30"
+      placeholder=""
+      class="pgs-input mb-8 outline outline-primary/30"
       disabled={loading}
     />
  

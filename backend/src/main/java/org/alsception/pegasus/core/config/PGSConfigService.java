@@ -29,6 +29,12 @@ public class PGSConfigService
         return this.isFeatureEnabled("b_registration_enabled");
     }
 
+    public boolean isGuestShoppingEnabled()
+    {
+        return true;//todo: izgleda ovo trenutno neradi nista, implementirati do kraja
+        //return this.isFeatureEnabled("b_guest_shopping_enabled");
+    }
+
     public boolean isShoppingEnabled()
     {
         return this.isFeatureEnabled("b_shopping_enabled");

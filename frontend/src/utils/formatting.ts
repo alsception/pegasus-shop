@@ -200,7 +200,7 @@ export function getOrderStatusLabel(status: string ): string
     switch (status?.toUpperCase()) 
     {
       case "READY":      
-        return "<i class='fas fa-check'>SPREMNO";
+        return "<i class='fas fa-check'></i>SPREMNO";
 
       case "DELIVERED":
       case "SERVED":
@@ -214,7 +214,7 @@ export function getOrderStatusLabel(status: string ): string
         return "VRAĆENO";
 
       case "IN_PREPARATION":
-        return "<i class='fas fa-fire'>U PRIPREMI";
+        return "<i class='fas fa-fire'></i>U PRIPREMI";
 
       case "WAITING":
         return "<i class='fas fa-hourglass'></i>NA ČEKANJU";

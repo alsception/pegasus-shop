@@ -104,10 +104,31 @@ public class PGSUser
         this.username = userDTO.getUsername();
         this.password = userDTO.getPassword();
     }
+
+    public PGSUser(String username) 
+    {
+        this.username = username;
+    }
+
+    public PGSUser(String username, PGSUserRole role) 
+    {
+        this.username = username;
+        this.role = role;
+    }
+
+    public PGSUser(String username, String password, PGSUserRole role) 
+    {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
+    public PGSUser(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
     
     public boolean isActive() {
         return Boolean.TRUE.equals(active); // vraća true samo ako je true
-    }
-    
-    //TODO: remove password from tostring
+    }    
 }

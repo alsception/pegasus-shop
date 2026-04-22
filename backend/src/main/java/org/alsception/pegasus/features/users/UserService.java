@@ -54,7 +54,7 @@ public class UserService
         return new UserDTO(savedUser);  // Convert the saved entity to DTO
     }
     
-    public PGSUser saveUser(PGSUser user, boolean encodePassword) 
+    public PGSUser createAndSaveCustomer(PGSUser user, boolean encodePassword) 
     {
         user.setId(CodeGenerator.generateNanoId());//Important
         if(encodePassword)
@@ -66,10 +66,25 @@ public class UserService
         
         PGSUser savedUser = repository.save(user);
         
-        logger.info("User created: "+user.getUsername());
+        logger.info("New customer user created: "+user.getUsername());
         return savedUser; 
     }
-    
+
+    public PGSUser createAndSaveGuest(PGSUser user, boolean encodePassword) 
+    {
+        user.setId(CodeGenerator.generateNanoId());//Important
+        if(encodePassword)
+        {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+        user.setRole(PGSUserRole.GUEST);
+        user.setActive(Boolean.TRUE);
+        
+        PGSUser savedUser = repository.save(user);
+        
+        logger.info("New guest user created: "+user.getUsername());
+        return savedUser; 
+    }    
     
     public UserDTO update(UserDTO receivedUser, String requestorUsername) 
     {

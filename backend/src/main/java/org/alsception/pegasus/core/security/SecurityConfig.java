@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -61,7 +62,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                    "/",                //storefront
+                    "/",    //storefront
                     "/index.html",      //storefront    
                     "/backoffice",      //backoffice
                     "/backoffice/**",   //backoffice
@@ -75,8 +76,10 @@ public class SecurityConfig {
                     "/*.css",
                     "/manifest.json",   // za PWA
                     "/sw.js",           // za PWA
-                    "/*.webmanifest"    // za PWA
+                    "/*.webmanifest"   // za PWA
                 ).permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll() // Svi mogu dohvatiti proizvode
+                .requestMatchers("/api/products/**").authenticated() // Sve ostalo (POST, PUT, DELETE) zahtijeva login
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/test/**").permitAll()
                 .requestMatchers("/api/sync/**").permitAll()    //Za cloud sync 

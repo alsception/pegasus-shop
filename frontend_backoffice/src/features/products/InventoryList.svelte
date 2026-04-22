@@ -308,7 +308,7 @@
     <tbody>
       {#each products as product, i}
         <tr 
-          class="bg-base-200/60 tr-highlight" 
+            class={`tr-highlight ${i % 2 === 1 ? 'bg-base-200/30' : 'bg-base-200/60'}`}
         >      
         <td class="text-center">
             {#if product.active !== undefined}

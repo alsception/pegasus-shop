@@ -64,6 +64,12 @@ export function isCustomer(): boolean
   return role === "[ROLE_CUSTOMER]";
 }
 
+export function isGuest(): boolean
+{
+  const role = getRolesFromToken(getToken());
+  return role === "[ROLE_GUEST]";
+}
+
 function getUsernameFromToken(token: string | null) 
 {
   try

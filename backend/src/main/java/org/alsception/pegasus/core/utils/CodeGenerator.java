@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import java.util.UUID;
 
 @Component
 public class CodeGenerator 
@@ -98,5 +99,10 @@ public class CodeGenerator
         String id = sb.reverse().toString();
         log.trace("Generated alfa: "+id);
         return id;    
+    }
+
+    public static String generateUUID() 
+    {
+        return UUID.randomUUID().toString();
     }
 }

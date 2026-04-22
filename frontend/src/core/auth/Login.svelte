@@ -117,9 +117,9 @@
   }
 </script>
 
-<HeaderLite />
-
-<div class="flex items-center justify-center min-h-screen relative">
+<!-- <HeaderLite />
+ -->
+<div class="flex items-center justify-center h-[80vh] relative">
   <div
     class=" rounded-lg /*animate-pulse*/ relative z-10 border-0 bg-opacity-100"
     style="box-shadow: none;"

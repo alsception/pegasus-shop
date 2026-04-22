@@ -17,6 +17,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+/**
+ * Ovaj controller koristimo za backoffice
+ * ALI I ZA store front
+ * ::.requestMatchers(HttpMethod.GET, "/api/products/**").permitAll() // Svi mogu dohvatiti proizvode
+ * ::.requestMatchers("/api/products/**").authenticated() // Sve ostalo (POST, PUT, DELETE) zahtijeva login
+ * 
+ * jednog dana, mozda omogucimo da se pregledaju proizvodi, bez da se kupuju.
+ */
+
 @RestController
 @CrossOrigin(origins = "*") // Allow all origins
 @RequestMapping("/api/products")
@@ -60,13 +69,6 @@ public class ProductController
             .orElse(ResponseEntity.notFound().build());
     }
 
-    //TODO: ovde cemo dodati most popular products
-//    @GetMapping("/popular")
-//    public PopularProductsWrapper getPopularProducts() 
-//    {
-//        return productService.getPopularProducts();
-//    }
-//    
     @PostMapping
     public PGSProduct createProduct(@RequestBody PGSProduct product) 
     {

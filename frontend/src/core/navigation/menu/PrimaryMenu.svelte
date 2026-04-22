@@ -10,12 +10,14 @@
   const role = getCurrentRole();  
 
   //Filter nav items by role
-  const getRoutesByRole = (role: 'ADMIN' | 'CUSTOMER') => {
+  const getRoutesByRole = (role: 'ADMIN' | 'CUSTOMER' | 'GUEST') => {
     return Object.entries(navRoutes)
       .filter(([_, route]) => {
         if(route.default) return true;
+        if(route.hidden) return false;
         if (role === 'ADMIN') return route.admin === true;
         if (role === 'CUSTOMER') return route.customer === true;
+        if (role === 'GUEST') return route.guest === true;
         return false;
       })
       .reduce((acc, [path, route]) => {

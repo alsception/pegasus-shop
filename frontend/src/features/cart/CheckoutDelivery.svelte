@@ -135,11 +135,11 @@
 
       if( paymentMethod == 1)
       {
-        push("/home");//orders page otvorimo na narudzbe na cekanju
+        push("/orders");//orders page otvorimo na narudzbe na cekanju
       }
       else
       {
-        push("/pay/"+orderId);//orders page otvorimo na narudzbe na cekanju
+        push("/pay/"+orderId);//stranica za placanje
       }
       
     } catch (err: any) {

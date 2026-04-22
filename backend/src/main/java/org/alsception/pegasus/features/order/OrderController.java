@@ -42,18 +42,26 @@ public class OrderController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-
+        PGSUser requestor = userService.findByUsername(username);
         logger.debug("Get order [{}] for user: {}", id, username);
 
-        try 
+        //TODO: isto ovako staviti dole
+        if( requestor.getRole().equals(PGSUserRole.ADMIN) || requestor.getRole().equals(PGSUserRole.SUPERADMIN) )
         {
-            PGSOrder order = orderService.getById(Long.parseLong(id));
-            return ResponseEntity.ok(OrderMapper.toDto(order));
-        } 
-        catch (BadRequestException e) 
+            try 
+            {
+                PGSOrder order = orderService.getById(Long.parseLong(id));
+                return ResponseEntity.ok(OrderMapper.toDto(order));
+            } 
+            catch (BadRequestException e) 
+            {
+                //Ovo ne bi trebalo vise da se pojavljuje
+                logger.warn("ERR_50: "+e.getMessage());
+                return ResponseEntity.notFound().build();
+            }
+        }
+        else //moze da vidi samo svoje
         {
-            //Ovo ne bi trebalo vise da se pojavljuje
-            logger.warn("ERR_50: "+e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }
@@ -74,7 +82,7 @@ public class OrderController {
         List<OrderDTO> result;
         
         //Moze da vidi sve
-        if( requestor.getRole().equals(PGSUserRole.ADMIN) || requestor.getRole().equals(PGSUserRole.KITCHEN) )
+        if( requestor.getRole().equals(PGSUserRole.ADMIN) || requestor.getRole().equals(PGSUserRole.SUPERADMIN) )
         {
             result = orderService
                 .get( search )

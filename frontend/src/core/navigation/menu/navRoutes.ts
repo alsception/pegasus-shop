@@ -54,6 +54,7 @@ export const navRoutes: NavRoutesMap =
       disabled: false,
       admin: true,
       customer: true,
+      guest:true
     },
     "/logout": {
       label: "Odjavi se ",
@@ -63,7 +64,32 @@ export const navRoutes: NavRoutesMap =
       disabled: false,
       hidden: false,
       admin: true,
+      customer: true,
+      default: false,
+      guest: false
+    },
+    "/login": {
+      label: "Prijavi se ",
+      icon: "user",
+      href: "#/login",
+      component: "Login",
+      disabled: false,
+      hidden: false,
+      admin: false,
       customer: false,
-      default: true,
+      default: false,
+      guest: true
+    },
+    "/register": {
+      label: "Registriraj se ",
+      icon: "right-to-bracket",
+      href: "#/register",
+      component: "Register",
+      disabled: false,
+      hidden: true,
+      admin: false,
+      customer: false,
+      default: false,
+      guest: true
     },
   };

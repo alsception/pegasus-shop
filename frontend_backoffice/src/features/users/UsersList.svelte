@@ -180,7 +180,7 @@
       case "ADMIN":
         return "error ";
 
-      case "WAITER":
+      case "GUEST":
         return "info ";
 
       case "KITCHEN":
@@ -189,13 +189,13 @@
       case "OTHER":
       
       case "TESTER":
-        return "primary ";
+        return "primary/70 ";
       
       case "CUSTOMER":
         return "success ";
         
       default:
-        return "primary "; // ili neka podrazumevana boja
+        return "primary/70 "; // ili neka podrazumevana boja
     }
   }
 

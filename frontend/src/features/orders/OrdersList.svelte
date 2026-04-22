@@ -384,7 +384,7 @@ i LITE APP!!, I MOZDA i WS.....
       </div>
     </div>
   {:else}
-    <a use:link href="/orders"><h3 class="font-bold font-mono text-2xl mt-14 mb-6 text-primary/80">Zadnje narudžbe</h3></a>
+    <a use:link href="/orders"><h3 class="font-bold font-mono text-2xl mt-14 mb-6 text-primary/80">Moje narudžbe</h3></a>
   {/if}
 
   {#if loading}
@@ -470,6 +470,7 @@ i LITE APP!!, I MOZDA i WS.....
               <th class="pgs-th-r">Ukupno<br>stavki</th>
               <th class="pgs-th-r">Iznos</th>
               <th class="pgs-th-l">Način<br>plaćanja</th>
+              <th class="pgs-th"></th>
               {#if !liteView}
                 <th class="pgs-th"></th>
               {/if}
@@ -572,11 +573,29 @@ i LITE APP!!, I MOZDA i WS.....
                     </div>
                     <button
                       class="px-4 group"
-                      aria-label="Delete"
+                      aria-label="Obriši"
                       on:click={() =>
                         deleteDialog(
                           order.id,
-                          "Are you sure you want to delete this order? This action cannot be undone!"
+                          "Jeste li sigurni?"
+                        )}
+                    >
+                      <div class="tooltip tooltip-info" data-tip="Delete">
+                        <i
+                          class="fas fa-times-circle text-gray-500 group-hover:text-red-400 cursor-pointer"
+                        ></i>
+                      </div>
+                    </button>
+                  </td>
+                {:else}  
+                <td class=" justify-center">                  
+                    <button
+                      class="px-4 group"
+                      aria-label="Obriši"
+                      on:click={() =>
+                        deleteDialog(
+                          order.id,
+                          "Jeste li sigurni?"
                         )}
                     >
                       <div class="tooltip tooltip-info" data-tip="Delete">

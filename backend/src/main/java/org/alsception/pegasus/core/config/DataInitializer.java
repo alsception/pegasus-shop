@@ -116,7 +116,7 @@ public class DataInitializer implements CommandLineRunner
         //TODO: also move this password somewhere
 
         String u = "pgsadmin";
-        String p = "******";
+        String p = new StringBuilder(u).reverse().toString();
         UserDTO user = new UserDTO(u,p,"admin", true);
         
         try 

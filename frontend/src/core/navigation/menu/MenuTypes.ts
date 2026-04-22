@@ -44,6 +44,7 @@ export type NavRoute = {
   hidden?: boolean //TODO: dis doesnt actually work. Currently we hide for disabled
   admin?: boolean
   customer?: boolean
+  guest?: boolean
   default?: boolean
 }
 

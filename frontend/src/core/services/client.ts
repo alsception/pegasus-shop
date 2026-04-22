@@ -65,6 +65,28 @@ export async function register(username: string, password: string)
   /*setToken(data.token);*///in future we should send token
 }
 
+export async function registerGuest() 
+{
+  const response = await fetch(`${API_BASE_URL}/auth/register/guest`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include' // if backend uses cookies
+  });
+
+  //register/guest endpoint vraca odma token  
+  if (!response.ok) 
+  {
+    let message = await processErrMsg(response, '');
+    throw new Error(`${message}`);
+  }
+
+  const data = await response.json();
+
+  authenticate(data.token);
+}
+
 
 /**
  * This function executes call to the backend

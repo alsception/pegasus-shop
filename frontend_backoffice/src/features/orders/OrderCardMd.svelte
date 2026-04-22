@@ -263,8 +263,14 @@
 
   <div class="flex items-center gap-1 text-sm text-primary mb-1 ml-1">
     <div class="flex items-center gap-1 text-sm text-primary/60 mr-2">
-      <i class="fas fa-user"></i>
-      <span><strong>{order.user?.username}</strong></span>
+      
+      {#if order.user?.role == 'GUEST'}
+      <i class=" fa-regular fa-user"></i>
+        <span class="text-warning"><strong>gost-{order.user?.username.substring(0,8)}</strong></span>
+      {:else}
+      <i class="fas fa-solid fa-user"></i>
+        <span class="text-info"><strong>{order.user?.username}</strong></span>
+      {/if}
     </div>
     <div
       class="text-sm flex items-center text-primary/60 gap-2"

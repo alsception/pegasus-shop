@@ -2,11 +2,11 @@ package org.alsception.pegasus.core.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import org.alsception.pegasus.core.config.PGSConfigService;
 import org.alsception.pegasus.core.logging.PGSLoggingService;
+import org.alsception.pegasus.core.utils.CodeGenerator;
 import org.alsception.pegasus.features.users.PGSUser;
 import org.alsception.pegasus.features.users.UserService;
 import org.slf4j.Logger;
@@ -102,7 +102,7 @@ public class AuthController
 
             // Create and save user
             PGSUser user = new PGSUser(userDTO);    
-            userService.saveUser(user,true);            
+            userService.createAndSaveCustomer(user,true);            
 
             //TODO: Why dont we sign in automaticaly after registration? Or send json instead of plain text?
 
@@ -116,6 +116,64 @@ public class AuthController
         {                   
             try {
                 printErrDetails("Error registering user", userDTO, e.getMessage());
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Error: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Frontend ce da posalje svaki put na ovaj endpoint da se napravi novi guest user
+     * To nam treba za guest checkout
+     */
+
+    @PostMapping("/register/guest")
+    public ResponseEntity<?> registerGuest(HttpServletRequest request) 
+    {
+        try 
+        {   
+            logger.info("Registering new guest user");    
+            
+            if(!configService.isGuestShoppingEnabled())
+            {
+                logger.error("Guest shopping disabled");
+                
+                return ResponseEntity
+                    .status(HttpStatus.METHOD_NOT_ALLOWED)
+                    .body( "Guest shopping disabled");
+            }   
+
+            // 1. generate uuid which will be username
+            String uuid = CodeGenerator.generateUUID();
+
+            this.log(request, "guest registration", uuid);
+
+            // Create and save guest user
+            // ovde nam trazi i password, stavicemo da bude obrnuti username
+            PGSUser user = new PGSUser(uuid, new StringBuilder(uuid).reverse().toString());    
+            userService.createAndSaveGuest(user,true);            
+
+            logger.info(user.toString());
+
+            UserDetails userDetails = userDetailsService.loadUserByUsername(uuid);
+            String token = jwtUtils.generateJwtToken(userDetails);    
+
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);  
+
+            //logger.info("Sadržaj mape: " + response.toString());
+
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(response);
+        } 
+        catch (Exception e) 
+        {                   
+            try {
+                logger.error("Error registering guest user",  e.getMessage());
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
