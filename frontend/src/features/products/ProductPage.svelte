@@ -6,7 +6,7 @@
   import LoadingOverlay from "../../core/utils/LoadingOverlay.svelte";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import AddToCartButton from "./AddToCartButton.svelte";
-  import { formatPrice } from "../../utils/formatting";
+  import { formatPrice, getFormattedPrice } from "../../utils/formatting";
 
   document.title = "Barbacoa";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -87,7 +87,7 @@
         <img
           src={product.imageUrl}
           alt={product.name}
-          class="object-contain w-full h-max-[600px]"
+          class="w-full h-full object-cover"
         />
         <div class="carousel rounded-box w-64 hidden">
           <div class="carousel-item w-full">
@@ -144,30 +144,39 @@
         <span class="text-gray-400 dark:text-gray-500">No image available</span>
       {/if}
     </div>
-    <h1 class="text-primary text-2xl">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-stretch">
+  
+  <div class=" mt-2">
+    <h2 class="text-primary text-3xl">
       {product.name}
       {#if !liteView}
-        <a
-          class="text-gray-400 hover:text-blue-300 text-md"
-          use:link
-          href="#/inventory/{product.id}"
-          title="Edit"
-          aria-label="Edit"
-        >
+        <a class="text-gray-400 hover:text-blue-300 text-md" use:link href="#/inventory/{product.id}">
           <i class="fas fa-pen"></i>
         </a>
       {/if}
-    </h1>
-    <div class="flex gap-2"></div>
+    </h2>
 
+  <div class=" ">
     {#if product.description}
-      <p>{product.description}</p>
+      <p class="mt-4 mb-4 text-secondary/40">{product.description}</p>
     {/if}
+  </div>
+  </div>
 
-    <h3 class="product-detail" style="font-size: x-large;">
-      {formatPrice(product.basePrice)}
+  <div class=" p-4">
+    <h3 class=" text-xl font-bold">
+      {@html getFormattedPrice(product.basePrice)}
     </h3>
-    <p></p>
+  </div>
+
+
+
+  <div class=" p-4">
+    <p class="mb-5">⭐⭐⭐⭐⭐</p>
+  </div>
+
+<div><AddToCartButton {product} width="50px" full={true}/></div>
+</div>
 
     {#if !liteView && isAdminView}
       <div class="w-full flex mr-0 mt-6 mb-6">
@@ -185,7 +194,7 @@
     color: var(--color-base-content);
   }
   .product-card {
-    max-width: 650px; /*not too wide for now*/
+    
     margin: 2rem auto;
     margin-top: 0;
     margin-bottom: 0;
@@ -210,8 +219,4 @@
     margin-bottom: 0px;
   }
 
-  img {
-    object-fit: contain;
-    max-height: 350px !important; /**trenutno je ovoliko velicina slike*/
-  }
 </style>

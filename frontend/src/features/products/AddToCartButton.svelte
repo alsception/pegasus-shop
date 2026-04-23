@@ -12,6 +12,7 @@
 
   export let product;
   export let width;
+  export let full;
 
   const lottieAnimationUrl = '/lottie/check2.lottie';//or check2.lottie or success3
 
@@ -33,7 +34,7 @@
   <button
     class="btn btn-ghost bg-base-100 dark:bg-primary-content/80"
     style="width: {width}; height: {width};"
-    aria-label="Dodaj u košaricu"
+    aria-label="Loading"
   >
     <span class="loading loading-spinner loading-xl bg-primary/70"></span>
   </button>
@@ -65,11 +66,14 @@
 <z class="{typeof window !== 'undefined' && window.innerWidth > 768 ? 'tooltip tooltip-info tooltip-top' : ''} z-[100] relative" data-tip="Dodaj u košaricu  ...">
   <button
     class="btn btn-ghost bg-base-100 hover:bg-base-300 dark:bg-secondary-content/10 dark:hover:border-2 border-info/ group"
-    style="width: {width}; height: {width};"
+    style="width: {full ? width*3 : width}; height: {width};"
     aria-label="Dodaj u košaricu"
     on:click={() => addToCart(product.id)}
   >
     <i class="fa fa-cart-plus text-primary/40 group-hover:text-primary text-xl dark:hover:text-info" aria-hidden="true"></i>
+    {#if full}
+      Dodaj u košaricu
+    {/if}
   </button>
 </z>
 {/if}

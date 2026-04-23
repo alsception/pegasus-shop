@@ -264,10 +264,10 @@
   >
   <!-- ovo ovde je uvek tamno -->
     <div data-theme="dark"
-      class="w-full lg:max-w-4xl lg:p-4 lg:m-6 lg:mb-4 lg:mt-0.5 bg-base-200/80
+      class="prod-form-cntr w-full lg:max-w-4xl lg:p-4 lg:m-6 lg:mb-4 lg:mt-0.5 bg-base-200/80
       lg:rounded-lg border-1 border-primary/20 backdrop-blur-lg lg:pb-[5px]
               max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:p-[10px] max-lg:pb-0 fixed top-[-16.5] lg:-top-16.5 left-0.5 [width:-webkit-fill-available] 
-              lg:static lg:w-auto md:min-w-[680px] justify-self-center"
+              lg:static lg:w-auto md:min-w-[680px] justify-self-center rounded"
               class:hidden={showModal}
     >
       <form
@@ -370,7 +370,7 @@
     no products found :/
   {:else}
   <div class="mt-20">
-    <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 4xl:grid-cols-5 gap-6 p-4 mb-20 mt-[-4rem] sm:mt-[-6rem]" 
+    <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 4xl:grid-cols-5 gap-6 md:gap-12 p-4 mb-20 mt-[-4rem] sm:mt-[-6rem]" 
       style="justify-items: center;">
       <!-- todo: ovde staviti kategorije -->
       {#each filteredProducts as product, i}
@@ -386,8 +386,8 @@
 
 {#snippet btnNext()}
 <!-- bg-gradient-to-b from-transparent via-slate-900 via-slate-950 via-slate-950 via-slate-900 to-transparent -->
-  <div class="fixed bottom-0 md:bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:right-15 lg:right-10 md:translate-x-0 z-[9000] w-full max-w-sm md:max-w-xs border-0 border-amber-400 
-  p-4  " 
+  <div id="btn-nxt-cntr" class="btn-nxt-cntr fixed bottom-0 md:bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:right-15 lg:right-10 md:translate-x-0 z-[9000] w-full max-w-sm md:max-w-xs border-0 border-amber-400 
+  p-4  transition-transform duration-300  hover:scale-105" 
   class:hidden={ !(cartTotal > 0)}>
     <a 
       class="btn btn-lg bg-slate-900/75 dark:bg-slate-900/80  --hover:bg-yellow-300 backdrop-blur-lg text-black border-2 border-primary/40 w-full max-w-lg md:max-w-xs 
@@ -397,7 +397,7 @@
       href="/cart"
     >
       {#if (cartTotal > 0)}
-      <span class="flex items-center gap-2 text-white/90 text-2xl hover:text-info">
+      <span class="flex items-center gap-2 text-white/90 text-2xl hover:text-[#728bff] ">
           Naruči 
           <i class="fas fa-shopping-cart"></i>
           <span class="font-bold text-2xl">{cartPriceFormatted}</span>

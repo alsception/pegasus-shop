@@ -19,11 +19,45 @@
 
   function closeModal() {
     showModal = false;
+    toggleHeader();
   }
 
   function handleProductClick(id: number | undefined) 
   {    
     openModal();
+    toggleHeader();
+  }
+
+  function toggleHeader(){
+    // Pronađi element (npr. navbar po ID-u ili klasi)
+    let element = document.querySelector('.navbar');
+
+    // Provjeri postoji li element prije dodavanja klase
+    if (element) {
+      element.classList.toggle('hidden'); // Dodaje klasu
+    }
+
+    element = document.querySelector('.btn-nxt-cntr');
+
+    // Provjeri postoji li element prije dodavanja klase
+    if (element) {
+      element.classList.toggle('hidden'); // Dodaje klasu
+    }
+
+    element = document.querySelector('.prod-form-cntr');
+
+    // Provjeri postoji li element prije dodavanja klase
+    if (element) {
+      element.classList.toggle('hidden'); // Dodaje klasu
+    }
+
+    // Dohvaća točno ove elemente
+    /* const elementi = document.querySelectorAll('.navbar, .btn-nxt-cntr, #btn-nxt-cntr');
+
+    elementi.forEach((el) => {
+      (el as HTMLElement).classList.toggle('hidden');
+    }); */
+    
   }
 
   if(product.name == 'Kulen') product.isNew = true;//TODO: ovo skloniti za deploy/live i dodati polje u entitet
@@ -55,7 +89,8 @@
 <div 
   class="bg-white dark:hover:border-primary/40
   overflow-hidden w-full  hover:shadow-lg transition-shadow /*hover:outline-1 hover:outline-primary/30*/ z-2
-  flex flex-col h-ful rounded-3xl" 
+  flex flex-col h-ful rounded-xl md:rounded-3xl
+  md:transition-transform md:duration-300 md:hover:-translate-y-2 md:hover:scale-105" 
   class:pgs-discount={product.discount>0} 
   class:pgs-new={product.isNew} 
   >
@@ -76,12 +111,13 @@
     {/if}
   </div>
   <div class="p-6 flex flex-col flex-1">
-    <h3 class="font-semibold text-lg break-words text-primary flex items-center justify-between " title={product.name}>
+    <h3 class="font-semibold text-lg break-words text-warning flex items-center justify-between ">
     
       <!-- svelte-ignore a11y_click_events_have_key_events -->
       <!-- svelte-ignore a11y_no_static_element_interactions -->
-      <span on:click={() => handleProductClick(product.id)} class="pgs-hyperlink">{product.name}</span>
+      <span on:click={() => handleProductClick(product.id)} class="pgs-hyperlink text-amber-600 dark:text-amber-500">{product.name}</span>
       <span class="hidden">{product.id}</span>
+      
       {#if product.discount }
         <span class="badge badge-accent text-3xl p-4 rotate-12">AKCIJA</span>
       {/if}
@@ -89,7 +125,9 @@
         <span class="badge badge-info text-2xl p-4 /*rotate-348*/">NOVO</span>
       {/if}
     </h3>
-      
+    
+    <p>⭐⭐⭐⭐⭐</p>
+
     <p
       class="text-sm text-gray-500 dark:text-gray-500 mt-1 line-clamp-3"
       title={product.description}
@@ -114,8 +152,8 @@
         
 
       {:else}
-        
-        <span class="text-xl font-bold text-amber-600 dark:text-amber-500">         
+<!--         text-amber-600 dark:text-amber-500
+ -->        <span class="text-xl font-bold text-primary ">         
           {@html getFormattedPrice(product.basePrice)}
         </span>   
 
@@ -127,33 +165,25 @@
 </div>
 
 {#if showModal}
-  <div class="modal modal-open pt-0" style="backdrop-filter: blur(10px);">
+  <div class="modal modal-open pt-0 sm:mt-0" style="backdrop-filter: blur(10px);">
     <div
-      class="modal-box max-h-[90vh] w-full sm:w-8/12 max-w-5xl p-0 flex flex-col bg-base-200"
+      class="modal-box max-h-[100vh] sm:h-full w-full max-w-[1900px] p-0 flex flex-col bg-base-200"
       transition:fly={{ y: 50, duration: 300 }}
     >
       <!-- Fixed Header -->
       <div
         class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300"
       >
-        <h3 class="font-bold text-lg">Detalji proizvoda</h3>
+        <div class="flex justify-end">
+          <h3 class="font-bold text-lg cursor-pointer" on:click={closeModal}>X</h3>
+        </div>
       </div>
 
       <!-- Scrollable Content -->
       <div class="overflow-y-auto flex-1">
         <ProductPage productId={product.id} liteView={true}></ProductPage>
       </div>
-
-      <!-- Fixed Footer -->
-      <div
-        class="sticky bottom-0 bg-base-100 z-10 px-6 py-4 border-t border-base-300"
-      >
-        <div class="flex justify-end gap-2">
-          <button class="btn btn-secondary" on:click={closeModal}
-            >Zatvori</button
-          >
-        </div>
-      </div>
+   
     </div>
 
     <!-- Glass Backdrop -->

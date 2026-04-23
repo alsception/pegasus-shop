@@ -72,7 +72,7 @@
   }
 </script>
 
-<div class="navbar shadow-sm fixed bg-[#0d0d0d]/84 bg-zinc-950/84 backdrop-blur-lg z-9000">
+<div class="navbar shadow-sm fixed bg-[#0d0d0d]/84 bg-zinc-950/84 backdrop-blur-lg z-9000 ring-2 ring-white/10 ">
   <div class="navbar-start">
     <div class="pl-16">
       <a href="/#/home">
