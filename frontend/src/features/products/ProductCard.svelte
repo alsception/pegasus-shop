@@ -27,6 +27,27 @@
   }
 
   if(product.name == 'Kulen') product.isNew = true;//TODO: ovo skloniti za deploy/live i dodati polje u entitet
+
+  //ovo nam je trebalo za import
+  function isFresh(item: Product)
+  {
+    if (item.modified) {
+      // Proveri da li je tip "string"
+      if (typeof item.modified === 'string') {
+          const danas = "2026-04-23";
+          
+          if (item.modified.startsWith(danas)) {
+              return true;
+          }
+      } else if (item.modified instanceof Date) {
+          // Ako je Date objekat, pretvori ga u string prvo
+          if (item.modified.toISOString().startsWith("2026-04-23")) {
+              return true
+          }
+      }
+    }
+    return false;
+  }
 </script>
 
 
@@ -56,9 +77,11 @@
   </div>
   <div class="p-6 flex flex-col flex-1">
     <h3 class="font-semibold text-lg break-words text-primary flex items-center justify-between " title={product.name}>
+    
       <!-- svelte-ignore a11y_click_events_have_key_events -->
       <!-- svelte-ignore a11y_no_static_element_interactions -->
       <span on:click={() => handleProductClick(product.id)} class="pgs-hyperlink">{product.name}</span>
+      <span class="hidden">{product.id}</span>
       {#if product.discount }
         <span class="badge badge-accent text-3xl p-4 rotate-12">AKCIJA</span>
       {/if}
@@ -66,7 +89,7 @@
         <span class="badge badge-info text-2xl p-4 /*rotate-348*/">NOVO</span>
       {/if}
     </h3>
-    
+      
     <p
       class="text-sm text-gray-500 dark:text-gray-500 mt-1 line-clamp-3"
       title={product.description}

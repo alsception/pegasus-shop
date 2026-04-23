@@ -1,0 +1,13 @@
+Redosled:
+
+1 Kreiraj okruženje:
+python3 -m venv env
+
+2 Aktiviraj ga:
+source env/bin/activate
+
+3 Instaliraj sve biblioteke odjednom (unutar env):
+pip install selenium requests
+
+4 Pokreni skriptu:
+python scrape.py

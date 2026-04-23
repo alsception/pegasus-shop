@@ -29,7 +29,6 @@
   let loading: boolean = false;
   let error: string | null = null;
   let isListView = false;
-  let isLiteListView = false;
   let isAdminView = true;
   let isDark = true;
   let page = 0;
@@ -179,16 +178,8 @@
   function toggleView() 
   {
     if(isListView)
-    {
-      if(!isLiteListView)
-      {
-        isLiteListView = true;
-      }
-      else
-      {
-        isListView = false;
-        isLiteListView = false;
-      }
+    {      
+      isListView = false;
     }
     else
     {
@@ -343,17 +334,15 @@
                       <span on:click={() => handleProductClick(product.id)}
                        class="pgs-hyperlink">{product.name}</span>
                     </h3>
-                    {#if isLiteListView}
-                      <p class="text-sm text-primary/50 mt-1 line-clamp-3 max-w-[80%;]" title={product.description} style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; white-space: normal;">
-                        {product.description}
-                      </p>  
-                    {/if}
+                    <p class="text-sm text-primary/50 mt-1 line-clamp-3 max-w-[80%;]" title={product.description} style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; white-space: normal;">
+                      {product.description}
+                    </p>  
                     <table class="w-full">
                       <tbody>
                         <tr>
                           <td class="pgs-td text-left text-4xl">
                             <h3 class="font-semibold text-lg truncate text-primary/50">
-                              € {formatPrice(product.basePrice)}
+                              {formatPrice(product.basePrice)}
                             </h3>
                           </td>
                           <td class="p-0">
@@ -396,23 +385,28 @@
 {/if}
 
 {#snippet btnNext()}
-  <div class="fixed bottom-6 right-4 md:right-15 lg:right-10 z-[9000]" class:hidden={showModal}>
+<!-- bg-gradient-to-b from-transparent via-slate-900 via-slate-950 via-slate-950 via-slate-900 to-transparent -->
+  <div class="fixed bottom-0 md:bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:right-15 lg:right-10 md:translate-x-0 z-[9000] w-full max-w-sm md:max-w-xs border-0 border-amber-400 
+  p-4  " 
+  class:hidden={ !(cartTotal > 0)}>
     <a 
-      class="btn btn-lg bg-yellow-300/60 dark:bg-yellow-300/80 hover:bg-yellow-300 backdrop-blur-lg text-black border-2 border-primary 
-      shadow-2xl ring-4 ring-white/10 pulsing-hov "
+      class="btn btn-lg bg-slate-900/75 dark:bg-slate-900/80  --hover:bg-yellow-300 backdrop-blur-lg text-black border-2 border-primary/40 w-full max-w-lg md:max-w-xs 
+      shadow-2xl ring-4 ring-white/10 pulsing-hov h-14"
       
       use:link 
       href="/cart"
     >
       {#if (cartTotal > 0)}
-      <span class="flex items-center gap-2">
-          Naruči | <span class="text-blue-800">{cartPriceFormatted}</span>
-          <i class="fas fa-shopping-cart"></i> <i class="fas fa-arrow-right text-sm"></i>
+      <span class="flex items-center gap-2 text-white/90 text-2xl hover:text-info">
+          Naruči 
+          <i class="fas fa-shopping-cart"></i>
+          <span class="font-bold text-2xl">{cartPriceFormatted}</span>
       </span>
       {:else}
       <span class="flex items-center gap-2">          
         Naruči 
-          <i class="fas fa-shopping-cart"></i> <i class="fas fa-arrow-right text-sm"></i>
+          <i class="fas fa-shopping-cart"></i> 
+          <i class="fas fa-arrow-right text-sm"></i>
       </span>
       {/if}
     </a>

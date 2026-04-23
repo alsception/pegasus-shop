@@ -86,6 +86,9 @@ public class PGSProduct {
     @Column(nullable = true)
     private Boolean favourite = false;   
     
+    @Column(nullable = true)
+    private Boolean alcohol = false;   
+    
 //    @Version
 //    private Integer version; // Optimistic locking to prevent concurrent modification issues    
     
@@ -131,5 +134,9 @@ public class PGSProduct {
     
     public boolean isActive() {
         return Boolean.TRUE.equals(active); // vraća true samo ako je true
+    }
+    
+    public boolean isAlcohol() {
+        return Boolean.TRUE.equals(alcohol); // vraća true samo ako je true
     }
 }

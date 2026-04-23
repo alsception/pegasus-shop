@@ -78,7 +78,7 @@
       <a href="#/home" class="flex items-center">
         <img src="/white_barbacoa.png" alt="Barbacoa logo" title="Barbacoa" style="max-width:149px;" class="invert-pic">
       </a>
-      <span class="font-bold">BACKOFFICE</span>
+      <span class="font-bold text-2xl" style="margin-top: -7px;color: darkblue;">BACKOFFICE</span>
     </div>
   </div>
   <div class="navbar-center"></div>

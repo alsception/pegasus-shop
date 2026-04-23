@@ -35,6 +35,7 @@ export const navRoutes: NavRoutesMap =
       disabled: false,
       admin: true,
       customer: true,
+      guest: true,
     },
     "/checkout": {
       label: "Checkout",

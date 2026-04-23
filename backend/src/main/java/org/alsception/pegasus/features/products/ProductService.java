@@ -2,6 +2,7 @@ package org.alsception.pegasus.features.products;
 
 import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +37,13 @@ public class ProductService
     }
     
     public List<PGSProductDTO> findProducts(String search, String code, String name) 
+    {        
+        return this.findProductsEntites(search, code, name).stream()
+                            .map(PGSProductDTO::new)
+                            .toList();
+    }
+    
+    public List<PGSProduct> findProductsEntites(String search, String code, String name) 
     {
         logger.debug("findProducts: search=["+search+"] code=["+code+"], name=["+name+"]. /46");
         if(search != null)
@@ -47,9 +55,7 @@ public class ProductService
                 logger.debug("Found products: "+result.size());
                 logger.debug("Converting to dto...");
                 
-                return  result.stream()
-                            .map(PGSProductDTO::new)
-                            .toList();
+                return  result;
             }
             catch(Exception e)
             {
@@ -61,15 +67,11 @@ public class ProductService
         {
             if(code==null && name == null)
             { 
-                return productRepository.findByActiveTrue().stream()
-                            .map(PGSProductDTO::new)
-                            .toList();
+                return productRepository.findByActiveTrue();
             }
             else
             {
-                return productRepository.findByCodeContainingIgnoreCaseOrNameContainingIgnoreCase(code, name).stream()
-                            .map(PGSProductDTO::new)
-                            .toList();
+                return productRepository.findByCodeContainingIgnoreCaseOrNameContainingIgnoreCase(code, name);                           
             }
         }
     }
@@ -127,8 +129,7 @@ public class ProductService
     }
     
     public PGSProduct updateProduct(Long id, PGSProduct updatedProduct) 
-    {
-        
+    {        
         return productRepository.findById(id).map(existingProduct -> 
         {
             existingProduct.setName(updatedProduct.getName());
@@ -145,9 +146,14 @@ public class ProductService
             existingProduct.setOther(updatedProduct.getOther());
             existingProduct.setStockQuantity(updatedProduct.getStockQuantity());
             existingProduct.setUnit(updatedProduct.getUnit());
+            existingProduct.setDiscount(updatedProduct.getDiscount());
+            existingProduct.setFavourite(updatedProduct.getFavourite()); 
+            existingProduct.setDepartment(updatedProduct.getDepartment());
+            existingProduct.setModified(LocalDateTime.now());
 
             return productRepository.save(existingProduct);
-        }).orElseThrow(() -> new EntityNotFoundException("Product not found"));
+        }
+        ).orElseThrow(() -> new EntityNotFoundException("Product not found"));
     }
 
     //wtf sta ce nam ovo????? trenutno nemamo reviews

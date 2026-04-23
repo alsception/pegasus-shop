@@ -48,6 +48,7 @@ public class PGSProductDTO
     
     private Boolean active;   
     private Boolean favourite;   
+    private Boolean alcohol;   
     
     public PGSProductDTO(PGSProduct p) 
     {
@@ -74,6 +75,7 @@ public class PGSProductDTO
         this.created = p.getCreated();
         this.modified = p.getModified();
         this.active = p.isActive();
+        this.alcohol = p.isAlcohol();
         this.favourite = p.getFavourite();
         this.category = p.getCategory() == null ? "" : p.getCategory().toString();                
     }
