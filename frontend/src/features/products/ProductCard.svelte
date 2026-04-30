@@ -1,12 +1,12 @@
 <script lang="ts">
   import { formatPrice, getFormattedPrice } from "../../utils/formatting";
   import AddToCartButton from "./AddToCartButton.svelte";
-  import { link } from "svelte-spa-router";
   import ProductPage from "./ProductPage.svelte";
-  import { fly } from "svelte/transition";
   import type { Product } from "./Product";
 
   export let product: Product;
+
+  export let zoomPix = false;
 
   let productId = product.id; //Product koji cemo prikazati na modalu kada se klikne
 
@@ -82,24 +82,31 @@
     }
     return false;
   }
+
+
+  function handleKeydown(event: { key: string }) {
+    if (event.key === "Escape") {
+      closeModal();
+    }
+  }
 </script>
 
-
+<svelte:window on:keydown={handleKeydown} />
 
 <div 
-  class="bg-white dark:hover:border-primary/40
-  overflow-hidden w-full  hover:shadow-lg transition-shadow /*hover:outline-1 hover:outline-primary/30*/ z-2
-  flex flex-col h-ful rounded-xl md:rounded-3xl
-  md:transition-transform md:duration-300 md:hover:-translate-y-2 md:hover:scale-105" 
+  class="bg-white overflow-hidden w-full /*z-2*/ flex flex-col h-full rounded-xl md:rounded-2xl" 
   class:pgs-discount={product.discount>0} 
   class:pgs-new={product.isNew} 
   >
   <div class="w-full h-48 flex items-center justify-center overflow-hidden">
     {#if product.imageUrl}
       <img
-        class="w-full h-full object-cover zoom"
+        class="w-full h-full object-none cursor-pointer zoom"
+        class:object-none={zoomPix}
+        class:object-cover={!zoomPix}
         src={product.imageUrl}
         alt={product.name}
+        on:click={() => handleProductClick(product.id)}
       />
     {:else}
     <div class="product-card-image-container" style="display: flex; align-items: center; justify-content: center; height: 150px;">
@@ -115,7 +122,7 @@
     
       <!-- svelte-ignore a11y_click_events_have_key_events -->
       <!-- svelte-ignore a11y_no_static_element_interactions -->
-      <span on:click={() => handleProductClick(product.id)} class="pgs-hyperlink text-amber-600 dark:text-amber-500">{product.name}</span>
+      <span on:click={() => handleProductClick(product.id)} class="pgs-hyperlink text-amber-700 dark:text-amber-500">{product.name}</span>
       <span class="hidden">{product.id}</span>
       
       {#if product.discount }
@@ -126,7 +133,11 @@
       {/if}
     </h3>
     
-    <p>⭐⭐⭐⭐⭐</p>
+    {#if false}
+      <!-- jednog lepog dana mozda stavimo ocene -->
+      <p>⭐⭐⭐⭐⭐</p>
+    {/if}
+    
 
     <p
       class="text-sm text-gray-500 dark:text-gray-500 mt-1 line-clamp-3"
@@ -152,23 +163,23 @@
         
 
       {:else}
-<!--         text-amber-600 dark:text-amber-500
- -->        <span class="text-xl font-bold text-primary ">         
+      <!-- text-amber-600 dark:text-amber-500 -->        
+       <span class="text-xl font-bold text-primary/80 dark:text-primary ">         
           {@html getFormattedPrice(product.basePrice)}
         </span>   
 
       {/if}
 
-      <AddToCartButton {product} width="50px" />
+      <AddToCartButton {product} width="50px" full={false}/>
     </div>    
   </div>
 </div>
 
 {#if showModal}
-  <div class="modal modal-open pt-0 sm:mt-0" style="backdrop-filter: blur(10px);">
+  <div class="modal modal-open pt-0 sm:mt-0 " style="backdrop-filter: blur(10px);">
     <div
-      class="modal-box max-h-[100vh] sm:h-full w-full max-w-[1900px] p-0 flex flex-col bg-base-200"
-      transition:fly={{ y: 50, duration: 300 }}
+      class="modal-box max-h-[100vh] sm:h-full max-w-[1900px] sm:w-full w-auto p-0 flex flex-col bg-base-200"
+      
     >
       <!-- Fixed Header -->
       <div
@@ -181,6 +192,8 @@
 
       <!-- Scrollable Content -->
       <div class="overflow-y-auto flex-1">
+      <!-- Zasto ovde opet ucitavamo s interneta kad imamo proizvod?
+       TODO: Ovde staviti ceo proizvod da bude brze,ali da se nista nepokvari -->
         <ProductPage productId={product.id} liteView={true}></ProductPage>
       </div>
    
@@ -195,16 +208,16 @@
 
 <style>
  .zoom {
-  transition: transform 0.3s ease; /* definiše brzinu i glatkoću */
+  transition: transform 0.5s ease; /* definiše brzinu i glatkoću */
 }
 
 .zoom:hover {
-  transform: scale(1.1); /* 1.1 znači povećanje od 10% */
+  transform: scale(1.15); /* 1.1 znači povećanje od 10% */
 }
 
 .pgs-discount{
   outline: 4px solid var(--color-accent);
-  background-color: oklch(50.131% 0.28782 284.203 / 0.11);
+  background-color: oklch(50.131% 0.28782 284.203 / 0.07);
 
 }
 

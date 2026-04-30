@@ -263,7 +263,7 @@
         <div
           class="p-0 bg-primary/10 text-primary-content/80 dark:text-primary/80 rounded-t"
         >
-          <h2 class="text-primary text-lg sm:text-2xl font-bold p-1 text-center h-14 pt-3">
+          <h2 class="text-primary text-lg sm:text-2xl font-bold p-1 text-center h-14 pt-3 rounded-t-xl">
             Košarica
           </h2>
         </div>
@@ -411,13 +411,11 @@
               <div class="modal modal-open pt-0" style="backdrop-filter: blur(10px);">
                 <div
                   class="modal-box max-h-[90vh] w-full sm:w-8/12 max-w-5xl p-0 flex flex-col bg-base-200"
-                  transition:fly={{ y: 50, duration: 300 }}
                 >
                   <!-- Fixed Header -->
                   <div
-                    class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300"
+                    class="sticky top-0 bg-base-100 z-10 px-3 py-2 border-b border-base-300"
                   >
-                    <h3 class="font-bold text-lg">Detalji proizvoda</h3>
                   </div>
 
                   <!-- Scrollable Content -->

@@ -29,7 +29,6 @@
 
   //Authenticacion
   $: auth.subscribe((value) => {
-    console.log('subscribe to auth',value);
     isAuthenticated = value.isAuthenticated;
   });
 

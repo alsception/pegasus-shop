@@ -7,13 +7,14 @@
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import AddToCartButton from "./AddToCartButton.svelte";
   import { formatPrice, getFormattedPrice } from "../../utils/formatting";
+  import AddToCartButtonBig from "./AddToCartButtonBig.svelte";
 
   document.title = "Barbacoa";
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   export let productId: number;
   export let liteView = false;
-  let product: Product | null = null;
+  export let product: Product | null = null;
   let loading = true;
   let error: string | null = null;
   let isAdminView = false;
@@ -76,108 +77,55 @@
   </div>
 {:else}
   <div
-    class="product-card dark:product-card-dark"
+    class="product-card dark:product-card-dark p-0 sm:px-12"
     class:border-2={!liteView}
     class:border-zinc-600={!liteView}
   >
     <div
-      class="w-full flex items-center justify-center overflow-hidden rounded-md mb-4"
+      class="w-full sm:h-[80vh] flex items-center justify-center overflow-hidden rounded-md mb-4 border-1 border-primary/20"
     >
       {#if product.imageUrl}
-        <img
-          src={product.imageUrl}
-          alt={product.name}
-          class="w-full h-full object-cover"
-        />
-        <div class="carousel rounded-box w-64 hidden">
-          <div class="carousel-item w-full">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.webp"
-              class="w-full"
-              alt="Tailwind CSS Carousel component" />
-          </div>
-          <div class="carousel-item w-full">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1565098772267-60af42b81ef2.webp"
-              class="w-full"
-              alt="Tailwind CSS Carousel component" />
-          </div>
-          <div class="carousel-item w-full">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1572635148818-ef6fd45eb394.webp"
-              class="w-full"
-              alt="Tailwind CSS Carousel component" />
-          </div>
-          <div class="carousel-item w-full">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1494253109108-2e30c049369b.webp"
-              class="w-full"
-              alt="Tailwind CSS Carousel component" />
-          </div>
-          <div class="carousel-item w-full">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1550258987-190a2d41a8ba.webp"
-              class="w-full"
-              alt="Tailwind CSS Carousel component" />
-          </div>
-          <div class="carousel-item w-full">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1559181567-c3190ca9959b.webp"
-              class="w-full"
-              alt="Tailwind CSS Carousel component" />
-          </div>
-          <div class="carousel-item w-full">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1601004890684-d8cbf643f5f2.webp"
-              class="w-full"
-              alt="Tailwind CSS Carousel component" />
-          </div>
-        </div>
-
-        <figure class="hover-gallery max-w-60 hidden">
-          <img src="https://img.daisyui.com/images/stock/daisyui-hat-1.webp" />
-          <img src="https://img.daisyui.com/images/stock/daisyui-hat-2.webp" />
-          <img src="https://img.daisyui.com/images/stock/daisyui-hat-3.webp" />
-          <img src="https://img.daisyui.com/images/stock/daisyui-hat-4.webp" />
-        </figure> 
+      <!-- TODO: DALI DA ZOOMIRAMO ILI OBJECT-COVER? -->
+        <img src={product.imageUrl} alt={product.name} class=" object-cover" />
       {:else}
         <span class="text-gray-400 dark:text-gray-500">No image available</span>
       {/if}
     </div>
-<div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-stretch">
-  
-  <div class=" mt-2">
-    <h2 class="text-primary text-3xl">
-      {product.name}
-      {#if !liteView}
-        <a class="text-gray-400 hover:text-blue-300 text-md" use:link href="#/inventory/{product.id}">
-          <i class="fas fa-pen"></i>
-        </a>
-      {/if}
-    </h2>
 
-  <div class=" ">
-    {#if product.description}
-      <p class="mt-4 mb-4 text-secondary/40">{product.description}</p>
-    {/if}
-  </div>
-  </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch p-4 sm:p-0">
+      <div class="w-full mt-2">
+        <h3 class="inline-block text-amber-700 dark:text-amber-500 text-2xl sm:text-3xl mr-2 sm:mr-0 mb-4 sm:mb-0">
+          {product.name}
+          <!-- ... link ... -->
+        </h3>
+        {#if product.discount}
+          <h3 class="inline-block text-md sm:ml-4 line-through">
+            {@html getFormattedPrice(product.basePrice)}
+          </h3>
+          <h3 class="inline-block text-xl font-bold text-success ml-4">
+            {@html getFormattedPrice(product.discount)}
+          </h3>
+        {:else}
+          <h3 class="inline-block text-xl font-bold ml-0 sm:ml-4 ">
+            {@html getFormattedPrice(product.basePrice)}
+          </h3>
+        {/if}
 
-  <div class=" p-4">
-    <h3 class=" text-xl font-bold">
-      {@html getFormattedPrice(product.basePrice)}
-    </h3>
-  </div>
+        <div class="flex items-center justify-between mt-auto">
+          <div class=" ">
+            {#if product.description}
+              <p class="mt-4 mb-4 text-secondary/40">{product.description}</p>
+            {/if}
+          </div>
+        </div>
+      </div>
 
-
-
-  <div class=" p-4">
-    <p class="mb-5">⭐⭐⭐⭐⭐</p>
-  </div>
-
-<div><AddToCartButton {product} width="50px" full={true}/></div>
-</div>
-
+      <div class="w-full mb-7 sm:mt-2 mt-16">
+        <div class="max-w-[28rem] ml-auto flex justify-center sm:justify-end">
+          <AddToCartButtonBig {product} width="250px" full={true} />
+        </div>
+      </div>
+    </div>
     {#if !liteView && isAdminView}
       <div class="w-full flex mr-0 mt-6 mb-6">
         <button type="button" on:click={close} class=" btn btn-ghost mr-5">
@@ -193,30 +141,7 @@
     min-height: 24px;
     color: var(--color-base-content);
   }
-  .product-card {
-    
-    margin: 2rem auto;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding: 2rem;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-radius: 12px;
+  .product-card {    
     background-color: var(--color-base-200);
   }
-
-  .product-card h1 {
-    margin-bottom: 1rem;
-    font-size: 1.8rem;
-  }
-
-  .product-detail {
-    margin: 0.5rem 0;
-    font-size: 1rem;
-    font-weight: bold;
-    color: var(--color-base-content);
-    margin-top: 16px;
-    margin-bottom: 0px;
-  }
-
 </style>

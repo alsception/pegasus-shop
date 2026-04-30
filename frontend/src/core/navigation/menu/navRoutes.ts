@@ -12,7 +12,7 @@ export const navRoutes: NavRoutesMap =
       icon: "home",
       href: "#/home",
       component: "/home",
-      admin: true,
+      admin: false,
       customer: false,
       default: false,
     },     

@@ -37,6 +37,7 @@
   let totalPages = 0; 
   let selectedCategory: number;
   let productId = 0; //Product koji cemo prikazati na modalu kada se klikne
+  let zoomPix = false;
   export let hideButtonDalje = false;
 
 
@@ -46,7 +47,7 @@
     isAuthenticated = value.isAuthenticated;
   });
 
-  function checkDarkmode() 
+  /* function checkDarkmode() 
   {
     const check = () => (isDark = document.body.classList.contains("dark"));
     check();
@@ -58,9 +59,9 @@
     });
 
     return () => observer.disconnect();
-  }
+  } */
 
-  function checkListViewParam() 
+  function checkUrlParams() 
   {
     let search = window.location.search;
     if (!search && window.location.hash.includes("?")) {
@@ -73,12 +74,22 @@
     if (listViewParam !== null) {
       isListView = listViewParam === "true";
     }
+
+    let zp = params.get("zoom");
+
+    if(zp!== null)
+    {
+      zoomPix = true;
+    }else{
+    }
+      
+    
   }
 
   onMount(async () => 
   {
-    checkDarkmode();
-    checkListViewParam();
+    //checkDarkmode();
+    checkUrlParams();
 
     try 
     {
@@ -374,7 +385,7 @@
       style="justify-items: center;">
       <!-- todo: ovde staviti kategorije -->
       {#each filteredProducts as product, i}
-        <ProductCard {product} />
+        <ProductCard {product} zoomPix={zoomPix}/>
       {/each}
     </div>
   </div>
@@ -385,22 +396,25 @@
 {/if}
 
 {#snippet btnNext()}
-<!-- bg-gradient-to-b from-transparent via-slate-900 via-slate-950 via-slate-950 via-slate-900 to-transparent -->
-  <div id="btn-nxt-cntr" class="btn-nxt-cntr fixed bottom-0 md:bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:right-15 lg:right-10 md:translate-x-0 z-[9000] w-full max-w-sm md:max-w-xs border-0 border-amber-400 
-  p-4  transition-transform duration-300  hover:scale-105" 
+<!--  -->
+  <div id="btn-nxt-cntr" class="btn-nxt-cntr fixed bottom-0 md:bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:right-15 lg:right-10 
+  md:translate-x-0 z-[9999] w-full max-w-2xl md:max-w-xs border-0 border-amber-400 
+  p-1 px-1 pb-0 transition-transform duration-30
+  " 
   class:hidden={ !(cartTotal > 0)}>
     <a 
-      class="btn btn-lg bg-slate-900/75 dark:bg-slate-900/80  --hover:bg-yellow-300 backdrop-blur-lg text-black border-2 border-primary/40 w-full max-w-lg md:max-w-xs 
-      shadow-2xl ring-4 ring-white/10 pulsing-hov h-14"
+      class="btn btn-lg bg-zinc-950/75 dark:bg-zinc-950/80  --hover:bg-yellow-300 backdrop-blur-lg text-black border-1 
+      border-primary/20 w-full max-w-lg md:max-w-xs 
+      shadow-2xl ring-4 ring-white/10 pulsing-hov h-14 rounded-md md:rounded-4xl"
       
       use:link 
       href="/cart"
     >
       {#if (cartTotal > 0)}
-      <span class="flex items-center gap-2 text-white/90 text-2xl hover:text-[#728bff] ">
+      <span class="flex items-center gap-2 text-white/95 dark:text-white/70 text-xl ">
           Naruči 
           <i class="fas fa-shopping-cart"></i>
-          <span class="font-bold text-2xl">{cartPriceFormatted}</span>
+          <span class=" text-xl">{cartPriceFormatted}</span>
       </span>
       {:else}
       <span class="flex items-center gap-2">          
@@ -444,7 +458,6 @@
       <div
         class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300"
       >
-        <h3 class="font-bold text-lg hidden">Detalji proizvoda</h3>
       </div>
 
       <!-- Scrollable Content -->
