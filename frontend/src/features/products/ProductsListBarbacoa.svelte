@@ -417,7 +417,7 @@
           <span class=" text-xl">{cartPriceFormatted}</span>
       </span>
       {:else}
-      <span class="flex items-center gap-2">          
+      <span class="flex items-center gap-2 text-white/95 dark:text-white/70">          
         Naruči 
           <i class="fas fa-shopping-cart"></i> 
           <i class="fas fa-arrow-right text-sm"></i>

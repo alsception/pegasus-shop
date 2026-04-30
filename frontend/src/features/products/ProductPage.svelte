@@ -120,7 +120,7 @@
         </div>
       </div>
 
-      <div class="w-full mb-7 sm:mt-2 mt-16">
+      <div class="w-full mb-7 mt-2">
         <div class="max-w-[28rem] ml-auto flex justify-center sm:justify-end">
           <AddToCartButtonBig {product} width="250px" full={true} />
         </div>

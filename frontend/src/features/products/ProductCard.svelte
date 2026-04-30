@@ -19,36 +19,68 @@
 
   function closeModal() {
     showModal = false;
-    toggleHeader();
+    showHeader();
   }
 
   function handleProductClick(id: number | undefined) 
   {    
     openModal();
-    toggleHeader();
+    hideHeader();
   }
 
-  function toggleHeader(){
+  function hideHeader(){
     // Pronađi element (npr. navbar po ID-u ili klasi)
     let element = document.querySelector('.navbar');
 
     // Provjeri postoji li element prije dodavanja klase
     if (element) {
-      element.classList.toggle('hidden'); // Dodaje klasu
+      element.classList.add('hidden'); // Dodaje klasu
     }
 
     element = document.querySelector('.btn-nxt-cntr');
 
     // Provjeri postoji li element prije dodavanja klase
     if (element) {
-      element.classList.toggle('hidden'); // Dodaje klasu
+      element.classList.add('hidden'); // Dodaje klasu
     }
 
     element = document.querySelector('.prod-form-cntr');
 
     // Provjeri postoji li element prije dodavanja klase
     if (element) {
-      element.classList.toggle('hidden'); // Dodaje klasu
+      element.classList.add('hidden'); // Dodaje klasu
+    }
+
+    // Dohvaća točno ove elemente
+    /* const elementi = document.querySelectorAll('.navbar, .btn-nxt-cntr, #btn-nxt-cntr');
+
+    elementi.forEach((el) => {
+      (el as HTMLElement).classList.toggle('hidden');
+    }); */
+    
+  }
+
+  function showHeader(){
+    // Pronađi element (npr. navbar po ID-u ili klasi)
+    let element = document.querySelector('.navbar');
+
+    // Provjeri postoji li element prije dodavanja klase
+    if (element) {
+      element.classList.remove('hidden'); // Dodaje klasu
+    }
+
+    element = document.querySelector('.btn-nxt-cntr');
+
+    // Provjeri postoji li element prije dodavanja klase
+    if (element) {
+      element.classList.remove('hidden'); // Dodaje klasu
+    }
+
+    element = document.querySelector('.prod-form-cntr');
+
+    // Provjeri postoji li element prije dodavanja klase
+    if (element) {
+      element.classList.remove('hidden'); // Dodaje klasu
     }
 
     // Dohvaća točno ove elemente
