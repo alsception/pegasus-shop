@@ -42,9 +42,8 @@
 
     <form
       on:submit|preventDefault={handleLogin}
-      class="w-full max-w-md relative p-6 px-10 pb-7 m-[5px] rounded-2xl bg-base-content/10 bg-gradient-to-br 
-                from-gray-50/40 via-base-200/40 to-zinc-100/40 
-                dark:from-gray-900/40 dark:via-base-200/40 dark:to-zinc-800/40 border 
+      class="w-full max-w-md relative p-6 px-10 pb-7 m-[5px] rounded-2xl bg-base-content/10 
+                 border 
                 border-base-content/20 backdrop-blur-lg /*border border-primary/14*/"
     >
       {#if loading}

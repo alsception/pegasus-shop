@@ -4,11 +4,9 @@
   import { onDestroy, onMount } from "svelte";
   import { link } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";
-  import { get } from "svelte/store";
   import {
     formatCode,
     formatCommentInfo,
-    formatDate,
     formatPrice,
     formatTime,
     formatTime2,
@@ -52,7 +50,6 @@ i LITE APP!!, I MOZDA i WS.....
   let totalAmount = 0;
   let isBlockView = true;
   let intervalId: string | number | NodeJS.Timeout | undefined;
-  let mojParametar = null;
   const REFRESH_INTERVAL = 5000; // 5 sekundi
   const autoRefresh = true;
   export let liteView = false;
@@ -536,15 +533,17 @@ i LITE APP!!, I MOZDA i WS.....
                 >
                 <td class="pgs-td font-mono text-center">
                   {#if order.paymentMethod == '1'}
-                    <span
-                      class="badge badge-soft badge-success font-mono badge-sm whitespace-nowrap"
-                      style="text-transform: uppercase;"
-                    >GOTOVINA</span>
+                    <div class="tooltip tooltip-info tooltip-top inline-flex" data-tip="Gotovina">
+                      <span class="badge badge-soft badge-warning flex items-center justify-center">
+                        <i class="fas fa-coins"></i>
+                      </span>
+                    </div>
                   {:else if order.paymentMethod == '2'}
-                    <span
-                      class="badge badge-soft badge-info font-mono badge-sm whitespace-nowrap"
-                      style="text-transform: uppercase;"
-                    >KARTICA</span>
+                    <div class="tooltip tooltip-info tooltip-top inline-flex" data-tip="Kartica">
+                      <span class="badge badge-soft badge-accent flex items-center justify-center">
+                        <i class="fas fa-credit-card"></i>
+                      </span>
+                    </div>
                   {:else}
                     <span
                       class="badge badge-soft badge-secondary font-mono badge-sm whitespace-nowrap"

@@ -31,9 +31,6 @@
     <p class="text-primary/80 text-3xl mt-8 text-centerp-2">
         {error}
     </p>
-    <p class="text-primary/60 text-xl mt-8 text-centerp-2">
-        Traženi resurs nije pronađen
-    </p>
 
   {:else}
 

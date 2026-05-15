@@ -122,6 +122,24 @@ export function formatDate(
     return output;
 }
 
+export function formatDate2( dateStr: string | number | Date | null | undefined )
+{
+    if (dateStr == null) return '';
+
+    const date = new Date(dateStr);
+    let output = '';  
+
+    const formattedDateTime = date.toLocaleString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+    });
+  
+    output = formattedDateTime
+
+    return output;
+}
+
 
 export const formattedTime = (value: string | number | Date | null | undefined): string => 
 {

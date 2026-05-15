@@ -1,22 +1,34 @@
 <script lang="ts">
   import { type FPGSUser } from "./FPGSUser";
   import { onMount } from "svelte";
-  import { params, push } from "svelte-spa-router";
+  import { link, params, push } from "svelte-spa-router";
   import { auth } from "../../core/services/SessionStore";
   import Login from "../../core/auth/Login.svelte";
   import api from "../../core/services/client";
   import ErrorDiv from "../../core/navigation/error/ErrorDiv.svelte";
   import { showSuccessToast } from "../../core/utils/toaster";
-  import { formatDateTime } from "../../utils/formatting";
-  import { showErrorModalWithTitle } from "../../utils/modal";
+  import { formatCode, formatCommentInfo, formatDate2, formatDateTime, formatPrice, formatTime, formatTime2, getOrderStatusColor, getOrderStatusLabel } from "../../utils/formatting";
+  import { showErrorModal, showErrorModalWithTitle } from "../../utils/modal";
+  import type { Order } from "../orders/Order";
+  import { fly } from "svelte/transition";
 
   export let endpoint: string | null = null; // Optional if used in a route
 
   let resolvedEndpoint: string;
 
   let loading: boolean = false;
+  let loadingOrders: boolean = false;
   let error: string | null = null;
   let ID: number | string | undefined;
+  let orders: Order[] = [];
+  let ordersNaCekanju: Order[] = [];
+  let ordersUpripremi: Order[] = [];
+  let ordersSpremni: Order[] = [];
+  let ordersOstalo: Order[] = [];
+
+
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
   document.title = "Account details | Barbacoa";
 
@@ -63,7 +75,12 @@
   $: if (resolvedEndpoint) 
   {
     fetchUser();
+    
   }
+
+  let isCheckedDetails = true;
+  let isCheckedCart = false;
+  let isCheckedOrders = false;
  
   // Available user types
   const userTypes = [
@@ -99,7 +116,11 @@
       ID = formData.id;//Ako je my-acc id cemo dobiti tek kad se ucita user.
       document.title = formData.username + " | Detalji računa " + " | Barbacoa";
       error = null;
-      formData.created = data.created;      
+      formData.created = data.created;   
+      
+      //If user is loaded, load orders
+      //TODO: start loading only when checked true;
+      fetchOrders(true);
     } 
     catch (err) 
     {
@@ -109,6 +130,97 @@
     {
       removeLoadingAnimation();
     }
+
+  }
+
+  async function fetchOrders(showLoading: boolean) 
+  {
+      const token = $auth.token;
+      if (showLoading) loadingOrders = true;
+
+      try 
+      {
+        const res = await fetch(API_BASE_URL + `/orders/user/${ID}`, 
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        // Check response status and handle specific cases
+        if (!res.ok) 
+        {
+          if (res.status === 401) 
+          {
+            console.log("Authentication failed - token may be expired");
+            // Clear invalid token
+            localStorage.removeItem("token");
+            auth.set({ token: null, isAuthenticated: false });
+            // Redirect to login or show login modal
+            // window.location.href = '/login';
+            // OR: showLoginModal = true;
+            // OR: goto('/login');
+            throw new Error("Authentication failed");
+          }
+          throw new Error(`Fetch error: ${res.status} - ${res.statusText}`);
+        }
+
+        // Parse JSON directly - no need for JSON.parse since res.json() already does this
+        const data = await res.json();
+
+        // Update orders with the received data
+        orders = data;
+
+        console.log(orders)
+
+        orders = data.reverse();
+
+        let ordersDropped = orders.filter((o) => o.code === null);
+        if( ordersDropped.length > 0)
+        {
+          console.warn("Dropped %s orders with code null", ordersDropped.length);
+          //ovo bi trebalo poslati na db log TODO
+        }
+          
+        orders = orders.filter((o) => o.code !== null);
+
+        ordersNaCekanju = orders.filter((o) => o.status === 'WAITING');
+        ordersUpripremi = orders.filter((o) => o.status === 'IN_PREPARATION');
+        ordersSpremni = orders.filter((o) => o.status === "READY" || o.status === "SERVED");
+        ordersOstalo = orders.filter((o) => (
+          o.status !== "READY" 
+           && o.status !== "SERVED"
+           && o.status !== "WAITING"
+           && o.status !== "IN_PREPARATION"
+        ));
+        //totalAmount = calculateTotal(orders);
+      } 
+      catch (error: any) 
+      {
+        console.error("Error during search:", error);
+
+        /**
+         * TODO: see if this works. should display error message.
+         * ako je failed to fetch, server je nedostupan.
+         */
+
+        showErrorModal("Greška prilikom učitavanja narudžbi: " + error.message);
+        // Handle 401 Unauthorized specifically
+        if (error.message.includes("401")) 
+        {
+          console.log("Authentication failed - token may be expired");
+          // Clear invalid token
+          $auth.token = null;
+        }
+
+      } 
+      finally 
+      {
+        if (showLoading) loadingOrders = false;
+      }
+         
   }
 
   function processError(err: any) 
@@ -265,6 +377,52 @@
       </div>
     {/if}
 
+
+       <!-- name of each tab group should be unique -->
+    <div class="tabs tabs-box rounded-xs">     
+
+      <input
+        type="radio"
+        name="my_tabs_6"
+        class="tab text-primary text-xl"
+        aria-label="Detalji računa"
+        checked={isCheckedDetails}
+      />
+      <div class="tab-content bg-base-300 dark:bg-[#0a0a0a] border-base-300 p-0 h-full"
+        >
+        {@render userForm()}
+      </div>
+
+      <input
+        type="radio"
+        name="my_tabs_6"
+        class="tab text-primary text-xl"
+        aria-label="Košarica"
+        checked={isCheckedCart}
+      />
+      <div
+        class="tab-content bg-base-300 dark:bg-[#0a0a0a] border-base-300 p-0 h-full"
+      >
+        {@render userCart()} 
+      </div>
+
+      <input
+        type="radio"
+        name="my_tabs_6"
+        class="tab text-primary text-xl"
+        aria-label="Narudžbe"
+        checked={isCheckedOrders}
+      />
+      <div     
+        class="tab-content bg-base-300 dark:bg-[#0a0a0a] border-base-300 p-0 h-full"
+      >
+        {@render userOrders()}
+      </div>
+
+    </div>
+
+    {#snippet userForm()}
+
     <!-- TODO: 
     FIX THIS PROBLEM:
     Non-interactive element `<form>` should not be assigned mouse or keyboard event listeners
@@ -274,19 +432,17 @@
     MDN Reference -->
 
     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-
     <form
       on:submit|preventDefault={handleSubmit}
       on:keydown={handleKeydown}
       id="userForm"
-      class="max-w-[100rem] mx-auto bg-base-200 rounded-lg p-8 w-full space-y-8"
+      class=" mx-auto bg-base-200 rounded-lg p-8 w-full space-y-8"
     >
       <!-- Header -->
       <div
         class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
       >
         <div>
-          <h3 class="text-3xl font-semibold text-primary">Detalji računa</h3>&nbsp;
           <div id="loadingMessage" style="display: none;" class="mt-2">
             <span class="loading loading-dots loading-xs"></span>
           </div>
@@ -544,6 +700,188 @@
         </div>
       </div>
     </form>
+  
+    {/snippet}
+
+    {#snippet userOrders()}
+    {#if loadingOrders}
+      <!-- Overlay loading animation -->
+      <div class="fixed inset-0 z-10 flex items-center justify-center">
+        <div
+          class="rounded-2xl max-w-5xl w-full mx-auto flex flex-col items-center"
+        >
+          <span
+            class="loading loading-infinity mb-2 text-blue-500"
+            style="width: 4rem; height: 4rem;"
+          ></span>
+        </div>
+      </div>
+    {/if}
+    <!-- Table view: -->
+    {#if orders.length > 0}
+    <div
+      class="max-w-[2048px] w-full overflow-x-auto rounded-lg align-middle text-center mx-auto"
+    >
+      <div class="">
+        <table class="table table-zebra min-w-full divide-y divide-accent">
+          <thead class="bg-base-300">
+            <tr class="h-12">
+              <th class="pgs-th">Broj</th>
+              <th class="pgs-th">Korisnik</th>
+              <th class="pgs-th">Dostava<br>za van</th>
+              <th class="pgs-th">Status</th>
+              <th class="pgs-th">Komentar</th>
+              <th class="pgs-th">Datum</th>
+              <th class="pgs-th">Primljeno</th>
+              <th class="pgs-th">U pripremi</th>
+              <th class="pgs-th">Spremno</th>
+              <th class="pgs-th-r">Ukupno<br>stavki</th>
+              <th class="pgs-th-r">Iznos</th>
+              <th class="pgs-th-l">Način<br>plaćanja</th>
+                <th class="pgs-th"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {#each orders as order, i}
+              <tr
+                class={`tr-highlight ${i % 2 === 1 ? 'bg-base-200/30' : 'bg-base-200/60'}`}
+                transition:fly={{ y: -50, duration: 300 }}
+              >
+                <td class="pgs-td">
+                  <a use:link href="/orders/{order.id}" class="pgs-hyperlink"
+                    >{formatCode(order.code)}</a
+                  >
+                </td>                
+                <td class="pgs-td font-mono font-bold">{order.user?.username}</td>
+                <td class="pgs-td font-mono p-2">
+                  <div class="flex items-center justify-center gap-1 text-sm text-primary/60 w-full">
+                    
+                    {#if order.code.endsWith('T')}
+                      <div class="tooltip tooltip-info tooltip-top flex items-center" data-tip="Za van">
+                        <span class="badge badge-soft badge-success flex items-center justify-center">
+                          <i class="fas fa-walking"></i>
+                        </span>
+                      </div>
+                    {:else}
+                      <div class="tooltip tooltip-info tooltip-top flex items-center" data-tip="Dostava">
+                        <span class="badge badge-soft badge-info flex items-center justify-center">
+                          <i class="fas fa-car"></i>
+                        </span>
+                      </div>  
+                    {/if}
+                  </div>
+                </td>
+                <td class="text-center">
+                  {#if order.status}
+                    <span
+                      class="badge badge-soft badge-{getOrderStatusColor(
+                        order.status
+                      )} font-mono badge-sm whitespace-nowrap"
+                      style="text-transform: uppercase;"
+                    >
+                      { getOrderStatusLabel(order.status) }
+                    </span>
+                  {/if}
+                </td>
+                <td class="text-center"
+                  >{@html formatCommentInfo(order.comment)}</td
+                >
+                <td class="pgs-td font-mono">
+                  {@html formatDate2(order.created)}
+                  <!-- {@html formatTime2(order.created)} -->
+                </td>
+                <td class="pgs-td font-mono">
+                  {@html formatTime(order.created, "novo", 15)}
+                  <!-- {@html formatTime2(order.created)} -->
+                </td>
+                <td class="pgs-td font-mono">
+                  {@html formatTime2(order.upripremiAt)}
+                </td>
+                <td class="pgs-td font-mono">
+                  {@html formatTime2(order.spremnoAt)}
+                </td>
+                <td class="pgs-td-num font-mono">{order.items.length}</td>
+                <td class="pgs-td-num font-mono font-bold text-right"
+                  >{formatPrice(order.price)}</td
+                >
+                <td class="pgs-td font-mono text-center">
+                  {#if order.paymentMethod == '1'}
+                    <div class="tooltip tooltip-info tooltip-top inline-flex" data-tip="Gotovina">
+                      <span class="badge badge-soft badge-warning flex items-center justify-center">
+                        <i class="fas fa-coins"></i>
+                      </span>
+                    </div>
+                  {:else if order.paymentMethod == '2'}
+                    <div class="tooltip tooltip-info tooltip-top inline-flex" data-tip="Kartica">
+                      <span class="badge badge-soft badge-accent flex items-center justify-center">
+                        <i class="fas fa-credit-card"></i>
+                      </span>
+                    </div>
+                  {:else}
+                    <span
+                      class="badge badge-soft badge-secondary font-mono badge-sm whitespace-nowrap"
+                      style="text-transform: uppercase;"
+                    >OSTALO</span>
+                  {/if}
+                </td>
+                  <td class=" justify-center">
+                    <div class="tooltip tooltip-info group" data-tip="Edit">
+                      <a
+                        class="px-4"
+                        aria-label="Edit"
+                        use:link
+                        href="/orders/mngmt/{order.id}"
+                      >
+                        <i
+                          class="fas fa-pen text-gray-500 group-hover:text-sky-400 cursor-pointer"
+                        ></i></a
+                      >
+                    </div>
+                    <button
+                      class="px-4 group"
+                      aria-label="Delete"
+                      on:click={() =>
+                        deleteDialog(
+                          order.id,
+                          "Are you sure you want to delete this order? This action cannot be undone!"
+                        )}
+                    >
+                      <div class="tooltip tooltip-info" data-tip="Delete">
+                        <i
+                          class="fas fa-times-circle text-gray-500 group-hover:text-red-400 cursor-pointer"
+                        ></i>
+                      </div>
+                    </button>
+                  </td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+          <div
+            class="nb-table-footer text-left bg-secondary w-full"
+            style="background-color: var(--color-base-200);"
+          >
+            Ukupan promet: <span
+              class="ml-4 font-bold font-mono text-2xl text-primary"
+              >{formatPrice(0)}</span
+            >
+            <br />
+            Ukupno narudžbi:
+            <span class="font-bold text-xl text-primary"> {orders.length}</span>
+          </div>
+      </div>
+    </div>
+    {:else}
+    {#if !loadingOrders}
+    <p class="p-6">Nema narudžbi</p>
+    {/if}
+    {/if}
+    {/snippet}
+
+    {#snippet userCart()}
+    .
+    {/snippet}
+
   {/if}
 </div>
 <!-- TODO: WE NEED SEPARATE MODAL FOR INFO/ERROR MESSAGE AND PROFILE PIX -->

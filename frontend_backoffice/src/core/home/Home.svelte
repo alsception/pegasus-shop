@@ -22,7 +22,7 @@
   };
 
   const allItems: Item[] = [
-    {
+    /* {
       id: 1,
       emoji: "📔",
       title: "Jelovnik",
@@ -33,6 +33,18 @@
       default: true,
       admin: true,
       customer: true,
+    }, */
+    {
+      id: 0,
+      emoji: "👤",
+      title: "Korisnici",
+      description: "Upravljanje korisnicima",
+      icon: "users--",
+      href: "/users",
+      color: "blue",
+      default: false,
+      admin: true,
+      customer: false,
     },
     {
       id: 6,
@@ -67,7 +79,7 @@
       href: "/cart",
       color: "orange",
       default: false,
-      admin: true,
+      admin: false,
       customer: true,
     },
     {
@@ -82,21 +94,10 @@
       admin: true,
       customer: false,
     },
-    {
-      id: 0,
-      emoji: "👤",
-      title: "Korisnici",
-      description: "Upravljanje korisnicima",
-      icon: "users--",
-      href: "/users",
-      color: "blue",
-      default: false,
-      admin: true,
-      customer: false,
-    },
+    
     {
       id: 8,
-      emoji: "📦",
+      emoji: "📔",
       title: "Upravljanje jelovnikom",
       description: "Upravljanje proizvodima",
       icon: "users--",
