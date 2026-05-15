@@ -39,6 +39,14 @@ export function getCurrentUsername()
   return getUsernameFromToken(getToken());
 }
 
+export function getLiteUsername() 
+{
+  if(isGuest())
+    return 'gost-'+getUsernameFromToken(getToken()).substring(0,8);
+  else
+    return getUsernameFromToken(getToken());
+}
+
 export function getRawRole() 
 {
   return getRolesFromToken(getToken());

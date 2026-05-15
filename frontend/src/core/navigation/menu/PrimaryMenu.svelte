@@ -1,7 +1,7 @@
 <script lang="ts">
   import { link } from "svelte-spa-router";
   import { navRoutes } from "./navRoutes";
-  import { getCurrentUsername } from "../../services/SessionStore";
+  import { getCurrentUsername, getLiteUsername } from "../../services/SessionStore";
   import { getCurrentRole } from "../../services/SessionStore";
   import type { NavRoutesMap } from "./MenuTypes";
   import { cartTotalCounter } from "../../services/CheckoutStore";
@@ -82,12 +82,9 @@
         title={getCurrentUsername()}
       >
         <i class="fas fa-user mr-1"></i>
-        <span class="">{getCurrentUsername()}</span>
+        <span class="">{getLiteUsername()}</span>
       </a>
       
-      <span class="badge badge-info badge-outline badge-xs">
-        { role !== 'CUSTOMER' ? role : '' }
-      </span>
     </div>
   </li>
   <li class=""></li>
