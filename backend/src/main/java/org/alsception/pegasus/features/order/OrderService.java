@@ -49,11 +49,22 @@ public class OrderService
     @Transactional(readOnly = true)
     public List<PGSOrder> getByUsername(String username, String search) 
     {    
+       return getByUsername(username, search, false);
+    }
+
+    /*
+     * Need transactional annotation to correctly load the orders, otherwise we'll get lazy loading exception
+     */
+    @Transactional(readOnly = true)
+    public List<PGSOrder> getByUsername(String username, String search, Boolean allTheTime) 
+    {    
         List<PGSOrder> orders;
         
         if(search == null || "".equals(search)) 
         {
-            orders = orderRepository.findByUsernameWithItems(username);
+            orders = allTheTime ? 
+            orderRepository.findByUsernameWithItems_AllTheTime(username)
+        :   orderRepository.findByUsernameWithItems(username);
         }
         else
         {

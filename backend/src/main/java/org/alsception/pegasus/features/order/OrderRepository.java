@@ -46,6 +46,21 @@ public interface OrderRepository extends JpaRepository<PGSOrder, Long> {
             ORDER BY o.created ASC
          """)
    List<PGSOrder> findByUsernameWithItems(@Param("username") String username);
+
+   /**
+       * We use this one in production
+       * @param username
+       * @return
+          */
+   @Query("""
+            SELECT DISTINCT o FROM PGSOrder o
+            LEFT JOIN FETCH o.items
+            LEFT JOIN FETCH o.user u
+            WHERE u.username = :username            
+            ORDER BY o.created DESC
+            LIMIT 50
+         """)
+   List<PGSOrder> findByUsernameWithItems_AllTheTime(@Param("username") String username);
    
    @Query("""
             SELECT DISTINCT o FROM PGSOrder o

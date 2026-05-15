@@ -8,6 +8,7 @@ import org.alsception.pegasus.features.order.dto.OrderDTO;
 import org.alsception.pegasus.features.order.dto.OrderMapper;
 import org.alsception.pegasus.features.users.PGSUser;
 import org.alsception.pegasus.features.users.PGSUserRole;
+import org.alsception.pegasus.features.users.UserDTO;
 import org.alsception.pegasus.features.users.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,6 +98,39 @@ public class OrderController {
                 .stream()
                 .map( OrderMapper::toDto )
                 .collect(Collectors.toList());
+        }      
+
+        return ResponseEntity.ok(result);
+    }
+
+    /* =========================
+       GET LIST OF ORDERS FOR USER
+       ========================= */
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<OrderDTO>> findByUser(
+            Principal principal,
+            @PathVariable Long id) 
+    {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        PGSUser requestor = userService.findByUsername(auth.getName());
+        UserDTO user = userService.findById(id);
+        logger.info("Getting orders for: {}", user.getUsername());
+        List<OrderDTO> result = null;
+        
+        //Moze da vidi sve
+        if( requestor.getRole().equals(PGSUserRole.ADMIN) || requestor.getRole().equals(PGSUserRole.SUPERADMIN) )
+        {
+            result = orderService
+                .getByUsername( user.getUsername(), null, true )
+                .stream()
+                .map( OrderMapper::toDto )
+                .collect(Collectors.toList());
+        }
+        else 
+        {
+            //nebi trebalo da se desi
+            logger.info("Else");
         }      
 
         return ResponseEntity.ok(result);
