@@ -233,7 +233,6 @@
 
   function handleProductClick(id: number | undefined) 
   {
-    console.log('clicked');
     if (id != undefined) productId = id;
     openModal();
   }
@@ -261,6 +260,51 @@
       isPulsing = false;
     }, 600); 
   }
+
+  let categories = [
+    {
+        "id": 1,
+        "name": "Predjela",
+        "fullName": "Predjela",
+        "level": 0,
+        "hasChildren": false
+    },
+    {
+        "id": 2,
+        "name": "Glavna jela",
+        "fullName": "Glavna jela",
+        "level": 0,
+        "hasChildren": false
+    },    
+    {
+        "id": 3,
+        "name": "Prilozi, salate, premazi",
+        "fullName": "Prilozi, salate, premazi",
+        "level": 0,
+        "hasChildren": false
+    },
+    {
+        "id": 4,
+        "name": "Desert",
+        "fullName": "Desert",
+        "level": 0,
+        "hasChildren": false
+    },
+    {
+        "id": 5,
+        "name": "Piće",
+        "fullName": "Piće",
+        "level": 0,
+        "hasChildren": false
+    },
+    /* {
+        "id": 6,
+        "name": "Sve",
+        "fullName": "Sve",
+        "level": 0,
+        "hasChildren": false
+    } */
+]
 
 </script>
 
@@ -381,13 +425,34 @@
     no products found :/
   {:else}
   <div class="mt-20">
-    <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 4xl:grid-cols-5 gap-6 md:gap-12 p-4 mb-20 mt-[-4rem] sm:mt-[-6rem]" 
-      style="justify-items: center;">
-      <!-- todo: ovde staviti kategorije -->
-      {#each filteredProducts as product, i}
-        <ProductCard {product} zoomPix={zoomPix}/>
-      {/each}
-    </div>
+    <div id="products-container" class="flex flex-col gap-12 p-4 mb-20 mt-[-4rem] sm:mt-[-6rem]">
+
+    {#each categories as category (category.id)}
+      <div class="w-full">
+        <div class="w-full mb-6">
+          <h3 class="text-3xl font-bold pb-2 border-b border-secondary/30 text-primary/80">{category.name}</h3>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 4xl:grid-cols-5 gap-6 md:gap-12" style="justify-items: center;">
+          {#each filteredProducts.filter(product => product.category == category.id) as product (product.id)}
+            <ProductCard {product} {zoomPix} />
+          {/each}
+        </div>
+      </div>
+    {/each}
+
+    {#if filteredProducts.some(product => !product.category || !categories.some(c => c.id == product.category))}
+      <div class="w-full">
+        <h3 class="text-3xl font-bold mb-6">Ostalo</h3>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 4xl:grid-cols-5 gap-6 md:gap-12" style="justify-items: center;">
+          {#each filteredProducts.filter(product => !product.category || !categories.some(c => c.id == product.category)) as product (product.id)}
+            <ProductCard {product} {zoomPix} />
+          {/each}
+        </div>
+      </div>
+    {/if}
+
+  </div>
   </div>
     {#if !hideButtonDalje}
       {@render btnNext()}
@@ -411,7 +476,7 @@
       href="/cart"
     >
       {#if (cartTotal > 0)}
-      <span class="flex items-center gap-2 text-white/95 dark:text-white/70 text-xl ">
+      <span class="flex items-center gap-2 text-white/95 dark:text-white/70 text-xl dark:hover:ring-border-800">
           Naruči 
           <i class="fas fa-shopping-cart"></i>
           <span class=" text-xl">{cartPriceFormatted}</span>

@@ -154,7 +154,7 @@
     
       <!-- svelte-ignore a11y_click_events_have_key_events -->
       <!-- svelte-ignore a11y_no_static_element_interactions -->
-      <span on:click={() => handleProductClick(product.id)} class="pgs-hyperlink text-amber-700 dark:text-amber-500">{product.name}</span>
+      <span on:click={() => handleProductClick(product.id)} class="pgs-hyperlink text-primary/80">{product.name}</span>
       <span class="hidden">{product.id}</span>
       
       {#if product.discount }
@@ -184,7 +184,7 @@
       {#if product.discount }
 
         <div class="flex">
-          <span class="text-xl font-bold text-primary line-through">
+          <span class="text-xl font-bold text-red-700 dark:text-red-600 line-through">
             { formatPrice( product.basePrice )}
           </span>   
           
@@ -195,8 +195,8 @@
         
 
       {:else}
-      <!-- text-amber-600 dark:text-amber-500 -->        
-       <span class="text-xl font-bold text-primary/80 dark:text-primary ">         
+
+      <span class="text-md  text-amber-700 dark:text-amber-600">         
           {@html getFormattedPrice(product.basePrice)}
         </span>   
 
@@ -218,7 +218,7 @@
         class="sticky top-0 bg-base-100 z-10 px-6 py-4 border-b border-base-300"
       >
         <div class="flex justify-end">
-          <h3 class="font-bold text-lg cursor-pointer" on:click={closeModal}>X</h3>
+          <h3 class="font-bold text-lg cursor-pointer" on:click={closeModal}><i class="fa-solid fa-x text-sm mx-2"></i></h3>
         </div>
       </div>
 

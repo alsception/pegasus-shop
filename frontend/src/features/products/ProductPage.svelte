@@ -94,19 +94,19 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch p-4 sm:p-0">
       <div class="w-full mt-2">
-        <h3 class="inline-block text-amber-700 dark:text-amber-500 text-2xl sm:text-3xl mr-2 sm:mr-0 mb-4 sm:mb-0">
-          {product.name}
+        <h3 class="inline-block text-primary text-2xl sm:text-2xl mr-2 sm:mr-0 mb-4 sm:mb-0">
+          {product.name} &nbsp; 
           <!-- ... link ... -->
         </h3>
         {#if product.discount}
-          <h3 class="inline-block text-md sm:ml-4 line-through">
+          <h3 class="inline-block text-md sm:ml-4 text-amber-700 dark:text-amber-600 line-through">
             {@html getFormattedPrice(product.basePrice)}
           </h3>
           <h3 class="inline-block text-xl font-bold text-success ml-4">
             {@html getFormattedPrice(product.discount)}
           </h3>
         {:else}
-          <h3 class="inline-block text-xl font-bold ml-0 sm:ml-4 ">
+          <h3 class="inline-block  text-amber-700 dark:text-amber-600 font-bold ml-0 sm:ml-4 ">
             {@html getFormattedPrice(product.basePrice)}
           </h3>
         {/if}
