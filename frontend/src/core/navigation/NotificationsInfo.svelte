@@ -16,7 +16,8 @@
         icon: '',
         title: '',
         text: '',
-        created: ''
+        created: '',
+        type: ''
     }];
  
     let notificationsMap = new Map();
@@ -121,7 +122,15 @@
                         hover:bg-base-200 hover:text-blue-400
                         text-primary text-sm"
             >
-                <i class="fas fa-{item.icon} w-5 mr-3"></i>
+                {#if item.type === '1'}
+                    <i class="fas fa-shopping-cart text-blue-500 w-5 mr-3"></i>
+                {:else if item.type === '2'}
+                    <i class="fas fa-fire text-amber-500 w-5 mr-3"></i>
+                {:else if item.type === '3'}
+                    <i class="fas fa-check text-green-500 w-5 mr-3"></i>
+                {:else}
+                    <i class="fas fa-{item.icon} w-5 mr-3"></i>
+                {/if}
 
                 <div class="flex flex-col">
                 <p class="font-bold dark:text-gray-400">
