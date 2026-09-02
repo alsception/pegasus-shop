@@ -106,7 +106,7 @@
             {@html getFormattedPrice(product.discount)}
           </h3>
         {:else}
-          <h3 class="inline-block  text-amber-700 dark:text-amber-600 font-bold ml-0 sm:ml-4 ">
+          <h3 class="inline-block  text-primary font-bold ml-0 sm:ml-4 ">
             {@html getFormattedPrice(product.basePrice)}
           </h3>
         {/if}

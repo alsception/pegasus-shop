@@ -427,6 +427,9 @@
   <div class="mt-20">
     <div id="products-container" class="flex flex-col gap-12 p-4 mb-20 mt-[-4rem] sm:mt-[-6rem]">
 
+
+      <!-- TODO: IFselected category -> ukloniti ostale -->
+
     {#each categories as category (category.id)}
       <div class="w-full">
         <div class="w-full mb-6">

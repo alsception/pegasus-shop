@@ -196,7 +196,7 @@
 
       {:else}
 
-      <span class="text-md  text-amber-700 dark:text-amber-600">         
+      <span class="text-md text-primary/80">         
           {@html getFormattedPrice(product.basePrice)}
         </span>   
 
