@@ -119,10 +119,10 @@
       <i class="fas fa-shopping-basket text-sm md:text-lg"></i>
     </button>
 
-    <div class="dropdown mr-5">
+    <div class="dropdown mr-5 pointer-events-none">
       <button
         tabindex="0"
-        class="btn btn-ghost p-0 hover:bg-primary/10 text-gray-500 text-xl"
+        class="btn btn-ghost p-0 hover:bg-primary/10 text-gray-500 text-xl pointer-events-auto"
         data-tip="Notifications"
         aria-label="Notifications"
         on:click={() => resetNotificationsInfo()}
